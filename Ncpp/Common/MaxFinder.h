@@ -1,0 +1,51 @@
+#pragma once
+
+#pragma inline_depth( 255 )
+
+#include <stdlib.h>
+
+
+#include <Lib\Novel\Ncpp\Common\Debug.h>
+//#include <Lib\Novel\Ncpp\Common\indexcalc.h>
+
+
+
+
+namespace Ncpp
+{
+	template< class T >
+	class MaxFinder : FRM_Object
+	{
+	public :
+
+		MaxFinder( T a_valOrg = -10000000 )
+		{
+			m_valOrg = a_valOrg;
+			m_valCur = a_valOrg;
+		}
+
+		void AddValue( T a_val )
+		{
+			if( a_val > m_valCur )
+				m_valCur = a_val;
+		}
+
+		T FindMax()
+		{
+			return m_valCur;
+		}
+
+
+		void Reset()
+		{
+			m_valCur = m_valOrg;
+		}
+
+
+	protected:
+
+		T m_valOrg;
+		T m_valCur;
+	};
+
+}
