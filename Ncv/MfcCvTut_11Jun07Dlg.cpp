@@ -6,7 +6,7 @@
 #include "MfcCvTut_11Jun07Dlg.h"
 #include "cvapp.h"
 
-#include <Lib\Novel\Ncv\OpenCV\funcs1.h>
+#include <Novel-Lib\Ncv\OpenCV\funcs1.h>
 
 
 #ifdef _DEBUG

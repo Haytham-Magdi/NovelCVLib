@@ -5,8 +5,8 @@
 #include <stdlib.h>
 
 
-#include <Lib\Novel\Ncpp\Common\Debug.h>
-#include <Lib\Novel\Ncpp\Common\OffsetCalc_1D.h>
+#include <Novel-Lib\Ncpp\Common\Debug.h>
+#include <Novel-Lib\Ncpp\Common\OffsetCalc_1D.h>
 
 
 namespace Ncpp

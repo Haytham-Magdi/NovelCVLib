@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <Lib\Novel\Ncpp\Common\commonLib.h>
+#include <Novel-Lib\Ncpp\Common\commonLib.h>
 
 
 namespace Ncpp

@@ -6,6 +6,6 @@
 #include <vector>
 */
 
-#include <Lib\Novel\Ncpp\Common\commonLib.h>
-#include <Lib\Novel\Ncpp\Math\funcs.h>
+#include <Novel-Lib\Ncpp\Common\commonLib.h>
+#include <Novel-Lib\Ncpp\Math\funcs.h>
 

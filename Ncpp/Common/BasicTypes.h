@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include <Lib\Novel\Ncpp\Common\common.h>
+#include <Novel-Lib\Ncpp\Common\common.h>
 
 
 namespace Ncpp

@@ -5,9 +5,9 @@
 #include <stdlib.h>
 
 
-#include <Lib\Novel\Ncpp\Common\Debug.h>
-#include <Lib\Novel\Ncpp\Common\ListQue.h>
-#include <Lib\Novel\Ncpp\Common\FixedVector.h>
+#include <Novel-Lib\Ncpp\Common\Debug.h>
+#include <Novel-Lib\Ncpp\Common\ListQue.h>
+#include <Novel-Lib\Ncpp\Common\FixedVector.h>
 
 
 namespace Ncpp

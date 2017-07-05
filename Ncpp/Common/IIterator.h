@@ -6,8 +6,8 @@
 
 
 
-#include <Lib\Novel\Ncpp\Common\Debug.h>
-#include <Lib\Novel\Ncpp\Common\Object.h>
+#include <Novel-Lib\Ncpp\Common\Debug.h>
+#include <Novel-Lib\Ncpp\Common\Object.h>
 
 
 namespace Ncpp

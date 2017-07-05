@@ -18,9 +18,9 @@ int * Ncpp::ObjectFriend::m_testBuf_2;
 
 int Ncpp::Dummy2::s_num1 = 0;
 
-//#include <Lib\Novel\Ncpp\Common\TypeIDGen.cpp>
-//#include <Lib\Novel\Ncpp\Common\FilePathMgr.cpp>
-//#include <Lib\Novel\Ncpp\Common\NumberIterator.cpp>
+//#include <Novel-Lib\Ncpp\Common\TypeIDGen.cpp>
+//#include <Novel-Lib\Ncpp\Common\FilePathMgr.cpp>
+//#include <Novel-Lib\Ncpp\Common\NumberIterator.cpp>
 
 
 

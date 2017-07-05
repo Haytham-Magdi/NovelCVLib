@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 
-#include <Lib\Novel\Ncpp\Common\Debug.h>
+#include <Novel-Lib\Ncpp\Common\Debug.h>
 
 
 #define FRM_IObject_IFC public virtual Ncpp::IObject

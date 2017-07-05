@@ -1,15 +1,15 @@
-#include <Lib\Novel\NcppCommon\commonLib.h>
-#include <Lib\Novel\Ncv\CvIncludes.h>
-#include <Lib\Novel\Ncv\Types.h>
-#include <Lib\Novel\Ncv\error.h>
+#include <Novel-Lib\NcppCommon\commonLib.h>
+#include <Novel-Lib\Ncv\CvIncludes.h>
+#include <Novel-Lib\Ncv\Types.h>
+#include <Novel-Lib\Ncv\error.h>
 #include <vector>
-#include <Lib\Novel\Ncv\Channel.h>
-#include <Lib\Novel\Ncv\Image.h>
-#include <Lib\Novel\Ncv\funcs1.h>
+#include <Novel-Lib\Ncv\Channel.h>
+#include <Novel-Lib\Ncv\Image.h>
+#include <Novel-Lib\Ncv\funcs1.h>
 
-#include <Lib\Novel\Ncv\ImageLineViewer2.h>
+#include <Novel-Lib\Ncv\ImageLineViewer2.h>
 
-#include <Lib\Novel\Ncv\ImgDataMgr_Simple_2.h>
+#include <Novel-Lib\Ncv\ImgDataMgr_Simple_2.h>
 
 
 namespace Hcv

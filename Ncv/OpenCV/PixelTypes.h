@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Lib\Novel\Ncv\OpenCV\CvIncludes.h>
+#include <Novel-Lib\Ncv\OpenCV\CvIncludes.h>
 
 
 

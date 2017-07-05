@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include <Lib\Novel\Ncpp\Common\debug.h>
-#include <Lib\Novel\Ncpp\Common\Object.h>
+#include <Novel-Lib\Ncpp\Common\debug.h>
+#include <Novel-Lib\Ncpp\Common\Object.h>
 
 
 

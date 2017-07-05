@@ -5,10 +5,10 @@
 #include <stdlib.h>
 
 
-#include <Lib\Novel\Ncpp\Common\Debug.h>
-#include <Lib\Novel\Ncpp\Common\OffsetCalc_1D.h>
-#include <Lib\Novel\Ncpp\Common\PtrIterator.h>
-#include <Lib\Novel\Ncpp\Common\MemSimpleAccessor_1D.h>
+#include <Novel-Lib\Ncpp\Common\Debug.h>
+#include <Novel-Lib\Ncpp\Common\OffsetCalc_1D.h>
+#include <Novel-Lib\Ncpp\Common\PtrIterator.h>
+#include <Novel-Lib\Ncpp\Common\MemSimpleAccessor_1D.h>
 
 
 namespace Ncpp

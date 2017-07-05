@@ -1,3 +1,3 @@
 
-//#include <Lib\Novel\Ncpp\Common\TypeIDGen.cpp>
+//#include <Novel-Lib\Ncpp\Common\TypeIDGen.cpp>
 

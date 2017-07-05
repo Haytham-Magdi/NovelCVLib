@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Lib\Novel\Ncpp\Common\commonLib.h>
-#include <Lib\Novel\Ncv\OpenCV\CvIncludes.h>
+#include <Novel-Lib\Ncpp\Common\commonLib.h>
+#include <Novel-Lib\Ncv\OpenCV\CvIncludes.h>
 
 
 namespace Ncv

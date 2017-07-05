@@ -1,12 +1,12 @@
-#include <Lib\Novel\Ncpp\Common\commonLib.h>
-#include <Lib\Novel\Ncv\OpenCV\CvIncludes.h>
-#include <Lib\Novel\Ncv\OpenCV\Types.h>
-#include <Lib\Novel\Ncv\OpenCV\PixelTypes.h>
-#include <Lib\Novel\Ncv\OpenCV\error.h>
-#include <Lib\Novel\Ncv\OpenCV\Channel.h>
-#include <Lib\Novel\Ncv\OpenCV\Image.h>
+#include <Novel-Lib\Ncpp\Common\commonLib.h>
+#include <Novel-Lib\Ncv\OpenCV\CvIncludes.h>
+#include <Novel-Lib\Ncv\OpenCV\Types.h>
+#include <Novel-Lib\Ncv\OpenCV\PixelTypes.h>
+#include <Novel-Lib\Ncv\OpenCV\error.h>
+#include <Novel-Lib\Ncv\OpenCV\Channel.h>
+#include <Novel-Lib\Ncv\OpenCV\Image.h>
 
-#include <Lib\Novel\Ncv\OpenCV\Hsv.h>
+#include <Novel-Lib\Ncv\OpenCV\Hsv.h>
 
 
 namespace Ncv
