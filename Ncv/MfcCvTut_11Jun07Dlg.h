@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <Novel-Lib\Ncv\IOMgr.h>
+#include <NovelCVLib\Ncv\IOMgr.h>
 #include "afxwin.h"
 
 

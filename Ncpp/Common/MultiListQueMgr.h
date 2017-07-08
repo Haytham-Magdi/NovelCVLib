@@ -5,8 +5,8 @@
 #include <stdlib.h>
 
 
-#include <Novel-Lib\Ncpp\Common\Debug.h>
-#include <Novel-Lib\Ncpp\Common\multilistque.h>
+#include <NovelCVLib\Ncpp\Common\Debug.h>
+#include <NovelCVLib\Ncpp\Common\multilistque.h>
 
 
 namespace Ncpp

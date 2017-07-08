@@ -1,13 +1,13 @@
-#include <Novel-Lib\Ncpp\Common\commonLib.h>
-#include <Novel-Lib\Ncv\OpenCV\CvIncludes.h>
-#include <Novel-Lib\Ncv\OpenCV\Types.h>
-#include <Novel-Lib\Ncv\OpenCV\error.h>
+#include <NovelCVLib\Ncpp\Common\commonLib.h>
+#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
+#include <NovelCVLib\Ncv\OpenCV\Types.h>
+#include <NovelCVLib\Ncv\OpenCV\error.h>
 #include <vector>
-#include <Novel-Lib\Ncv\OpenCV\Channel.h>
-#include <Novel-Lib\Ncv\OpenCV\Image.h>
-#include <Novel-Lib\Ncv\OpenCV\funcs1.h>
+#include <NovelCVLib\Ncv\OpenCV\Channel.h>
+#include <NovelCVLib\Ncv\OpenCV\Image.h>
+#include <NovelCVLib\Ncv\OpenCV\funcs1.h>
 
-#include <Novel-Lib\Ncv\Binarization\BinarizationProcess1.h>
+#include <NovelCVLib\Ncv\Binarization\BinarizationProcess1.h>
 
 
 #define M_PI 3.14159265358979323846

@@ -5,11 +5,11 @@
 #include <stdlib.h>
 
 
-#include <Novel-Lib\Ncpp\Common\Debug.h>
-#include <Novel-Lib\Ncpp\Common\Object.h>
-#include <Novel-Lib\Ncpp\Common\ObjRef.h>
-#include <Novel-Lib\Ncpp\Common\OffsetCalc_2D.h>
-#include <Novel-Lib\Ncpp\Common\MemSimpleAccessor_2D.h>
+#include <NovelCVLib\Ncpp\Common\Debug.h>
+#include <NovelCVLib\Ncpp\Common\Object.h>
+#include <NovelCVLib\Ncpp\Common\ObjRef.h>
+#include <NovelCVLib\Ncpp\Common\OffsetCalc_2D.h>
+#include <NovelCVLib\Ncpp\Common\MemSimpleAccessor_2D.h>
 
 
 namespace Ncpp

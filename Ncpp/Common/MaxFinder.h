@@ -5,8 +5,8 @@
 #include <stdlib.h>
 
 
-#include <Novel-Lib\Ncpp\Common\Debug.h>
-//#include <Novel-Lib\Ncpp\Common\indexcalc.h>
+#include <NovelCVLib\Ncpp\Common\Debug.h>
+//#include <NovelCVLib\Ncpp\Common\indexcalc.h>
 
 
 

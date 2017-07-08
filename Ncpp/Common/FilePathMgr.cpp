@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <Novel-Lib\Ncpp\Common\FilePathMgr.h>
+#include <NovelCVLib\Ncpp\Common\FilePathMgr.h>
 
 
 using namespace Ncpp;

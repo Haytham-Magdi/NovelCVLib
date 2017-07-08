@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 
-#include <Novel-Lib\Ncpp\Common\Debug.h>
+#include <NovelCVLib\Ncpp\Common\Debug.h>
 
 
 namespace Ncpp

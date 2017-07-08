@@ -5,10 +5,10 @@
 #include <stdlib.h>
 
 
-#include <Novel-Lib\Ncpp\Common\FixedVector.h>
+#include <NovelCVLib\Ncpp\Common\FixedVector.h>
 
-#include <Novel-Lib\Ncpp\Common\Debug.h>
-//#include <Novel-Lib\Ncpp\Common\indexcalc.h>
+#include <NovelCVLib\Ncpp\Common\Debug.h>
+//#include <NovelCVLib\Ncpp\Common\indexcalc.h>
 
 
 

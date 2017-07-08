@@ -1,15 +1,15 @@
 #pragma once
 
-#include <Novel-Lib\Ncpp\Common\commonLib.h>
+#include <NovelCVLib\Ncpp\Common\commonLib.h>
 
-#include <Novel-Lib\Ncpp\Math\mathLib.h>
+#include <NovelCVLib\Ncpp\Math\mathLib.h>
 
-#include <Novel-Lib\Ncv\OpenCV\Types.h>
+#include <NovelCVLib\Ncv\OpenCV\Types.h>
 
 
-//#include <Novel-Lib\Ncpp\Math\funcs.h>
+//#include <NovelCVLib\Ncpp\Math\funcs.h>
 
-//#include <Novel-Lib\Ncv\Signal1DViewer.h>
+//#include <NovelCVLib\Ncv\Signal1DViewer.h>
 
 
 namespace Ncv

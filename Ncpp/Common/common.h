@@ -4,7 +4,7 @@
 //#include <string.h>
 #include <stdlib.h>
 
-#include <Novel-Lib\Ncpp\Common\debug.h>
-#include <Novel-Lib\Ncpp\Common\BasicTypes.h>
-#include <Novel-Lib\Ncpp\Common\Object.h>
-#include <Novel-Lib\Ncpp\Common\Exception.h>
+#include <NovelCVLib\Ncpp\Common\debug.h>
+#include <NovelCVLib\Ncpp\Common\BasicTypes.h>
+#include <NovelCVLib\Ncpp\Common\Object.h>
+#include <NovelCVLib\Ncpp\Common\Exception.h>

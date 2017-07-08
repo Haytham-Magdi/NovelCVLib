@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Novel-Lib\Ncpp\Common\commonLib.h>
-#include <Novel-Lib\Ncv\OpenCV\CvIncludes.h>
-#include <Novel-Lib\Ncv\OpenCV\Types.h>
-#include <Novel-Lib\Ncv\OpenCV\error.h>
-//#include <Novel-Lib\Ncpp\stl\vector>
+#include <NovelCVLib\Ncpp\Common\commonLib.h>
+#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
+#include <NovelCVLib\Ncv\OpenCV\Types.h>
+#include <NovelCVLib\Ncv\OpenCV\error.h>
+//#include <NovelCVLib\Ncpp\stl\vector>
 #include <vector>
 
 

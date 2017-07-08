@@ -1,18 +1,18 @@
 #pragma once
 
-#include <Novel-Lib\Ncpp\Common\commonLib.h>
-#include <Novel-Lib\Ncpp\Math\mathLib.h>
-#include <Novel-Lib\Ncv\OpenCV\CvIncludes.h>
-#include <Novel-Lib\Ncv\OpenCV\Types.h>
-#include <Novel-Lib\Ncv\OpenCV\error.h>
+#include <NovelCVLib\Ncpp\Common\commonLib.h>
+#include <NovelCVLib\Ncpp\Math\mathLib.h>
+#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
+#include <NovelCVLib\Ncv\OpenCV\Types.h>
+#include <NovelCVLib\Ncv\OpenCV\error.h>
 #include <vector>
-#include <Novel-Lib\Ncv\OpenCV\Channel.h>
-#include <Novel-Lib\Ncv\OpenCV\Image.h>
+#include <NovelCVLib\Ncv\OpenCV\Channel.h>
+#include <NovelCVLib\Ncv\OpenCV\Image.h>
 
-#include <Novel-Lib\Ncv\OpenCV\funcs1.h>
+#include <NovelCVLib\Ncv\OpenCV\funcs1.h>
 
-#include <Novel-Lib\Ncv\LinePath.h>
-//#include <Novel-Lib\Ncv\ColorFilter1DSystem.h>
+#include <NovelCVLib\Ncv\LinePath.h>
+//#include <NovelCVLib\Ncv\ColorFilter1DSystem.h>
 
 
 

@@ -1,15 +1,15 @@
 #pragma once
 
-#include <Novel-Lib\Ncpp\Common\commonLib.h>
-//#include <Novel-Lib\Ncv\OpenCV\CvIncludes.h>
-#include <Novel-Lib\Ncv\OpenCV\Types.h>
-#include <Novel-Lib\Ncv\OpenCV\error.h>
-//#include <Novel-Lib\Ncv\OpenCV\funcs1.h>
+#include <NovelCVLib\Ncpp\Common\commonLib.h>
+//#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
+#include <NovelCVLib\Ncv\OpenCV\Types.h>
+#include <NovelCVLib\Ncv\OpenCV\error.h>
+//#include <NovelCVLib\Ncv\OpenCV\funcs1.h>
 //#include <vector>
-//#include <Novel-Lib\Ncv\OpenCV\Image.h>
+//#include <NovelCVLib\Ncv\OpenCV\Image.h>
 
-#include <Novel-Lib\Ncv\Element_Operations.h>
-#include <Novel-Lib\Ncv\Element_Operations_VectorVal.h>
+#include <NovelCVLib\Ncv\Element_Operations.h>
+#include <NovelCVLib\Ncv\Element_Operations_VectorVal.h>
 
 
 
@@ -25,7 +25,7 @@ namespace Ncv
 #define T_Elm float
 #define N_Dims 2
 
-#include <Novel-Lib\Ncv\Element_Operations_VectorVal_CoreFile.cpp>
+#include <NovelCVLib\Ncv\Element_Operations_VectorVal_CoreFile.cpp>
 
 #undef T_Elm
 #undef N_Dims
@@ -33,7 +33,7 @@ namespace Ncv
 #define T_Elm float
 #define N_Dims 3
 
-#include <Novel-Lib\Ncv\Element_Operations_VectorVal_CoreFile.cpp>
+#include <NovelCVLib\Ncv\Element_Operations_VectorVal_CoreFile.cpp>
 
 #undef T_Elm
 #undef N_Dims
@@ -42,7 +42,7 @@ namespace Ncv
 #define T_Elm float
 #define N_Dims 4
 
-#include <Novel-Lib\Ncv\Element_Operations_VectorVal_CoreFile.cpp>
+#include <NovelCVLib\Ncv\Element_Operations_VectorVal_CoreFile.cpp>
 
 #undef T_Elm
 #undef N_Dims

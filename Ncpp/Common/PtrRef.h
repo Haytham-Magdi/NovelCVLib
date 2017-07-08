@@ -2,9 +2,9 @@
 
 
 
-//#include <Novel-Lib\Ncpp\Common\common.h>
-#include <Novel-Lib\Ncpp\Common\object.h>
-#include <Novel-Lib\Ncpp\Common\killers.h>
+//#include <NovelCVLib\Ncpp\Common\common.h>
+#include <NovelCVLib\Ncpp\Common\object.h>
+#include <NovelCVLib\Ncpp\Common\killers.h>
 
 
 namespace Ncpp

@@ -1,21 +1,21 @@
 #pragma once
 
-#include <Novel-Lib\Ncpp\Common\commonLib.h>
-#include <Novel-Lib\Ncpp\Math\mathLib.h>
-#include <Novel-Lib\Ncv\OpenCV\CvIncludes.h>
-#include <Novel-Lib\Ncv\OpenCV\Types.h>
-#include <Novel-Lib\Ncv\OpenCV\error.h>
+#include <NovelCVLib\Ncpp\Common\commonLib.h>
+#include <NovelCVLib\Ncpp\Math\mathLib.h>
+#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
+#include <NovelCVLib\Ncv\OpenCV\Types.h>
+#include <NovelCVLib\Ncv\OpenCV\error.h>
 #include <vector>
-#include <Novel-Lib\Ncv\OpenCV\Channel.h>
-#include <Novel-Lib\Ncv\OpenCV\Image.h>
-#include <Novel-Lib\Ncv\ImageAccessor.h>
+#include <NovelCVLib\Ncv\OpenCV\Channel.h>
+#include <NovelCVLib\Ncv\OpenCV\Image.h>
+#include <NovelCVLib\Ncv\ImageAccessor.h>
 
-//#include <Novel-Lib\Ncv\ImageLineItrProvider.h>
-//#include <Novel-Lib\Ncv\ImageItrMgr.h>
+//#include <NovelCVLib\Ncv\ImageLineItrProvider.h>
+//#include <NovelCVLib\Ncv\ImageItrMgr.h>
 
-#include <Novel-Lib\Ncv\ImgSizeRotation.h>
-#include <Novel-Lib\Ncv\Binarization\ImgAngleDirMgr.h>
-#include <Novel-Lib\Ncv\Binarization\AngleDirMgrColl_Context.h>
+#include <NovelCVLib\Ncv\ImgSizeRotation.h>
+#include <NovelCVLib\Ncv\Binarization\ImgAngleDirMgr.h>
+#include <NovelCVLib\Ncv\Binarization\AngleDirMgrColl_Context.h>
 
 
 namespace Ncv
