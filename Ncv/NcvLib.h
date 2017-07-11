@@ -4,7 +4,7 @@
 #include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
 #include <NovelCVLib\Ncv\VectorVal.h>
 #include <NovelCVLib\Ncv\OpenCV\Types.h>
-#include <NovelCVLib\Ncv\OpenCV\killers.h>
+#include <NovelCVLib\Ncv\OpenCV\OpenCVKillers.h>
 #include <NovelCVLib\Ncv\OpenCV\error.h>
 #include <NovelCVLib\Ncv\OpenCV\PixelTypes.h>
 #include <NovelCVLib\Ncv\OpenCV\Channel.h>

@@ -9,7 +9,7 @@
 #include <NovelCVLib\Ncpp\Common\BasicTypes.h>
 #include <NovelCVLib\Ncpp\Common\Object.h>
 #include <NovelCVLib\Ncpp\Common\Exception.h>
-#include <NovelCVLib\Ncpp\Common\killers.h>
+#include <NovelCVLib\Ncpp\Common\CommonKillers.h>
 #include <NovelCVLib\Ncpp\Common\ObjRef.h>
 #include <NovelCVLib\Ncpp\Common\PtrRef.h>
 //#include <NovelCVLib\Ncpp\Common\TypeIDGen.h>
