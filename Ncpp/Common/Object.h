@@ -76,31 +76,6 @@ namespace Ncpp
 		{
 			if(NULL != a_pObj)
 			{
-				////if( 309783 == a_pObj->m_id )
-				//if( false )
-				//{
-				//	if( 575 == m_id )
-				//		m_id = m_id;
-
-				//	if( NULL == m_testBuf )
-				//	{
-				//		s_nTestBuf_Siz = 1000000;
-
-				//		Ncpp_ASSERT( m_id < s_nTestBuf_Siz );
-
-				//		m_testBuf = new int[ s_nTestBuf_Siz ];
-				//		m_testBuf_2 = new int[ s_nTestBuf_Siz ];
-
-				//		for( int i=0; i < s_nTestBuf_Siz; i++ )
-				//		{
-				//			m_testBuf[ i ] = 0;
-				//			m_testBuf_2[ i ] = 0;
-				//		}
-				//	}
-
-				//	m_testBuf[ m_id ]++;
-				//}
-
 				a_pObj->AddRef();
 			}
 		}
@@ -109,15 +84,6 @@ namespace Ncpp
 		{
 			if(NULL != a_pObj)
 			{
-				//if( 309783 == a_pObj->m_id )
-				//{
-				//	Ncpp_ASSERT( NULL != m_testBuf );
-
-				//	Ncpp_ASSERT( m_id < s_nTestBuf_Siz );
-
-				//	m_testBuf_2[ m_id ]++;
-				//}
-
 				a_pObj->Release();
 			}
 		}
@@ -144,9 +110,6 @@ namespace Ncpp
 	private:
 		virtual void AddRef(void)
 		{
-			//if( 309783 == m_id )
-			//	m_id = m_id;
-
 			m_nRefCnt++;
 		}
 
@@ -154,14 +117,6 @@ namespace Ncpp
 		{
 			if( m_nRefCnt <= m_nDel_RefCnt )
 				return;
-
-			//if( 309783 == m_id && 2 == m_nRefCnt )
-			//	m_id = m_id;
-
-			//if( 309783 == m_id )
-			////if( 309783 == m_id && 1 == m_nRefCnt )
-			////if( 309783 == m_id && 1 == m_nRefCnt )
-			//	m_id = m_id;
 
 			m_nRefCnt--;
 			Ncpp_ASSERT(m_nRefCnt >= 0);
