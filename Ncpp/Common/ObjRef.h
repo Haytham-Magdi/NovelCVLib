@@ -2,7 +2,6 @@
 
 
 #include <NovelCVLib\Ncpp\Common\debug.h>
-#include <NovelCVLib\Ncpp\Common\Object.h>
 
 
 
@@ -11,7 +10,7 @@ namespace Ncpp
 	
 	
 	template<class T>
-	class ObjRef : virtual ObjectFriend
+	class ObjRef
 	{
 	public:
 		ObjRef()
@@ -22,18 +21,18 @@ namespace Ncpp
 		ObjRef(T * a_pObj)
 		{
 			m_pObj = a_pObj;
-			AddObjectRef(m_pObj);
+			ObjRef<T>::AddObjectRef(m_pObj);
 		}
 
 		ObjRef(const ObjRef & a_objRef) 
 		{
 			m_pObj = a_objRef.m_pObj;
-			AddObjectRef(m_pObj);
+			ObjRef<T>::AddObjectRef(m_pObj);
 		}
 
 		~ObjRef()
 		{
-			ReleaseObject(m_pObj);
+			ObjRef<T>::ReleaseObject(m_pObj);
 		}
 
 		void operator = (const ObjRef<T> & a_objRef) 
@@ -43,11 +42,10 @@ namespace Ncpp
 
 		void operator = (T * a_pObj) 
 		{
-			AddObjectRef(a_pObj);
-			ReleaseObject(m_pObj);
+			ObjRef<T>::AddObjectRef(a_pObj);
+			ObjRef<T>::ReleaseObject(m_pObj);
 			m_pObj = a_pObj;            
 		}
-
 
 		T * operator -> (void)
 		{
@@ -57,6 +55,24 @@ namespace Ncpp
 		operator T * (void)
 		{
 			return m_pObj;
+		}
+
+	protected:
+
+		static void AddObjectRef(T * a_pObj)
+		{
+			if (NULL != a_pObj)
+			{
+				a_pObj->AddRef();
+			}
+		}
+
+		static void ReleaseObject(T * a_pObj)
+		{
+			if (NULL != a_pObj)
+			{
+				a_pObj->Release();
+			}
 		}
 
 	protected:
