@@ -60,7 +60,7 @@ namespace Ncpp
 		static int s_id;
 
 	protected:
-		virtual void AddObjectRef(IObject * a_pObj)
+		void AddObjectRef(IObject * a_pObj)
 		{
 			if(NULL != a_pObj)
 			{
@@ -68,7 +68,7 @@ namespace Ncpp
 			}
 		}
 
-		virtual void ReleaseObject(IObject * a_pObj)
+		void ReleaseObject(IObject * a_pObj)
 		{
 			if(NULL != a_pObj)
 			{
