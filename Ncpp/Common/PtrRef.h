@@ -27,7 +27,7 @@ namespace Ncpp
 		
 		
 		template<class T>
-			class PtrObj : FRM_IObject_IFC
+			class PtrObj : FRM_Object_IFC
 		{
 	public:
 		

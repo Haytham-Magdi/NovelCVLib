@@ -6,13 +6,13 @@
 
 #include <NovelCVLib\Ncpp\Common\Debug.h>
 
-#define FRM_IObject_IFC public virtual Ncpp::IObject
 #define FRM_Object public virtual Ncpp::Object
 
 namespace Ncpp
 {
 	class ObjectFriend;
 
+	/*
 	class IObject
 	{
 	public:
@@ -37,48 +37,10 @@ namespace Ncpp
 
 		friend ObjectFriend;
 	};
-
-	class ObjectFriend
-	{
-	public:
-
-		ObjectFriend()
-		{
-			m_id = s_id++;
-		}
-
-		static int * m_testBuf;
-		static int * m_testBuf_2;
-
-		//static int s_nTestBuf_Cnt;
-		static int s_nTestBuf_Siz;
-
-	protected:
-
-		int m_id;
-
-		static int s_id;
-
-	protected:
-		void AddObjectRef(IObject * a_pObj)
-		{
-			if(NULL != a_pObj)
-			{
-				a_pObj->AddRef();
-			}
-		}
-
-		void ReleaseObject(IObject * a_pObj)
-		{
-			if(NULL != a_pObj)
-			{
-				a_pObj->Release();
-			}
-		}
-	};
+	*/
 
 	
-	class Object : FRM_IObject_IFC
+	class Object
 	{
 	public:
 		
@@ -91,12 +53,12 @@ namespace Ncpp
 			m_bAllowDelete = true;
 		}
 
-		virtual ~Object(void)
+		~Object(void)
 		{
 		}
 
 	private:
-		virtual void AddRef(void)
+		void AddRef(void)
 		{
 			m_nRefCnt++;
 		}
@@ -129,6 +91,46 @@ namespace Ncpp
 	private:
 		int m_nRefCnt;
 
+		friend ObjectFriend;
 	};
 	
+	class ObjectFriend
+	{
+	public:
+
+		ObjectFriend()
+		{
+			m_id = s_id++;
+		}
+
+		static int * m_testBuf;
+		static int * m_testBuf_2;
+
+		//static int s_nTestBuf_Cnt;
+		static int s_nTestBuf_Siz;
+
+	protected:
+
+		int m_id;
+
+		static int s_id;
+
+	protected:
+		void AddObjectRef(Object * a_pObj)
+		{
+			if (NULL != a_pObj)
+			{
+				a_pObj->AddRef();
+			}
+		}
+
+		void ReleaseObject(Object * a_pObj)
+		{
+			if (NULL != a_pObj)
+			{
+				a_pObj->Release();
+			}
+		}
+	};
+
 }
