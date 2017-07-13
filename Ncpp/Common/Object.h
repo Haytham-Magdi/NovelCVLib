@@ -4,9 +4,7 @@
 
 #include <stdlib.h>
 
-
 #include <NovelCVLib\Ncpp\Common\Debug.h>
-
 
 #define FRM_IObject_IFC public virtual Ncpp::IObject
 #define FRM_Object public virtual Ncpp::Object
@@ -19,11 +17,6 @@ namespace Ncpp
 	{
 	public:
 
-		//class 
-
-	public:
-
-
 		IObject()
 		{
 			m_id = s_id++;
@@ -33,12 +26,9 @@ namespace Ncpp
 
 		static int s_id;
 
-
 	protected:
 
 		int m_id;
-
-
 
 	private:
 
@@ -62,8 +52,6 @@ namespace Ncpp
 
 		//static int s_nTestBuf_Cnt;
 		static int s_nTestBuf_Siz;
-
-
 
 	protected:
 
@@ -93,6 +81,7 @@ namespace Ncpp
 	class Object : FRM_IObject_IFC
 	{
 	public:
+		
 		Object(void)
 		{
 			m_nRefCnt = 0;
@@ -105,7 +94,6 @@ namespace Ncpp
 		virtual ~Object(void)
 		{
 		}
-
 
 	private:
 		virtual void AddRef(void)
@@ -142,7 +130,5 @@ namespace Ncpp
 		int m_nRefCnt;
 
 	};
-	
-
 	
 }
