@@ -8,7 +8,7 @@
 #include <NovelCVLib\Ncpp\Common\ObjRef.h>
 
 
-#define FRM_Object public virtual Ncpp::Object
+#define FRM_Object(T) public virtual Ncpp::Object<T>
 
 namespace Ncpp
 {

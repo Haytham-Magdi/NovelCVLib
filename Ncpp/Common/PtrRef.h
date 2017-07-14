@@ -5,6 +5,7 @@
 //#include <NovelCVLib\Ncpp\Common\common.h>
 #include <NovelCVLib\Ncpp\Common\object.h>
 #include <NovelCVLib\Ncpp\Common\CommonKillers.h>
+#include <NovelCVLib\Ncpp\Common\Object.h>
 
 
 namespace Ncpp
@@ -19,7 +20,7 @@ namespace Ncpp
 
 
 	template<class T>
-	class PtrObj : FRM_Object_IFC
+	class PtrObj : FRM_Object(T)
 	{
 	public:
 
@@ -29,8 +30,9 @@ namespace Ncpp
 			m_nRefCnt = 0;
 		}
 
-		virtual ~PtrObj(void)
+		~PtrObj(void)
 		{
+			KillObj<T>(m_ptr);
 		}
 
 		T * GetPtr(void)
@@ -39,25 +41,25 @@ namespace Ncpp
 		}
 
 	private:
-		virtual void AddRef(void)
-		{
-			m_nRefCnt++;
-			Dummy2::s_num1++;
-		}
+		//void AddRef(void)
+		//{
+		//	m_nRefCnt++;
+		//	//Dummy2::s_num1++;
+		//}
 
-		virtual void Release(void)
-		{
-			m_nRefCnt--;
-			Ncpp_ASSERT(m_nRefCnt >= 0);
+		//void Release(void)
+		//{
+		//	m_nRefCnt--;
+		//	Ncpp_ASSERT(m_nRefCnt >= 0);
 
-			Dummy2::s_num1--;
+		//	//Dummy2::s_num1--;
 
-			if (0 == m_nRefCnt)
-			{
-				KillObj(m_ptr);
-				delete this;
-			}
-		}
+		//	if (0 == m_nRefCnt)
+		//	{
+		//		KillObj(m_ptr);
+		//		delete this;
+		//	}
+		//}
 
 
 	private:
@@ -155,12 +157,15 @@ namespace Ncpp
 	////int PtrObj<T>::PtrObj::s_nRefCnt = 0;
 	//int PtrObj<T>::PtrObj<T>::s_nRefCnt = 0;
 	
-	template<class T2, class T1>
-		inline PtrRef<T2> GenRef(PtrRef<T1> a_t1)
-	{
-		PtrRef<T2> t2 = (T2 *) a_t1;
-		return t2;
-	}
+	//template<class T2, class T1>
+	//	inline PtrRef<T2> GenRef(PtrRef<T1> a_t1)
+	//{
+	//	PtrRef<T2> t2 = (T2 *) a_t1;
+	//	return t2;
+	//}
 
-	
+
+	template <class T>
+	using PtrRef = ObjRef<PtrObj<T>>;
+
 }
