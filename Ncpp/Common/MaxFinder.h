@@ -14,7 +14,7 @@
 namespace Ncpp
 {
 	template< class T >
-	class MaxFinder : FRM_Object(MaxFinder)
+	class MaxFinder : FRM_Object(MaxFinder<T>)
 	{
 	public :
 

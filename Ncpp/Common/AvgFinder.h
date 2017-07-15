@@ -14,7 +14,7 @@
 namespace Ncpp
 {
 	template< class T = float >
-	class AvgFinder : FRM_Object(AvgFinder)
+	class AvgFinder : FRM_Object(AvgFinder<T>)
 	{
 	public :
 

@@ -14,7 +14,7 @@
 namespace Ncpp
 {
 	template<class T>
-	class PtrPrvider : FRM_Object(PtrPrvider)
+	class PtrPrvider : FRM_Object(PtrPrvider<T>)
 	{
 	protected:
 

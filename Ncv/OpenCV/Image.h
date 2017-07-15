@@ -17,7 +17,7 @@ namespace Ncv
 	#define IMAGE_REF(T) Ncpp::ObjRef< Ncv::Image< T > >
 
 	template<class T>
-	class Image : FRM_Object(Image)
+	class Image : FRM_Object(Image<T>)
 	{
 	public:
 		Image(IplImage * a_src)

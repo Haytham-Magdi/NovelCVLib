@@ -45,7 +45,7 @@ namespace Ncpp
 
 	private:
 		int m_nRefCnt;
-		friend ObjectFriend;
+		friend ObjRef;
 	};
 
 }

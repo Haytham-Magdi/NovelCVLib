@@ -22,7 +22,7 @@ namespace Ncv
 #define TempImageAccessor_REF(T) ObjRef< TempImageAccessor< T >>
 
 	template<class T>
-	class TempImageAccessor : FRM_Object(TempImageAccessor)
+	class TempImageAccessor : FRM_Object(TempImageAccessor<T>)
 	{
 	public:
 

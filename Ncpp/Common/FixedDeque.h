@@ -14,7 +14,7 @@
 namespace Ncpp
 {
 	template<class T>
-	class FixedDeque : FRM_Object(FixedDeque)
+	class FixedDeque : FRM_Object(FixedDeque<T>)
 	{
 	public:
 		//virtual T GetAt(int a_index) = 0;

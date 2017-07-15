@@ -14,7 +14,7 @@
 namespace Ncpp
 {
 	template< class T >
-	class MinFinder : FRM_Object(MinFinder)
+	class MinFinder : FRM_Object(MinFinder<T>)
 	{
 	public :
 

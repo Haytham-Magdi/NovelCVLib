@@ -145,28 +145,28 @@ namespace Ncpp
 			}
 
 
-			int nSameCnt = 0;
+			//int nSameCnt = 0;
 
-			int nDifCnt = 0;
+			//int nDifCnt = 0;
 
-			for( int i=0; i < ObjectFriend::s_nTestBuf_Siz; i++ )
-			{
-				if( 0 == ObjectFriend::m_testBuf[ i ] )
-					continue;
+			//for( int i=0; i < ObjectFriend::s_nTestBuf_Siz; i++ )
+			//{
+			//	if( 0 == ObjectFriend::m_testBuf[ i ] )
+			//		continue;
 
-				int nVal_1 = ObjectFriend::m_testBuf[ i ];
-				int nVal_2 = ObjectFriend::m_testBuf_2[ i ];
+			//	int nVal_1 = ObjectFriend::m_testBuf[ i ];
+			//	int nVal_2 = ObjectFriend::m_testBuf_2[ i ];
 
-				if( nVal_1 == nVal_2 )
-				{
-					nSameCnt++;
-				}
-				else
-				{
-					nDifCnt++;
-				}
+			//	if( nVal_1 == nVal_2 )
+			//	{
+			//		nSameCnt++;
+			//	}
+			//	else
+			//	{
+			//		nDifCnt++;
+			//	}
 
-			}
+			//}
 
 
 			CycleNum++;
@@ -192,7 +192,7 @@ namespace Ncpp
 	};
 
 	template<class T>
-	class FixedVector : FRM_Object(FixedVector)
+	class FixedVector : FRM_Object(FixedVector<T>)
 	{
 	public:
 		//virtual T GetAt(int a_index) = 0;

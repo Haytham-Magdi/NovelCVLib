@@ -11,7 +11,7 @@
 namespace Ncpp
 {
 	template<class T>
-	class ListQue : FRM_Object(ListQue)
+	class ListQue : FRM_Object(ListQue<T>)
 	{
 	protected:
 

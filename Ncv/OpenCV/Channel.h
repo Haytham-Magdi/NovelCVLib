@@ -12,7 +12,7 @@
 namespace Ncv
 {
 	template<class T>
-	class Channel : FRM_Object(Channel)
+	class Channel : FRM_Object(Channel<T>)
 	{
 	public:
 		Channel(IplImageRef a_src, int a_nChnl,

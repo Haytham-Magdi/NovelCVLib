@@ -12,7 +12,7 @@
 namespace Ncpp
 {
 	template<class T>
-	class ListElm : FRM_Object(ListElm)
+	class ListElm : FRM_Object(ListElm<T>)
 	{
 	protected:
 

@@ -16,7 +16,7 @@ namespace Ncpp
 #define MemAccessor_1D_REF(T) Ncpp::ObjRef< MemAccessor_1D< T > >
 
 	template<class T>
-	class MemAccessor_1D : FRM_Object(MemAccessor_1D)
+	class MemAccessor_1D : FRM_Object(MemAccessor_1D<T>)
 	{
 	public:
 
