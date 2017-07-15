@@ -19,7 +19,7 @@ namespace Ncv
 	namespace Ns_Binarization
 	{
 
-		class ImgAngleDirMgr : FRM_Object
+		class ImgAngleDirMgr : FRM_Object(ImgAngleDirMgr)
 		{
 		public:
 

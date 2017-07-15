@@ -15,7 +15,7 @@ namespace Ncv
 	using namespace Ncpp::Math;
 	using namespace std;
 
-	class Signal1D : FRM_Object
+	class Signal1D : FRM_Object(Signal1D)
 	{
 	public:
 
@@ -29,7 +29,7 @@ namespace Ncv
 
 
 
-	class Signal1DBuilder : FRM_Object
+	class Signal1DBuilder : FRM_Object(Signal1DBuilder)
 	{
 	public:
 

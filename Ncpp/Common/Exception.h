@@ -7,7 +7,7 @@
 namespace Ncpp
 {
 
-	class Exception : FRM_Object
+	class Exception : FRM_Object(Exception)
 	{
 	public:
 

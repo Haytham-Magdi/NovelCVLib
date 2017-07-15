@@ -13,7 +13,7 @@
 namespace Ncpp
 {
 	template<class T>
-	class IIterator : FRM_Object
+	class IIterator : FRM_Object(IIterator)
 	{
 	public:
 		virtual bool MoveNext() = 0;

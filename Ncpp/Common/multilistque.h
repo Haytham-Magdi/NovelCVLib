@@ -13,7 +13,7 @@
 namespace Ncpp
 {
 	template<class T>
-	class MultiListQue : FRM_Object
+	class MultiListQue : FRM_Object(MultiListQue)
 	{
 	protected:
 

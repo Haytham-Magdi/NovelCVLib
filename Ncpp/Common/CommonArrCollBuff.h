@@ -16,7 +16,7 @@
 namespace Ncpp
 {
 	template< class T >
-	class CommonArrCollBuff : FRM_Object
+	class CommonArrCollBuff : FRM_Object(CommonArrCollBuff)
 	{
 	public :
 

@@ -24,7 +24,7 @@ namespace Ncv
 	namespace Ns_Binarization
 	{
 
-		class AngleDirMgrColl_Context : FRM_Object
+		class AngleDirMgrColl_Context : FRM_Object(AngleDirMgrColl_Context)
 		{
 		public:
 

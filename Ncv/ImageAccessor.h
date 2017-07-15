@@ -40,7 +40,7 @@ namespace Ncv
 
 
 	template<class T_ImgElm, class T_AccElm, int const V_NofChannels>
-	class ImageAccessor : FRM_Object
+	class ImageAccessor : FRM_Object(ImageAccessor)
 	{
 	public:
 

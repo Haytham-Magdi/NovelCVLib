@@ -12,7 +12,7 @@
 namespace Ncpp
 {
 	template<class T>
-	class APtrList : FRM_Object
+	class APtrList : FRM_Object(APtrList<T>)
 	{
 	protected:
 

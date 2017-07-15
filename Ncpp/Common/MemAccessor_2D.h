@@ -20,7 +20,7 @@ namespace Ncpp
 #define MemAccessor_2D_REF(T) ObjRef<MemAccessor_2D<T>>
 
 	template<class T>
-	class MemAccessor_2D : FRM_Object
+	class MemAccessor_2D : FRM_Object(MemAccessor_2D)
 	{
 	public:
 

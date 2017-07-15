@@ -13,7 +13,7 @@ namespace Ncpp
 {
 
 	template<class T>
-	class PtrIterator //: FRM_Object
+	class PtrIterator //: FRM_Object()
 	{
 	public:
 

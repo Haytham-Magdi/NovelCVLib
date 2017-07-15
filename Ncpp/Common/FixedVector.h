@@ -192,7 +192,7 @@ namespace Ncpp
 	};
 
 	template<class T>
-	class FixedVector : FRM_Object
+	class FixedVector : FRM_Object(FixedVector)
 	{
 	public:
 		//virtual T GetAt(int a_index) = 0;

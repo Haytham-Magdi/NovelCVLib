@@ -47,7 +47,7 @@ namespace Hcv
 
 		};
 
-		class IFilterOutputMgr : FRM_Object
+		class IFilterOutputMgr : FRM_Object(IFilterOutputMgr)
 		{
 		public:
 			virtual void ProcessOutput( int a_nFilterID, F32ColorVal a_outVal, int a_nBackShift ) = 0;

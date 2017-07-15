@@ -14,7 +14,7 @@ namespace Ncpp
 	class OffsetCalc_2D;
 	typedef Ncpp::ObjRef< OffsetCalc_2D > OffsetCalc_2D_Ref;
 
-	class OffsetCalc_2D : FRM_Object
+	class OffsetCalc_2D : FRM_Object(OffsetCalc_2D)
 	{
 	public:
 

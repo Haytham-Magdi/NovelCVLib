@@ -10,7 +10,7 @@
 
 namespace Ncpp
 {
-	class IndexCalc2D : FRM_Object
+	class IndexCalc2D : FRM_Object(IndexCalc2D)
 	{
 	public:
 
@@ -80,7 +80,7 @@ namespace Ncpp
 		bool m_bInitDone;
 	};
 
-	class IndexCalc3D : FRM_Object
+	class IndexCalc3D : FRM_Object(IndexCalc3D)
 	{
 	public:
 

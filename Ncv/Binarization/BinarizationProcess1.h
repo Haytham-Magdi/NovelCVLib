@@ -21,7 +21,7 @@ namespace Ncv
 	namespace Ns_Binarization
 	{
 
-		class BinarizationProcess1 : FRM_Object
+		class BinarizationProcess1 : FRM_Object(BinarizationProcess1)
 		{
 		public:
 

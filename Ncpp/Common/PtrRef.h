@@ -20,7 +20,8 @@ namespace Ncpp
 
 
 	template<class T>
-	class PtrObj : FRM_Object(T)
+	//class PtrObj : FRM_Object()(T)
+	class PtrObj : FRM_Object(PtrObj)
 	{
 	public:
 

@@ -13,7 +13,7 @@ namespace Ncpp
 	class OffsetCalc_1D;
 	typedef Ncpp::ObjRef< OffsetCalc_1D > OffsetCalc_1D_Ref;
 
-	class OffsetCalc_1D : FRM_Object
+	class OffsetCalc_1D : FRM_Object(OffsetCalc_1D)
 	{
 	public:
 

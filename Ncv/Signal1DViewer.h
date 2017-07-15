@@ -18,7 +18,7 @@ namespace Ncv
 	using namespace std;
 
 
-	class Signal1DDrawing : FRM_Object
+	class Signal1DDrawing : FRM_Object(Signal1DDrawing)
 	{
 	public:
 
@@ -48,7 +48,7 @@ namespace Ncv
 	typedef Ncpp::ObjRef< Signal1DDrawing > Signal1DDrawingRef;
 
 
-	class Signal1DViewer : FRM_Object
+	class Signal1DViewer : FRM_Object(Signal1DViewer)
 	{
 	protected :
 
