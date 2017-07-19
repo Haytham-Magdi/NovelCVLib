@@ -44,9 +44,13 @@ namespace Ncv
 	{
 	public:
 
+		//ImageAccessor(Ncpp::ObjRef<Image<T_ImgElm>> a_srcImg)
+		//ImageAccessor(Ncpp::ObjRef<Ncv::Image<T_ImgElm>> a_srcImg)
 		ImageAccessor(IMAGE_REF(T_ImgElm) a_srcImg)
 		{
 			m_isLocked = false;
+			//IplImage * p1 = ((Image<T_ImgElm>*)a_srcImg)->GetIplImagePtr();
+
 			Init(a_srcImg);
 		}
 
@@ -223,7 +227,7 @@ namespace Ncv
 	};
 
 	//typedef VectorValImageAcc< Float, 4 > F32VectorValImageAcc_4C;
-	
+
 
 	//template <size_t N>
 	//using Vector = Matrix<N, 1>;
