@@ -24,7 +24,7 @@ namespace Ncpp
 			ObjRef<T>::AddObjectRef(m_pObj);
 		}
 
-		ObjRef(const ObjRef & a_objRef) 
+		ObjRef(const ObjRef & a_objRef)
 		{
 			m_pObj = a_objRef.m_pObj;
 			ObjRef<T>::AddObjectRef(m_pObj);
@@ -35,16 +35,16 @@ namespace Ncpp
 			ObjRef<T>::ReleaseObject(m_pObj);
 		}
 
-		void operator = (const ObjRef<T> & a_objRef) 
+		void operator = (const ObjRef<T> & a_objRef)
 		{
 			*this = a_objRef.m_pObj;
 		}
 
-		void operator = (T * a_pObj) 
+		void operator = (T * a_pObj)
 		{
 			ObjRef<T>::AddObjectRef(a_pObj);
 			ObjRef<T>::ReleaseObject(m_pObj);
-			m_pObj = a_pObj;            
+			m_pObj = a_pObj;
 		}
 
 		T * operator -> (void)
@@ -61,7 +61,7 @@ namespace Ncpp
 
 		static void AddObjectRef(T * a_pObj)
 		{
-			if (NULL != a_pObj)
+			if (nullptr != a_pObj)
 			{
 				a_pObj->AddRef();
 			}
@@ -69,14 +69,14 @@ namespace Ncpp
 
 		static void ReleaseObject(T * a_pObj)
 		{
-			if (NULL != a_pObj)
+			if (nullptr != a_pObj)
 			{
-				a_pObj->Release();
+				Object<T>::ReleaseObject(a_pObj);
 			}
 		}
 
 	protected:
-		T * m_pObj;		
+		T * m_pObj;
 	};
-	
+
 }

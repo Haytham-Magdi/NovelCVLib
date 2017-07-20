@@ -8,7 +8,7 @@
 #include <NovelCVLib\Ncpp\Common\ObjRef.h>
 
 
-#define FRM_Object(T) public virtual Ncpp::Object<T>
+#define FRM_Object(T) public Ncpp::Object<T>
 
 namespace Ncpp
 {
@@ -16,12 +16,10 @@ namespace Ncpp
 	class Object
 	{
 	public:
-		
+
 		Object(void)
 		{
 			m_nRefCnt = 0;
-			m_nDel_RefCnt = 0;
-			m_bAllowDelete = true;
 		}
 
 	private:
@@ -30,22 +28,22 @@ namespace Ncpp
 			m_nRefCnt++;
 		}
 
-		void Release(void)
+		static void ReleaseObject(T * a_pObj)
 		{
-			m_nRefCnt--;
-			Ncpp_ASSERT(m_nRefCnt >= 0);
+			a_pObj->m_nRefCnt--;
+			Ncpp_ASSERT(a_pObj->m_nRefCnt >= 0);
 
-			if(0 == m_nRefCnt)
+			if (0 == a_pObj->m_nRefCnt)
 			{
-				KillObj<T>((T*)this);
+				KillObj<T>(a_pObj);
 			}
 		}
 
-	protected:
+	private:
+		friend ObjRef<T>;
 
 	private:
 		int m_nRefCnt;
-		friend ObjRef;
 	};
 
 }
