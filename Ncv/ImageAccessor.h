@@ -49,7 +49,7 @@ namespace Ncv
 		ImageAccessor(IMAGE_REF(T_ImgElm) a_srcImg)
 		{
 			m_isLocked = false;
-			//IplImage * p1 = ((Image<T_ImgElm>*)a_srcImg)->GetIplImagePtr();
+			IplImage * p1 = ((Image<T_ImgElm>*)a_srcImg)->GetIplImagePtr();
 
 			Init(a_srcImg);
 		}
