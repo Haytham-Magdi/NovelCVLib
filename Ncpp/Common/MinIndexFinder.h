@@ -14,7 +14,7 @@
 namespace Ncpp
 {
 	template< class T >
-	class MinIndexFinder : FRM_Object(MinIndexFinder<T>)
+	class MinIndexFinder : public Ncpp::Object
 	{
 	public :
 

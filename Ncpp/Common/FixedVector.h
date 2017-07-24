@@ -40,7 +40,7 @@ namespace Ncpp
 
 		static void Init()
 		{
-			if( NULL == FixedVectorDebug::FixedVectorID_Arr )
+			if( nullptr == FixedVectorDebug::FixedVectorID_Arr )
 			{
 				FixedVectorID_Arr = new int [ 
 					FixedVectorID_Arr_Size ];
@@ -62,7 +62,7 @@ namespace Ncpp
 
 		static void Reset_ID_Arr()
 		{
-			Ncpp_ASSERT( NULL != FixedVectorDebug::FixedVectorID_Arr );
+			Ncpp_ASSERT( nullptr != FixedVectorDebug::FixedVectorID_Arr );
 
 			for( int i=0; i < FixedVectorID_Arr_Size; i++ )
 			{
@@ -181,7 +181,7 @@ namespace Ncpp
 
 		static void Update()
 		{
-			if( NULL != pFunc_Update )
+			if( nullptr != pFunc_Update )
 				pFunc_Update();
 		}
 
@@ -192,7 +192,7 @@ namespace Ncpp
 	};
 
 	template<class T>
-	class FixedVector : FRM_Object(FixedVector<T>)
+	class FixedVector : public Ncpp::Object
 	{
 	public:
 		//virtual T GetAt(int a_index) = 0;
@@ -207,7 +207,7 @@ namespace Ncpp
 
 		~FixedVector() 
 		{
-			if( NULL != m_data )
+			if( nullptr != m_data )
 			{
 				delete [] m_data;
 				FixedVectorDebug::AllocCnt--;
@@ -249,7 +249,7 @@ namespace Ncpp
 
 		void SetCapacity( int a_capacity )
 		{
-			if( NULL != m_data )
+			if( nullptr != m_data )
 			{
 				delete [] m_data;
 				FixedVectorDebug::AllocCnt--;
@@ -340,7 +340,7 @@ namespace Ncpp
 		{
 			FixedVectorDebug::Init();
 
-			m_data = NULL;
+			m_data = nullptr;
 			m_size = 0;
 			m_capacity = 0;
 

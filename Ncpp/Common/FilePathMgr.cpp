@@ -45,11 +45,11 @@ FilePathMgr::FilePathMgr( char * a_filePath )
 
 	pch = strtok ( buff, "\\" );
 
-	while (pch != NULL)
+	while (pch != nullptr)
 	{
 		m_pathPart_Arr.PushBack( pch );
 		//printf ("%s\n",pch);
-		pch = strtok (NULL, "\\");
+		pch = strtok (nullptr, "\\");
 	}
 
 	//for( int i=0; i < m_pathPart_Arr.GetSize(); i++ )
@@ -135,7 +135,7 @@ void FilePathMgr::GetFileTitle( FixedVector< char > & a_rOut_Arr )
 
 	pDot = strrchr( a_rOut_Arr.GetHeadPtr(), '.' );
 
-	if( NULL != pDot )
+	if( nullptr != pDot )
 		*pDot = 0;
 
 

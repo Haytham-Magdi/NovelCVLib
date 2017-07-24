@@ -13,7 +13,7 @@
 namespace Ncpp
 {
 	template<class T>
-	class MultiListQue : FRM_Object(MultiListQue<T>)
+	class MultiListQue : public Ncpp::Object
 	{
 	protected:
 
@@ -26,8 +26,8 @@ namespace Ncpp
 
 			for(int i=0; i<a_nofQues; i++)
 			{
-				m_pushVect[i] = NULL;
-				m_popVect[i] = NULL;
+				m_pushVect[i] = nullptr;
+				m_popVect[i] = nullptr;
 			}
 		}
 
@@ -39,11 +39,11 @@ namespace Ncpp
 		void PushPtr(int a_nIndex, T * a_ptr)
 		{
 			Ncpp_ASSERT(a_nIndex < m_pushVect.GetSize());
-			Ncpp_ASSERT(NULL != a_ptr);
+			Ncpp_ASSERT(nullptr != a_ptr);
 
 			T * pOld = m_pushVect[a_nIndex]; 
 
-			if(NULL != pOld)
+			if(nullptr != pOld)
 			{
 				pOld->pPrev = a_ptr;
 				m_pushVect[a_nIndex] = a_ptr;
@@ -61,7 +61,7 @@ namespace Ncpp
 
 			T * ptr = m_popVect[a_nIndex];
 
-			if(NULL != ptr)
+			if(nullptr != ptr)
 			{
 				if(ptr != ptr->pPrev)
 				{
@@ -70,8 +70,8 @@ namespace Ncpp
 				}
 				else
 				{
-					m_pushVect[a_nIndex] = NULL;
-					m_popVect[a_nIndex] = NULL;
+					m_pushVect[a_nIndex] = nullptr;
+					m_popVect[a_nIndex] = nullptr;
 				}
 			}
 
@@ -85,7 +85,7 @@ namespace Ncpp
 
 			T * ptr = m_popVect[a_nIndex];
 
-			if(NULL != ptr)
+			if(nullptr != ptr)
 			{
 				return true;
 			}
@@ -100,7 +100,7 @@ namespace Ncpp
 		{
 			T * ptr = a_pQue->PopPtr();
 
-			while(NULL != ptr)
+			while(nullptr != ptr)
 			{
 				this->PushPtr(a_nIndex, ptr);
 				ptr = a_pQue->PopPtr();
@@ -111,7 +111,7 @@ namespace Ncpp
 		{
 			T * ptr = this->PopPtr(a_nIndex);
 
-			while(NULL != ptr)
+			while(nullptr != ptr)
 			{
 				a_pQue->PushPtr(ptr);
 				ptr = this->PopPtr(a_nIndex);
@@ -133,7 +133,7 @@ namespace Ncpp
 
 		MultiListQueMember()
 		{
-			//pPrev = NULL;
+			//pPrev = nullptr;
 			pPrev = (T*)this;
 		}
 

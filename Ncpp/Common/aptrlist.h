@@ -12,7 +12,7 @@
 namespace Ncpp
 {
 	template<class T>
-	class APtrList : FRM_Object(APtrList<T>)
+	class APtrList : public Ncpp::Object
 	{
 	protected:
 
@@ -20,9 +20,9 @@ namespace Ncpp
 
 		APtrList()
 		{
-			m_lastPtr = NULL;
-			m_firstPtr = NULL;
-			m_currentPtr = NULL;
+			m_lastPtr = nullptr;
+			m_firstPtr = nullptr;
+			m_currentPtr = nullptr;
 			m_nSize = 0;
 		}
 
@@ -36,11 +36,11 @@ namespace Ncpp
 			if( ( (unsigned int)a_ptr & 0xff00fff0 ) == 0x02000040 )
 				a_ptr = a_ptr;
 
-			Ncpp_ASSERT(NULL != a_ptr);
+			Ncpp_ASSERT(nullptr != a_ptr);
 
 			T * pOld = m_lastPtr; 
 
-			if(NULL != pOld)
+			if(nullptr != pOld)
 			{
 				pOld->pPrev = a_ptr;
 				a_ptr->pNext = pOld;
@@ -59,7 +59,7 @@ namespace Ncpp
 		{
 			T * ptr = m_firstPtr;
 
-			if(NULL != ptr)
+			if(nullptr != ptr)
 				RemovePtr(ptr);
 
 			return ptr;
@@ -68,14 +68,14 @@ namespace Ncpp
 
 		void RemovePtr(T * a_ptr)
 		{
-			Ncpp_ASSERT(NULL != a_ptr);
+			Ncpp_ASSERT(nullptr != a_ptr);
 
 			T * pCurrent = Current();
 
 			if(1 == m_nSize)
 			{
-				m_lastPtr = NULL;
-				m_firstPtr = NULL;
+				m_lastPtr = nullptr;
+				m_firstPtr = nullptr;
 			}
 			else if(a_ptr == m_lastPtr)
 			{
@@ -132,11 +132,11 @@ namespace Ncpp
 		{
 			T * ptr = Current();
 
-			if(NULL == ptr)
-				return NULL;
+			if(nullptr == ptr)
+				return nullptr;
 
 			if( ptr == ptr->pPrev )
-				return NULL;
+				return nullptr;
 
 			m_currentPtr = ptr->pPrev;
 
@@ -147,11 +147,11 @@ namespace Ncpp
 		{
 			T * ptr = Current();
 
-			if(NULL == ptr)
-				return NULL;
+			if(nullptr == ptr)
+				return nullptr;
 
 			if( ptr == ptr->pNext )
-				return NULL;
+				return nullptr;
 
 			m_currentPtr = ptr->pNext;
 
@@ -182,9 +182,9 @@ namespace Ncpp
 				m_nSize += a_rSrc.m_nSize;
 			}
 
-			a_rSrc.m_firstPtr = NULL;
-			a_rSrc.m_lastPtr = NULL;
-			a_rSrc.m_currentPtr = NULL;
+			a_rSrc.m_firstPtr = nullptr;
+			a_rSrc.m_lastPtr = nullptr;
+			a_rSrc.m_currentPtr = nullptr;
 			a_rSrc.m_nSize = 0;
 		}
 

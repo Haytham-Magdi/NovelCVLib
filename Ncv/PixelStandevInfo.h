@@ -14,7 +14,7 @@
 namespace Ncv
 {
 
-	class PixelStandevInfo //: FRM_Object()
+	class PixelStandevInfo //: public Ncpp::Object
 	{
 	public:
 		int Dir;

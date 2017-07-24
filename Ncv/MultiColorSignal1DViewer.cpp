@@ -19,7 +19,7 @@ namespace Ncv
 	{
 		m_sv = a_sv;
 
-		if( NULL == a_sv )
+		if( nullptr == a_sv )
 			m_sv = new Signal1DViewer();
 	}
 

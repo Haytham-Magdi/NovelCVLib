@@ -20,8 +20,8 @@ namespace Ncpp
 
 
 	template<class T>
-	//class PtrObj : FRM_Object()(T)
-	class PtrObj : FRM_Object(PtrObj<T>)
+	//class PtrObj : public Ncpp::Object
+	class PtrObj : public Ncpp::Object
 	{
 	public:
 
@@ -86,7 +86,7 @@ namespace Ncpp
 	//public:
 	//	PtrRef()
 	//	{
-	//		m_pObj = NULL;
+	//		m_pObj = nullptr;
 	//	}
 	//	
 	//	PtrRef(T * a_ptr)
@@ -143,7 +143,7 @@ namespace Ncpp
 	//	
 	//	operator Dummy * (void)
 	//	{
-	//		return NULL;
+	//		return nullptr;
 	//	}
 
 

@@ -14,7 +14,7 @@
 namespace Ncv
 {
 
-	class ConflictInfo //: FRM_Object()
+	class ConflictInfo //: public Ncpp::Object
 	{
 	public:
 		bool Exists;
@@ -22,7 +22,7 @@ namespace Ncv
 		int Offset_Side_2;
 	};
 
-	class ConflictInfo_Ex : public ConflictInfo//: FRM_Object()
+	class ConflictInfo_Ex : public ConflictInfo//: public Ncpp::Object
 	{
 	public:
 		int Dir;

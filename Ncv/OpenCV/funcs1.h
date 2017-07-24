@@ -1012,13 +1012,13 @@ namespace Ncv
 	S32ImageRef GenMinPosDepthImg( CvSize a_siz );
 
 	void FillCenterOfMassArr( F32ImageRef a_src, int a_nAprSiz,
-		FixedVector< F32Point > * a_pPointArr, F32ImageRef * a_pAvgImgRef = NULL );
+		FixedVector< F32Point > * a_pPointArr, F32ImageRef * a_pAvgImgRef = nullptr );
 
 	void FillSlidePointArr( F32ImageRef a_src, int a_nAprSiz,
-		FixedVector< F32Point > * a_pPointArr, F32ImageRef * a_pAvgImgRef = NULL );	
+		FixedVector< F32Point > * a_pPointArr, F32ImageRef * a_pAvgImgRef = nullptr );	
 
 	void FillClimbPointArr( F32ImageRef a_src, int a_nAprSiz,
-		FixedVector< F32Point > * a_pPointArr, F32ImageRef * a_pAvgImgRef = NULL );	
+		FixedVector< F32Point > * a_pPointArr, F32ImageRef * a_pAvgImgRef = nullptr );	
 
 	void DrawValueSignals( FixedVector< float > & a_valArr, FixedVector< U8ColorVal > & a_colorArr );
 	//void DrawValueSignals( FixedVector< float > & a_valArr, FixedVector< U8ColorVal > & a_colorArr,
@@ -1033,7 +1033,7 @@ namespace Ncv
 
 
 	F32ImageRef Gen_CovMatPure_Img( F32ImageRef a_src, int a_nAprSiz, 
-		F32ImageRef * a_pMeanImg = NULL, F32ColorVal * a_mean_Buf = NULL );
+		F32ImageRef * a_pMeanImg = nullptr, F32ColorVal * a_mean_Buf = nullptr );
 
 	F32ImageRef Gen_CovMatNonPure_Img( F32ImageRef a_src, int a_nAprSiz );
 

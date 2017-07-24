@@ -11,7 +11,7 @@
 namespace Ncpp
 {
 	template<class T>
-	class ListQue : FRM_Object(ListQue<T>)
+	class ListQue : public Ncpp::Object
 	{
 	protected:
 
@@ -19,17 +19,17 @@ namespace Ncpp
 
 		ListQue()
 		{
-			m_pushPtr = NULL;
-			m_popPtr = NULL;
+			m_pushPtr = nullptr;
+			m_popPtr = nullptr;
 		}
 
 		void PushPtr(T * a_ptr)
 		{
-			Ncpp_ASSERT(NULL != a_ptr);
+			Ncpp_ASSERT(nullptr != a_ptr);
 
 			T * pOld = m_pushPtr; 
 
-			if(NULL != pOld)
+			if(nullptr != pOld)
 			{
 				pOld->pPrev = a_ptr;
 				m_pushPtr = a_ptr;
@@ -45,7 +45,7 @@ namespace Ncpp
 		{
 			T * ptr = m_popPtr;
 
-			if(NULL != ptr)
+			if(nullptr != ptr)
 			{
 				if(ptr != ptr->pPrev)
 				{
@@ -54,8 +54,8 @@ namespace Ncpp
 				}
 				else
 				{
-					m_pushPtr = NULL;
-					m_popPtr = NULL;
+					m_pushPtr = nullptr;
+					m_popPtr = nullptr;
 				}
 			}
 

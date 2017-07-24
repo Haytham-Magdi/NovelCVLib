@@ -50,7 +50,7 @@ namespace Ncv
 		//	F32ImageAccessor3C_Ref a_imgAcc,
 		//	F32ColorVal & a_val1, F32ColorVal & a_val2, int a_stripWidth)
 		//{
-		//	F32ImageAccessor1C_Ref ret = NULL;
+		//	F32ImageAccessor1C_Ref ret = nullptr;
 		//		//F32ImageAccessor1C_Ref ret = F32ImageAccessor1C(
 		//		//F32Image::Create(a_imgAcc->GetSrcImg()->GetSize(), 1));
 

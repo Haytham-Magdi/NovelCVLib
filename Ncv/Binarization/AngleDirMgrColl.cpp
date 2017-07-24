@@ -494,13 +494,13 @@ namespace Ncv
 
 			//MemSimpleAccessor_2D<F32ColorVal> sac_Disp1 = disp1_Img->GetMemAccessor()->GenSimpleAccessor();
 
-			PixelInfo_1 * pPI = NULL;
+			PixelInfo_1 * pPI = nullptr;
 			int cnt_1 = 0;
 
 			do
 			{
 				pPI = rgnGrowQues.PopPtrMin();
-				if (NULL == pPI)
+				if (nullptr == pPI)
 				{
 					continue;
 				}
@@ -550,7 +550,7 @@ namespace Ncv
 				}
 
 
-			} while (NULL != pPI);
+			} while (nullptr != pPI);
 
 			//ShowImage(disp1_Img->GetSrcImg(), "disp1_Img");
 

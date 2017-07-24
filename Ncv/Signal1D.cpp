@@ -60,7 +60,7 @@ namespace Ncv
 		if( false == m_bDone )
 		{
 			Ncpp::Debug::Assert( false );
-			return NULL;
+			return nullptr;
 		}
 
 		return m_sig;

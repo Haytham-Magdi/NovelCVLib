@@ -27,11 +27,11 @@ namespace Ncv
 		//class ImgAngleDirMgr::Context;
 		//typedef Ncpp::ObjRef< ImgAngleDirMgr::Context > ImgAngleDirMgr_Context_Ref;
 
-		class ImgAngleDirMgr : FRM_Object(ImgAngleDirMgr)
+		class ImgAngleDirMgr : public Ncpp::Object
 		{
 		public:
 
-			class Context : FRM_Object(Context)
+			class Context : public Ncpp::Object
 			{
 			public:
 

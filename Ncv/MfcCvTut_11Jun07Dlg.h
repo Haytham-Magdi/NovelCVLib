@@ -16,7 +16,7 @@ class CMfcCvTut_11Jun07Dlg : public CDialog, public Ncv::IOMgr::IIOMgrCore
 {
 // Construction
 public:
-	CMfcCvTut_11Jun07Dlg(CWnd* pParent = NULL);	// standard constructor
+	CMfcCvTut_11Jun07Dlg(CWnd* pParent = nullptr);	// standard constructor
 
 	virtual void ReadString( char * a_sKey, char * a_buff);
 	virtual bool ValueExists( char * a_sKey );

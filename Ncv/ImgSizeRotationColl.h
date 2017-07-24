@@ -17,7 +17,7 @@
 
 namespace Ncv
 {
-	class ImgSizeRotationColl : FRM_Object(ImgSizeRotationColl)
+	class ImgSizeRotationColl : public Ncpp::Object
 	{
 	public:
 

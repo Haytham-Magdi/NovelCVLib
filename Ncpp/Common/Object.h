@@ -8,11 +8,11 @@
 #include <NovelCVLib\Ncpp\Common\ObjRef.h>
 
 
-#define FRM_Object(T) public Ncpp::Object<T>
 
 namespace Ncpp
 {
-	template<class T>
+	class ObjectFriend;
+
 	class Object
 	{
 	public:
@@ -28,22 +28,43 @@ namespace Ncpp
 			m_nRefCnt++;
 		}
 
-		static void ReleaseObject(T * a_pObj)
+		void Release()
 		{
-			a_pObj->m_nRefCnt--;
-			Ncpp_ASSERT(a_pObj->m_nRefCnt >= 0);
+			m_nRefCnt--;
+			Ncpp_ASSERT(m_nRefCnt >= 0);
+		}
 
-			if (0 == a_pObj->m_nRefCnt)
-			{
-				KillObj<T>(a_pObj);
-			}
+		int GetRefCount()
+		{
+			return m_nRefCnt;
 		}
 
 	private:
-		friend ObjRef<T>;
+		friend ObjectFriend;
 
 	private:
 		int m_nRefCnt;
 	};
 
+
+	class ObjectFriend
+	{
+	protected:
+
+		static void AddObjectRef(Object * a_pObj)
+		{
+			a_pObj->AddRef();
+		}
+
+		static void ReleaseObject(Object * a_pObj)
+		{
+			a_pObj->Release();
+		}
+
+		static int GetObjectRefCount(Object * a_pObj)
+		{
+			return a_pObj->GetRefCount();
+		}
+
+	};
 }

@@ -47,7 +47,7 @@ namespace Hcv
 
 		};
 
-		class IFilterOutputMgr : FRM_Object(IFilterOutputMgr)
+		class IFilterOutputMgr : public Ncpp::Object
 		{
 		public:
 			virtual void ProcessOutput( int a_nFilterID, F32ColorVal a_outVal, int a_nBackShift ) = 0;
@@ -60,7 +60,7 @@ namespace Hcv
 		class FilterOutputMgrBase : public IFilterOutputMgr
 		{
 		public:
-			FilterOutputMgrBase( ImageLineViewer2 * a_pIlv, IFilterOutputMgrRef a_inner = NULL ) : 
+			FilterOutputMgrBase( ImageLineViewer2 * a_pIlv, IFilterOutputMgrRef a_inner = nullptr ) : 
 			  m_pIlv( a_pIlv ), m_inner( a_inner ) {}
 
 			virtual void ProcessOutput( int a_nFilterID, F32ColorVal a_outVal, int a_nBackShift )
@@ -76,19 +76,19 @@ namespace Hcv
 
 			void ProcessInner( int a_nFilterID, F32ColorVal a_outVal, int a_nBackShift )
 			{
-				if( NULL != m_inner )
+				if( nullptr != m_inner )
 					m_inner->ProcessOutput( a_nFilterID, a_outVal, a_nBackShift );
 			}
 
 			void ProcessInner( int a_nFilterID, float a_outVal, int a_nBackShift )
 			{
-				if( NULL != m_inner )
+				if( nullptr != m_inner )
 					m_inner->ProcessOutput( a_nFilterID, a_outVal, a_nBackShift );
 			}
 
 			void ProvideInnerSignal( Signal1DViewerRef a_sv )
 			{
-				if( NULL != m_inner )
+				if( nullptr != m_inner )
 					m_inner->ProvideSignal( a_sv );
 			}
 
@@ -114,7 +114,7 @@ namespace Hcv
 		public:
 			ColorOutputMgr( ImageLineViewer2 * a_pIlv,
 				U8ColorVal a_valColor0, U8ColorVal a_valColor1, U8ColorVal a_valColor2 ) 
-				: FilterOutputMgrBase( a_pIlv ), m_sb0( NULL ), m_sb1( NULL ), m_sb2( NULL ), 
+				: FilterOutputMgrBase( a_pIlv ), m_sb0( nullptr ), m_sb1( nullptr ), m_sb2( nullptr ), 
 				m_valColor0(a_valColor0), m_valColor1(a_valColor1), m_valColor2(a_valColor2) {}
 
 			virtual void ProcessOutput( int a_nFilterID, F32ColorVal a_outVal, int a_nBackShift );
@@ -146,7 +146,7 @@ namespace Hcv
 		{
 		public:
 			SingleOutputMgr( ImageLineViewer2 * a_pIlv, U8ColorVal a_color ) 
-				: FilterOutputMgrBase( a_pIlv ), m_color(a_color), m_sb( NULL ) {}
+				: FilterOutputMgrBase( a_pIlv ), m_color(a_color), m_sb( nullptr ) {}
 
 			virtual void ProcessOutput( int a_nFilterID, float a_outVal, int a_nBackShift );
 			virtual void ProvideSignal( Signal1DViewerRef a_sv );
@@ -171,7 +171,7 @@ namespace Hcv
 		class Diff1MarkerOutputMgr : public FilterOutputMgrBase
 		{
 		public:
-			Diff1MarkerOutputMgr( ImageLineViewer2 * a_pIlv, IFilterOutputMgrRef a_inner = NULL ) 
+			Diff1MarkerOutputMgr( ImageLineViewer2 * a_pIlv, IFilterOutputMgrRef a_inner = nullptr ) 
 				: FilterOutputMgrBase( a_pIlv, a_inner ) {}
 
 			virtual void ProcessOutput( int a_nFilterID, float a_outVal, int a_nBackShift );
@@ -180,7 +180,7 @@ namespace Hcv
 		class Diff2MarkerOutputMgr : public FilterOutputMgrBase
 		{
 		public:
-			Diff2MarkerOutputMgr( ImageLineViewer2 * a_pIlv, IFilterOutputMgrRef a_inner = NULL ) 
+			Diff2MarkerOutputMgr( ImageLineViewer2 * a_pIlv, IFilterOutputMgrRef a_inner = nullptr ) 
 				: FilterOutputMgrBase( a_pIlv, a_inner ) {}
 
 			virtual void ProcessOutput( int a_nFilterID, float a_outVal, int a_nBackShift );

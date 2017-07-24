@@ -12,7 +12,7 @@
 namespace Ncv
 {
 	template<class T>
-	class Channel : FRM_Object(Channel<T>)
+	class Channel : public Ncpp::Object
 	{
 	public:
 		Channel(IplImageRef a_src, int a_nChnl,
@@ -97,7 +97,7 @@ namespace Ncv
 			T * srcData;
 			//HCV_CALL( cvGetImageRawData ((IplImage *)a_src, (Ncpp::Uint8 **) &srcData, 
 			HCV_CALL( cvGetRawData ((IplImage *)a_src, (Ncpp::Uint8 **) &srcData, 
-				NULL, NULL));			
+				nullptr, nullptr));			
 
 			m_pixs = &srcData[m_nBgnX * m_nStepX + a_nChnl +
 				m_nBgnY * m_nLineLen];

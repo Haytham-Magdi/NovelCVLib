@@ -17,7 +17,7 @@ namespace Ncv
 {
 
 	template<class T>
-	class Image : FRM_Object(Image<T>)
+	class Image : public Ncpp::Object
 	{
 	public:
 		Image(IplImage * a_src)
@@ -34,7 +34,7 @@ namespace Ncv
 
 		IplImage * GetIplImagePtr(void)
 		{
-			Ncpp_ASSERT( NULL != (IplImage *)m_orgImg );
+			Ncpp_ASSERT( nullptr != (IplImage *)m_orgImg );
 
 			return (IplImage *)m_orgImg;
 		}
@@ -151,7 +151,7 @@ namespace Ncv
 
 				//HCV_CALL( cvGetImageRawData ((IplImage *)a_src, (Ncpp::Uint8 **) &m_pixs, 
 				HCV_CALL( cvGetRawData ((IplImage *)a_src, (Ncpp::Uint8 **) &m_pixs, 
-					NULL, NULL));			
+					nullptr, nullptr));			
 
 			//m_pixs = &srcData[m_nBgnX * m_nStepX + a_nChnl +
 			//	m_nBgnY * m_nLineLen];

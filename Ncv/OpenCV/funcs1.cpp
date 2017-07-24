@@ -893,7 +893,7 @@ namespace Ncv
 	{
 		S16ImageRef ret;
 
-		Ncpp_ASSERT(NULL != a_src->GetIplImagePtr());
+		Ncpp_ASSERT(nullptr != a_src->GetIplImagePtr());
 
 		ret = S16Image::Create(
 			cvGetSize(a_src->GetIplImagePtr()), a_src->GetNofChannels());
@@ -991,7 +991,7 @@ namespace Ncv
 		//	hthm 241012
 		//return;
 
-		bool bFstShow = (NULL == cvGetWindowHandle(a_sWndName));
+		bool bFstShow = (nullptr == cvGetWindowHandle(a_sWndName));
 
 		HCV_CALL(cvNamedWindow(a_sWndName, 1));
 		HCV_CALL(cvShowImage(a_sWndName, a_iplImagePtr));
@@ -1272,7 +1272,7 @@ namespace Ncv
 
 	F32ImageRef GenPyrUpImg(F32ImageRef a_src, int a_nIterCnt)
 	{
-		F32ImageRef ret = NULL;
+		F32ImageRef ret = nullptr;
 
 		F32ImageRef src = a_src;
 
@@ -1338,7 +1338,7 @@ namespace Ncv
 
 	F32ImageRef GenPyrDownImg(F32ImageRef a_src, int a_nIterCnt)
 	{
-		F32ImageRef ret = NULL;
+		F32ImageRef ret = nullptr;
 
 		F32ImageRef src = a_src;
 
@@ -2404,7 +2404,7 @@ namespace Ncv
 		//a_nDist = 45;
 
 		if (1 != a_grad1->GetNofChannels())
-			return NULL;
+			return nullptr;
 
 		S16ImageRef ret = S16Image::Create(
 			a_grad1->GetSize(), 1);
@@ -3233,7 +3233,7 @@ namespace Ncv
 			a_nAprSiz,
 			a_nAprSiz,
 			CV_SHAPE_ELLIPSE,
-			NULL
+			nullptr
 			)
 			);
 
@@ -3278,7 +3278,7 @@ namespace Ncv
 			a_nAprSiz,
 			a_nAprSiz,
 			CV_SHAPE_ELLIPSE,
-			NULL
+			nullptr
 			)
 			);
 
@@ -3335,7 +3335,7 @@ namespace Ncv
 			a_nAprSiz,
 			a_nAprSiz,
 			CV_SHAPE_ELLIPSE,
-			NULL
+			nullptr
 			)
 			);
 
@@ -3397,7 +3397,7 @@ namespace Ncv
 			a_nAprSiz,
 			a_nAprSiz,
 			CV_SHAPE_ELLIPSE,
-			NULL
+			nullptr
 			)
 			);
 
@@ -3492,11 +3492,11 @@ namespace Ncv
 
 		F32ImageRef meanImg;
 
-		if (NULL == a_mean_Buf)
+		if (nullptr == a_mean_Buf)
 		{
 			meanImg = GenFastAvgImg(a_src, a_nAprSiz);
 
-			if (NULL != a_pMeanImg)
+			if (nullptr != a_pMeanImg)
 				*a_pMeanImg = meanImg;
 
 			mean_Buf = (F32ColorVal *)meanImg->GetPixAt(0, 0);
@@ -4356,7 +4356,7 @@ namespace Ncv
 
 		//a_pPointArr
 
-		if (NULL != a_pAvgImgRef)
+		if (nullptr != a_pAvgImgRef)
 			*a_pAvgImgRef = avgImg;
 	}
 
@@ -4702,7 +4702,7 @@ namespace Ncv
 
 		//a_pPointArr
 
-		//if( NULL != a_pAvgImgRef )
+		//if( nullptr != a_pAvgImgRef )
 		//	*a_pAvgImgRef = avgImg;
 	}
 
@@ -5058,7 +5058,7 @@ namespace Ncv
 
 		//a_pPointArr
 
-		//if( NULL != a_pAvgImgRef )
+		//if( nullptr != a_pAvgImgRef )
 		//	*a_pAvgImgRef = avgImg;
 	}
 
@@ -5246,7 +5246,7 @@ namespace Ncv
 	//				rPixInfo.pAbovePix = acPixInfo.GetPtrAt(nAbvX, nAbvY);
 	//			}
 
-	//			rPixInfo.pSlideSrc = NULL;
+	//			rPixInfo.pSlideSrc = nullptr;
 
 	//			rPixInfo.bIsEdge = false;
 	//			rPixInfo.bIsValley = false;
@@ -5264,7 +5264,7 @@ namespace Ncv
 	//	{
 	//		IndexLQM * pIlqm = mlqMgr.PopPtrMax();
 
-	//		if (NULL == pIlqm)
+	//		if (nullptr == pIlqm)
 	//			break;
 
 	//		PixInfo * pPI = &pixInfoArr[pIlqm->Index];
@@ -5534,7 +5534,7 @@ namespace Ncv
 	//				rPixInfo.pAbovePix = acPixInfo.GetPtrAt(nAbvX, nAbvY);
 	//			}
 
-	//			rPixInfo.pSlideSrc = NULL;
+	//			rPixInfo.pSlideSrc = nullptr;
 
 	//			rPixInfo.bIsEdge = false;
 	//			rPixInfo.bIsValley = false;
@@ -5552,7 +5552,7 @@ namespace Ncv
 	//	{
 	//		IndexLQM * pIlqm = mlqMgr.PopPtrMax();
 
-	//		if (NULL == pIlqm)
+	//		if (nullptr == pIlqm)
 	//			break;
 
 	//		PixInfo * pPI = &pixInfoArr[pIlqm->Index];

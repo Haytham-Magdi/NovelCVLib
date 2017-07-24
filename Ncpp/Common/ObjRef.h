@@ -2,20 +2,20 @@
 
 
 #include <NovelCVLib\Ncpp\Common\debug.h>
+#include <NovelCVLib\Ncpp\Common\Object.h>
 
 
 
 namespace Ncpp
 {
 	
-	
 	template<class T>
-	class ObjRef
+	class ObjRef : public ObjectFriend
 	{
 	public:
 		ObjRef()
 		{
-			m_pObj = NULL;
+			m_pObj = nullptr;
 		}
 
 		ObjRef(T * a_pObj)
@@ -63,7 +63,7 @@ namespace Ncpp
 		{
 			if (nullptr != a_pObj)
 			{
-				a_pObj->AddRef();
+				ObjectFriend::AddObjectRef(a_pObj);
 			}
 		}
 
@@ -71,7 +71,12 @@ namespace Ncpp
 		{
 			if (nullptr != a_pObj)
 			{
-				Object<T>::ReleaseObject(a_pObj);
+				ObjectFriend::ReleaseObject(a_pObj);
+
+				if (0 == ObjectFriend::GetObjectRefCount(a_pObj))
+				{
+					KillObj<T>(a_pObj);
+				}
 			}
 		}
 

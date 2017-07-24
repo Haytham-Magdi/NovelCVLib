@@ -21,7 +21,7 @@ namespace Ncv
 		inline PixelTypeInfo * GetPixTInfo(T a_dmy)
 	{
 		Ncpp_ASSERT(false);
-		return NULL;
+		return nullptr;
 	}
 
 	inline PixelTypeInfo * GetPixTInfo(Ncpp::Int16 a_dmy)		

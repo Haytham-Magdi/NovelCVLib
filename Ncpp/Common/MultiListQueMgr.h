@@ -37,7 +37,7 @@ namespace Ncpp
 		{
 			T * pLA = m_multiQues.PopPtr( m_nLastMinIndex );
 
-			while( NULL == pLA )
+			while( nullptr == pLA )
 			{
 				if(m_nLastMinIndex < m_nLastMaxIndex)
 				{
@@ -57,7 +57,7 @@ namespace Ncpp
 		{
 			T * pLA = m_multiQues.PopPtr( m_nLastMaxIndex );
 
-			while( NULL == pLA )
+			while( nullptr == pLA )
 			{
 				if(m_nLastMaxIndex > m_nLastMinIndex)
 				{

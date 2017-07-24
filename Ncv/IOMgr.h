@@ -29,7 +29,7 @@ namespace Ncv
 
 		static IIOMgrCore * GetCore()
 		{
-			//return NULL;
+			//return nullptr;
 			return m_pCore;
 			
 		}

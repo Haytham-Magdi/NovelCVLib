@@ -12,7 +12,7 @@
 namespace Ncpp
 {
 	template<class T>
-	class ListElm : FRM_Object(ListElm<T>)
+	class ListElm : public Ncpp::Object
 	{
 	protected:
 
@@ -20,8 +20,8 @@ namespace Ncpp
 
 		ListElm()
 		{
-			m_pNext = NULL;
-			m_pPrev = NULL;
+			m_pNext = nullptr;
+			m_pPrev = nullptr;
 		}
 
 	public:
@@ -41,7 +41,7 @@ namespace Ncpp
 			ListElm< T > * pNext = m_pNext;
 			ListElm< T > * pOldNext = pNext;
 
-			while( NULL != pNext )
+			while( nullptr != pNext )
 			{
 				pOldNext = pNext;
 
@@ -56,7 +56,7 @@ namespace Ncpp
 			ListElm< T > * pPrev = m_pPrev;
 			ListElm< T > * pOldPrev = pPrev;
 
-			while( NULL != pPrev )
+			while( nullptr != pPrev )
 			{
 				pOldPrev = pPrev;
 
@@ -68,8 +68,8 @@ namespace Ncpp
 
 		void AddNext( ListElm< T > * a_pElm )
 		{
-			Ncpp_ASSERT( NULL == m_pNext );
-			Ncpp_ASSERT( NULL == a_pElm->m_pPrev );
+			Ncpp_ASSERT( nullptr == m_pNext );
+			Ncpp_ASSERT( nullptr == a_pElm->m_pPrev );
 
 			m_pNext = a_pElm;
 			a_pElm->m_pPrev = this;
@@ -77,8 +77,8 @@ namespace Ncpp
 
 		void AddPrev( ListElm< T > * a_pElm )
 		{
-			Ncpp_ASSERT( NULL == m_pPrev );
-			Ncpp_ASSERT( NULL == a_pElm->m_pNext );
+			Ncpp_ASSERT( nullptr == m_pPrev );
+			Ncpp_ASSERT( nullptr == a_pElm->m_pNext );
 
 			m_pPrev = a_pElm;
 			a_pElm->m_pNext = this;
@@ -91,8 +91,8 @@ namespace Ncpp
 				BreakNext()
 					BreakPrev()
 
-			Ncpp_ASSERT( NULL == m_pNext );
-			Ncpp_ASSERT( NULL == a_pElm->m_pPrev );
+			Ncpp_ASSERT( nullptr == m_pNext );
+			Ncpp_ASSERT( nullptr == a_pElm->m_pPrev );
 
 			m_pNext = a_pElm;
 			a_pElm->m_pPrev = this;
@@ -101,19 +101,19 @@ namespace Ncpp
 
 		void BreakNext()
 		{
-			if( NULL != m_pNext )
+			if( nullptr != m_pNext )
 			{
-				m_pNext->m_pPrev = NULL;
-				m_pNext = NULL;
+				m_pNext->m_pPrev = nullptr;
+				m_pNext = nullptr;
 			}
 		}
 
 		void BreakPrev()
 		{
-			if( NULL != m_pPrev )
+			if( nullptr != m_pPrev )
 			{
-				m_pPrev->m_pNext = NULL;
-				m_pPrev = NULL;
+				m_pPrev->m_pNext = nullptr;
+				m_pPrev = nullptr;
 			}
 		}
 
@@ -125,8 +125,8 @@ namespace Ncpp
 			BreakNext();
 			BreakPrev();
 
-			if( NULL != pNext &&
-				NULL != pPrev )
+			if( nullptr != pNext &&
+				nullptr != pPrev )
 			{
 				pPrev->AddNext( pNext );
 			}

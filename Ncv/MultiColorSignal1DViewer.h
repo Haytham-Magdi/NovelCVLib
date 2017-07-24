@@ -21,7 +21,7 @@ namespace Ncv
 	using namespace std;
 
 /*
-	class Signal1DDrawing : FRM_Object()
+	class Signal1DDrawing : public Ncpp::Object
 	{
 	public:
 
@@ -45,13 +45,13 @@ namespace Ncv
 	typedef Ncpp::ObjRef< Signal1DDrawing > Signal1DDrawingRef;
 */
 
-	class MultiColorSignal1DViewer : FRM_Object(MultiColorSignal1DViewer)
+	class MultiColorSignal1DViewer : public Ncpp::Object
 	{
 	protected :
 
 
 	public:
-		MultiColorSignal1DViewer( Signal1DViewerRef a_sv = NULL );
+		MultiColorSignal1DViewer( Signal1DViewerRef a_sv = nullptr );
 
 		U8ImageRef GenDisplayImage()
 		{

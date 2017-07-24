@@ -23,7 +23,7 @@ namespace Ncv
 	namespace Ns_Binarization
 	{
 
-		class AngleDirMgrColl : FRM_Object(AngleDirMgrColl)
+		class AngleDirMgrColl : public Ncpp::Object
 		{
 		protected:
 

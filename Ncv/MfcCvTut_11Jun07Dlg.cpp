@@ -52,7 +52,7 @@ END_MESSAGE_MAP()
 
 
 
-CMfcCvTut_11Jun07Dlg::CMfcCvTut_11Jun07Dlg(CWnd* pParent /*=NULL*/)
+CMfcCvTut_11Jun07Dlg::CMfcCvTut_11Jun07Dlg(CWnd* pParent /*=nullptr*/)
 : CDialog(CMfcCvTut_11Jun07Dlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -156,7 +156,7 @@ BOOL CMfcCvTut_11Jun07Dlg::OnInitDialog()
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
 	CMenu* pSysMenu = GetSystemMenu(FALSE);
-	if (pSysMenu != NULL)
+	if (pSysMenu != nullptr)
 	{
 		CString strAboutMenu;
 		strAboutMenu.LoadString(IDS_ABOUTBOX);
@@ -258,7 +258,7 @@ void CMfcCvTut_11Jun07Dlg::OnBnClickedOpenImageBtn()
  CFileDialog dlg(TRUE, _T("*.bmp"), "",
     OFN_FILEMUSTEXIST|OFN_PATHMUSTEXIST| OFN_HIDEREADONLY,
     "image files (*.bmp; *.jpg) |*.bmp;*.jpg| AVI files (*.avi) |*.avi|All Files (*.*)|*.*||",
-	NULL);
+	nullptr);
 
  
 
@@ -821,7 +821,7 @@ void CMfcCvTut_11Jun07Dlg::RgnSgmImg_Mouse_Callback(
 	{
 		Ncv::IRegionSegmentor20Ref rs1 = GlobalStuff::GetRegionSegmentor();
 
-		if( NULL == rs1 )
+		if( nullptr == rs1 )
 			return;
 
 		//rs1->ShowValleyPath( a_x, a_y );
@@ -871,7 +871,7 @@ void CMfcCvTut_11Jun07Dlg::RgnSgmImg_Mouse_Callback(
 		{
 			Ncv::IRegionSegmentor20Ref rs1 = GlobalStuff::GetRegionSegmentor();
 
-			if( NULL == rs1 )
+			if( nullptr == rs1 )
 				return;
 
 			rs1->ShowEdgeOfConflict();

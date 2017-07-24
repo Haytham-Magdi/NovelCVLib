@@ -16,7 +16,7 @@ namespace Ncpp
 #define MemAccessor_1D_REF(T) Ncpp::ObjRef< MemAccessor_1D< T > >
 
 	template<class T>
-	class MemAccessor_1D : FRM_Object(MemAccessor_1D<T>)
+	class MemAccessor_1D : public Ncpp::Object
 	{
 	public:
 
@@ -122,7 +122,7 @@ namespace Ncpp
 			if (m_isLocked)
 				throw "m_isLocked";
 
-			Ncpp_ASSERT(NULL != a_data);
+			Ncpp_ASSERT(nullptr != a_data);
 
 			m_data = a_data;
 			m_data_Org = a_data;

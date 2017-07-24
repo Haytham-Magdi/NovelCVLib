@@ -10,7 +10,7 @@
 
 namespace Ncpp
 {
-	class CircIndex : FRM_Object(CircIndex)
+	class CircIndex : public Ncpp::Object
 	{
 	public :
 

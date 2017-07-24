@@ -438,7 +438,7 @@ namespace Hcv
 			IIterator_REF( F32Point ) iter1 = lp;
 
 
-			F32ColorVal * pix2 = NULL;
+			F32ColorVal * pix2 = nullptr;
 
 
 			int indexOnLine = 0;
@@ -539,7 +539,7 @@ namespace Hcv
 	{
 		ProcessInner( a_nFilterID, a_outVal, a_nBackShift );
 
-		if( NULL == m_sb0 )
+		if( nullptr == m_sb0 )
 		{
 			 m_sb0 = new Signal1DBuilder( 700, a_nBackShift );
 			 m_sb1 = new Signal1DBuilder( 700, a_nBackShift );
@@ -572,7 +572,7 @@ namespace Hcv
 	{
 		ProcessInner( a_nFilterID, a_outVal, a_nBackShift );
 
-		if( NULL == m_sb )
+		if( nullptr == m_sb )
 		{
 			 m_sb = new Signal1DBuilder( 700, a_nBackShift );
 		}
@@ -585,7 +585,7 @@ namespace Hcv
 		ProvideInnerSignal( a_sv );
 
 		// Hthm Tmp
-		if( NULL == m_sb )
+		if( nullptr == m_sb )
 		{
 			 m_sb = new Signal1DBuilder( 700 );
 		}
@@ -739,12 +739,12 @@ namespace Hcv
 
 			RgnInfo * pFstRootRgn = FindRootRgnBef( pEdgeRgn );
 
-			if( NULL == pFstRootRgn )
+			if( nullptr == pFstRootRgn )
 				continue;
 
 			RgnInfo * pSndRootRgn = FindRootRgnAft( );
 
-			if( NULL == pSndRootRgn )
+			if( nullptr == pSndRootRgn )
 				continue;
 
 
@@ -762,12 +762,12 @@ namespace Hcv
 	ImageLineViewer2::RgnInfo * ImageLineViewer2::FindRootRgnBef( ImageLineViewer2::RgnInfo * a_pEdgeRgn )
 	{
 		if( 0 == m_rootRgnPtrVect.GetSize() )
-			return NULL;
+			return nullptr;
 
 		const int edgeIOL = a_pEdgeRgn->IndexOnLine;
 
 		if( edgeIOL < m_rootRgnPtrVect[ m_rootIdx ]->IndexOnLine )
-			return NULL;
+			return nullptr;
 
 		for( ; m_rootIdx < m_rootRgnPtrVect.GetSize(); m_rootIdx++ )
 		{
@@ -791,12 +791,12 @@ namespace Hcv
 		if( -1 == a_limIOL )
 		{
 			if( m_rootRgnPtrVect.GetSize() == m_rootIdx )
-				return NULL;
+				return nullptr;
 		}
 		else
 		{
 			if( m_rootRgnPtrVect[ m_rootIdx ]->IndexOnLine >= a_limIOL )
-				return NULL;
+				return nullptr;
 		}
 
 		return m_rootRgnPtrVect[ m_rootIdx ];
