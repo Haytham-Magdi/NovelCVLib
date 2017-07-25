@@ -10,17 +10,8 @@
 
 namespace Ncpp
 {
-	//class Dummy {};		
-	
-	//class Dummy2 
-	//{
-	//public:
-	//	static int s_num1;
-	//};
-
 
 	template<class T>
-	//class PtrObj : public Ncpp::Object
 	class PtrObj : public Ncpp::Object
 	{
 	public:
@@ -42,131 +33,94 @@ namespace Ncpp
 		}
 
 	private:
-		//void AddRef(void)
-		//{
-		//	m_nRefCnt++;
-		//	//Dummy2::s_num1++;
-		//}
 
-		//void Release(void)
-		//{
-		//	m_nRefCnt--;
-		//	Ncpp_ASSERT(m_nRefCnt >= 0);
-
-		//	//Dummy2::s_num1--;
-
-		//	if (0 == m_nRefCnt)
-		//	{
-		//		KillObj(m_ptr);
-		//		delete this;
-		//	}
-		//}
-
-
-	private:
-		//static int s_nRefCnt;
 		int m_nRefCnt;
 		T * m_ptr;
 	};
 
+	template<class T>
+	class PtrRef : public ObjectFriend
+	{
+	public:
+		PtrRef()
+		{
+			m_pObj = nullptr;
+		}
 
+		PtrRef(T * a_ptr)
+		{
+			m_pObj = new PtrObj<T>(a_ptr);
+			PtrRef<T>::AddObjectRef(m_pObj);
+		}
 
-	//template<class T>
-	//template<typename T>
-	//	class PtrRef : virtual ObjectFriend 
-	//{
-	//	
-	//public:
-	//	
-	//	
-	//	
-	//	///////////////////////////////////////////
-	//	
-	//	
-	//public:
-	//	PtrRef()
-	//	{
-	//		m_pObj = nullptr;
-	//	}
-	//	
-	//	PtrRef(T * a_ptr)
-	//	{
-	//		m_pObj = new PtrObj<T>(a_ptr);
-	//		AddObjectRef(m_pObj);
-	//	}
-	//	
-	//	PtrRef(const PtrRef & a_ptrRef) 
-	//	{
-	//		m_pObj = a_ptrRef.m_pObj;
-	//		AddObjectRef(m_pObj);
-	//	}
-	//	
-	//	~PtrRef()
-	//	{
-	//		ReleaseObject(m_pObj);
-	//	}
-	//	
-	//	void operator = (const PtrRef<T> & a_ptrRef) 
-	//	{
-	//		*this = a_ptrRef.m_pObj;
-	//	}
-	//	
-	//	void operator = (PtrObj<T> * a_ptrObj) 
-	//	{
-	//		AddObjectRef(a_ptrObj);
-	//		ReleaseObject(m_pObj);
-	//		m_pObj = a_ptrObj;
-	//	}
+		PtrRef(const PtrRef & a_ptrRef)
+		{
+			m_pObj = a_ptrRef.m_pObj;
+			PtrRef<T>::AddObjectRef(m_pObj);
+		}
 
-	//	void operator = (Dummy * a_pDmy) 
-	//	{
-	//		Ncpp_ASSERT(false);
-	//	}
+		~PtrRef()
+		{
+			PtrRef<T>::ReleaseObject(m_pObj);
+		}
 
-	//	void operator = (T * a_ptr) 
-	//	{
-	//		ReleaseObject(m_pObj);
-	//		m_pObj = new PtrObj<T>(a_ptr);
-	//		AddObjectRef(m_pObj);
-	//	}
-	//	
-	//	
-	//	T * operator -> (void)
-	//	{
-	//		return m_pObj->GetPtr();
-	//	}
+		void operator = (const PtrRef<T> & a_ptrRef)
+		{
+			*this = a_ptrRef.m_pObj;
+		}
 
-	//	operator T * (void)
-	//	{
-	//		return m_pObj->GetPtr();
-	//	}
-	//	
-	//	operator Dummy * (void)
-	//	{
-	//		return nullptr;
-	//	}
+		void operator = (PtrObj<T> * a_ptrObj)
+		{
+			PtrRef<T>::AddObjectRef(a_ptrObj);
+			PtrRef<T>::ReleaseObject(m_pObj);
+			m_pObj = a_ptrObj;
+		}
 
+		void operator = (T * a_ptr)
+		{
+			PtrRef<T>::ReleaseObject(m_pObj);
+			m_pObj = new PtrObj<T>(a_ptr);
+			PtrRef<T>::AddObjectRef(m_pObj);
+		}
 
+		T * operator -> (void)
+		{
+			return m_pObj->GetPtr();
+		}
 
-	//protected:
-	//	PtrObj<T> * m_pObj;		
-	//	
-	//};
+		operator T * (void)
+		{
+			return m_pObj->GetPtr();
+		}
 
-	////template<class T>
-	//template<typename T>
-	////int PtrObj<T>::PtrObj::s_nRefCnt = 0;
-	//int PtrObj<T>::PtrObj<T>::s_nRefCnt = 0;
-	
-	//template<class T2, class T1>
-	//	inline PtrRef<T2> GenRef(PtrRef<T1> a_t1)
-	//{
-	//	PtrRef<T2> t2 = (T2 *) a_t1;
-	//	return t2;
-	//}
+	protected:
 
+		static void AddObjectRef(PtrObj<T> * a_pObj)
+		{
+			if (nullptr != a_pObj)
+			{
+				ObjectFriend::AddObjectRef(a_pObj);
+			}
+		}
 
-	template <class T>
-	using PtrRef = ObjRef<PtrObj<T>>;
+		static void ReleaseObject(PtrObj<T> * a_pObj)
+		{
+			if (nullptr != a_pObj)
+			{
+				ObjectFriend::ReleaseObject(a_pObj);
+
+				if (0 == ObjectFriend::GetObjectRefCount(a_pObj))
+				{
+					KillObj<PtrObj<T>>(a_pObj);
+				}
+			}
+		}
+
+	protected:
+		PtrObj<T> * m_pObj;
+	};
+
 
 }
+
+
