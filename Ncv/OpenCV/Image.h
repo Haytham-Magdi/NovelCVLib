@@ -7,6 +7,13 @@
 #include <NovelCVLib\Ncv\OpenCV\error.h>
 #include <NovelCVLib\Ncv\OpenCV\Channel.h>
 
+#include <NovelCVLib\Ncv\OpenCV\OpenCVKillers.h>
+
+//#include <NovelCVLib\Ncv\OpenCV\funcs1.h>
+////#include <NovelCVLib\Ncv\ConvKernel.h>
+//#include <NovelCVLib\Ncv\OpenCV\Hsv.h>
+
+
 //#include "D:\HthmWork_D\OpenCV-2.3.1-win-superpack\opencv\build\include\opencv2\legacy\compat.hpp"
 
 

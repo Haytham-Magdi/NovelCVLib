@@ -7,6 +7,7 @@
 //#include <NovelCVLib\Ncpp\stl\vector>
 #include <vector>
 
+#include <NovelCVLib\Ncv\OpenCV\OpenCVKillers.h>
 
 
 namespace Ncv

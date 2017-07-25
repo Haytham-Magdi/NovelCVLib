@@ -3,6 +3,8 @@
 #include <NovelCVLib\Ncv\NcvLib_Old.cpp>
 
 
+#include <NovelCVLib\Ncv\OpenCV\OpenCVKillers.cpp>
+
 //#include <NovelCVLib\Ncv\RegionSegmentor44.cpp>
 //#include <NovelCVLib\Ncv\RegionSegmentor45.cpp>
 //#include <NovelCVLib\Ncv\RegionSegmentor46.cpp>

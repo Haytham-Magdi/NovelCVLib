@@ -8,6 +8,7 @@
 #include <NovelCVLib\Ncpp\Common\Object.h>
 
 
+
 namespace Ncpp
 {
 

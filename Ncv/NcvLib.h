@@ -1,8 +1,8 @@
 #pragma once
 
 #include <NovelCVLib\Ncpp\Common\commonLib.h>
-#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
 #include <NovelCVLib\Ncv\VectorVal.h>
+#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
 #include <NovelCVLib\Ncv\OpenCV\Types.h>
 #include <NovelCVLib\Ncv\OpenCV\OpenCVKillers.h>
 #include <NovelCVLib\Ncv\OpenCV\error.h>
