@@ -6,7 +6,6 @@
 namespace Ncpp
 {
 	
-	//inline void KillObj(IplImage * a_ptr)
 	void KillObj(IplImage * a_ptr)
 	{
 		cvReleaseImage(&a_ptr);
