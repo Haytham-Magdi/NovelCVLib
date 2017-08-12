@@ -7,7 +7,7 @@
 
 #include <NovelCVLib\Ncpp\Common\FixedVector.h>
 
-#include <NovelCVLib\Ncpp\Common\Debug.h>
+#include <NovelCVLib\Common\Debug.h>
 //#include <NovelCVLib\Ncpp\Common\indexcalc.h>
 
 

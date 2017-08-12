@@ -3,9 +3,9 @@
 
 
 //#include <NovelCVLib\Ncpp\Common\common.h>
-#include <NovelCVLib\Ncpp\Common\object.h>
-#include <NovelCVLib\Ncpp\Common\CommonKillers.h>
-#include <NovelCVLib\Ncpp\Common\Object.h>
+//#include <NovelCVLib\Common\object.h>
+#include <NovelCVLib\Common\CommonKillers.h>
+#include <NovelCVLib\Common\Object.h>
 
 
 

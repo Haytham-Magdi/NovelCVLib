@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 
-#include <NovelCVLib\Ncpp\Common\Debug.h>
+#include <NovelCVLib\Common\Debug.h>
 #include <NovelCVLib\Ncpp\Common\OffsetCalc_1D.h>
 #include <NovelCVLib\Ncpp\Common\PtrIterator.h>
 #include <NovelCVLib\Ncpp\Common\MemSimpleAccessor_1D.h>

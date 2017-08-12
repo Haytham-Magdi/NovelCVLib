@@ -1,6 +1,7 @@
 #pragma once
 
 #include <NovelCVLib\Ncpp\Common\commonLib.h>
+#include <NovelCVLib\Common\PtrRef.h>
 #include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
 
 

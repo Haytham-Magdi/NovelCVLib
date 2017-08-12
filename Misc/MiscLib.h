@@ -5,12 +5,12 @@
 #include <stdlib.h>
 #include <vector>
 
-//#include <NovelCVLib\Ncpp\Common\debug.h>
+//#include <NovelCVLib\Common\debug.h>
 //#include <NovelCVLib\Ncpp\Common\BasicTypes.h>
-//#include <NovelCVLib\Ncpp\Common\Object.h>
+//#include <NovelCVLib\Common\Object.h>
 //#include <NovelCVLib\Ncpp\Common\Exception.h>
-//#include <NovelCVLib\Ncpp\Common\CommonKillers.h>
-//#include <NovelCVLib\Ncpp\Common\ObjRef.h>
+//#include <NovelCVLib\Common\CommonKillers.h>
+//#include <NovelCVLib\Common\ObjRef.h>
 //#include <NovelCVLib\Ncpp\Common\PtrRef.h>
 
 #include <NovelCVLib\Ncpp\Common\FixedVector.h>

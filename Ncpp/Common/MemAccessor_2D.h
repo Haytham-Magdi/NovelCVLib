@@ -5,9 +5,9 @@
 #include <stdlib.h>
 
 
-#include <NovelCVLib\Ncpp\Common\Debug.h>
-#include <NovelCVLib\Ncpp\Common\Object.h>
-#include <NovelCVLib\Ncpp\Common\ObjRef.h>
+#include <NovelCVLib\Common\Debug.h>
+#include <NovelCVLib\Common\Object.h>
+#include <NovelCVLib\Common\ObjRef.h>
 #include <NovelCVLib\Ncpp\Common\OffsetCalc_2D.h>
 #include <NovelCVLib\Ncpp\Common\MemSimpleAccessor_2D.h>
 

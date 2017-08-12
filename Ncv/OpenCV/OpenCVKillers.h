@@ -1,5 +1,7 @@
 #pragma once
 
+#include <NovelCVLib\Common\CommonKillers.h>
+
 #include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
 
 namespace Ncpp

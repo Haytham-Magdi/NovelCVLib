@@ -4,8 +4,8 @@
 
 #include <stdlib.h>
 
-#include <NovelCVLib\Ncpp\Common\Debug.h>
-#include <NovelCVLib\Ncpp\Common\ObjRef.h>
+#include <NovelCVLib\Common\Debug.h>
+#include <NovelCVLib\Common\ObjRef.h>
 
 
 

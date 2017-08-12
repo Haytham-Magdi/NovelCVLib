@@ -1,8 +1,8 @@
 #pragma once
 
 //#include <NovelCVLib\Ncpp\Common\common.h>
-#include <NovelCVLib\Ncpp\Common\Object.h>
-#include <NovelCVLib\Ncpp\Common\ObjRef.h>
+#include <NovelCVLib\Common\Object.h>
+#include <NovelCVLib\Common\ObjRef.h>
 
 namespace Ncpp
 {
