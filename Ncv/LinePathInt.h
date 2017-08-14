@@ -31,10 +31,7 @@ namespace Ncv
 		bool MoveNext();
 
 
-
-
 	protected:
-
 
 		const F32Point m_bgnPnt;
 		const F32Point m_endPnt;
