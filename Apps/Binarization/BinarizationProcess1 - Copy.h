@@ -13,7 +13,7 @@
 //#include <NovelCVLib\Ncv\ImageItrMgr.h>
 
 #include <NovelCVLib\Ncv\ImgRotationMgr.h>
-#include <NovelCVLib\Ncv\Binarization\ImgAngleDirMgr.h>
+#include <NovelCVLib\Apps\Binarization\ImgAngleDirMgr.h>
 
 
 namespace Ncv

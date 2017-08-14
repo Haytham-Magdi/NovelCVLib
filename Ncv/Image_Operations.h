@@ -5,9 +5,8 @@
 #include <NovelCVLib\Ncv\OpenCV\Types.h>
 #include <NovelCVLib\Ncv\OpenCV\error.h>
 #include <NovelCVLib\Ncv\OpenCV\funcs1.h>
-#include <vector>
 #include <NovelCVLib\Ncv\OpenCV\Image.h>
-#include <NovelCVLib\Ncv\Element_Operations.h>
+#include <NovelCVLib\Element_Operations\Element_Operations.h>
 #include <NovelCVLib\Ncv\Line_Operations.h>
 #include <NovelCVLib\Ncv\TempImageAccessor.h>
 

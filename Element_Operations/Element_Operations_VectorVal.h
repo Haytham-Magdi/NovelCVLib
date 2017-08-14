@@ -9,7 +9,7 @@
 //#include <NovelCVLib\Ncv\OpenCV\Image.h>
 
 #include <NovelCVLib\Ncv\VectorVal.h>
-#include <NovelCVLib\Ncv\Element_Operations.h>
+#include <NovelCVLib\Element_Operations\Element_Operations.h>
 
 
 namespace Ncv
@@ -22,7 +22,7 @@ namespace Ncv
 #define T_Elm float
 #define N_Dims 2
 
-#include <NovelCVLib\Ncv\Element_Operations_VectorVal_CoreFile.h>
+#include <NovelCVLib\Element_Operations\Element_Operations_VectorVal_CoreFile.h>
 
 #undef T_Elm
 #undef N_Dims
@@ -31,7 +31,7 @@ namespace Ncv
 #define T_Elm float
 #define N_Dims 3
 
-#include <NovelCVLib\Ncv\Element_Operations_VectorVal_CoreFile.h>
+#include <NovelCVLib\Element_Operations\Element_Operations_VectorVal_CoreFile.h>
 
 #undef T_Elm
 #undef N_Dims
@@ -40,7 +40,7 @@ namespace Ncv
 #define T_Elm float
 #define N_Dims 4
 
-#include <NovelCVLib\Ncv\Element_Operations_VectorVal_CoreFile.h>
+#include <NovelCVLib\Element_Operations\Element_Operations_VectorVal_CoreFile.h>
 
 #undef T_Elm
 #undef N_Dims

@@ -8,8 +8,8 @@
 #include <vector>
 #include <NovelCVLib\Ncv\OpenCV\Image.h>
 
-#include <NovelCVLib\Ncv\Element_Operations.h>
-#include <NovelCVLib\Ncv\Element_Operations_F32ColorVal.h>
+#include <NovelCVLib\Element_Operations\Element_Operations.h>
+#include <NovelCVLib\Element_Operations\Element_Operations_F32ColorVal.h>
 
 
 namespace Ncv

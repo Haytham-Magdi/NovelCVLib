@@ -194,33 +194,18 @@
 #include <NovelCVLib\Ncv\TempImageAccessor.h>
 #include <NovelCVLib\Ncv\Line_Operations.h>
 #include <NovelCVLib\Ncv\ImageAccessorOperations.h>
-#include <NovelCVLib\Ncv\Element_Operations_VectorVal.h>
-#include <NovelCVLib\Ncv\Element_Operations_F32ColorVal.h>
-#include <NovelCVLib\Ncv\Element_Operations.h>
+#include <NovelCVLib\Element_Operations\Element_Operations_VectorVal.h>
+#include <NovelCVLib\Element_Operations\Element_Operations_F32ColorVal.h>
+#include <NovelCVLib\Element_Operations\Element_Operations.h>
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
 #include <NovelCVLib\Ncv\ConflictInfo.h>
 
-
-//#include <NovelCVLib\Ncv\LocHist\ImgDataGradMgr_LocHist.h>
-//#include <NovelCVLib\Ncv\LocHist\ImgDataMgr_2_FactorySet_LocHist.h>
-//#include <NovelCVLib\Ncv\LocHist\ImgDataMgr_2_LocHist.h>
-
-//#include <NovelCVLib\Ncv\GridColorPalette.h>
-
-//#include <NovelCVLib\Ncv\GridPal\ImgDataGradMgr_GridPal.h>
-//#include <NovelCVLib\Ncv\GridPal\ImgDataMgr_2_FactorySet_GridPal.h>
-//#include <NovelCVLib\Ncv\GridPal\ImgDataMgr_2_GridPal.h>
-
-//#include <NovelCVLib\Ncv\ImgData_Simple\ImgDataGradMgr_Simple.h>
-//#include <NovelCVLib\Ncv\ImgData_Simple\ImgDataMgr_2_FactorySet_Simple.h>
-//#include <NovelCVLib\Ncv\ImgData_Simple\ImgDataMgr_2_Simple.h>
-
-#include <NovelCVLib\Ncv\Binarization\ImgAngleDirMgr.h>
-#include <NovelCVLib\Ncv\Binarization\AngleDirMgrColl.h>
-#include <NovelCVLib\Ncv\Binarization\AngleDirMgrColl_Context.h>
-//#include <NovelCVLib\Ncv\Binarization\RotationMgrColl.h>
-#include <NovelCVLib\Ncv\Binarization\BinarizationProcess1.h>
-#include <NovelCVLib\Ncv\Binarization\PixelInfo_1.h>
+#include <NovelCVLib\Apps\Binarization\ImgAngleDirMgr.h>
+#include <NovelCVLib\Apps\Binarization\AngleDirMgrColl.h>
+#include <NovelCVLib\Apps\Binarization\AngleDirMgrColl_Context.h>
+//#include <NovelCVLib\Apps\Binarization\RotationMgrColl.h>
+#include <NovelCVLib\Apps\Binarization\BinarizationProcess1.h>
+#include <NovelCVLib\Apps\Binarization\PixelInfo_1.h>
 
 
 

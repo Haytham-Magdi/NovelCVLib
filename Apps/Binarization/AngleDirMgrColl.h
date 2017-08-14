@@ -12,9 +12,9 @@
 //#include <NovelCVLib\Ncv\ImageLineItrProvider.h>
 //#include <NovelCVLib\Ncv\ImageItrMgr.h>
 
-#include <NovelCVLib\Ncv\Binarization\ImgAngleDirMgr.h>
-//#include <NovelCVLib\Ncv\Binarization\ImgSizeRotationColl.h>
-#include <NovelCVLib\Ncv\Binarization\AngleDirMgrColl_Context.h>
+#include <NovelCVLib\Apps\Binarization\ImgAngleDirMgr.h>
+//#include <NovelCVLib\Apps\Binarization\ImgSizeRotationColl.h>
+#include <NovelCVLib\Apps\Binarization\AngleDirMgrColl_Context.h>
 #include <NovelCVLib\Ncv\ImgSizeRotationColl.h>
 
 

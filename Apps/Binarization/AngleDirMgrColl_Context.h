@@ -15,9 +15,8 @@
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
 #include <NovelCVLib\Ncv\ConflictInfo.h>
 
-#include <NovelCVLib\Ncv\Binarization\ImgAngleDirMgr.h>
-//#include <NovelCVLib\Ncv\Binarization\RotationMgrColl.h>
-#include <NovelCVLib\Ncv\ConflictInfo.h>
+#include <NovelCVLib\Apps\Binarization\ImgAngleDirMgr.h>
+//#include <NovelCVLib\Apps\Binarization\RotationMgrColl.h>
 
 
 namespace Ncv
@@ -25,22 +24,23 @@ namespace Ncv
 	namespace Ns_Binarization
 	{
 
-		class PixelInfo_1 : public MultiListQueMember< PixelInfo_1 >
+		class AngleDirMgrColl_Context : public Ncpp::Object
 		{
 		public:
 
-			int X;
-			int Y;
+			TempImageAccessor_REF(PixelStandevInfo) m_standevInfoImg;
+			TempImageAccessor_REF(ConflictInfo_Ex) m_conflictInfoImg;
+			F32ImageAccessor1C_Ref m_wideConflictDiff_Img;
+			F32VectorValImageAcc_4C_Ref m_avgPStandev_InrWide_Img;
 
-			ConflictInfo_Ex * pConflictInfo;
+			F32ImageAccessor3C_Ref m_org_Img;
 
-			float Val_WideOutStandev;
-
-			bool IsPushed;
+			//TempImageAccessor_REF(int) m_standevInfoImg;
+			//PixelStandevInfo psi;
 
 		};
 
-		//typedef Ncpp::ObjRef< PixelInfo_1 > PixelInfo_1_Ref;
+		typedef Ncpp::ObjRef< AngleDirMgrColl_Context > AngleDirMgrColl_Context_Ref;
 	};
 
 }

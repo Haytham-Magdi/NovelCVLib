@@ -58,8 +58,8 @@
 #include <NovelCVLib\Ncv\ConflictInfo.cpp>
 
 
-#include <NovelCVLib\Ncv\Element_Operations_F32ColorVal.cpp>
-#include <NovelCVLib\Ncv\Element_Operations_VectorVal.cpp>
+#include <NovelCVLib\Element_Operations\Element_Operations_F32ColorVal.cpp>
+#include <NovelCVLib\Element_Operations\Element_Operations_VectorVal.cpp>
 
 
 //#include <NovelCVLib\Ncv\LocHist\ImgDataGradMgr_LocHist.cpp>
@@ -76,12 +76,12 @@
 //#include <NovelCVLib\Ncv\ImgData_Simple\ImgDataMgr_2_FactorySet_Simple.cpp>
 //#include <NovelCVLib\Ncv\ImgData_Simple\ImgDataMgr_2_Simple.cpp>
 
-#include <NovelCVLib\Ncv\Binarization\ImgAngleDirMgr.cpp>
-#include <NovelCVLib\Ncv\Binarization\AngleDirMgrColl.cpp>
-#include <NovelCVLib\Ncv\Binarization\AngleDirMgrColl_Context.cpp>
-//#include <NovelCVLib\Ncv\Binarization\RotationMgrColl.cpp>
-#include <NovelCVLib\Ncv\Binarization\BinarizationProcess1.cpp>
-#include <NovelCVLib\Ncv\Binarization\PixelInfo_1.cpp>
+#include <NovelCVLib\Apps\Binarization\ImgAngleDirMgr.cpp>
+#include <NovelCVLib\Apps\Binarization\AngleDirMgrColl.cpp>
+#include <NovelCVLib\Apps\Binarization\AngleDirMgrColl_Context.cpp>
+//#include <NovelCVLib\Apps\Binarization\RotationMgrColl.cpp>
+#include <NovelCVLib\Apps\Binarization\BinarizationProcess1.cpp>
+#include <NovelCVLib\Apps\Binarization\PixelInfo_1.cpp>
 
 
 

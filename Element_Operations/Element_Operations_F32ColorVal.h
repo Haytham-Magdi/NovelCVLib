@@ -8,7 +8,7 @@
 #include <vector>
 #include <NovelCVLib\Ncv\OpenCV\Image.h>
 
-#include <NovelCVLib\Ncv\Element_Operations.h>
+#include <NovelCVLib\Element_Operations\Element_Operations.h>
 
 
 namespace Ncv

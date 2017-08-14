@@ -8,8 +8,8 @@
 #include <NovelCVLib\Ncv\OpenCV\funcs1.h>
 
 #include <NovelCVLib\Ncv\Image_Operations.h>
-#include <NovelCVLib\Ncv\Binarization\AngleDirMgrColl.h>
-#include <NovelCVLib\Ncv\Binarization\PixelInfo_1.h>
+#include <NovelCVLib\Apps\Binarization\AngleDirMgrColl.h>
+#include <NovelCVLib\Apps\Binarization\PixelInfo_1.h>
 
 
 #define M_PI 3.14159265358979323846
