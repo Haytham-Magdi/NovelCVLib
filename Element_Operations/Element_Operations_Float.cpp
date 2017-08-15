@@ -69,5 +69,15 @@ namespace Ncv
 			*a_pArg = 0.0f;
 		}
 
+		bool IsUndefined_ByPtr(T * a_pArg)
+		{
+			return *a_pArg < -0.88888888;
+		}
+
+		void SetToUndefined_ByPtr(T * a_pArg)
+		{
+			*a_pArg = 99999999;
+		}
+
 	};
 }
