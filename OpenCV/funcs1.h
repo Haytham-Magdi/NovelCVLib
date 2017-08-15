@@ -4,7 +4,7 @@
 
 #include <NovelCVLib\Ncpp\Math\mathLib.h>
 
-#include <NovelCVLib\Ncv\OpenCV\Types.h>
+#include <NovelCVLib\OpenCV\Types.h>
 
 
 //#include <NovelCVLib\Ncpp\Math\funcs.h>

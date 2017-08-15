@@ -1,8 +1,8 @@
 
-#include <NovelCVLib\Ncv\OpenCV\PixelTypes.cpp>
-#include <NovelCVLib\Ncv\OpenCV\funcs1.cpp>
+#include <NovelCVLib\OpenCV\PixelTypes.cpp>
+#include <NovelCVLib\OpenCV\funcs1.cpp>
 //#include <NovelCVLib\Ncv\ConvKernel.cpp>
-#include <NovelCVLib\Ncv\OpenCV\Hsv.cpp>
+#include <NovelCVLib\OpenCV\Hsv.cpp>
 //#include <NovelCVLib\Ncv\HistoGram.cpp>
 #include <NovelCVLib\Ncv\InitLib.cpp>
 //#include <NovelCVLib\Ncv\RegionSegmentor.cpp>

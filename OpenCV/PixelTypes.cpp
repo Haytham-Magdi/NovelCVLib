@@ -1,7 +1,7 @@
 #pragma once
 
 #include <NovelCVLib\Ncpp\Common\commonLib.h>
-#include <NovelCVLib\Ncv\OpenCV\PixelTypes.h>
+#include <NovelCVLib\OpenCV\PixelTypes.h>
 
 
 

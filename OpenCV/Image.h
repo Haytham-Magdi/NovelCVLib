@@ -1,17 +1,17 @@
 #pragma once
 
 #include <NovelCVLib\Ncpp\Common\commonLib.h>
-#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
-#include <NovelCVLib\Ncv\OpenCV\Types.h>
-#include <NovelCVLib\Ncv\OpenCV\PixelTypes.h>
-#include <NovelCVLib\Ncv\OpenCV\error.h>
-#include <NovelCVLib\Ncv\OpenCV\Channel.h>
+#include <NovelCVLib\OpenCV\CvIncludes.h>
+#include <NovelCVLib\OpenCV\Types.h>
+#include <NovelCVLib\OpenCV\PixelTypes.h>
+#include <NovelCVLib\OpenCV\error.h>
+#include <NovelCVLib\OpenCV\Channel.h>
 
-#include <NovelCVLib\Ncv\OpenCV\OpenCVKillers.h>
+#include <NovelCVLib\OpenCV\OpenCVKillers.h>
 
-//#include <NovelCVLib\Ncv\OpenCV\funcs1.h>
+//#include <NovelCVLib\OpenCV\funcs1.h>
 ////#include <NovelCVLib\Ncv\ConvKernel.h>
-//#include <NovelCVLib\Ncv\OpenCV\Hsv.h>
+//#include <NovelCVLib\OpenCV\Hsv.h>
 
 
 //#include "D:\HthmWork_D\OpenCV-2.3.1-win-superpack\opencv\build\include\opencv2\legacy\compat.hpp"

@@ -1,12 +1,12 @@
 #pragma once
 
 #include <NovelCVLib\Ncpp\Common\commonLib.h>
-#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
-#include <NovelCVLib\Ncv\OpenCV\Types.h>
-#include <NovelCVLib\Ncv\OpenCV\error.h>
-#include <NovelCVLib\Ncv\OpenCV\funcs1.h>
-#include <vector>
-#include <NovelCVLib\Ncv\OpenCV\Image.h>
+//#include <NovelCVLib\OpenCV\CvIncludes.h>
+//#include <NovelCVLib\OpenCV\Types.h>
+//#include <NovelCVLib\OpenCV\error.h>
+//#include <NovelCVLib\OpenCV\funcs1.h>
+////#include <vector>
+//#include <NovelCVLib\OpenCV\Image.h>
 
 
 
@@ -81,6 +81,18 @@ namespace Ncv
 		void SetToZero_ByPtr(T * a_pArg)
 		{
 			*a_pArg = 0;
+		}
+
+		template<class T>
+		bool IsUndefined_ByPtr(T * a_pArg)
+		{
+			Ncpp::Exception::ThrowNotImplemented();
+		}
+
+		template<class T>
+		void SetToUndefined_ByPtr(T * a_pArg)
+		{
+			Ncpp::Exception::ThrowNotImplemented();
 		}
 
 		template<class T>

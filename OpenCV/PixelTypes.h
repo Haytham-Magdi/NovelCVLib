@@ -1,7 +1,7 @@
 #pragma once
 
 #include <NovelCVLib\Common\BasicTypes.h>
-#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
+#include <NovelCVLib\OpenCV\CvIncludes.h>
 
 
 

@@ -3,7 +3,7 @@
 #include <NovelCVLib\Ncv\NcvLib_Old.cpp>
 
 
-#include <NovelCVLib\Ncv\OpenCV\OpenCVKillers.cpp>
+#include <NovelCVLib\OpenCV\OpenCVKillers.cpp>
 
 //#include <NovelCVLib\Ncv\RegionSegmentor44.cpp>
 //#include <NovelCVLib\Ncv\RegionSegmentor45.cpp>
@@ -58,7 +58,8 @@
 #include <NovelCVLib\Ncv\ConflictInfo.cpp>
 
 
-#include <NovelCVLib\Element_Operations\Element_Operations_F32ColorVal.cpp>
+#include <NovelCVLib\Element_Operations\Element_Operations_Float.cpp>
+#include <NovelCVLib\OpenCV\Element_Operations_F32ColorVal.cpp>
 #include <NovelCVLib\Element_Operations\Element_Operations_VectorVal.cpp>
 
 

@@ -2,16 +2,16 @@
 
 #include <NovelCVLib\Ncpp\Common\commonLib.h>
 #include <NovelCVLib\Ncv\VectorVal.h>
-#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
-#include <NovelCVLib\Ncv\OpenCV\Types.h>
-#include <NovelCVLib\Ncv\OpenCV\OpenCVKillers.h>
-#include <NovelCVLib\Ncv\OpenCV\error.h>
-#include <NovelCVLib\Ncv\OpenCV\PixelTypes.h>
-#include <NovelCVLib\Ncv\OpenCV\Channel.h>
-#include <NovelCVLib\Ncv\OpenCV\Image.h>
-#include <NovelCVLib\Ncv\OpenCV\funcs1.h>
+#include <NovelCVLib\OpenCV\CvIncludes.h>
+#include <NovelCVLib\OpenCV\Types.h>
+#include <NovelCVLib\OpenCV\OpenCVKillers.h>
+#include <NovelCVLib\OpenCV\error.h>
+#include <NovelCVLib\OpenCV\PixelTypes.h>
+#include <NovelCVLib\OpenCV\Channel.h>
+#include <NovelCVLib\OpenCV\Image.h>
+#include <NovelCVLib\OpenCV\funcs1.h>
 //#include <NovelCVLib\Ncv\ConvKernel.h>
-#include <NovelCVLib\Ncv\OpenCV\Hsv.h>
+#include <NovelCVLib\OpenCV\Hsv.h>
 //#include <NovelCVLib\Ncv\HistoGram.h>
 #include <NovelCVLib\Ncv\InitLib.h>
 //#include <NovelCVLib\Ncv\RegionSegmentor.h>
@@ -195,7 +195,8 @@
 #include <NovelCVLib\Ncv\Line_Operations.h>
 #include <NovelCVLib\Ncv\ImageAccessorOperations.h>
 #include <NovelCVLib\Element_Operations\Element_Operations_VectorVal.h>
-#include <NovelCVLib\Element_Operations\Element_Operations_F32ColorVal.h>
+#include <NovelCVLib\Element_Operations\Element_Operations_Float.h>
+#include <NovelCVLib\OpenCV\Element_Operations_F32ColorVal.h>
 #include <NovelCVLib\Element_Operations\Element_Operations.h>
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
 #include <NovelCVLib\Ncv\ConflictInfo.h>

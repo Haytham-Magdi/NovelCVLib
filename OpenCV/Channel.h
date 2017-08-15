@@ -1,13 +1,13 @@
 #pragma once
 
 #include <NovelCVLib\Ncpp\Common\commonLib.h>
-#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
-#include <NovelCVLib\Ncv\OpenCV\Types.h>
-#include <NovelCVLib\Ncv\OpenCV\error.h>
+#include <NovelCVLib\OpenCV\CvIncludes.h>
+#include <NovelCVLib\OpenCV\Types.h>
+#include <NovelCVLib\OpenCV\error.h>
 //#include <NovelCVLib\Ncpp\stl\vector>
 #include <vector>
 
-#include <NovelCVLib\Ncv\OpenCV\OpenCVKillers.h>
+#include <NovelCVLib\OpenCV\OpenCVKillers.h>
 
 
 namespace Ncv

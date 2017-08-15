@@ -2,7 +2,7 @@
 
 #include <NovelCVLib\Ncpp\Common\commonLib.h>
 #include <NovelCVLib\Common\PtrRef.h>
-#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
+#include <NovelCVLib\OpenCV\CvIncludes.h>
 
 
 namespace Ncv

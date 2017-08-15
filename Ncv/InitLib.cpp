@@ -1,11 +1,11 @@
 #pragma once
 
 #include <NovelCVLib\Ncpp\Common\commonLib.h>
-#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
-#include <NovelCVLib\Ncv\OpenCV\Types.h>
-#include <NovelCVLib\Ncv\OpenCV\PixelTypes.h>
-#include <NovelCVLib\Ncv\OpenCV\error.h>
-#include <NovelCVLib\Ncv\OpenCV\Channel.h>
+#include <NovelCVLib\OpenCV\CvIncludes.h>
+#include <NovelCVLib\OpenCV\Types.h>
+#include <NovelCVLib\OpenCV\PixelTypes.h>
+#include <NovelCVLib\OpenCV\error.h>
+#include <NovelCVLib\OpenCV\Channel.h>
 #include <NovelCVLib\Ncv\InitLib.h>
 
 

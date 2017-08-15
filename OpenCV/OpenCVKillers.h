@@ -2,7 +2,7 @@
 
 #include <NovelCVLib\Common\CommonKillers.h>
 
-#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
+#include <NovelCVLib\OpenCV\CvIncludes.h>
 
 namespace Ncpp
 {

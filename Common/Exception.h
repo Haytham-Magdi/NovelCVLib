@@ -13,10 +13,17 @@ namespace Ncpp
 
 		static void Throw(ObjRef<Exception> a_exp)
 		{
+			throw "Exception";
 		}
 
 		static void Throw(char * a_sText)
 		{
+			throw "Exception";
+		}
+
+		static void ThrowNotImplemented()
+		{
+			Throw("Not Implemented!");
 		}
 
 	};

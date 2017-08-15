@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NovelCVLib\Ncv\OpenCV\CvIncludes.h>
+#include <NovelCVLib\OpenCV\CvIncludes.h>
 
 #define HCV_CALL( Func )                                             \
 {                                                                   \
