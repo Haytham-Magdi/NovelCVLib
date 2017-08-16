@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NovelCVLib\Ncpp\Common\commonLib.h>
+#include <NovelCVLib\Common\commonLib.h>
 //#include <NovelCVLib\OpenCV\CvIncludes.h>
 //#include <NovelCVLib\OpenCV\Types.h>
 //#include <NovelCVLib\OpenCV\error.h>
@@ -87,12 +87,15 @@ namespace Ncv
 		bool IsUndefined_ByPtr(T * a_pArg)
 		{
 			Ncpp::Exception::ThrowNotImplemented();
+
+			//	to be revised
+			throw "Not Implemented";
 		}
 
 		template<class T>
 		void SetToUndefined_ByPtr(T * a_pArg)
 		{
-			Ncpp::Exception::ThrowNotImplemented();
+			Exception::ThrowNotImplemented();
 		}
 
 		template<class T>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NovelCVLib\Ncpp\Common\commonLib.h>
+#include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
 #include <NovelCVLib\OpenCV\CvIncludes.h>
 #include <NovelCVLib\OpenCV\Types.h>
 #include <NovelCVLib\OpenCV\error.h>
@@ -69,14 +69,14 @@ namespace Ncv
 			*a_pArg = 0.0f;
 		}
 
-		bool IsUndefined_ByPtr(T * a_pArg)
+		bool IsUndefined_ByPtr(float * a_pArg)
 		{
-			return *a_pArg < -0.88888888;
+			return *a_pArg < -88888888.0f;
 		}
 
-		void SetToUndefined_ByPtr(T * a_pArg)
+		void SetToUndefined_ByPtr(float * a_pArg)
 		{
-			*a_pArg = 99999999;
+			*a_pArg = -99999999.0f;
 		}
 
 	};

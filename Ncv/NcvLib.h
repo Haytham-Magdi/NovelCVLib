@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NovelCVLib\Ncpp\Common\commonLib.h>
+#include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
 #include <NovelCVLib\Ncv\VectorVal.h>
 #include <NovelCVLib\OpenCV\CvIncludes.h>
 #include <NovelCVLib\OpenCV\Types.h>

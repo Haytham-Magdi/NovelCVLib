@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NovelCVLib\Ncpp\Common\commonLib.h>
+#include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
 
 #include <NovelCVLib\Ncpp\Math\mathLib.h>
 

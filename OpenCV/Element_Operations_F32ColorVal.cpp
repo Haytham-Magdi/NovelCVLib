@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NovelCVLib\Ncpp\Common\commonLib.h>
+#include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
 #include <NovelCVLib\OpenCV\CvIncludes.h>
 #include <NovelCVLib\OpenCV\Types.h>
 #include <NovelCVLib\OpenCV\error.h>
@@ -11,6 +11,7 @@
 #include <NovelCVLib\Element_Operations\Element_Operations.h>
 #include <NovelCVLib\Element_Operations\Element_Operations_Float.h>
 #include <NovelCVLib\OpenCV\Element_Operations_F32ColorVal.h>
+#include <NovelCVLib\Element_Operations\Element_Operations_Float.h>
 
 
 namespace Ncv
@@ -70,6 +71,19 @@ namespace Ncv
 			a_pArg->val0 = 0;
 			a_pArg->val1 = 0;
 			a_pArg->val2 = 0;
+		}
+
+		bool IsUndefined_ByPtr(F32ColorVal * a_pArg)
+		{
+			//return a_pArg->val0 < -88888888.0f;
+			return IsUndefined_ByPtr<float>(&a_pArg->val0);
+		}
+
+		void SetToUndefined_ByPtr(F32ColorVal * a_pArg)
+		{
+			SetToUndefined_ByPtr<float>(&a_pArg->val0);
+			//SetToUndefined_ByPtr(&a_pArg->val1);
+			//SetToUndefined_ByPtr(&a_pArg->val2);
 		}
 
 	};

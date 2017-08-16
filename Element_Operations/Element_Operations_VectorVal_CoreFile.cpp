@@ -63,9 +63,24 @@
 		{
 			for (int i = 0; i < a_pArg->GetNofDims(); i++)
 			{
-				a_pArg->Vals[i] = 0;
+				SetToZero_ByPtr(&a_pArg->Vals[i]);
 			}
 		}
+
+		bool IsUndefined_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg)
+		{
+			return IsUndefined_ByPtr(&a_pArg[0]);
+		}
+
+		void SetToUndefined_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg)
+		{
+			for (int i = 0; i < a_pArg->GetNofDims(); i++)
+			{
+				SetToUndefined_ByPtr(&a_pArg->Vals[i]);
+			}
+		}
+
+
 
 //#undef T_Elm float
 //#undef N_Dims 3
