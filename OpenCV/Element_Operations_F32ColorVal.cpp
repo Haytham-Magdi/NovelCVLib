@@ -75,15 +75,14 @@ namespace Ncv
 
 		bool IsUndefined_ByPtr(F32ColorVal * a_pArg)
 		{
-			//return a_pArg->val0 < -88888888.0f;
 			return IsUndefined_ByPtr<float>(&a_pArg->val0);
 		}
 
 		void SetToUndefined_ByPtr(F32ColorVal * a_pArg)
 		{
 			SetToUndefined_ByPtr<float>(&a_pArg->val0);
-			//SetToUndefined_ByPtr(&a_pArg->val1);
-			//SetToUndefined_ByPtr(&a_pArg->val2);
+			SetToUndefined_ByPtr<float>(&a_pArg->val1);
+			SetToUndefined_ByPtr<float>(&a_pArg->val2);
 		}
 
 	};

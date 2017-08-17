@@ -33,6 +33,9 @@ namespace Ncv
 		template<> void MultiplyByNum_ByPtr(F32ColorVal * a_pInp, float a_num, F32ColorVal * a_pOut);
 
 		template<> void SetToZero_ByPtr(F32ColorVal * a_pArg);
-
+		
+		template<> bool IsUndefined_ByPtr(F32ColorVal * a_pArg);
+		
+		template<> void SetToUndefined_ByPtr(F32ColorVal * a_pArg);
 	};
 }

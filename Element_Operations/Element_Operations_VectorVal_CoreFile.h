@@ -14,8 +14,8 @@
 
 		template<> void SetToZero_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg);
 
-		template<> void SetToZero_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg);
+		template<> bool IsUndefined_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg);
 
-		template<> void SetToZero_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg);
+		template<> void SetToUndefined_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg);
 
 
