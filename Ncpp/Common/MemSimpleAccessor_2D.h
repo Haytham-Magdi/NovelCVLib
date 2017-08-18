@@ -19,12 +19,12 @@ namespace Ncpp
 		{
 		}
 
-		void Init(T * a_data, int a_nIndexSize_X, int a_nIndexSize_Y, int a_nStepSize_X, int a_nStepSize_Y)
+		void Init(T * a_data, int a_NofElms_X, int a_NofElms_Y, int a_nStepSize_X, int a_nStepSize_Y)
 		{
 			m_data = a_data;
 			
-			m_nIndexSize_X = a_nIndexSize_X;
-			m_nIndexSize_Y = a_nIndexSize_Y;
+			m_NofElms_X = a_NofElms_X;
+			m_NofElms_Y = a_NofElms_Y;
 
 			m_nStepSize_X = a_nStepSize_X;
 			m_nStepSize_Y = a_nStepSize_Y;
@@ -34,22 +34,22 @@ namespace Ncpp
 		T & GetAt(int a_pos_X, int a_pos_Y)
 		{
 			Ncpp_ASSERT(a_pos_X >= 0);
-			Ncpp_ASSERT(a_pos_X < m_nIndexSize_X);
+			Ncpp_ASSERT(a_pos_X < m_NofElms_X);
 			
 			Ncpp_ASSERT(a_pos_Y >= 0);
-			Ncpp_ASSERT(a_pos_Y < m_nIndexSize_Y);
+			Ncpp_ASSERT(a_pos_Y < m_NofElms_Y);
 
 			return m_data[a_pos_X * m_nStepSize_X + a_pos_Y * m_nStepSize_Y];
 		}
 
 		int GetSize_X()
 		{
-			return m_nIndexSize_X;
+			return m_NofElms_X;
 		}
 
 		int GetSize_Y()
 		{
-			return m_nIndexSize_Y;
+			return m_NofElms_Y;
 		}
 
 	protected:
@@ -59,8 +59,8 @@ namespace Ncpp
 		int m_nStepSize_X;
 		int m_nStepSize_Y;
 
-		int m_nIndexSize_X;
-		int m_nIndexSize_Y;
+		int m_NofElms_X;
+		int m_NofElms_Y;
 	};
 
 }

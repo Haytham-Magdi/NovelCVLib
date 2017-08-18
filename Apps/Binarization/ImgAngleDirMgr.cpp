@@ -445,11 +445,11 @@ namespace Ncv
 			Context & cx = *m_context;
 
 			MemAccessor_2D_REF(ConflictInfo) confAcc = cx.m_conflict_Img->GetMemAccessor();
-			F32ImageRef confDsp_Img = F32Image::Create(cvSize(confAcc->GetIndexSize_X_Org(), confAcc->GetIndexSize_Y_Org()), 3);
+			F32ImageRef confDsp_Img = F32Image::Create(cvSize(confAcc->GetNofElms_X_Org(), confAcc->GetNofElms_Y_Org()), 3);
 
 			confDsp_Img->SetAll(0);
 
-			const int nSize_1D = confAcc->GetIndexSize_X() * confAcc->GetIndexSize_Y();
+			const int nSize_1D = confAcc->GetNofElms_X() * confAcc->GetNofElms_Y();
 
 			F32ColorVal * destPtr = (F32ColorVal *)confDsp_Img->GetDataPtr();
 			ConflictInfo * srcPtr = confAcc->GetDataPtr();

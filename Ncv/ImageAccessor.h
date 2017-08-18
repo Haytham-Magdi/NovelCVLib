@@ -67,7 +67,7 @@ namespace Ncv
 
 		CvSize GetSize()
 		{
-			return cvSize(m_memAccessor->GetIndexSize_X(), m_memAccessor->GetIndexSize_Y());
+			return cvSize(m_memAccessor->GetNofElms_X(), m_memAccessor->GetNofElms_Y());
 		}
 
 		CvSize GetSrcImgSize()
@@ -77,7 +77,7 @@ namespace Ncv
 
 		int GetSize_1D()
 		{
-			return m_memAccessor->GetIndexSize_X() * m_memAccessor->GetIndexSize_Y();
+			return m_memAccessor->GetNofElms_X() * m_memAccessor->GetNofElms_Y();
 		}
 
 		T_AccElm * GetDataPtr()
@@ -183,12 +183,12 @@ namespace Ncv
 				throw "m_isLocked";
 
 			m_srcImg = F32Image::Create(
-				//cvSize(a_offsetCalc->GetOffsetCalc_X_Org()->GetIndexSize(),
-				//a_offsetCalc->GetOffsetCalc_Y_Org()->GetIndexSize()),
-				cvSize(a_offsetCalc->GetOffsetCalc_X_Org()->GetOuterIndexSize(),
-				a_offsetCalc->GetOffsetCalc_Y_Org()->GetOuterIndexSize()),
-				//cvSize(a_offsetCalc->GetOffsetCalc_Y()->GetIndexSize(),
-				//a_offsetCalc->GetOffsetCalc_X()->GetIndexSize()),
+				//cvSize(a_offsetCalc->GetOffsetCalc_X_Org()->GetNofElms(),
+				//a_offsetCalc->GetOffsetCalc_Y_Org()->GetNofElms()),
+				cvSize(a_offsetCalc->GetOffsetCalc_X_Org()->GetOuterNofElms(),
+				a_offsetCalc->GetOffsetCalc_Y_Org()->GetOuterNofElms()),
+				//cvSize(a_offsetCalc->GetOffsetCalc_Y()->GetNofElms(),
+				//a_offsetCalc->GetOffsetCalc_X()->GetNofElms()),
 				V_NofChannels);
 
 			m_memAccessor = new MemAccessor_2D<T_AccElm>((T_AccElm *)m_srcImg->GetDataPtr(), a_offsetCalc);

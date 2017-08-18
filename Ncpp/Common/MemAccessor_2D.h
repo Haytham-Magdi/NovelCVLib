@@ -59,24 +59,24 @@ namespace Ncpp
 			m_isLocked = false;
 		}
 
-		int GetIndexSize_X()
+		int GetNofElms_X()
 		{
-			return m_offsetCalc->GetOffsetCalc_X()->GetIndexSize();
+			return m_offsetCalc->GetOffsetCalc_X()->GetNofElms();
 		}
 
-		int GetIndexSize_Y()
+		int GetNofElms_Y()
 		{
-			return m_offsetCalc->GetOffsetCalc_Y()->GetIndexSize();
+			return m_offsetCalc->GetOffsetCalc_Y()->GetNofElms();
 		}
 
-		int GetIndexSize_X_Org()
+		int GetNofElms_X_Org()
 		{
-			return m_offsetCalc->GetOffsetCalc_X_Org()->GetIndexSize();
+			return m_offsetCalc->GetOffsetCalc_X_Org()->GetNofElms();
 		}
 
-		int GetIndexSize_Y_Org()
+		int GetNofElms_Y_Org()
 		{
-			return m_offsetCalc->GetOffsetCalc_Y_Org()->GetIndexSize();
+			return m_offsetCalc->GetOffsetCalc_Y_Org()->GetNofElms();
 		}
 
 		OffsetCalc_2D_Ref GetOffsetCalc()
@@ -100,7 +100,7 @@ namespace Ncpp
 		{
 			MemSimpleAccessor_2D<T> sac;
 
-			sac.Init(m_data + m_offsetCalc->GetOffsetPart1(), GetIndexSize_X(), GetIndexSize_Y(), 
+			sac.Init(m_data + m_offsetCalc->GetOffsetPart1(), GetNofElms_X(), GetNofElms_Y(), 
 				m_offsetCalc->GetOffsetCalc_X()->GetActualStepSize(),
 				m_offsetCalc->GetOffsetCalc_Y()->GetActualStepSize()
 				);

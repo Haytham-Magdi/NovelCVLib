@@ -214,10 +214,10 @@ namespace Ncv
 		void AngleDirMgrColl::DisplayStandiv_Dir_Img()
 		{
 			MemAccessor_2D_REF(PixelStandevInfo) psiAcc = m_context_H->m_standevInfoImg->GetMemAccessor();
-			//F32ImageRef dspImg_Values = F32Image::Create(cvSize(psiAcc->GetIndexSize_X(), psiAcc->GetIndexSize_Y()), 1);
-			F32ImageRef dspImg_Colored = F32Image::Create(cvSize(psiAcc->GetIndexSize_X(), psiAcc->GetIndexSize_Y()), 3);
+			//F32ImageRef dspImg_Values = F32Image::Create(cvSize(psiAcc->GetNofElms_X(), psiAcc->GetNofElms_Y()), 1);
+			F32ImageRef dspImg_Colored = F32Image::Create(cvSize(psiAcc->GetNofElms_X(), psiAcc->GetNofElms_Y()), 3);
 
-			const int nSize_1D = psiAcc->GetIndexSize_X() * psiAcc->GetIndexSize_Y();
+			const int nSize_1D = psiAcc->GetNofElms_X() * psiAcc->GetNofElms_Y();
 
 			PixelStandevInfo * srcPtr = psiAcc->GetDataPtr();
 			//float * destPtr_Values = dspImg_Values->GetDataPtr();
@@ -284,11 +284,11 @@ namespace Ncv
 		void AngleDirMgrColl::DisplayConflictImg()
 		{
 			MemAccessor_2D_REF(ConflictInfo_Ex) confAcc = m_context_H->m_conflictInfoImg->GetMemAccessor();
-			F32ImageRef confDsp_Img = F32Image::Create(cvSize(confAcc->GetIndexSize_X_Org(), confAcc->GetIndexSize_Y_Org()), 3);
+			F32ImageRef confDsp_Img = F32Image::Create(cvSize(confAcc->GetNofElms_X_Org(), confAcc->GetNofElms_Y_Org()), 3);
 
 			confDsp_Img->SetAll(0);
 
-			const int nSize_1D = confAcc->GetIndexSize_X() * confAcc->GetIndexSize_Y();
+			const int nSize_1D = confAcc->GetNofElms_X() * confAcc->GetNofElms_Y();
 
 			F32ColorVal * destPtr = (F32ColorVal *)confDsp_Img->GetDataPtr();
 			ConflictInfo_Ex * srcPtr = confAcc->GetDataPtr();

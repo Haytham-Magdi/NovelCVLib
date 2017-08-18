@@ -19,31 +19,31 @@ namespace Ncpp
 		{
 		}
 
-		void Init(T * a_data, int a_nIndexSize, int a_nStepSize)
+		void Init(T * a_data, int a_NofElms, int a_nStepSize)
 		{
 			m_data = a_data;
-			m_nIndexSize = a_nIndexSize;
+			m_NofElms = a_NofElms;
 			m_nStepSize = a_nStepSize;
 		}
 
 		T & operator[](int a_pos)
 		{
 			Ncpp_ASSERT(a_pos >= 0);
-			Ncpp_ASSERT(a_pos < m_nIndexSize);
+			Ncpp_ASSERT(a_pos < m_NofElms);
 
 			return m_data[a_pos * m_nStepSize];
 		}
 
 		int GetSize()
 		{
-			return m_nIndexSize;
+			return m_NofElms;
 		}
 
 	protected:
 
 		T * m_data;
 		int m_nStepSize;
-		int m_nIndexSize;
+		int m_NofElms;
 	};
 	
 }

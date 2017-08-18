@@ -17,10 +17,10 @@ namespace Ncpp
 	{
 	public:
 
-		OffsetCalc_1D(int a_nOuterIndexSize, int a_nAbsoluteStepSize)
+		OffsetCalc_1D(int a_nOuterNofElms, int a_nAbsoluteStepSize)
 		{
 			m_isLocked = false;
-			Init(a_nOuterIndexSize, a_nAbsoluteStepSize, 0, a_nOuterIndexSize - 1);
+			Init(a_nOuterNofElms, a_nAbsoluteStepSize, 0, a_nOuterNofElms - 1);
 		}
 
 		OffsetCalc_1D_Ref Clone()
@@ -55,10 +55,10 @@ namespace Ncpp
 				throw "m_isLocked";
 
 			Ncpp_ASSERT(a_nRelativeBgnStep >= 0);
-			Ncpp_ASSERT(a_nRelativeBgnStep < m_nIndexSize);
+			Ncpp_ASSERT(a_nRelativeBgnStep < m_NofElms);
 
 			Ncpp_ASSERT(a_nRelativeEndStep >= 0);
-			Ncpp_ASSERT(a_nRelativeEndStep < m_nIndexSize);
+			Ncpp_ASSERT(a_nRelativeEndStep < m_NofElms);
 
 			int nRelativeRangeDiff = a_nRelativeEndStep - a_nRelativeBgnStep;
 			Ncpp_ASSERT(0 != nRelativeRangeDiff);
@@ -118,19 +118,19 @@ namespace Ncpp
 			return m_nOuterLimOffset;
 		}
 
-		int GetOuterIndexSize()
+		int GetOuterNofElms()
 		{
-			return m_nOuterIndexSize;
+			return m_nOuterNofElms;
 		}
 
-		int GetIndexSize()
+		int GetNofElms()
 		{
-			return m_nIndexSize;
+			return m_NofElms;
 		}
 
 		void ResetRange()
 		{
-			SetRange_Absolute(0, m_nOuterIndexSize - 1);
+			SetRange_Absolute(0, m_nOuterNofElms - 1);
 		}
 
 	protected:
@@ -140,17 +140,17 @@ namespace Ncpp
 			m_isLocked = false;
 		}
 
-		void Init(int a_nOuterIndexSize, int a_nAbsoluteStepSize, int a_nInnerBgnStep, int a_nInnerEndStep)
+		void Init(int a_nOuterNofElms, int a_nAbsoluteStepSize, int a_nInnerBgnStep, int a_nInnerEndStep)
 		{
 			if (m_isLocked)
 				throw "m_isLocked";
 
-			Ncpp_ASSERT(a_nOuterIndexSize > 0);
+			Ncpp_ASSERT(a_nOuterNofElms > 0);
 			Ncpp_ASSERT(a_nAbsoluteStepSize > 0);
 
-			m_nOuterIndexSize = a_nOuterIndexSize;
+			m_nOuterNofElms = a_nOuterNofElms;
 			m_nAbsoluteStepSize = a_nAbsoluteStepSize;
-			m_nOuterLimOffset = m_nOuterIndexSize * m_nAbsoluteStepSize;
+			m_nOuterLimOffset = m_nOuterNofElms * m_nAbsoluteStepSize;
 
 			SetRange_Absolute(a_nInnerBgnStep, a_nInnerEndStep);
 		}
@@ -161,16 +161,16 @@ namespace Ncpp
 				throw "m_isLocked";
 
 			Ncpp_ASSERT(a_nInnerBgnStep >= 0);
-			Ncpp_ASSERT(a_nInnerBgnStep < m_nOuterIndexSize);
+			Ncpp_ASSERT(a_nInnerBgnStep < m_nOuterNofElms);
 
 			Ncpp_ASSERT(a_nInnerEndStep >= 0);
-			Ncpp_ASSERT(a_nInnerEndStep < m_nOuterIndexSize);
+			Ncpp_ASSERT(a_nInnerEndStep < m_nOuterNofElms);
 
 			//int nInnerRangeDiff = a_nInnerEndStep - a_nInnerBgnStep;
 			int nInnerRangeDiff = (a_nInnerEndStep + 1) - a_nInnerBgnStep;
 			Ncpp_ASSERT(0 != nInnerRangeDiff);
 
-			m_nIndexSize = abs(nInnerRangeDiff);
+			m_NofElms = abs(nInnerRangeDiff);
 
 			m_nInnerBgnStep = a_nInnerBgnStep;
 			m_nInnerEndStep = a_nInnerEndStep;
@@ -197,10 +197,10 @@ namespace Ncpp
 		int m_nAbsoluteStepSize;
 		int m_nActualStepSize;
 
-		int m_nOuterIndexSize;
+		int m_nOuterNofElms;
 		int m_nOuterLimOffset;
 
-		int m_nIndexSize;
+		int m_NofElms;
 		int m_nInnerBgnStep;
 		int m_nInnerEndStep;
 
