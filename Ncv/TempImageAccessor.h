@@ -29,17 +29,17 @@ namespace Ncv
 		//TempImageAccessor(MemAccessor_2D_REF(T) a_memAccessor)
 		TempImageAccessor(OffsetCalc_2D_Ref a_offsetCalc)
 		{
-			//int nSize_X = a_memAccessor->GetOffsetCalc()->GetOffsetCalc_X()->GetNofElms();
-			//int nSize_Y = a_memAccessor->GetOffsetCalc()->GetOffsetCalc_Y()->GetNofElms();
-			int nSize_X = a_offsetCalc->GetOffsetCalc_X_Org()->GetNofElms();
-			int nSize_Y = a_offsetCalc->GetOffsetCalc_Y_Org()->GetNofElms();
+			//int nSize_X = a_memAccessor->GetOffsetCalc()->GetOffsetCalc_X()->GetNofSteps();
+			//int nSize_Y = a_memAccessor->GetOffsetCalc()->GetOffsetCalc_Y()->GetNofSteps();
+			int nSize_X = a_offsetCalc->GetOffsetCalc_X_Org()->GetNofSteps();
+			int nSize_Y = a_offsetCalc->GetOffsetCalc_Y_Org()->GetNofSteps();
 			int nSize_1D = nSize_X * nSize_Y;
 
 			m_allocVect = new FixedVector<T>();
 			m_allocVect->SetSize(nSize_1D);
 
 			OffsetCalc_2D_Ref offsetCalc = new OffsetCalc_2D(1, nSize_X, nSize_Y);
-			//if (a_offsetCalc->GetOffsetCalc_X_Org()->GetNofElms() != a_offsetCalc->GetOffsetCalc_X()->GetNofElms())
+			//if (a_offsetCalc->GetOffsetCalc_X_Org()->GetNofSteps() != a_offsetCalc->GetOffsetCalc_X()->GetNofSteps())
 			//if (a_offsetCalc->GetOffsetCalc_X_Org() != a_offsetCalc->GetOffsetCalc_X())
 			//if ((int)a_offsetCalc->GetOffsetCalc_X_Org() != (int)a_offsetCalc->GetOffsetCalc_X())
 			if (a_offsetCalc->GetOffsetCalc_X_Org()->GetActualStepSize() != a_offsetCalc->GetOffsetCalc_X()->GetActualStepSize())
@@ -65,7 +65,7 @@ namespace Ncv
 
 		int GetSize_1D()
 		{
-			return m_memAccessor->GetNofElms_X() * m_memAccessor->GetNofElms_Y();
+			return m_memAccessor->GetNofSteps_X() * m_memAccessor->GetNofSteps_Y();
 		}
 
 		T * GetDataPtr()

@@ -40,16 +40,16 @@ namespace Ncpp
 			return pRet;
 		}
 
-		int GetNofElms()
+		int GetNofSteps()
 		{
-			return m_offsetCalc->GetNofElms();
+			return m_offsetCalc->GetNofSteps();
 		}
 
 		MemSimpleAccessor_1D<T> GenSimpleAccessor()
 		{
 			MemSimpleAccessor_1D<T> sac;
 
-			sac.Init(m_data + m_offsetCalc->GetOffsetPart1(), GetNofElms(),
+			sac.Init(m_data + m_offsetCalc->GetOffsetPart1(), GetNofSteps(),
 				m_offsetCalc->GetActualStepSize());
 
 			return sac;
@@ -57,7 +57,7 @@ namespace Ncpp
 
 		PtrIterator<T> GenPtrIterator()
 		{
-			return GenPtrIterator(0, this->GetNofElms() - 1);
+			return GenPtrIterator(0, this->GetNofSteps() - 1);
 		}
 
 		PtrIterator<T> GenPtrIterator(int a_nBgn, int a_nEnd)

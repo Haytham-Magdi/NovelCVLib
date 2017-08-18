@@ -48,11 +48,11 @@ namespace Ncv
 		//void RotateImage(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(T) a_outAcc)
 		void RotateImage(T * a_destBuf, CvSize a_destSiz, T * a_srcBuf, CvSize a_srcSiz)
 		{
-			//Ncpp_ASSERT(a_inpAcc->GetNofElms_X() == m_srcSiz.width);
-			//Ncpp_ASSERT(a_inpAcc->GetNofElms_Y() == m_srcSiz.height);
+			//Ncpp_ASSERT(a_inpAcc->GetNofSteps_X() == m_srcSiz.width);
+			//Ncpp_ASSERT(a_inpAcc->GetNofSteps_Y() == m_srcSiz.height);
 
-			//Ncpp_ASSERT(a_outAcc->GetNofElms_X() == m_resSiz.width);
-			//Ncpp_ASSERT(a_outAcc->GetNofElms_Y() == m_resSiz.height);
+			//Ncpp_ASSERT(a_outAcc->GetNofSteps_X() == m_resSiz.width);
+			//Ncpp_ASSERT(a_outAcc->GetNofSteps_Y() == m_resSiz.height);
 
 			Ncpp_ASSERT(a_srcSiz.width == m_srcSiz.width);
 			Ncpp_ASSERT(a_srcSiz.height == m_srcSiz.height);

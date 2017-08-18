@@ -109,7 +109,7 @@ namespace Ncv
 			MemAccessor_1D_REF(T) acc_Dest_Y = a_destAcc->GenAccessor_1D_Y();
 			MemAccessor_1D_REF(T) acc_Dest_X = a_destAcc->GenAccessor_1D_X();
 
-			Ncpp_ASSERT(acc_Src_Y->GetNofElms() == acc_Dest_Y->GetNofElms());
+			Ncpp_ASSERT(acc_Src_Y->GetNofSteps() == acc_Dest_Y->GetNofSteps());
 
 			PtrIterator<T> ptrItr_Src_Y = acc_Src_Y->GenPtrIterator();
 			PtrIterator<T> ptrItr_Dest_Y = acc_Dest_Y->GenPtrIterator();
@@ -135,8 +135,8 @@ namespace Ncv
 			MemAccessor_1D_REF(float) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
 			MemAccessor_1D_REF(float) acc_Out_X = a_outAcc->GenAccessor_1D_X();
 
-			Ncpp_ASSERT(acc_Inp_Y->GetNofElms() ==
-				acc_Out_Y->GetNofElms());
+			Ncpp_ASSERT(acc_Inp_Y->GetNofSteps() ==
+				acc_Out_Y->GetNofSteps());
 
 			PtrIterator<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
 			PtrIterator<float> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
@@ -162,7 +162,7 @@ namespace Ncv
 			MemAccessor_1D_REF(float) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
 			MemAccessor_1D_REF(float) acc_Out_X = a_outAcc->GenAccessor_1D_X();
 
-			Ncpp_ASSERT(acc_Inp_Y->GetNofElms() == acc_Out_Y->GetNofElms());
+			Ncpp_ASSERT(acc_Inp_Y->GetNofSteps() == acc_Out_Y->GetNofSteps());
 
 			PtrIterator<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
 			PtrIterator<float> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
@@ -205,8 +205,8 @@ namespace Ncv
 			MemAccessor_1D_REF(T) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
 			MemAccessor_1D_REF(T) acc_Out_X = a_outAcc->GenAccessor_1D_X();
 
-			Ncpp_ASSERT(acc_Inp_Y->GetNofElms() ==
-				acc_Out_Y->GetNofElms());
+			Ncpp_ASSERT(acc_Inp_Y->GetNofSteps() ==
+				acc_Out_Y->GetNofSteps());
 
 			PtrIterator<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
 			PtrIterator<T> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
@@ -253,8 +253,8 @@ namespace Ncv
 			MemAccessor_1D_REF(T) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
 			MemAccessor_1D_REF(T) acc_Out_X = a_outAcc->GenAccessor_1D_X();
 
-			Ncpp_ASSERT(acc_Inp_Y->GetNofElms() == acc_Weight_Y->GetNofElms());
-			Ncpp_ASSERT(acc_Inp_Y->GetNofElms() == acc_Out_Y->GetNofElms());
+			Ncpp_ASSERT(acc_Inp_Y->GetNofSteps() == acc_Weight_Y->GetNofSteps());
+			Ncpp_ASSERT(acc_Inp_Y->GetNofSteps() == acc_Out_Y->GetNofSteps());
 
 			PtrIterator<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
 			PtrIterator<float> ptrItr_Weight_Y = acc_Weight_Y->GenPtrIterator();
@@ -302,8 +302,8 @@ namespace Ncv
 			MemAccessor_1D_REF(float) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
 			MemAccessor_1D_REF(float) acc_Out_X = a_outAcc->GenAccessor_1D_X();
 
-			Ncpp_ASSERT(acc_Inp_Y->GetNofElms() ==
-				acc_Out_Y->GetNofElms());
+			Ncpp_ASSERT(acc_Inp_Y->GetNofSteps() ==
+				acc_Out_Y->GetNofSteps());
 
 			PtrIterator<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
 			PtrIterator<float> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
@@ -352,11 +352,11 @@ namespace Ncv
 			MemAccessor_1D_REF(float) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
 			MemAccessor_1D_REF(float) acc_Out_X = a_outAcc->GenAccessor_1D_X();
 
-			Ncpp_ASSERT(acc_Avg_Y->GetNofElms() == acc_Avg_MagSqr_Y->GetNofElms());
-			Ncpp_ASSERT(acc_Avg_Y->GetNofElms() == acc_Out_Y->GetNofElms());
+			Ncpp_ASSERT(acc_Avg_Y->GetNofSteps() == acc_Avg_MagSqr_Y->GetNofSteps());
+			Ncpp_ASSERT(acc_Avg_Y->GetNofSteps() == acc_Out_Y->GetNofSteps());
 
-			//Ncpp_ASSERT(acc_Avg_X->GetNofElms() == acc_Avg_MagSqr_X->GetNofElms());
-			//Ncpp_ASSERT(acc_Avg_X->GetNofElms() == acc_Out_X->GetNofElms());
+			//Ncpp_ASSERT(acc_Avg_X->GetNofSteps() == acc_Avg_MagSqr_X->GetNofSteps());
+			//Ncpp_ASSERT(acc_Avg_X->GetNofSteps() == acc_Out_X->GetNofSteps());
 
 			PtrIterator<T> ptrItr_Avg_Y = acc_Avg_Y->GenPtrIterator();
 			PtrIterator<float> ptrItr_Avg_MagSqr_Y = acc_Avg_MagSqr_Y->GenPtrIterator();
@@ -390,8 +390,8 @@ namespace Ncv
 			MemAccessor_1D_REF(ConflictInfo) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
 			MemAccessor_1D_REF(ConflictInfo) acc_Out_X = a_outAcc->GenAccessor_1D_X();
 
-			Ncpp_ASSERT(acc_Avg_Y->GetNofElms() == acc_Avg_MagSqr_Y->GetNofElms());
-			Ncpp_ASSERT(acc_Avg_Y->GetNofElms() == acc_Out_Y->GetNofElms());
+			Ncpp_ASSERT(acc_Avg_Y->GetNofSteps() == acc_Avg_MagSqr_Y->GetNofSteps());
+			Ncpp_ASSERT(acc_Avg_Y->GetNofSteps() == acc_Out_Y->GetNofSteps());
 
 			PtrIterator<T> ptrItr_Avg_Y = acc_Avg_Y->GenPtrIterator();
 			PtrIterator<float> ptrItr_Avg_MagSqr_Y = acc_Avg_MagSqr_Y->GenPtrIterator();
@@ -425,8 +425,8 @@ namespace Ncv
 			MemAccessor_1D_REF(float) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
 			MemAccessor_1D_REF(float) acc_Out_X = a_outAcc->GenAccessor_1D_X();
 
-			Ncpp_ASSERT(acc_Avg_Y->GetNofElms() == acc_Avg_MagSqr_Y->GetNofElms());
-			Ncpp_ASSERT(acc_Avg_Y->GetNofElms() == acc_Out_Y->GetNofElms());
+			Ncpp_ASSERT(acc_Avg_Y->GetNofSteps() == acc_Avg_MagSqr_Y->GetNofSteps());
+			Ncpp_ASSERT(acc_Avg_Y->GetNofSteps() == acc_Out_Y->GetNofSteps());
 
 			PtrIterator<T> ptrItr_Avg_Y = acc_Avg_Y->GenPtrIterator();
 			PtrIterator<float> ptrItr_Avg_MagSqr_Y = acc_Avg_MagSqr_Y->GenPtrIterator();
@@ -451,11 +451,11 @@ namespace Ncv
 		void Cala_AvgStandevImage_H(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(float) a_magSqrAcc,
 			MemAccessor_2D_REF(float) a_outAcc, Range<int> a_standevRange_X, Range<int> a_avgRange_Y)
 		{
-			Ncpp_ASSERT(a_inpAcc->GetNofElms_X() == a_magSqrAcc->GetNofElms_X());
-			Ncpp_ASSERT(a_inpAcc->GetNofElms_X() == a_outAcc->GetNofElms_X());
+			Ncpp_ASSERT(a_inpAcc->GetNofSteps_X() == a_magSqrAcc->GetNofSteps_X());
+			Ncpp_ASSERT(a_inpAcc->GetNofSteps_X() == a_outAcc->GetNofSteps_X());
 
-			Ncpp_ASSERT(a_inpAcc->GetNofElms_Y() == a_magSqrAcc->GetNofElms_Y());
-			Ncpp_ASSERT(a_inpAcc->GetNofElms_Y() == a_outAcc->GetNofElms_Y());
+			Ncpp_ASSERT(a_inpAcc->GetNofSteps_Y() == a_magSqrAcc->GetNofSteps_Y());
+			Ncpp_ASSERT(a_inpAcc->GetNofSteps_Y() == a_outAcc->GetNofSteps_Y());
 
 
 

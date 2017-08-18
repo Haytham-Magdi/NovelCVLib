@@ -18,10 +18,10 @@ namespace Ncpp
 	{
 	public:
 
-		OffsetCalc_2D(int a_nAbsoluteStepSize_X, int a_nOuterNofElms_X, int a_nOuterNofElms_Y)
+		OffsetCalc_2D(int a_nAbsoluteStepSize_X, int a_nOuterNofSteps_X, int a_nOuterNofSteps_Y)
 		{
 			m_isLocked = false;
-			Init(a_nAbsoluteStepSize_X, a_nOuterNofElms_X, a_nOuterNofElms_Y);
+			Init(a_nAbsoluteStepSize_X, a_nOuterNofSteps_X, a_nOuterNofSteps_Y);
 		}
 
 		bool IsLocked()
@@ -135,22 +135,22 @@ namespace Ncpp
 			m_isLocked = false;
 		}
 
-		void Init(int a_nAbsoluteStepSize_X, int a_nOuterNofElms_X, int a_nOuterNofElms_Y)
+		void Init(int a_nAbsoluteStepSize_X, int a_nOuterNofSteps_X, int a_nOuterNofSteps_Y)
 		{
 			if (m_isLocked)
 				throw "m_isLocked";
 
-			m_offsetCalc_X = new OffsetCalc_1D(a_nOuterNofElms_X, a_nAbsoluteStepSize_X);
+			m_offsetCalc_X = new OffsetCalc_1D(a_nOuterNofSteps_X, a_nAbsoluteStepSize_X);
 			m_offsetCalc_X->Lock();
 			m_offsetCalc_X_Org = m_offsetCalc_X;
 
 
-			m_offsetCalc_Y = new OffsetCalc_1D(a_nOuterNofElms_Y, m_offsetCalc_X->GetOuterLimOffset());
+			m_offsetCalc_Y = new OffsetCalc_1D(a_nOuterNofSteps_Y, m_offsetCalc_X->GetOuterLimOffset());
 			m_offsetCalc_Y->Lock();
 			m_offsetCalc_Y_Org = m_offsetCalc_Y;
 
-			//m_offsetCalc_X->Init(a_nOuterNofElms_X, a_nAbsoluteStepSize_X);
-			//m_offsetCalc_Y->Init(a_nOuterNofElms_Y, m_offsetCalc_X->GetOuterLimOffset());
+			//m_offsetCalc_X->Init(a_nOuterNofSteps_X, a_nAbsoluteStepSize_X);
+			//m_offsetCalc_Y->Init(a_nOuterNofSteps_Y, m_offsetCalc_X->GetOuterLimOffset());
 
 			m_nOuterLimOffset = m_offsetCalc_Y->GetOuterLimOffset();
 		}
