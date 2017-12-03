@@ -21,9 +21,12 @@
 #include <NovelCVLib\Ncpp\Common\MemAccessor_2D.h>
 #include <NovelCVLib\Ncpp\Common\MemSimpleAccessor_1D.h>
 #include <NovelCVLib\Ncpp\Common\MemSimpleAccessor_2D.h>
+#include <NovelCVLib\Ncpp\Common\FlexArrayAccessor_1D.h>
+#include <NovelCVLib\Ncpp\Common\FlexArrayAccessor_2D.h>
 #include <NovelCVLib\Ncpp\Common\Range.h>
 #include <NovelCVLib\Ncpp\Common\Window.h>
 #include <NovelCVLib\Ncpp\Common\PtrIterator.h>
+#include <NovelCVLib\Ncpp\Common\PtrIterator2.h>
 #include <NovelCVLib\Ncpp\Common\MultiListQueMgr.h>
 #include <NovelCVLib\Ncpp\Common\MaxFinder.h>
 #include <NovelCVLib\Ncpp\Common\MinFinder.h>
