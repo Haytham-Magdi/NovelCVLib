@@ -6,24 +6,24 @@
 
 
 #include <NovelCVLib\Common\Debug.h>
-#include <NovelCVLib\Ncpp\Common\FlexArrayAccessor_1D.h>
+#include <NovelCVLib\Ncpp\Common\VirtArrayAccessor_1D.h>
 
 
 namespace Ncpp
 {
 	template<class T>
-	class FlexArrayAccessor_2D
+	class VirtArrayAccessor_2D
 	{
 	public:
 
-		FlexArrayAccessor_2D()
+		VirtArrayAccessor_2D()
 		{
 		}
 
 		void Init(T * a_data, int a_nofSteps_X, int a_nStepSize_X, int a_nofSteps_Y, int a_nStepSize_Y)
 		{
 			m_data = a_data;
-			
+
 			m_nofSteps_X = a_nofSteps_X;
 			m_nStepSize_X = a_nStepSize_X;
 
@@ -67,6 +67,11 @@ namespace Ncpp
 			return m_nStepSize_Y;
 		}
 
+		const int CalcSize_1D()
+		{
+			return m_nofSteps_X * m_nofSteps_Y;
+		}
+
 		void SetData(T * a_data)
 		{
 			m_data = a_data;
@@ -92,37 +97,63 @@ namespace Ncpp
 			m_nStepSize_Y = a_nStepSize_Y;
 		}
 
-		void CopyAccessor_X_To(FlexArrayAccessor_1D * a_pAcc)
+		void AssignAccessor_X_To(VirtArrayAccessor_1D<T> * a_pAcc)
 		{
 			a_pAcc->Init(m_data, m_nofSteps_X, m_nStepSize_X);
 		}
 
-		FlexArrayAccessor_1D GenAccessor_X()
+		VirtArrayAccessor_1D<T> GenAccessor_X()
 		{
-			FlexArrayAccessor_1D acc;
-			acc.Init(m_data, m_nofSteps_X, m_nStepSize_X);
+			VirtArrayAccessor_1D<T> acc;
+			AssignAccessor_X_To(&acc);
+			return acc;
 		}
 
-		void CopyAccessor_Y_To(FlexArrayAccessor_1D * a_pAcc)
+		void AssignAccessor_Y_To(VirtArrayAccessor_1D<T> * a_pAcc)
 		{
 			a_pAcc->Init(m_data, m_nofSteps_Y, m_nStepSize_Y);
 		}
 
-		FlexArrayAccessor_1D GenAccessor_Y()
+		VirtArrayAccessor_1D<T> GenAccessor_Y()
 		{
-			FlexArrayAccessor_1D acc;
-			acc.Init(m_data, m_nofSteps_Y, m_nStepSize_Y);
+			VirtArrayAccessor_1D<T> acc;
+			AssignAccessor_Y_To(&acc);
+			return acc;
+		}
+
+		void CopyTo(VirtArrayAccessor_2D<T> * a_pAcc)
+		{
+			a_pAcc->Init(m_data, m_nofSteps_X, m_nStepSize_X, m_nofSteps_Y, m_nStepSize_Y);
+		}
+
+		VirtArrayAccessor_2D<T> Clone()
+		{
+			VirtArrayAccessor_2D<T> arr;
+			CopyTo(&arr);
+			return arr;
+		}
+
+		void AssignTransposeTo(VirtArrayAccessor_2D<T> * a_pAcc)
+		{
+			a_pAcc->Init(m_data, m_nofSteps_Y, m_nStepSize_Y, m_nofSteps_X, m_nStepSize_X);
+		}
+
+		VirtArrayAccessor_2D<T> GenTranspose()
+		{
+			VirtArrayAccessor_2D<T> acc;
+			AssignTransposeTo(&acc);
+			return acc;
 		}
 
 	protected:
 
 		T * m_data;
-		
+
 		int m_nStepSize_X;
 		int m_nofSteps_X;
 
 		int m_nStepSize_Y;
 		int m_nofSteps_Y;
 	};
-	
+
 }

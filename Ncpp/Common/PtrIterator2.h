@@ -16,8 +16,12 @@ namespace Ncpp
 	class PtrIterator2 //: public Ncpp::Object
 	{
 	public:
+		PtrIterator2()
+		{
 
-		PtrIterator2(T * a_bgn, T * a_end, int a_nStepSize)
+		}
+
+		void Init(T * a_bgn, T * a_end, int a_nStepSize)
 		{
 			Ncpp_ASSERT(0 == ((a_end - a_bgn) % a_nStepSize));
 			Ncpp_ASSERT(((a_end - a_bgn) / a_nStepSize) >= 0);

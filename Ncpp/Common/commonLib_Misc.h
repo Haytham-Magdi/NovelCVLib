@@ -33,8 +33,11 @@
 #include <NovelCVLib\Ncpp\Common\MemAccessor_2D.h>
 #include <NovelCVLib\Ncpp\Common\MemSimpleAccessor_1D.h>
 #include <NovelCVLib\Ncpp\Common\MemSimpleAccessor_2D.h>
-#include <NovelCVLib\Ncpp\Common\FlexArrayAccessor_1D.h>
-#include <NovelCVLib\Ncpp\Common\FlexArrayAccessor_2D.h>
+#include <NovelCVLib\Ncpp\Common\Size_2D.h>
+#include <NovelCVLib\Ncpp\Common\VirtArrayAccessor_1D.h>
+#include <NovelCVLib\Ncpp\Common\VirtArrayAccessor_2D.h>
+#include <NovelCVLib\Ncpp\Common\ArrayHolder_2D.h>
+#include <NovelCVLib\Ncpp\Common\SimpleArrayHolder_2D.h>
 #include <NovelCVLib\Ncpp\Common\Range.h>
 #include <NovelCVLib\Ncpp\Common\Window.h>
 #include <NovelCVLib\Ncpp\Common\PtrIterator.h>
