@@ -7,6 +7,7 @@
 
 #include <NovelCVLib\Common\Debug.h>
 #include <NovelCVLib\Ncpp\Common\VirtArrayAccessor_1D.h>
+#include <NovelCVLib\Ncpp\Common\Size_2D.h>
 
 
 namespace Ncpp
@@ -70,6 +71,11 @@ namespace Ncpp
 		const int CalcSize_1D()
 		{
 			return m_nofSteps_X * m_nofSteps_Y;
+		}
+
+		const Size_2D GetSize()
+		{
+			return Size_2D(m_nofSteps_X, m_nofSteps_Y);
 		}
 
 		void SetData(T * a_data)

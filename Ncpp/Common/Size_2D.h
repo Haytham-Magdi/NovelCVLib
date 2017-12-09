@@ -11,7 +11,7 @@
 
 namespace Ncpp
 {
-	class Size_2D : public Ncpp::Object
+	class Size_2D // : public Ncpp::Object
 	{
 	public:
 

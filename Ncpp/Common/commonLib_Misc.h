@@ -36,6 +36,7 @@
 #include <NovelCVLib\Ncpp\Common\Size_2D.h>
 #include <NovelCVLib\Ncpp\Common\VirtArrayAccessor_1D.h>
 #include <NovelCVLib\Ncpp\Common\VirtArrayAccessor_2D.h>
+#include <NovelCVLib\Ncpp\Common\ActualArrayAccessor_2D.h>
 #include <NovelCVLib\Ncpp\Common\ArrayHolder_2D.h>
 #include <NovelCVLib\Ncpp\Common\SimpleArrayHolder_2D.h>
 #include <NovelCVLib\Ncpp\Common\Range.h>
