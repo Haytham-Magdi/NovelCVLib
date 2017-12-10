@@ -29,7 +29,7 @@ namespace Ncpp
 			m_nSize_Y = a_nSize_Y;
 		}
 
-		const T & GetAt(int a_pos_X, int a_pos_Y)
+		const T & GetAt(int a_pos_X, int a_pos_Y) const
 		{
 			Ncpp_ASSERT(a_pos_X >= 0);
 			Ncpp_ASSERT(a_pos_X < m_nSize_X);
