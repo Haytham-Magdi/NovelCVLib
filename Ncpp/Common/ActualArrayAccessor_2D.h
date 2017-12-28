@@ -21,8 +21,16 @@ namespace Ncpp
 		{
 		}
 
+		void Init(T * a_data, Size_2D & a_size)
+		{
+			Init(a_data, a_size.GetX(), a_size.GetY());
+		}
+
 		void Init(T * a_data, int a_nSize_X, int a_nSize_Y)
 		{
+			Ncpp_ASSERT(a_nSize_X >= 0);
+			Ncpp_ASSERT(a_nSize_Y >= 0);
+
 			m_data = a_data;
 
 			m_nSize_X = a_nSize_X;
@@ -40,27 +48,27 @@ namespace Ncpp
 			return m_data[a_pos_X * m_nStepSize_X + a_pos_Y * m_nStepSize_Y];
 		}
 
-		const T * GetData()
+		const T * GetData() const
 		{
 			return m_data;
 		}
 
-		const int GetSize_X()
+		const int GetSize_X() const
 		{
 			return m_nSize_X;
 		}
 
-		const int GetSize_Y()
+		const int GetSize_Y() const
 		{
 			return m_nSize_Y;
 		}
 
-		const int CalcSize_1D()
+		const int CalcSize_1D() const
 		{
 			return m_nSize_X * m_nSize_Y;
 		}
 
-		const Size_2D GetSize()
+		const Size_2D GetSize() const
 		{
 			return Size_2D(m_nSize_X, m_nSize_Y);
 		}
@@ -80,15 +88,27 @@ namespace Ncpp
 			m_nSize_Y = a_nSize_Y;
 		}
 
-		void CopyTo(ActualArrayAccessor_2D<T> * a_pAcc)
+		void CopyTo(ActualArrayAccessor_2D<T> * a_pAcc) const
 		{
-			a_pAcc->Init(m_data, m_nSize_X, m_nStepSize_X, m_nSize_Y, m_nStepSize_Y);
+			a_pAcc->Init(m_data, m_nSize_X, m_nSize_Y);
 		}
 
-		ActualArrayAccessor_2D<T> Clone()
+		ActualArrayAccessor_2D<T> Clone() const
 		{
 			ActualArrayAccessor_2D<T> arr;
 			CopyTo(&arr);
+			return arr;
+		}
+
+		void AssignVirtAccessorTo(VirtArrayAccessor_2D<T> * a_pAcc) const
+		{
+			a_pAcc->Init(m_data, m_nSize_X, 1, m_nSize_Y, m_nSize_X);
+		}
+
+		VirtArrayAccessor_2D<T> GenVirtAccessor() const
+		{
+			VirtArrayAccessor_2D<T> arr;
+			AssignVirtAccessorTo(&arr);
 			return arr;
 		}
 

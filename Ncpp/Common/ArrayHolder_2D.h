@@ -21,16 +21,25 @@ namespace Ncv
 	public:
 
 		virtual ~ArrayHolder_2D() = 0;
-		virtual ArrayHolder_2D_REF(T) Clone() = 0;
 
-		VirtArrayAccessor_2D & GetVirtAccessor()
+		const VirtArrayAccessor_2D & GetVirtAccessor() const
 		{
 			return m_virtAccessor;
 		}
 
-		ActualArrayAccessor_2D & GetActualAccessor()
+		const ActualArrayAccessor_2D & GetActualAccessor() const
 		{
 			return m_actualAccessor;
+		}
+
+		const Size_2D GetSize() const
+		{
+			return m_actualAccessor.GetSize();
+		}
+
+		void TransposeVirtAccessor()
+		{
+			m_virtAccessor.TransposeSelf();
 		}
 
 	protected:

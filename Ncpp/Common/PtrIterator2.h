@@ -31,7 +31,7 @@ namespace Ncpp
 			m_nStepSize = a_nStepSize;
 		}
 
-		bool CanMove()
+		bool CanMove() const
 		{
 			return m_bgn != m_end;
 		}
@@ -48,12 +48,12 @@ namespace Ncpp
 			m_end -= m_nStepSize;
 		}
 
-		T * GetBgn()
+		T * GetBgn() const
 		{
 			return m_bgn;
 		}
 
-		T * GetEnd()
+		T * GetEnd() const
 		{
 			return m_end;
 		}

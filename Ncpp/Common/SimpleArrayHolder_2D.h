@@ -1,8 +1,6 @@
 #pragma once
 
 #include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
-//#include <NovelCVLib\OpenCV\Types.h>
-//#include <NovelCVLib\OpenCV\error.h>
 #include <NovelCVLib\Ncpp\Common\ArrayHolder_2D.h>
 #include <NovelCVLib\Ncpp\Common\Size_2D.h>
 
@@ -29,11 +27,6 @@ namespace Ncv
 			m_allocVect.SetSize(a_size.CalcSize_1D());
 			m_virtAccessor.Init(m_allocVect.GetHeadPtr(), a_size.GetX(), 1, a_size.GetY(), a_size.GetX());
 			m_actualAccessor.Init(m_allocVect.GetHeadPtr(), a_size.GetX(), a_size.GetY());
-		}
-
-		virtual ArrayHolder_2D_REF(T) Clone()
-		{
-			ArrayHolder_2D_REF(T) ret = new SimpleArrayHolder_2D(m_accessor.GetSize());
 		}
 
 	protected:

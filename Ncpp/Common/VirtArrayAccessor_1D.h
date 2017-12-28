@@ -27,7 +27,7 @@ namespace Ncpp
 			m_nStepSize = a_nStepSize;
 		}
 
-		const T & operator[](int a_pos)
+		const T & operator[](int a_pos) const
 		{
 			Ncpp_ASSERT(a_pos >= 0);
 			Ncpp_ASSERT(a_pos < m_nofSteps);
@@ -35,17 +35,17 @@ namespace Ncpp
 			return m_data[a_pos * m_nStepSize];
 		}
 
-		const int GetSize()
+		const int GetSize() const
 		{
 			return m_nofSteps;
 		}
 
-		const T * GetData()
+		const T * GetData() const
 		{
 			return m_data;
 		}
 
-		const int GetStepSize()
+		const int GetStepSize() const
 		{
 			return m_nStepSize;
 		}
@@ -64,39 +64,43 @@ namespace Ncpp
 		{
 			m_nStepSize = a_nStepSize;
 		}
-
 		
-		void AssignPtrIteratorTo(PtrIterator2<T> * a_pItr)
+		void AssignPtrIteratorTo(PtrIterator2<T> * a_pItr) const
 		{
 			AssignPtrIteratorTo(a_pItr, 0, (m_nofSteps - 1));
-			//a_pAcc->Init(m_data, &m_data[(m_nofSteps - 1) * m_nStepSize], m_nStepSize);
 		}
 
-		void AssignPtrIteratorTo(PtrIterator2<T> * a_pItr, int a_bgnPos, int a_endPos)
+		void AssignPtrIteratorTo(PtrIterator2<T> * a_pItr, int a_bgnPos, int a_endPos) const
 		{
-			a_pAcc->Init(&m_data[a_bgnPos * m_nStepSize], &m_data[a_endPos * m_nStepSize], m_nStepSize);
+			Ncpp_ASSERT(a_bgnPos >= 0);
+			Ncpp_ASSERT(a_bgnPos < m_nofSteps);
+
+			Ncpp_ASSERT(a_endPos >= 0);
+			Ncpp_ASSERT(a_endPos < m_nofSteps);
+
+			a_pItr->Init(&m_data[a_bgnPos * m_nStepSize], &m_data[a_endPos * m_nStepSize], m_nStepSize);
 		}
 
-		PtrIterator2<T> GenPtrIterator()
+		PtrIterator2<T> GenPtrIterator() const
 		{
 			PtrIterator2<T> itr;
-			itr.AssignPtrIteratorTo(&itr);
+			AssignPtrIteratorTo(&itr);
 			return itr;
 		}
 
-		PtrIterator2<T> GenPtrIterator(int a_bgnPos, int a_endPos)
+		PtrIterator2<T> GenPtrIterator(int a_bgnPos, int a_endPos) const
 		{
 			PtrIterator2<T> itr;
-			itr.AssignPtrIteratorTo(&itr, a_bgnPos, a_endPos);
+			AssignPtrIteratorTo(&itr, a_bgnPos, a_endPos);
 			return itr;
 		}
 
-		void CopyTo(VirtArrayAccessor_1D * a_pArr)
+		void CopyTo(VirtArrayAccessor_1D * a_pArr) const
 		{
 			a_pArr->Init(m_data, m_nofSteps, m_nStepSize);
 		}
 
-		VirtArrayAccessor_1D Clone()
+		VirtArrayAccessor_1D Clone() const
 		{
 			VirtArrayAccessor_1D arr;
 			CopyTo(&arr);

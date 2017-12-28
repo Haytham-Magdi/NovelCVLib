@@ -45,17 +45,17 @@ namespace Ncpp
 		//	return a_nIdx / sizeX;
 		//}
 
-		int GetX()
+		const int GetX() const
 		{
 			return sizeX;
 		}
 
-		int GetY()
+		const int GetY() const
 		{
 			return sizeY;
 		}
 
-		int CalcSize_1D()
+		const int CalcSize_1D() const
 		{
 			return sizeX * sizeY;
 		}

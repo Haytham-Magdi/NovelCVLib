@@ -249,6 +249,8 @@ namespace Ncpp
 
 		void SetCapacity( int a_capacity )
 		{
+			Ncpp_ASSERT(a_capacity >= 0);
+
 			if( nullptr != m_data )
 			{
 				delete [] m_data;
@@ -314,6 +316,8 @@ namespace Ncpp
 
 		void SetSize( int a_size )
 		{
+			Ncpp_ASSERT(a_size >= 0);
+
 			if( m_capacity < a_size )
 				SetCapacity( a_size );
 
