@@ -58,8 +58,7 @@ namespace Ncv
 		template<class T>
 		void CopyLine(const VirtArrayAccessor_1D<T> & a_destAcc, const VirtArrayAccessor_1D<T> & a_srcAcc)
 		{
-			Ncpp_ASSERT(a_srcAcc->GetNofSteps() ==
-				a_destAcc->GetNofSteps());
+			Ncpp_ASSERT(a_srcAcc->GetSize() == a_destAcc->GetSize());
 
 			PtrIterator2<T> ptrItr_Src = a_srcAcc->GenPtrIterator();
 			PtrIterator2<T> ptrItr_Dest = a_destAcc->GenPtrIterator();
@@ -76,8 +75,7 @@ namespace Ncv
 		template<class T>
 		void CalcMagLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<float> & a_outAcc)
 		{
-			Ncpp_ASSERT(a_inpAcc->GetNofSteps() ==
-				a_outAcc->GetNofSteps());
+			Ncpp_ASSERT(a_inpAcc->GetSize() == a_outAcc->GetSize());
 
 			PtrIterator2<T> ptrItr_Inp = a_inpAcc->GenPtrIterator();
 			PtrIterator2<float> ptrItr_Out = a_outAcc->GenPtrIterator();
@@ -94,13 +92,10 @@ namespace Ncv
 		template<class T>
 		void CalcMagSqrLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<float> & a_outAcc)
 		{
-			Ncpp_ASSERT(a_inpAcc->GetNofSteps() == a_outAcc->GetNofSteps());
+			Ncpp_ASSERT(a_inpAcc->GetSize() == a_outAcc->GetSize());
 
 			PtrIterator2<T> ptrItr_Inp = a_inpAcc->GenPtrIterator();
 			PtrIterator2<float> ptrItr_Out = a_outAcc->GenPtrIterator();
-
-			const float rate1 = 0.5;
-			int i = 0;
 
 			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
@@ -108,7 +103,6 @@ namespace Ncv
 				float * ptr_Out = ptrItr_Out.GetBgn();
 
 				*ptr_Out = Element_Operations::CalcMagSqr_ByPtr<T>(ptr_Inp);
-				//*ptr_Out = rate1 * i++;
 			}
 		}
 
@@ -128,7 +122,7 @@ namespace Ncv
 		template<class T>
 		void AvgLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, Range<int> & a_range)
 		{
-			Ncpp_ASSERT(a_inpAcc->GetNofSteps() == a_outAcc->GetNofSteps());
+			Ncpp_ASSERT(a_inpAcc->GetSize() == a_outAcc->GetSize());
 			Ncpp_ASSERT(a_range.GetBgn() <= 0);
 			Ncpp_ASSERT(0 <= a_range.GetEnd());
 
@@ -140,7 +134,7 @@ namespace Ncv
 			MemSimpleAccessor_1D<T> sac_Inp = a_inpAcc->GenSimpleAccessor();
 			MemSimpleAccessor_1D<T> sac_Out = a_outAcc->GenSimpleAccessor();
 
-			const int nSize_1D = a_inpAcc->GetNofSteps();
+			const int nSize_1D = a_inpAcc->GetSize();
 
 			const int nBefDiff = -a_range.GetBgn();
 			const int nAftDiff = a_range.GetEnd();
@@ -200,8 +194,8 @@ namespace Ncv
 		template<class T>
 		void AvgLine_Weighted(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<float> & a_weightAcc, const VirtArrayAccessor_1D<T> & a_outAcc, Range<int> & a_range)
 		{
-			Ncpp_ASSERT(a_inpAcc->GetNofSteps() == a_outAcc->GetNofSteps());
-			Ncpp_ASSERT(a_inpAcc->GetNofSteps() == a_weightAcc->GetNofSteps());
+			Ncpp_ASSERT(a_inpAcc->GetSize() == a_outAcc->GetSize());
+			Ncpp_ASSERT(a_inpAcc->GetSize() == a_weightAcc->GetSize());
 			Ncpp_ASSERT(a_range.GetBgn() <= 0);
 			Ncpp_ASSERT(0 <= a_range.GetEnd());
 
@@ -214,7 +208,7 @@ namespace Ncv
 			MemSimpleAccessor_1D<float> sac_Weight = a_weightAcc->GenSimpleAccessor();
 			MemSimpleAccessor_1D<T> sac_Out = a_outAcc->GenSimpleAccessor();
 
-			const int nSize_1D = a_inpAcc->GetNofSteps();
+			const int nSize_1D = a_inpAcc->GetSize();
 
 			const int nBefDiff = -a_range.GetBgn();
 			const int nAftDiff = a_range.GetEnd();
@@ -302,8 +296,8 @@ namespace Ncv
 		template<class T>
 		void CalcSqrtLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<float> & a_outAcc)
 		{
-			Ncpp_ASSERT(a_inpAcc->GetNofSteps() ==
-				a_outAcc->GetNofSteps());
+			Ncpp_ASSERT(a_inpAcc->GetSize() ==
+				a_outAcc->GetSize());
 
 			PtrIterator2<T> ptrItr_Inp = a_inpAcc->GenPtrIterator();
 			PtrIterator2<float> ptrItr_Out = a_outAcc->GenPtrIterator();
@@ -321,8 +315,8 @@ namespace Ncv
 		void CalcStandevLine(const VirtArrayAccessor_1D<T> & a_avg_Acc, const VirtArrayAccessor_1D<float> & a_avg_MagSqr_Acc,
 			const VirtArrayAccessor_1D<float> & a_outAcc)
 		{
-			Ncpp_ASSERT(a_avg_Acc->GetNofSteps() == a_avg_MagSqr_Acc->GetNofSteps());
-			Ncpp_ASSERT(a_avg_Acc->GetNofSteps() == a_outAcc->GetNofSteps());
+			Ncpp_ASSERT(a_avg_Acc->GetSize() == a_avg_MagSqr_Acc->GetSize());
+			Ncpp_ASSERT(a_avg_Acc->GetSize() == a_outAcc->GetSize());
 
 			PtrIterator2<T> ptrItr_Avg = a_avg_Acc->GenPtrIterator();
 			PtrIterator2<float> ptrItr_Avg_MagSqr = a_avg_MagSqr_Acc->GenPtrIterator();
@@ -349,14 +343,14 @@ namespace Ncv
 				FillLine<ConflictInfo>(a_outAcc, val_Init);
 			}
 
-			Ncpp_ASSERT(a_avg_Acc->GetNofSteps() == a_avg_MagSqr_Acc->GetNofSteps());
-			Ncpp_ASSERT(a_avg_Acc->GetNofSteps() == a_outAcc->GetNofSteps());
+			Ncpp_ASSERT(a_avg_Acc->GetSize() == a_avg_MagSqr_Acc->GetSize());
+			Ncpp_ASSERT(a_avg_Acc->GetSize() == a_outAcc->GetSize());
 
 			MemSimpleAccessor_1D<T> sac_Avg = a_avg_Acc->GenSimpleAccessor();
 			MemSimpleAccessor_1D<float> sac_Avg_MagSqr = a_avg_MagSqr_Acc->GenSimpleAccessor();
 			MemSimpleAccessor_1D<ConflictInfo> sac_Out = a_outAcc->GenSimpleAccessor();
 
-			const int nSize_1D = a_outAcc->GetNofSteps();
+			const int nSize_1D = a_outAcc->GetSize();
 
 			const int nBefDiff = -a_range.GetBgn();
 			const int nAftDiff = a_range.GetEnd();
@@ -401,14 +395,14 @@ namespace Ncv
 				FillLine<float>(a_outAcc, val_Init);
 			}
 
-			Ncpp_ASSERT(a_avg_Acc->GetNofSteps() == a_avg_MagSqr_Acc->GetNofSteps());
-			Ncpp_ASSERT(a_avg_Acc->GetNofSteps() == a_outAcc->GetNofSteps());
+			Ncpp_ASSERT(a_avg_Acc->GetSize() == a_avg_MagSqr_Acc->GetSize());
+			Ncpp_ASSERT(a_avg_Acc->GetSize() == a_outAcc->GetSize());
 
 			MemSimpleAccessor_1D<T> sac_Avg = a_avg_Acc->GenSimpleAccessor();
 			MemSimpleAccessor_1D<float> sac_Avg_MagSqr = a_avg_MagSqr_Acc->GenSimpleAccessor();
 			MemSimpleAccessor_1D<float> sac_Out = a_outAcc->GenSimpleAccessor();
 
-			const int nSize_1D = a_outAcc->GetNofSteps();
+			const int nSize_1D = a_outAcc->GetSize();
 
 			const int nBefDiff = -a_range.GetBgn();
 			const int nAftDiff = a_range.GetEnd();
