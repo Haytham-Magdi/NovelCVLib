@@ -18,7 +18,7 @@ namespace Ncv
 	using namespace LineOperations2;
 	using namespace Element_Operations;
 
-	namespace Image_Operations
+	namespace ImageOperations2
 	{
 		template<class T>
 		void FillImage_Stripes_H(MemAccessor_2D_REF(T) a_memAcc, T & a_val1, T & a_val2, int a_stripWidth)

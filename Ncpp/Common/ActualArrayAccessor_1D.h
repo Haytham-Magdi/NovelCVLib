@@ -7,7 +7,6 @@
 
 #include <NovelCVLib\Common\Debug.h>
 #include <NovelCVLib\Ncpp\Common\VirtArrayAccessor_1D.h>
-#include <NovelCVLib\Ncpp\Common\Size_1D.h>
 #include <NovelCVLib\Ncpp\Common\PtrIterator2.h>
 
 
@@ -22,17 +21,11 @@ namespace Ncpp
 		{
 		}
 
-		void Init(T * a_data, Size_1D & a_size)
-		{
-			Init(a_data, a_size.GetX(), a_size.GetY());
-		}
-
 		void Init(T * a_data, int a_nSize)
 		{
 			Ncpp_ASSERT(a_nSize >= 0);
 
 			m_data = a_data;
-
 			m_nSize = a_nSize;
 		}
 
@@ -47,16 +40,6 @@ namespace Ncpp
 		const T * GetData() const
 		{
 			return m_data;
-		}
-
-		const int GetSize() const
-		{
-			return m_nSize;
-		}
-
-		const int CalcSize_1D() const
-		{
-			return m_nSize;
 		}
 
 		const int GetSize() const

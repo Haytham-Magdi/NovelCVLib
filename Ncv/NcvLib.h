@@ -193,6 +193,8 @@
 #include <NovelCVLib\Ncv\Image_Operations.h>
 #include <NovelCVLib\Ncv\TempImageAccessor.h>
 #include <NovelCVLib\Ncv\Line_Operations.h>
+#include <NovelCVLib\Ncv\LineOperations2.h>
+#include <NovelCVLib\Ncv\ImageOperations2.h>
 #include <NovelCVLib\Ncv\ImageAccessorOperations.h>
 #include <NovelCVLib\Element_Operations\Element_Operations_VectorVal.h>
 #include <NovelCVLib\Element_Operations\Element_Operations_Float.h>

@@ -1,5 +1,10 @@
 #pragma once
 
+#include <NovelCVLib\Ncpp\Common\VirtArrayAccessor_1D.h>
+#include <NovelCVLib\Ncpp\Common\ActualArrayAccessor_1D.h>
+#include <NovelCVLib\Ncpp\Common\ArrayHolder_1D.h>
+#include <NovelCVLib\Ncpp\Common\SimpleArrayHolder_1D.h>
+#include <NovelCVLib\Ncpp\Common\ArrayHolderProxy_1D.h>
 #include <NovelCVLib\Ncpp\Common\VirtArrayAccessor_2D.h>
 #include <NovelCVLib\Ncpp\Common\ActualArrayAccessor_2D.h>
 #include <NovelCVLib\Ncpp\Common\ArrayHolder_2D.h>

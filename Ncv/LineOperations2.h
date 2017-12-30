@@ -1,12 +1,12 @@
 #pragma once
 
 #include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
-#include <NovelCVLib\OpenCV\CvIncludes.h>
-#include <NovelCVLib\OpenCV\Types.h>
-#include <NovelCVLib\OpenCV\error.h>
-#include <NovelCVLib\OpenCV\funcs1.h>
+//#include <NovelCVLib\OpenCV\CvIncludes.h>
+//#include <NovelCVLib\OpenCV\Types.h>
+//#include <NovelCVLib\OpenCV\error.h>
+//#include <NovelCVLib\OpenCV\funcs1.h>
 #include <vector>
-#include <NovelCVLib\OpenCV\Image.h>
+//#include <NovelCVLib\OpenCV\Image.h>
 #include <NovelCVLib\Ncv\ConflictInfo.h>
 
 //#include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
@@ -20,92 +20,92 @@ namespace Ncv
 	namespace LineOperations2
 	{
 		template<class T>
-		void FillLine(MemAccessor_1D_REF(T) a_memAcc, T & a_val)
+		void FillLine(const VirtArrayAccessor_1D<T> & a_acc, T & a_val)
 		{
-			PtrIterator<T> ptrItr = a_memAcc->GenPtrIterator();
+			PtrIterator2<T> ptrItr = a_acc->GenPtrIterator();
 
-			for (; !ptrItr.IsDone(); ptrItr.Next())
+			for (; ptrItr.CanMove(); ptrItr.MoveBgn())
 			{
-				T * ptr = ptrItr.GetCurrent();
+				T * ptr = ptrItr.GetBgn();
 				Element_Operations::Copy_ByPtr<T>(ptr, &a_val);
 			}
 		}
 
 		template<class T>
-		void DivideLineByNum(MemAccessor_1D_REF(T) a_memAcc, float a_num)
+		void DivideLineByNum(const VirtArrayAccessor_1D<T> & a_acc, float a_num)
 		{
-			PtrIterator<T> ptrItr = a_memAcc->GenPtrIterator();
+			PtrIterator2<T> ptrItr = a_acc->GenPtrIterator();
 
-			for (; !ptrItr.IsDone(); ptrItr.Next())
+			for (; ptrItr.CanMove(); ptrItr.MoveBgn())
 			{
-				T * ptr = ptrItr.GetCurrent();
+				T * ptr = ptrItr.GetBgn();
 				Element_Operations::DivideByNum_ByPtr<T>(ptr, a_num, ptr);
 			}
 		}
 
 		template<class T>
-		void MultiplyLineByNum(MemAccessor_1D_REF(T) a_memAcc, float a_num)
+		void MultiplyLineByNum(const VirtArrayAccessor_1D<T> & a_acc, float a_num)
 		{
-			PtrIterator<T> ptrItr = a_memAcc->GenPtrIterator();
+			PtrIterator2<T> ptrItr = a_acc->GenPtrIterator();
 
-			for (; !ptrItr.IsDone(); ptrItr.Next())
+			for (; ptrItr.CanMove(); ptrItr.MoveBgn())
 			{
-				T * ptr = ptrItr.GetCurrent();
+				T * ptr = ptrItr.GetBgn();
 				Element_Operations::MultiplyByNum_ByPtr<T>(ptr, a_num, ptr);
 			}
 		}
 
 		template<class T>
-		void CopyLine(MemAccessor_1D_REF(T) a_destAcc, MemAccessor_1D_REF(T) a_srcAcc)
+		void CopyLine(const VirtArrayAccessor_1D<T> & a_destAcc, const VirtArrayAccessor_1D<T> & a_srcAcc)
 		{
 			Ncpp_ASSERT(a_srcAcc->GetNofSteps() ==
 				a_destAcc->GetNofSteps());
 
-			PtrIterator<T> ptrItr_Src = a_srcAcc->GenPtrIterator();
-			PtrIterator<T> ptrItr_Dest = a_destAcc->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Src = a_srcAcc->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Dest = a_destAcc->GenPtrIterator();
 
-			for (; !ptrItr_Src.IsDone(); ptrItr_Src.Next(), ptrItr_Dest.Next())
+			for (; ptrItr_Src.CanMove(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
 			{
-				T * ptr_Src = ptrItr_Src.GetCurrent();
-				T * ptr_Dest = ptrItr_Dest.GetCurrent();
+				T * ptr_Src = ptrItr_Src.GetBgn();
+				T * ptr_Dest = ptrItr_Dest.GetBgn();
 
 				Element_Operations::Copy_ByPtr<T>(ptr_Dest, ptr_Src);
 			}
 		}
 
 		template<class T>
-		void CalcMagLine(MemAccessor_1D_REF(T) a_inpAcc, MemAccessor_1D_REF(float) a_outAcc)
+		void CalcMagLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<float> & a_outAcc)
 		{
 			Ncpp_ASSERT(a_inpAcc->GetNofSteps() ==
 				a_outAcc->GetNofSteps());
 
-			PtrIterator<T> ptrItr_Inp = a_inpAcc->GenPtrIterator();
-			PtrIterator<float> ptrItr_Out = a_outAcc->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Inp = a_inpAcc->GenPtrIterator();
+			PtrIterator2<float> ptrItr_Out = a_outAcc->GenPtrIterator();
 
-			for (; !ptrItr_Inp.IsDone(); ptrItr_Inp.Next(), ptrItr_Out.Next())
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
-				T * ptr_Inp = ptrItr_Inp.GetCurrent();
-				float * ptr_Out = ptrItr_Out.GetCurrent();
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				float * ptr_Out = ptrItr_Out.GetBgn();
 
 				*ptr_Out = Element_Operations::CalcMag_ByPtr<T>(ptr_Inp);
 			}
 		}
 
 		template<class T>
-		void CalcMagSqrLine(MemAccessor_1D_REF(T) a_inpAcc, MemAccessor_1D_REF(float) a_outAcc)
+		void CalcMagSqrLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<float> & a_outAcc)
 		{
 			Ncpp_ASSERT(a_inpAcc->GetNofSteps() == a_outAcc->GetNofSteps());
 
-			PtrIterator<T> ptrItr_Inp = a_inpAcc->GenPtrIterator();
-			PtrIterator<float> ptrItr_Out = a_outAcc->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Inp = a_inpAcc->GenPtrIterator();
+			PtrIterator2<float> ptrItr_Out = a_outAcc->GenPtrIterator();
 
 			const float rate1 = 0.5;
 			int i = 0;
 
-			for (; !ptrItr_Inp.IsDone(); ptrItr_Inp.Next(), ptrItr_Out.Next())
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
-				T * ptr_Inp = ptrItr_Inp.GetCurrent();
-				float * ptr_Out = ptrItr_Out.GetCurrent();
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				float * ptr_Out = ptrItr_Out.GetBgn();
 
 				*ptr_Out = Element_Operations::CalcMagSqr_ByPtr<T>(ptr_Inp);
 				//*ptr_Out = rate1 * i++;
@@ -113,20 +113,20 @@ namespace Ncv
 		}
 
 		template<class T>
-		void AssertValues_Line(MemAccessor_1D_REF(T) a_inpAcc)
+		void AssertValues_Line(const VirtArrayAccessor_1D<T> & a_inpAcc)
 		{
-			PtrIterator<T> ptrItr_Inp = a_inpAcc->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Inp = a_inpAcc->GenPtrIterator();
 
-			for (; !ptrItr_Inp.IsDone(); ptrItr_Inp.Next())
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn())
 			{
-				T * ptr_Inp = ptrItr_Inp.GetCurrent();
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
 
 				Element_Operations::AssertValue_ByPtr<T>(ptr_Inp);
 			}
 		}
 
 		template<class T>
-		void AvgLine(MemAccessor_1D_REF(T) a_inpAcc, MemAccessor_1D_REF(T) a_outAcc, Range<int> & a_range)
+		void AvgLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, Range<int> & a_range)
 		{
 			Ncpp_ASSERT(a_inpAcc->GetNofSteps() == a_outAcc->GetNofSteps());
 			Ncpp_ASSERT(a_range.GetBgn() <= 0);
@@ -198,7 +198,7 @@ namespace Ncv
 		}
 
 		template<class T>
-		void AvgLine_Weighted(MemAccessor_1D_REF(T) a_inpAcc, MemAccessor_1D_REF(float) a_weightAcc, MemAccessor_1D_REF(T) a_outAcc, Range<int> & a_range)
+		void AvgLine_Weighted(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<float> & a_weightAcc, const VirtArrayAccessor_1D<T> & a_outAcc, Range<int> & a_range)
 		{
 			Ncpp_ASSERT(a_inpAcc->GetNofSteps() == a_outAcc->GetNofSteps());
 			Ncpp_ASSERT(a_inpAcc->GetNofSteps() == a_weightAcc->GetNofSteps());
@@ -300,48 +300,48 @@ namespace Ncv
 		}
 
 		template<class T>
-		void CalcSqrtLine(MemAccessor_1D_REF(T) a_inpAcc, MemAccessor_1D_REF(float) a_outAcc)
+		void CalcSqrtLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<float> & a_outAcc)
 		{
 			Ncpp_ASSERT(a_inpAcc->GetNofSteps() ==
 				a_outAcc->GetNofSteps());
 
-			PtrIterator<T> ptrItr_Inp = a_inpAcc->GenPtrIterator();
-			PtrIterator<float> ptrItr_Out = a_outAcc->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Inp = a_inpAcc->GenPtrIterator();
+			PtrIterator2<float> ptrItr_Out = a_outAcc->GenPtrIterator();
 
-			for (; !ptrItr_Inp.IsDone(); ptrItr_Inp.Next(), ptrItr_Out.Next())
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
-				T * ptr_Inp = ptrItr_Inp.GetCurrent();
-				float * ptr_Out = ptrItr_Out.GetCurrent();
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				float * ptr_Out = ptrItr_Out.GetBgn();
 
 				*ptr_Out = Element_Operations::CalcSqrt_ByPtr<T>(ptr_Inp);
 			}
 		}
 
 		template<class T>
-		void CalcStandevLine(MemAccessor_1D_REF(T) a_avg_Acc, MemAccessor_1D_REF(float) a_avg_MagSqr_Acc,
-			MemAccessor_1D_REF(float) a_outAcc)
+		void CalcStandevLine(const VirtArrayAccessor_1D<T> & a_avg_Acc, const VirtArrayAccessor_1D<float> & a_avg_MagSqr_Acc,
+			const VirtArrayAccessor_1D<float> & a_outAcc)
 		{
 			Ncpp_ASSERT(a_avg_Acc->GetNofSteps() == a_avg_MagSqr_Acc->GetNofSteps());
 			Ncpp_ASSERT(a_avg_Acc->GetNofSteps() == a_outAcc->GetNofSteps());
 
-			PtrIterator<T> ptrItr_Avg = a_avg_Acc->GenPtrIterator();
-			PtrIterator<float> ptrItr_Avg_MagSqr = a_avg_MagSqr_Acc->GenPtrIterator();
-			PtrIterator<float> ptrItr_Out = a_outAcc->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Avg = a_avg_Acc->GenPtrIterator();
+			PtrIterator2<float> ptrItr_Avg_MagSqr = a_avg_MagSqr_Acc->GenPtrIterator();
+			PtrIterator2<float> ptrItr_Out = a_outAcc->GenPtrIterator();
 
-			for (; !ptrItr_Avg.IsDone();
-				ptrItr_Avg.Next(), ptrItr_Avg_MagSqr.Next(), ptrItr_Out.Next())
+			for (; ptrItr_Avg.CanMove();
+				ptrItr_Avg.MoveBgn(), ptrItr_Avg_MagSqr.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
-				T * ptr_Avg = ptrItr_Avg.GetCurrent();
-				float * ptr_Avg_MagSqr = ptrItr_Avg_MagSqr.GetCurrent();
-				float * ptr_Out = ptrItr_Out.GetCurrent();
+				T * ptr_Avg = ptrItr_Avg.GetBgn();
+				float * ptr_Avg_MagSqr = ptrItr_Avg_MagSqr.GetBgn();
+				float * ptr_Out = ptrItr_Out.GetBgn();
 
 				*ptr_Out = Element_Operations::CalcStandev_ByPtr<T>(ptr_Avg, *ptr_Avg_MagSqr);
 			}
 		}
 
 		template<class T>
-		void CalcConflictLine(MemAccessor_1D_REF(T) a_avg_Acc, MemAccessor_1D_REF(float) a_avg_MagSqr_Acc,
-			MemAccessor_1D_REF(ConflictInfo) a_outAcc, Range<int> & a_range)
+		void CalcConflictLine(const VirtArrayAccessor_1D<T> & a_avg_Acc, const VirtArrayAccessor_1D<float> & a_avg_MagSqr_Acc,
+			const VirtArrayAccessor_1D<ConflictInfo> & a_outAcc, Range<int> & a_range)
 		{
 			{
 				ConflictInfo val_Init;
@@ -392,8 +392,8 @@ namespace Ncv
 		}
 
 		template<class T>
-		void Calc_ConflictDiff_Line(MemAccessor_1D_REF(T) a_avg_Acc, MemAccessor_1D_REF(float) a_avg_MagSqr_Acc,
-			MemAccessor_1D_REF(float) a_outAcc, Range<int> & a_range)
+		void Calc_ConflictDiff_Line(const VirtArrayAccessor_1D<T> & a_avg_Acc, const VirtArrayAccessor_1D<float> & a_avg_MagSqr_Acc,
+			const VirtArrayAccessor_1D<float> & a_outAcc, Range<int> & a_range)
 		{
 			{
 				float val_Init;
