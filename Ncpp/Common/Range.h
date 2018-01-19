@@ -19,7 +19,7 @@ namespace Ncpp
 		{
 		}
 
-		void Init(T a_bgn, T a_end)
+		void Init(const T a_bgn, const T a_end)
 		{
 			//Ncpp_ASSERT(a_end);
 
@@ -27,7 +27,7 @@ namespace Ncpp
 			m_end = a_end;
 		}
 
-		static Range New(T a_bgn, T a_end)
+		static Range New(const T a_bgn, const T a_end)
 		{
 			Range ret;
 			ret.Init(a_bgn, a_end);
@@ -35,12 +35,12 @@ namespace Ncpp
 			return ret;
 		}
 
-		T GetBgn()
+		T GetBgn() const
 		{
 			return m_bgn;
 		}
 
-		T GetEnd()
+		T GetEnd() const
 		{
 			return m_end;
 		}

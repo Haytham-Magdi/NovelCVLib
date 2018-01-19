@@ -1,12 +1,12 @@
 #pragma once
 
 #include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
-#include <NovelCVLib\OpenCV\CvIncludes.h>
-#include <NovelCVLib\OpenCV\Types.h>
-#include <NovelCVLib\OpenCV\error.h>
-#include <NovelCVLib\OpenCV\funcs1.h>
-#include <NovelCVLib\OpenCV\Image.h>
-#include <NovelCVLib\Element_Operations\Element_Operations.h>
+//#include <NovelCVLib\OpenCV\CvIncludes.h>
+//#include <NovelCVLib\OpenCV\Types.h>
+//#include <NovelCVLib\OpenCV\error.h>
+//#include <NovelCVLib\OpenCV\funcs1.h>
+//#include <NovelCVLib\OpenCV\Image.h>
+#include <NovelCVLib\ElementOperations2\ElementOperations2.h>
 #include <NovelCVLib\Ncv\LineOperations2.h>
 #include <NovelCVLib\Ncpp\Common\ArrayHolderUtil.h>
 
@@ -16,12 +16,12 @@ namespace Ncv
 {
 	using namespace Ncpp;
 	using namespace LineOperations2;
-	using namespace Element_Operations;
+	using namespace ElementOperations2;
 
 	namespace ImageOperations2
 	{
 		template<class T>
-		void FillImage_Stripes_H(MemAccessor_2D_REF(T) a_memAcc, T & a_val1, T & a_val2, int a_stripWidth)
+		void FillImage_Stripes_X(const VirtArrayAccessor_2D<T> & a_acc, const T & a_val1, const T & a_val2, int a_stripWidth)
 		{
 			T * valArr[2];
 			valArr[0] = &a_val1;
@@ -29,264 +29,263 @@ namespace Ncv
 
 			int valIdx = 1;
 
-			MemAccessor_1D_REF(T) acc_Y = a_memAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_X = a_memAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Y = a_acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_X = a_acc.GenAccessor_X();
 
-			PtrIterator<T> ptrItr_Y = acc_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Y = acc_Y->GenPtrIterator();
 
-			for (int i = 0; !ptrItr_Y.IsDone(); ptrItr_Y.Next(), i++)
+			for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
 			{
-				T * ptr_Y = ptrItr_Y.GetCurrent();
+				T * ptr_Y = ptrItr_Y.GetBgn();
 
 				if (0 == i % a_stripWidth)
 				{
 					valIdx = 1 - valIdx;
 				}
 
-				acc_X->SetDataPtr(ptr_Y);
+				acc_X.SetData(ptr_Y);
 				FillLine<T>(acc_X, *valArr[valIdx]);
 			}
 		}
 
 		template<class T>
-		void FillImage(MemAccessor_2D_REF(T) a_memAcc, T & a_val)
+		void FillImage(const VirtArrayAccessor_2D<T> & a_acc, const T & a_val)
 		{
-			MemAccessor_1D_REF(T) acc_Y = a_memAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_X = a_memAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Y = a_acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_X = a_acc.GenAccessor_X();
 
-			PtrIterator<T> ptrItr_Y = acc_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Y = acc_Y->GenPtrIterator();
 
-			//for (int i = 0; !ptrItr_Y.IsDone(); ptrItr_Y.Next(), i++)
-			for (; !ptrItr_Y.IsDone(); ptrItr_Y.Next())
+			//for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
+			for (; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn())
 			{
-				T * ptr_Y = ptrItr_Y.GetCurrent();
+				T * ptr_Y = ptrItr_Y.GetBgn();
 
-				acc_X->SetDataPtr(ptr_Y);
+				acc_X.SetData(ptr_Y);
 				FillLine<T>(acc_X, a_val);
 			}
 		}
 
 		template<class T>
-		void DivideImageByNum(MemAccessor_2D_REF(T) a_memAcc, float a_num)
+		void DivideImageByNum(const VirtArrayAccessor_2D<T> & a_acc, const float a_num)
 		{
-			MemAccessor_1D_REF(T) acc_Y = a_memAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_X = a_memAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Y = a_acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_X = a_acc.GenAccessor_X();
 
-			PtrIterator<T> ptrItr_Y = acc_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Y = acc_Y->GenPtrIterator();
 
-			for (int i = 0; !ptrItr_Y.IsDone(); ptrItr_Y.Next(), i++)
+			for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
 			{
-				T * ptr_Y = ptrItr_Y.GetCurrent();
+				T * ptr_Y = ptrItr_Y.GetBgn();
 
-				acc_X->SetDataPtr(ptr_Y);
+				acc_X.SetData(ptr_Y);
 				DivideLineByNum<T>(acc_X, a_num);
 			}
 		}
 
 		template<class T>
-		void MultiplyImageByNum(MemAccessor_2D_REF(T) a_memAcc, float a_num)
+		void MultiplyImageByNum(const VirtArrayAccessor_2D<T> & a_acc, const float a_num)
 		{
-			MemAccessor_1D_REF(T) acc_Y = a_memAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_X = a_memAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Y = a_acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_X = a_acc.GenAccessor_X();
 
-			PtrIterator<T> ptrItr_Y = acc_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Y = acc_Y->GenPtrIterator();
 
-			for (int i = 0; !ptrItr_Y.IsDone(); ptrItr_Y.Next(), i++)
+			for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
 			{
-				T * ptr_Y = ptrItr_Y.GetCurrent();
+				T * ptr_Y = ptrItr_Y.GetBgn();
 
-				acc_X->SetDataPtr(ptr_Y);
+				acc_X.SetData(ptr_Y);
 				MultiplyLineByNum<T>(acc_X, a_num);
 			}
 		}
 
 		template<class T>
-		void CopyImage(MemAccessor_2D_REF(T) a_destAcc, MemAccessor_2D_REF(T) a_srcAcc)
+		void CopyImage(const VirtArrayAccessor_2D<T> & a_destAcc, const VirtArrayAccessor_2D<T> & a_srcAcc)
 		{
-			MemAccessor_1D_REF(T) acc_Src_Y = a_srcAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_Src_X = a_srcAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Src_Y = a_srcAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_Src_X = a_srcAcc.GenAccessor_X();
 
-			MemAccessor_1D_REF(T) acc_Dest_Y = a_destAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_Dest_X = a_destAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Dest_Y = a_destAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_Dest_X = a_destAcc.GenAccessor_X();
 
-			Ncpp_ASSERT(acc_Src_Y->GetNofSteps() == acc_Dest_Y->GetNofSteps());
+			Ncpp_ASSERT(acc_Src_Y.GetSize() == acc_Dest_Y.GetSize());
 
-			PtrIterator<T> ptrItr_Src_Y = acc_Src_Y->GenPtrIterator();
-			PtrIterator<T> ptrItr_Dest_Y = acc_Dest_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Src_Y = acc_Src_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Dest_Y = acc_Dest_Y->GenPtrIterator();
 
-			for (; !ptrItr_Src_Y.IsDone(); ptrItr_Src_Y.Next(), ptrItr_Dest_Y.Next())
+			for (; ptrItr_Src_Y.CanMove(); ptrItr_Src_Y.MoveBgn(), ptrItr_Dest_Y.MoveBgn())
 			{
-				T * ptr_Src_Y = ptrItr_Src_Y.GetCurrent();
-				T * ptr_Dest_Y = ptrItr_Dest_Y.GetCurrent();
+				T * ptr_Src_Y = ptrItr_Src_Y.GetBgn();
+				T * ptr_Dest_Y = ptrItr_Dest_Y.GetBgn();
 
-				acc_Src_X->SetDataPtr(ptr_Src_Y);
-				acc_Dest_X->SetDataPtr(ptr_Dest_Y);
+				acc_Src_X.SetData(ptr_Src_Y);
+				acc_Dest_X.SetData(ptr_Dest_Y);
 
 				CopyLine<T>(acc_Dest_X, acc_Src_X);
 			}
 		}
 
 		template<class T>
-		void CalcMagImage(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(float) a_outAcc)
+		void CalcMagImage(const VirtArrayAccessor_2D<T> & a_inpAcc, MemAccessor_2D_REF(float) a_outAcc)
 		{
-			MemAccessor_1D_REF(T) acc_Inp_Y = a_inpAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_Inp_X = a_inpAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_Inp_X = a_inpAcc.GenAccessor_X();
 
-			MemAccessor_1D_REF(float) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(float) acc_Out_X = a_outAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<float> & acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> & acc_Out_X = a_outAcc.GenAccessor_X();
 
-			Ncpp_ASSERT(acc_Inp_Y->GetNofSteps() ==
-				acc_Out_Y->GetNofSteps());
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
 
-			PtrIterator<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
-			PtrIterator<float> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
+			PtrIterator2<float> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
 
-			for (; !ptrItr_Inp_Y.IsDone(); ptrItr_Inp_Y.Next(), ptrItr_Out_Y.Next())
+			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
-				T * ptr_Inp_Y = ptrItr_Inp_Y.GetCurrent();
-				float * ptr_Out_Y = ptrItr_Out_Y.GetCurrent();
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				float * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
 
-				acc_Inp_X->SetDataPtr(ptr_Inp_Y);
-				acc_Out_X->SetDataPtr(ptr_Out_Y);
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
 
 				CalcMagLine<T>(acc_Inp_X, acc_Out_X);
 			}
 		}
 
 		template<class T>
-		void CalcMagSqrImage(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(float) a_outAcc)
+		void CalcMagSqrImage(const VirtArrayAccessor_2D<T> & a_inpAcc, MemAccessor_2D_REF(float) a_outAcc)
 		{
-			MemAccessor_1D_REF(T) acc_Inp_Y = a_inpAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_Inp_X = a_inpAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_Inp_X = a_inpAcc.GenAccessor_X();
 
-			MemAccessor_1D_REF(float) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(float) acc_Out_X = a_outAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<float> & acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> & acc_Out_X = a_outAcc.GenAccessor_X();
 
-			Ncpp_ASSERT(acc_Inp_Y->GetNofSteps() == acc_Out_Y->GetNofSteps());
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
 
-			PtrIterator<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
-			PtrIterator<float> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
+			PtrIterator2<float> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
 
-			for (; !ptrItr_Inp_Y.IsDone(); ptrItr_Inp_Y.Next(), ptrItr_Out_Y.Next())
+			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
-				T * ptr_Inp_Y = ptrItr_Inp_Y.GetCurrent();
-				float * ptr_Out_Y = ptrItr_Out_Y.GetCurrent();
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				float * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
 
-				acc_Inp_X->SetDataPtr(ptr_Inp_Y);
-				acc_Out_X->SetDataPtr(ptr_Out_Y);
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
 
 				CalcMagSqrLine<T>(acc_Inp_X, acc_Out_X);
 			}
 		}
 
 		template<class T>
-		void AssertValues_Image(MemAccessor_2D_REF(T) a_inpAcc)
+		void AssertValues_Image(const VirtArrayAccessor_2D<T> & a_inpAcc)
 		{
-			MemAccessor_1D_REF(T) acc_Inp_Y = a_inpAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_Inp_X = a_inpAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_Inp_X = a_inpAcc.GenAccessor_X();
 
-			PtrIterator<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
 
-			for (; !ptrItr_Inp_Y.IsDone(); ptrItr_Inp_Y.Next())
+			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn())
 			{
-				T * ptr_Inp_Y = ptrItr_Inp_Y.GetCurrent();
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
 
-				acc_Inp_X->SetDataPtr(ptr_Inp_Y);
+				acc_Inp_X.SetData(ptr_Inp_Y);
 				AssertValues_Line<T>(acc_Inp_X);
 			}
 		}
 
 		template<class T>
-		void AvgImage_H(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(T) a_outAcc, Range<int> & a_range_X)
+		void AvgImage_X(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const Range<int> & a_range_X)
 		{
-			MemAccessor_1D_REF(T) acc_Inp_Y = a_inpAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_Inp_X = a_inpAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_Inp_X = a_inpAcc.GenAccessor_X();
 
-			MemAccessor_1D_REF(T) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_Out_X = a_outAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_Out_X = a_outAcc.GenAccessor_X();
 
-			Ncpp_ASSERT(acc_Inp_Y->GetNofSteps() ==
-				acc_Out_Y->GetNofSteps());
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() ==
+				acc_Out_Y.GetSize());
 
-			PtrIterator<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
-			PtrIterator<T> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
 
-			for (; !ptrItr_Inp_Y.IsDone(); ptrItr_Inp_Y.Next(), ptrItr_Out_Y.Next())
+			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
-				T * ptr_Inp_Y = ptrItr_Inp_Y.GetCurrent();
-				T * ptr_Out_Y = ptrItr_Out_Y.GetCurrent();
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
 
-				acc_Inp_X->SetDataPtr(ptr_Inp_Y);
-				acc_Out_X->SetDataPtr(ptr_Out_Y);
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
 
 				AvgLine(acc_Inp_X, acc_Out_X, a_range_X);
 			}
 		}
 
 		template<class T>
-		void AvgImage(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(T) a_outAcc, Window<int> & a_window)
+		void AvgImage(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const Window<int> & a_window)
 		{
 			TempImageAccessor_REF(T) tmpImgAcc = new ArrayHolderUtil<T>(a_outAcc->GetOffsetCalc());
 
-			AvgImage_H<T>(a_inpAcc, tmpImgAcc->GetMemAccessor(), a_window.GetRange_X());
-			//AvgImage_H<T>(a_inpAcc, a_outAcc, a_range_X);
+			AvgImage_X<T>(a_inpAcc, tmpImgAcc->GetMemAccessor(), a_window.GetRange_X());
+			//AvgImage_X<T>(a_inpAcc, a_outAcc, a_range_X);
 
 			//return;
 
-			MemAccessor_2D_REF(T) outAcc2 = a_outAcc->Clone();
+			const VirtArrayAccessor_2D<T> & outAcc2 = a_outAcc->Clone();
 			outAcc2->SwitchXY();
 
 			tmpImgAcc->SwitchXY();
 
-			AvgImage_H<T>(tmpImgAcc->GetMemAccessor(), outAcc2, a_window.GetRange_Y());
+			AvgImage_X<T>(tmpImgAcc->GetMemAccessor(), outAcc2, a_window.GetRange_Y());
 		}
 
 		template<class T>
-		void AvgImage_Weighted_H(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(float) a_weightAcc, MemAccessor_2D_REF(T) a_outAcc, Range<int> & a_range_X)
+		void AvgImage_Weighted_X(const VirtArrayAccessor_2D<T> & a_inpAcc, MemAccessor_2D_REF(float) a_weightAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const Range<int> & a_range_X)
 		{
-			MemAccessor_1D_REF(T) acc_Inp_Y = a_inpAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_Inp_X = a_inpAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_Inp_X = a_inpAcc.GenAccessor_X();
 
-			MemAccessor_1D_REF(float) acc_Weight_Y = a_weightAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(float) acc_Weight_X = a_weightAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<float> & acc_Weight_Y = a_weightAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> & acc_Weight_X = a_weightAcc.GenAccessor_X();
 
-			MemAccessor_1D_REF(T) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_Out_X = a_outAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_Out_X = a_outAcc.GenAccessor_X();
 
-			Ncpp_ASSERT(acc_Inp_Y->GetNofSteps() == acc_Weight_Y->GetNofSteps());
-			Ncpp_ASSERT(acc_Inp_Y->GetNofSteps() == acc_Out_Y->GetNofSteps());
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Weight_Y.GetSize());
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
 
-			PtrIterator<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
-			PtrIterator<float> ptrItr_Weight_Y = acc_Weight_Y->GenPtrIterator();
-			PtrIterator<T> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
+			PtrIterator2<float> ptrItr_Weight_Y = acc_Weight_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
 
-			for (; !ptrItr_Inp_Y.IsDone(); ptrItr_Inp_Y.Next(), ptrItr_Weight_Y.Next(), ptrItr_Out_Y.Next())
+			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Weight_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
-				T * ptr_Inp_Y = ptrItr_Inp_Y.GetCurrent();
-				float * ptr_Weight_Y = ptrItr_Weight_Y.GetCurrent();
-				T * ptr_Out_Y = ptrItr_Out_Y.GetCurrent();
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				float * ptr_Weight_Y = ptrItr_Weight_Y.GetBgn();
+				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
 
-				acc_Inp_X->SetDataPtr(ptr_Inp_Y);
-				acc_Weight_X->SetDataPtr(ptr_Weight_Y);
-				acc_Out_X->SetDataPtr(ptr_Out_Y);
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_Weight_X.SetData(ptr_Weight_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
 
 				AvgLine_Weighted(acc_Inp_X, acc_Weight_X, acc_Out_X, a_range_X);
 			}
 		}
 
 		template<class T>
-		void AvgImage_Weighted(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(float) a_weightAcc, MemAccessor_2D_REF(T) a_outAcc, Window<int> & a_window)
+		void AvgImage_Weighted(const VirtArrayAccessor_2D<T> & a_inpAcc, MemAccessor_2D_REF(float) a_weightAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const Window<int> & a_window)
 		{
 			TempImageAccessor_REF(T) tmpImgAcc = new ArrayHolderUtil<T>(a_outAcc->GetOffsetCalc());
 
-			AvgImage_Weighted_H(a_inpAcc, a_weightAcc, tmpImgAcc->GetMemAccessor(), a_window.GetRange_X());
+			AvgImage_Weighted_X(a_inpAcc, a_weightAcc, tmpImgAcc->GetMemAccessor(), a_window.GetRange_X());
 
-			MemAccessor_2D_REF(T) outAcc2 = a_outAcc->Clone();
+			const VirtArrayAccessor_2D<T> & outAcc2 = a_outAcc->Clone();
 			outAcc2->SwitchXY();
 
 			tmpImgAcc->SwitchXY();
 
-			AvgImage_H<T>(tmpImgAcc->GetMemAccessor(), outAcc2, a_window.GetRange_Y());
+			AvgImage_X<T>(tmpImgAcc->GetMemAccessor(), outAcc2, a_window.GetRange_Y());
 		}
 
 
@@ -294,35 +293,35 @@ namespace Ncv
 
 
 		template<class T>
-		void CalcSqrtImage(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(float) a_outAcc)
+		void CalcSqrtImage(const VirtArrayAccessor_2D<T> & a_inpAcc, MemAccessor_2D_REF(float) a_outAcc)
 		{
-			MemAccessor_1D_REF(T) acc_Inp_Y = a_inpAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_Inp_X = a_inpAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_Inp_X = a_inpAcc.GenAccessor_X();
 
-			MemAccessor_1D_REF(float) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(float) acc_Out_X = a_outAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<float> & acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> & acc_Out_X = a_outAcc.GenAccessor_X();
 
-			Ncpp_ASSERT(acc_Inp_Y->GetNofSteps() ==
-				acc_Out_Y->GetNofSteps());
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() ==
+				acc_Out_Y.GetSize());
 
-			PtrIterator<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
-			PtrIterator<float> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y->GenPtrIterator();
+			PtrIterator2<float> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
 
-			for (; !ptrItr_Inp_Y.IsDone(); ptrItr_Inp_Y.Next(), ptrItr_Out_Y.Next())
+			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
-				T * ptr_Inp_Y = ptrItr_Inp_Y.GetCurrent();
-				float * ptr_Out_Y = ptrItr_Out_Y.GetCurrent();
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				float * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
 
-				acc_Inp_X->SetDataPtr(ptr_Inp_Y);
-				acc_Out_X->SetDataPtr(ptr_Out_Y);
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
 
 				CalcSqrtLine<T>(acc_Inp_X, acc_Out_X);
 			}
 		}
 
 		template<class T>
-		void Calc_Avg_And_Standev_Image(MemAccessor_2D_REF(T) a_inp_Acc, MemAccessor_2D_REF(T) a_out_Avg_Acc,
-			MemAccessor_2D_REF(float) a_out_Standev_Acc, Window<int> & a_Win)
+		void Calc_Avg_And_Standev_Image(const VirtArrayAccessor_2D<T> & a_inp_Acc, const VirtArrayAccessor_2D<T> & a_out_Avg_Acc,
+			MemAccessor_2D_REF(float) a_out_Standev_Acc, const Window<int> & a_Win)
 		{
 			//TempImageAccessor_REF(T) avg_Img = new TempImageAccessor_REF<T>(a_inp_Acc->GetOffsetCalc());
 			AvgImage(a_inp_Acc, a_out_Avg_Acc, a_Win);
@@ -340,116 +339,116 @@ namespace Ncv
 		}
 
 		template<class T>
-		void CalcStandevImage(MemAccessor_2D_REF(T) a_avg_Acc, MemAccessor_2D_REF(float) a_avg_MagSqr_Acc,
+		void CalcStandevImage(const VirtArrayAccessor_2D<T> & a_avg_Acc, MemAccessor_2D_REF(float) a_avg_MagSqr_Acc,
 			MemAccessor_2D_REF(float) a_outAcc)
 		{
-			MemAccessor_1D_REF(T) acc_Avg_Y = a_avg_Acc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_Avg_X = a_avg_Acc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Avg_Y = a_avg_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_Avg_X = a_avg_Acc.GenAccessor_X();
 
-			MemAccessor_1D_REF(float) acc_Avg_MagSqr_Y = a_avg_MagSqr_Acc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(float) acc_Avg_MagSqr_X = a_avg_MagSqr_Acc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<float> & acc_Avg_MagSqr_Y = a_avg_MagSqr_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> & acc_Avg_MagSqr_X = a_avg_MagSqr_Acc.GenAccessor_X();
 
-			MemAccessor_1D_REF(float) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(float) acc_Out_X = a_outAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<float> & acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> & acc_Out_X = a_outAcc.GenAccessor_X();
 
-			Ncpp_ASSERT(acc_Avg_Y->GetNofSteps() == acc_Avg_MagSqr_Y->GetNofSteps());
-			Ncpp_ASSERT(acc_Avg_Y->GetNofSteps() == acc_Out_Y->GetNofSteps());
+			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_Avg_MagSqr_Y.GetSize());
+			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_Out_Y.GetSize());
 
-			//Ncpp_ASSERT(acc_Avg_X->GetNofSteps() == acc_Avg_MagSqr_X->GetNofSteps());
-			//Ncpp_ASSERT(acc_Avg_X->GetNofSteps() == acc_Out_X->GetNofSteps());
+			//Ncpp_ASSERT(acc_Avg_X.GetSize() == acc_Avg_MagSqr_X.GetSize());
+			//Ncpp_ASSERT(acc_Avg_X.GetSize() == acc_Out_X.GetSize());
 
-			PtrIterator<T> ptrItr_Avg_Y = acc_Avg_Y->GenPtrIterator();
-			PtrIterator<float> ptrItr_Avg_MagSqr_Y = acc_Avg_MagSqr_Y->GenPtrIterator();
-			PtrIterator<float> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Avg_Y = acc_Avg_Y->GenPtrIterator();
+			PtrIterator2<float> ptrItr_Avg_MagSqr_Y = acc_Avg_MagSqr_Y->GenPtrIterator();
+			PtrIterator2<float> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
 
-			for (; !ptrItr_Avg_Y.IsDone();
-				ptrItr_Avg_Y.Next(), ptrItr_Avg_MagSqr_Y.Next(), ptrItr_Out_Y.Next())
+			for (; ptrItr_Avg_Y.CanMove();
+				ptrItr_Avg_Y.MoveBgn(), ptrItr_Avg_MagSqr_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
-				T * ptr_Avg_Y = ptrItr_Avg_Y.GetCurrent();
-				float * ptr_Avg_MagSqr_Y = ptrItr_Avg_MagSqr_Y.GetCurrent();
-				float * ptr_Out_Y = ptrItr_Out_Y.GetCurrent();
+				T * ptr_Avg_Y = ptrItr_Avg_Y.GetBgn();
+				float * ptr_Avg_MagSqr_Y = ptrItr_Avg_MagSqr_Y.GetBgn();
+				float * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
 
-				acc_Avg_X->SetDataPtr(ptr_Avg_Y);
-				acc_Avg_MagSqr_X->SetDataPtr(ptr_Avg_MagSqr_Y);
-				acc_Out_X->SetDataPtr(ptr_Out_Y);
+				acc_Avg_X.SetData(ptr_Avg_Y);
+				acc_Avg_MagSqr_X.SetData(ptr_Avg_MagSqr_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
 
 				CalcStandevLine<T>(acc_Avg_X, acc_Avg_MagSqr_X, acc_Out_X);
 			}
 		}
 
 		template<class T>
-		void CalcConflictImage_H(MemAccessor_2D_REF(T) a_avg_Acc, MemAccessor_2D_REF(float) a_avg_MagSqr_Acc,
-			MemAccessor_2D_REF(ConflictInfo) a_outAcc, Range<int> & a_range_X)
+		void CalcConflictImage_X(const VirtArrayAccessor_2D<T> & a_avg_Acc, MemAccessor_2D_REF(float) a_avg_MagSqr_Acc,
+			MemAccessor_2D_REF(ConflictInfo2) a_outAcc, const Range<int> & a_range_X)
 		{
-			MemAccessor_1D_REF(T) acc_Avg_Y = a_avg_Acc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_Avg_X = a_avg_Acc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Avg_Y = a_avg_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_Avg_X = a_avg_Acc.GenAccessor_X();
 
-			MemAccessor_1D_REF(float) acc_Avg_MagSqr_Y = a_avg_MagSqr_Acc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(float) acc_Avg_MagSqr_X = a_avg_MagSqr_Acc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<float> & acc_Avg_MagSqr_Y = a_avg_MagSqr_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> & acc_Avg_MagSqr_X = a_avg_MagSqr_Acc.GenAccessor_X();
 
-			MemAccessor_1D_REF(ConflictInfo) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(ConflictInfo) acc_Out_X = a_outAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<ConflictInfo2> & acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<ConflictInfo2> & acc_Out_X = a_outAcc.GenAccessor_X();
 
-			Ncpp_ASSERT(acc_Avg_Y->GetNofSteps() == acc_Avg_MagSqr_Y->GetNofSteps());
-			Ncpp_ASSERT(acc_Avg_Y->GetNofSteps() == acc_Out_Y->GetNofSteps());
+			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_Avg_MagSqr_Y.GetSize());
+			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_Out_Y.GetSize());
 
-			PtrIterator<T> ptrItr_Avg_Y = acc_Avg_Y->GenPtrIterator();
-			PtrIterator<float> ptrItr_Avg_MagSqr_Y = acc_Avg_MagSqr_Y->GenPtrIterator();
-			PtrIterator<ConflictInfo> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Avg_Y = acc_Avg_Y->GenPtrIterator();
+			PtrIterator2<float> ptrItr_Avg_MagSqr_Y = acc_Avg_MagSqr_Y->GenPtrIterator();
+			PtrIterator2<ConflictInfo2> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
 
-			for (; !ptrItr_Avg_Y.IsDone();
-				ptrItr_Avg_Y.Next(), ptrItr_Avg_MagSqr_Y.Next(), ptrItr_Out_Y.Next())
+			for (; ptrItr_Avg_Y.CanMove();
+				ptrItr_Avg_Y.MoveBgn(), ptrItr_Avg_MagSqr_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
-				T * ptr_Avg_Y = ptrItr_Avg_Y.GetCurrent();
-				float * ptr_Avg_MagSqr_Y = ptrItr_Avg_MagSqr_Y.GetCurrent();
-				ConflictInfo * ptr_Out_Y = ptrItr_Out_Y.GetCurrent();
+				T * ptr_Avg_Y = ptrItr_Avg_Y.GetBgn();
+				float * ptr_Avg_MagSqr_Y = ptrItr_Avg_MagSqr_Y.GetBgn();
+				ConflictInfo2 * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
 
-				acc_Avg_X->SetDataPtr(ptr_Avg_Y);
-				acc_Avg_MagSqr_X->SetDataPtr(ptr_Avg_MagSqr_Y);
-				acc_Out_X->SetDataPtr(ptr_Out_Y);
+				acc_Avg_X.SetData(ptr_Avg_Y);
+				acc_Avg_MagSqr_X.SetData(ptr_Avg_MagSqr_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
 
 				CalcConflictLine<T>(acc_Avg_X, acc_Avg_MagSqr_X, acc_Out_X, a_range_X);
 			}
 		}
 
 		template<class T>
-		void Calc_ConflictDiff_Image_H(MemAccessor_2D_REF(T) a_avg_Acc, MemAccessor_2D_REF(float) a_avg_MagSqr_Acc,
-			MemAccessor_2D_REF(float) a_outAcc, Range<int> & a_range_X)
+		void Calc_ConflictDiff_Image_X(const VirtArrayAccessor_2D<T> & a_avg_Acc, MemAccessor_2D_REF(float) a_avg_MagSqr_Acc,
+			MemAccessor_2D_REF(float) a_outAcc, const Range<int> & a_range_X)
 		{
-			MemAccessor_1D_REF(T) acc_Avg_Y = a_avg_Acc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(T) acc_Avg_X = a_avg_Acc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<T> & acc_Avg_Y = a_avg_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> & acc_Avg_X = a_avg_Acc.GenAccessor_X();
 
-			MemAccessor_1D_REF(float) acc_Avg_MagSqr_Y = a_avg_MagSqr_Acc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(float) acc_Avg_MagSqr_X = a_avg_MagSqr_Acc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<float> & acc_Avg_MagSqr_Y = a_avg_MagSqr_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> & acc_Avg_MagSqr_X = a_avg_MagSqr_Acc.GenAccessor_X();
 
-			MemAccessor_1D_REF(float) acc_Out_Y = a_outAcc->GenAccessor_1D_Y();
-			MemAccessor_1D_REF(float) acc_Out_X = a_outAcc->GenAccessor_1D_X();
+			const VirtArrayAccessor_1D<float> & acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> & acc_Out_X = a_outAcc.GenAccessor_X();
 
-			Ncpp_ASSERT(acc_Avg_Y->GetNofSteps() == acc_Avg_MagSqr_Y->GetNofSteps());
-			Ncpp_ASSERT(acc_Avg_Y->GetNofSteps() == acc_Out_Y->GetNofSteps());
+			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_Avg_MagSqr_Y.GetSize());
+			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_Out_Y.GetSize());
 
-			PtrIterator<T> ptrItr_Avg_Y = acc_Avg_Y->GenPtrIterator();
-			PtrIterator<float> ptrItr_Avg_MagSqr_Y = acc_Avg_MagSqr_Y->GenPtrIterator();
-			PtrIterator<float> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
+			PtrIterator2<T> ptrItr_Avg_Y = acc_Avg_Y->GenPtrIterator();
+			PtrIterator2<float> ptrItr_Avg_MagSqr_Y = acc_Avg_MagSqr_Y->GenPtrIterator();
+			PtrIterator2<float> ptrItr_Out_Y = acc_Out_Y->GenPtrIterator();
 
-			for (; !ptrItr_Avg_Y.IsDone();
-				ptrItr_Avg_Y.Next(), ptrItr_Avg_MagSqr_Y.Next(), ptrItr_Out_Y.Next())
+			for (; ptrItr_Avg_Y.CanMove();
+				ptrItr_Avg_Y.MoveBgn(), ptrItr_Avg_MagSqr_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
-				T * ptr_Avg_Y = ptrItr_Avg_Y.GetCurrent();
-				float * ptr_Avg_MagSqr_Y = ptrItr_Avg_MagSqr_Y.GetCurrent();
-				float * ptr_Out_Y = ptrItr_Out_Y.GetCurrent();
+				T * ptr_Avg_Y = ptrItr_Avg_Y.GetBgn();
+				float * ptr_Avg_MagSqr_Y = ptrItr_Avg_MagSqr_Y.GetBgn();
+				float * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
 
-				acc_Avg_X->SetDataPtr(ptr_Avg_Y);
-				acc_Avg_MagSqr_X->SetDataPtr(ptr_Avg_MagSqr_Y);
-				acc_Out_X->SetDataPtr(ptr_Out_Y);
+				acc_Avg_X.SetData(ptr_Avg_Y);
+				acc_Avg_MagSqr_X.SetData(ptr_Avg_MagSqr_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
 
 				Calc_ConflictDiff_Line<T>(acc_Avg_X, acc_Avg_MagSqr_X, acc_Out_X, a_range_X);
 			}
 		}
 
 		template<class T>
-		void Cala_AvgStandevImage_H(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(float) a_magSqrAcc,
-			MemAccessor_2D_REF(float) a_outAcc, Range<int> a_standevRange_X, Range<int> a_avgRange_Y)
+		void Cala_AvgStandevImage_X(const VirtArrayAccessor_2D<T> & a_inpAcc, MemAccessor_2D_REF(float) a_magSqrAcc,
+			MemAccessor_2D_REF(float) a_outAcc, const Range<int> a_standevRange_X, const Range<int> a_avgRange_Y)
 		{
 			Ncpp_ASSERT(a_inpAcc->GetNofSteps_X() == a_magSqrAcc->GetNofSteps_X());
 			Ncpp_ASSERT(a_inpAcc->GetNofSteps_X() == a_outAcc->GetNofSteps_X());
@@ -459,23 +458,23 @@ namespace Ncv
 
 
 
-			TempImageAccessor_REF(T) tmpAvgAcc_H = new ArrayHolderUtil<T>(a_inpAcc->GetOffsetCalc());
-			AvgImage_H(a_inpAcc, tmpAvgAcc_H->GetMemAccessor(), a_standevRange_X);
+			TempImageAccessor_REF(T) tmpAvgAcc_X = new ArrayHolderUtil<T>(a_inpAcc->GetOffsetCalc());
+			AvgImage_X(a_inpAcc, tmpAvgAcc_X->GetMemAccessor(), a_standevRange_X);
 
-			TempImageAccessor_REF(float) tmpAvg_MagSqr_H_Acc = new ArrayHolderUtil<float>(a_outAcc->GetOffsetCalc());
-			AvgImage_H(a_magSqrAcc, tmpAvg_MagSqr_H_Acc->GetMemAccessor(), a_standevRange_X);
+			TempImageAccessor_REF(float) tmpAvg_MagSqr_X_Acc = new ArrayHolderUtil<float>(a_outAcc->GetOffsetCalc());
+			AvgImage_X(a_magSqrAcc, tmpAvg_MagSqr_X_Acc->GetMemAccessor(), a_standevRange_X);
 
-			TempImageAccessor_REF(float) tmpStandev_H_Acc = new ArrayHolderUtil<float>(a_outAcc->GetOffsetCalc());
-			CalcStandevImage(tmpAvgAcc_H->GetMemAccessor(), tmpAvg_MagSqr_H_Acc->GetMemAccessor(),
-				tmpStandev_H_Acc->GetMemAccessor());
+			TempImageAccessor_REF(float) tmpStandev_X_Acc = new ArrayHolderUtil<float>(a_outAcc->GetOffsetCalc());
+			CalcStandevImage(tmpAvgAcc_X->GetMemAccessor(), tmpAvg_MagSqr_X_Acc->GetMemAccessor(),
+				tmpStandev_X_Acc->GetMemAccessor());
 
 			MemAccessor_2D_REF(float) outAcc_2 = a_outAcc->Clone();
 			outAcc_2->SwitchXY();
 
-			MemAccessor_2D_REF(float) standev_H_Acc_2 = tmpStandev_H_Acc->GetMemAccessor()->Clone();
-			standev_H_Acc_2->SwitchXY();
+			MemAccessor_2D_REF(float) standev_X_Acc_2 = tmpStandev_X_Acc->GetMemAccessor()->Clone();
+			standev_X_Acc_2->SwitchXY();
 
-			AvgImage_H(standev_H_Acc_2, outAcc_2, a_avgRange_Y);
+			AvgImage_X(standev_X_Acc_2, outAcc_2, a_avgRange_Y);
 		}
 
 

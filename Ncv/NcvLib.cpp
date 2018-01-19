@@ -62,6 +62,10 @@
 #include <NovelCVLib\OpenCV\Element_Operations_F32ColorVal.cpp>
 #include <NovelCVLib\Element_Operations\Element_Operations_VectorVal.cpp>
 
+#include <NovelCVLib\ElementOperations2\ElementOperations2_Float.cpp>
+#include <NovelCVLib\OpenCV\ElementOperations2_F32ColorVal.cpp>
+#include <NovelCVLib\ElementOperations2\ElementOperations2_VectorVal.cpp>
+
 
 //#include <NovelCVLib\Ncv\LocHist\ImgDataGradMgr_LocHist.cpp>
 //#include <NovelCVLib\Ncv\LocHist\ImgDataMgr_2_FactorySet_LocHist.cpp>

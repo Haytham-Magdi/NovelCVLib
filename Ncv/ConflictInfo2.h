@@ -14,20 +14,20 @@
 namespace Ncv
 {
 
-	class ConflictInfo //: public Ncpp::Object
+	class ConflictInfo2 //: public Ncpp::Object
 	{
 	public:
 		bool Exists;
-		int Offset_Side_1;
-		int Offset_Side_2;
+		//int Offset_Side_1;
+		//int Offset_Side_2;
 	};
 
-	class ConflictInfo_Ex : public ConflictInfo//: public Ncpp::Object
+	class ConflictInfo2_Ex : public ConflictInfo2//: public Ncpp::Object
 	{
 	public:
 		int Dir;
 		//float NormVal;
 	};
 
-	//typedef Ncpp::ObjRef< ConflictInfo > ConflictInfoRef;
+	//typedef Ncpp::ObjRef< ConflictInfo2 > ConflictInfo2Ref;
 }

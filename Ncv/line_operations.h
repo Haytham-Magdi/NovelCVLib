@@ -126,7 +126,7 @@ namespace Ncv
 		}
 
 		template<class T>
-		void AvgLine(MemAccessor_1D_REF(T) a_inpAcc, MemAccessor_1D_REF(T) a_outAcc, Range<int> & a_range)
+		void AvgLine(MemAccessor_1D_REF(T) a_inpAcc, MemAccessor_1D_REF(T) a_outAcc, const Range<int> & a_range)
 		{
 			Ncpp_ASSERT(a_inpAcc->GetNofSteps() == a_outAcc->GetNofSteps());
 			Ncpp_ASSERT(a_range.GetBgn() <= 0);
@@ -198,7 +198,7 @@ namespace Ncv
 		}
 
 		template<class T>
-		void AvgLine_Weighted(MemAccessor_1D_REF(T) a_inpAcc, MemAccessor_1D_REF(float) a_weightAcc, MemAccessor_1D_REF(T) a_outAcc, Range<int> & a_range)
+		void AvgLine_Weighted(MemAccessor_1D_REF(T) a_inpAcc, MemAccessor_1D_REF(float) a_weightAcc, MemAccessor_1D_REF(T) a_outAcc, const Range<int> & a_range)
 		{
 			Ncpp_ASSERT(a_inpAcc->GetNofSteps() == a_outAcc->GetNofSteps());
 			Ncpp_ASSERT(a_inpAcc->GetNofSteps() == a_weightAcc->GetNofSteps());
@@ -341,7 +341,7 @@ namespace Ncv
 
 		template<class T>
 		void CalcConflictLine(MemAccessor_1D_REF(T) a_avg_Acc, MemAccessor_1D_REF(float) a_avg_MagSqr_Acc,
-			MemAccessor_1D_REF(ConflictInfo) a_outAcc, Range<int> & a_range)
+			MemAccessor_1D_REF(ConflictInfo) a_outAcc, const Range<int> & a_range)
 		{
 			{
 				ConflictInfo val_Init;
@@ -393,7 +393,7 @@ namespace Ncv
 
 		template<class T>
 		void Calc_ConflictDiff_Line(MemAccessor_1D_REF(T) a_avg_Acc, MemAccessor_1D_REF(float) a_avg_MagSqr_Acc,
-			MemAccessor_1D_REF(float) a_outAcc, Range<int> & a_range)
+			MemAccessor_1D_REF(float) a_outAcc, const Range<int> & a_range)
 		{
 			{
 				float val_Init;

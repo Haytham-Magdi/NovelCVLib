@@ -197,7 +197,7 @@ namespace Ncv
 		}
 
 		template<class T>
-		void AvgImage_H(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(T) a_outAcc, Range<int> & a_range_X)
+		void AvgImage_H(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(T) a_outAcc, const Range<int> & a_range_X)
 		{
 			MemAccessor_1D_REF(T) acc_Inp_Y = a_inpAcc->GenAccessor_1D_Y();
 			MemAccessor_1D_REF(T) acc_Inp_X = a_inpAcc->GenAccessor_1D_X();
@@ -224,7 +224,7 @@ namespace Ncv
 		}
 
 		template<class T>
-		void AvgImage(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(T) a_outAcc, Window<int> & a_window)
+		void AvgImage(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(T) a_outAcc, const Window<int> & a_window)
 		{
 			TempImageAccessor_REF(T) tmpImgAcc = new TempImageAccessor<T>(a_outAcc->GetOffsetCalc());
 
@@ -242,7 +242,7 @@ namespace Ncv
 		}
 
 		template<class T>
-		void AvgImage_Weighted_H(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(float) a_weightAcc, MemAccessor_2D_REF(T) a_outAcc, Range<int> & a_range_X)
+		void AvgImage_Weighted_H(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(float) a_weightAcc, MemAccessor_2D_REF(T) a_outAcc, const Range<int> & a_range_X)
 		{
 			MemAccessor_1D_REF(T) acc_Inp_Y = a_inpAcc->GenAccessor_1D_Y();
 			MemAccessor_1D_REF(T) acc_Inp_X = a_inpAcc->GenAccessor_1D_X();
@@ -275,7 +275,7 @@ namespace Ncv
 		}
 
 		template<class T>
-		void AvgImage_Weighted(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(float) a_weightAcc, MemAccessor_2D_REF(T) a_outAcc, Window<int> & a_window)
+		void AvgImage_Weighted(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(float) a_weightAcc, MemAccessor_2D_REF(T) a_outAcc, const Window<int> & a_window)
 		{
 			TempImageAccessor_REF(T) tmpImgAcc = new TempImageAccessor<T>(a_outAcc->GetOffsetCalc());
 
@@ -322,7 +322,7 @@ namespace Ncv
 
 		template<class T>
 		void Calc_Avg_And_Standev_Image(MemAccessor_2D_REF(T) a_inp_Acc, MemAccessor_2D_REF(T) a_out_Avg_Acc,
-			MemAccessor_2D_REF(float) a_out_Standev_Acc, Window<int> & a_Win)
+			MemAccessor_2D_REF(float) a_out_Standev_Acc, const Window<int> & a_Win)
 		{
 			//TempImageAccessor_REF(T) avg_Img = new TempImageAccessor_REF<T>(a_inp_Acc->GetOffsetCalc());
 			AvgImage(a_inp_Acc, a_out_Avg_Acc, a_Win);
@@ -379,7 +379,7 @@ namespace Ncv
 
 		template<class T>
 		void CalcConflictImage_H(MemAccessor_2D_REF(T) a_avg_Acc, MemAccessor_2D_REF(float) a_avg_MagSqr_Acc,
-			MemAccessor_2D_REF(ConflictInfo) a_outAcc, Range<int> & a_range_X)
+			MemAccessor_2D_REF(ConflictInfo) a_outAcc, const Range<int> & a_range_X)
 		{
 			MemAccessor_1D_REF(T) acc_Avg_Y = a_avg_Acc->GenAccessor_1D_Y();
 			MemAccessor_1D_REF(T) acc_Avg_X = a_avg_Acc->GenAccessor_1D_X();
@@ -414,7 +414,7 @@ namespace Ncv
 
 		template<class T>
 		void Calc_ConflictDiff_Image_H(MemAccessor_2D_REF(T) a_avg_Acc, MemAccessor_2D_REF(float) a_avg_MagSqr_Acc,
-			MemAccessor_2D_REF(float) a_outAcc, Range<int> & a_range_X)
+			MemAccessor_2D_REF(float) a_outAcc, const Range<int> & a_range_X)
 		{
 			MemAccessor_1D_REF(T) acc_Avg_Y = a_avg_Acc->GenAccessor_1D_Y();
 			MemAccessor_1D_REF(T) acc_Avg_X = a_avg_Acc->GenAccessor_1D_X();
@@ -449,7 +449,7 @@ namespace Ncv
 
 		template<class T>
 		void Cala_AvgStandevImage_H(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(float) a_magSqrAcc,
-			MemAccessor_2D_REF(float) a_outAcc, Range<int> a_standevRange_X, Range<int> a_avgRange_Y)
+			MemAccessor_2D_REF(float) a_outAcc, const Range<int> a_standevRange_X, const Range<int> a_avgRange_Y)
 		{
 			Ncpp_ASSERT(a_inpAcc->GetNofSteps_X() == a_magSqrAcc->GetNofSteps_X());
 			Ncpp_ASSERT(a_inpAcc->GetNofSteps_X() == a_outAcc->GetNofSteps_X());

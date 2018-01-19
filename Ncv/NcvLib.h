@@ -196,10 +196,17 @@
 #include <NovelCVLib\Ncv\LineOperations2.h>
 #include <NovelCVLib\Ncv\ImageOperations2.h>
 #include <NovelCVLib\Ncv\ImageAccessorOperations.h>
+
 #include <NovelCVLib\Element_Operations\Element_Operations_VectorVal.h>
 #include <NovelCVLib\Element_Operations\Element_Operations_Float.h>
 #include <NovelCVLib\OpenCV\Element_Operations_F32ColorVal.h>
 #include <NovelCVLib\Element_Operations\Element_Operations.h>
+
+#include <NovelCVLib\ElementOperations2\ElementOperations2_VectorVal.h>
+#include <NovelCVLib\ElementOperations2\ElementOperations2_Float.h>
+#include <NovelCVLib\OpenCV\ElementOperations2_F32ColorVal.h>
+#include <NovelCVLib\ElementOperations2\ElementOperations2.h>
+
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
 #include <NovelCVLib\Ncv\ConflictInfo.h>
 
