@@ -18,6 +18,8 @@ namespace Ncv
 	{
 	public:
 		bool Exists;
+		void * pSide_1;
+		void * pSide_2;
 		//int Offset_Side_1;
 		//int Offset_Side_2;
 	};
