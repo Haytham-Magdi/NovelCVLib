@@ -21,7 +21,7 @@ namespace Ncv
 	{
 	public:
 
-		ImgSizeRotationColl(Size_2D a_srcSiz, int a_nofRots);
+		ImgSizeRotationColl(CvSize a_srcSiz, int a_nofRots);
 
 		ImgSizeRotationRef GetRotAt(int a_nRotIdx)
 		{
@@ -33,7 +33,7 @@ namespace Ncv
 			return m_rotMgrArr.GetSize();
 		}
 
-		Size_2D GetSrcImgSiz()
+		CvSize GetSrcImgSiz()
 		{
 			return m_srcSiz;
 		}
@@ -45,7 +45,7 @@ namespace Ncv
 	protected:
 
 		//F32ImageRef m_srcImg;
-		Size_2D m_srcSiz;
+		CvSize m_srcSiz;
 
 		int m_nofRots;
 		Ncpp::FixedVector< ImgSizeRotationRef > m_rotMgrArr;

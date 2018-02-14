@@ -2,13 +2,12 @@
 
 #include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
 #include <NovelCVLib\Ncpp\Math\mathLib.h>
-
-//#include <NovelCVLib\OpenCV\CvIncludes.h>
-//#include <NovelCVLib\OpenCV\Types.h>
-//#include <NovelCVLib\OpenCV\error.h>
-//#include <vector>
-//#include <NovelCVLib\OpenCV\Channel.h>
-//#include <NovelCVLib\OpenCV\Image.h>
+#include <NovelCVLib\OpenCV\CvIncludes.h>
+#include <NovelCVLib\OpenCV\Types.h>
+#include <NovelCVLib\OpenCV\error.h>
+#include <vector>
+#include <NovelCVLib\OpenCV\Channel.h>
+#include <NovelCVLib\OpenCV\Image.h>
 
 //#include <NovelCVLib\Ncv\ImageLineItrProvider.h>
 //#include <NovelCVLib\Ncv\ImageItrMgr.h>
@@ -23,7 +22,7 @@ namespace Ncv
 	{
 	public:
 
-		ImgSizeRotation(Size_2D a_srcSiz, float a_angDig);
+		ImgSizeRotation(CvSize a_srcSiz, float a_angDig);
 
 		//F32ImageRef GetSrcImg() { return m_srcImg; }
 
@@ -31,9 +30,9 @@ namespace Ncv
 
 		float GetAngleByRad() { return m_angRad; }
 
-		Size_2D GetSrcImgSiz() { return m_srcSiz; }
+		CvSize GetSrcImgSiz() { return m_srcSiz; }
 
-		Size_2D GetResImgSiz() { return m_resSiz; }
+		CvSize GetResImgSiz() { return m_resSiz; }
 
 		S32ImageRef Get_ResToSrcMapImage() { return m_resToSrcMapImg; }
 
@@ -47,7 +46,7 @@ namespace Ncv
 
 		template<class T>
 		//void RotateImage(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(T) a_outAcc)
-		void RotateImage(T * a_destBuf, Size_2D a_destSiz, T * a_srcBuf, Size_2D a_srcSiz)
+		void RotateImage(T * a_destBuf, CvSize a_destSiz, T * a_srcBuf, CvSize a_srcSiz)
 		{
 			//Ncpp_ASSERT(a_inpAcc->GetNofSteps_X() == m_srcSiz.width);
 			//Ncpp_ASSERT(a_inpAcc->GetNofSteps_Y() == m_srcSiz.height);
@@ -237,9 +236,9 @@ namespace Ncv
 
 		CvPoint m_bgnPnt;
 
-		Size_2D m_srcSiz;
+		CvSize m_srcSiz;
 
-		Size_2D m_resSiz;
+		CvSize m_resSiz;
 		S32ImageRef m_resToSrcMapImg;
 		//F32ImageRef m_resImg;
 		S32ImageRef m_srcToResMapImg;

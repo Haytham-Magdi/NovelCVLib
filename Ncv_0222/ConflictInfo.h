@@ -9,23 +9,25 @@
 //#include <NovelCVLib\OpenCV\Channel.h>
 //#include <NovelCVLib\OpenCV\Image.h>
 
+
+
 namespace Ncv
 {
-	template<class T, const int N>
-	class VectorVal
+
+	class ConflictInfo //: public Ncpp::Object
 	{
 	public:
-		const int GetNofDims()
-		{
-			return N;
-		}
-
-	public:
-		T Vals[N];
-
+		bool Exists;
+		int Offset_Side_1;
+		int Offset_Side_2;
 	};
 
-	template<int const N>
-	using F32VectorVal = VectorVal<float, N>;
+	class ConflictInfo_Ex : public ConflictInfo//: public Ncpp::Object
+	{
+	public:
+		int Dir;
+		//float NormVal;
+	};
 
+	//typedef Ncpp::ObjRef< ConflictInfo > ConflictInfoRef;
 }
