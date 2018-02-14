@@ -15,8 +15,8 @@
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
 #include <NovelCVLib\Ncv\ConflictInfo.h>
 
-#include <NovelCVLib\Apps\Binarization\ImgAngleDirMgr.h>
-//#include <NovelCVLib\Apps\Binarization\RotationMgrColl.h>
+#include <NovelCVLib\Apps\Binarization2\ImgAngleDirMgr.h>
+//#include <NovelCVLib\Apps\Binarization2\RotationMgrColl.h>
 #include <NovelCVLib\Ncv\ConflictInfo.h>
 
 

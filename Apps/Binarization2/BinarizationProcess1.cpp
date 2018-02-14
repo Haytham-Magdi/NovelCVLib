@@ -7,7 +7,7 @@
 #include <NovelCVLib\OpenCV\Image.h>
 #include <NovelCVLib\OpenCV\funcs1.h>
 
-#include <NovelCVLib\Apps\Binarization\BinarizationProcess1.h>
+#include <NovelCVLib\Apps\Binarization2\BinarizationProcess1.h>
 
 
 #define M_PI 3.14159265358979323846
