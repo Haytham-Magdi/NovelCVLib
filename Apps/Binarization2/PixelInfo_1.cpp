@@ -19,7 +19,7 @@ namespace Ncv
 	//using namespace Ncpp::Math;
 
 	using namespace Ncv;
-	using namespace Ncv::Image_Operations2;
+	using namespace Ncv::ImageOperations2;
 	using namespace Ncv::ImageAccessorOperations;
 
 	namespace Ns_Binarization

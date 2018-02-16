@@ -190,9 +190,8 @@
 //#include <NovelCVLib\Ncv\ImgScanMgr.h>
 //#include <NovelCVLib\Ncv\ImgClusteringTry.h>
 #include <NovelCVLib\Ncv\ImageAccessor.h>
-#include <NovelCVLib\Ncv\Image_Operations2.h>
+#include <NovelCVLib\Ncv\ImageOperations2.h>
 #include <NovelCVLib\Ncv\TempImageAccessor.h>
-#include <NovelCVLib\Ncv\LineOperations2.h>
 #include <NovelCVLib\Ncv\LineOperations2.h>
 #include <NovelCVLib\Ncv\ImageOperations2.h>
 #include <NovelCVLib\Ncv\ImageAccessorOperations.h>

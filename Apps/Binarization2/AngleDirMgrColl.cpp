@@ -7,7 +7,7 @@
 #include <NovelCVLib\OpenCV\Image.h>
 #include <NovelCVLib\OpenCV\funcs1.h>
 
-#include <NovelCVLib\Ncv\Image_Operations2.h>
+#include <NovelCVLib\Ncv\ImageOperations2.h>
 #include <NovelCVLib\Apps\Binarization2\AngleDirMgrColl.h>
 #include <NovelCVLib\Apps\Binarization2\PixelInfo_1.h>
 
@@ -21,7 +21,7 @@ namespace Ncv
 	//using namespace Ncpp::Math;
 
 	using namespace Ncv;
-	using namespace Ncv::Image_Operations2;
+	using namespace Ncv::ImageOperations2;
 	//using namespace Ncv::ImageAccessorOperations;
 
 	namespace Ns_Binarization

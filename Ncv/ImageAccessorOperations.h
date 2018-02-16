@@ -9,7 +9,7 @@
 #include <NovelCVLib\OpenCV\Image.h>
 //#include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
 
-#include <NovelCVLib\Ncv\Image_Operations2.h>
+#include <NovelCVLib\Ncv\ImageOperations2.h>
 
 
 
@@ -19,7 +19,7 @@ namespace Ncv
 	namespace ImageAccessorOperations
 	{
 		using namespace Ncpp;
-		using namespace Ncv::Image_Operations2;
+		using namespace Ncv::ImageOperations2;
 
 
 		////-------------------------------------------------------------------

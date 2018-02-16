@@ -15,7 +15,7 @@ namespace Ncv
 	class SimpleArrayHolder_2D;
 
 
-#define SimpleArrayHolder_2D_REF(T) ObjRef< SimpleArrayHolder_2D< T >>
+//#define SimpleArrayHolder_2D_REF(T) ObjRef< SimpleArrayHolder_2D< T >>
 
 	template<class T>
 	class SimpleArrayHolder_2D : public ArrayHolder_2D<T>
@@ -34,4 +34,6 @@ namespace Ncv
 		FixedVector<T> m_allocVect;
 	};
 
+	template<class T>
+	using SimpleArrayHolder_2D_Ref = ObjRef< SimpleArrayHolder_2D< T >>;
 }

@@ -219,7 +219,7 @@ namespace Ncv
 		template<class T>
 		void AvgImage(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const Window<int> & a_window)
 		{
-			ArrayHolder_2D_REF(T) tmpHolder = ArrayHolderUtil<T>::CreateFrom(a_outAcc.GetSize());
+			ArrayHolder_2D_Ref<T> tmpHolder = ArrayHolderUtil<T>::CreateFrom(a_outAcc.GetSize());
 			AvgImage_X<T>(a_inpAcc, tmpHolder->GetVirtAccessor(), a_window.GetRange_X());
 
 			//tmpHolder_T = ArrayHolderUtil<T>::CreateTransposedProxyFrom(tmpHolder);
@@ -266,7 +266,7 @@ namespace Ncv
 		template<class T>
 		void AvgImage_Weighted(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<float> & a_weightAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const Window<int> & a_window)
 		{
-			ArrayHolder_2D_REF(T) tmpHolder = ArrayHolderUtil<T>::CreateFrom(a_outAcc.GetSize());
+			ArrayHolder_2D_Ref<T> tmpHolder = ArrayHolderUtil<T>::CreateFrom(a_outAcc.GetSize());
 			AvgImage_Weighted_X(a_inpAcc, a_weightAcc, tmpHolder->GetVirtAccessor(), a_window.GetRange_X());
 
 			//tmpHolder_T = ArrayHolderUtil<T>::CreateTransposedProxyFrom(tmpHolder);
@@ -438,7 +438,7 @@ namespace Ncv
 			Ncpp_ASSERT(a_inpAcc.GetSize_X() == a_outAcc.GetSize_X());
 
 
-			ArrayHolder_2D_REF(T) tmpAvgHolder_X = ArrayHolderUtil<T>::CreateFrom(a_inpAcc.GetSize());
+			ArrayHolder_2D_Ref<T> tmpAvgHolder_X = ArrayHolderUtil<T>::CreateFrom(a_inpAcc.GetSize());
 			AvgImage_X(a_inpAcc, tmpAvgHolder_X->GetVirtAccessor(), a_standevRange_X);
 
 			ArrayHolder_2D_REF(float) tmpAvg_MagSqr_X_Holder = ArrayHolderUtil<float>::CreateFrom(a_outAcc->GetSize());

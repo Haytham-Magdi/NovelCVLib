@@ -13,7 +13,7 @@ namespace Ncv
 	class ArrayHolder_1D;
 
 
-#define ArrayHolder_1D_REF(T) ObjRef< ArrayHolder_1D< T >>
+//#define ArrayHolder_1D_REF(T) ObjRef< ArrayHolder_1D< T >>
 
 	template<class T>
 	class ArrayHolder_1D : public Ncpp::Object
@@ -42,5 +42,8 @@ namespace Ncv
 		VirtArrayAccessor_1D m_virtAccessor;
 		ActualArrayAccessor_1D m_actualAccessor;
 	};
+
+	template<class T>
+	using ArrayHolder_1D_Ref = ObjRef< ArrayHolder_1D< T >>;
 
 }

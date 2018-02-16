@@ -13,8 +13,9 @@ namespace Ncv
 	class ArrayHolder_2D;
 
 
-#define ArrayHolder_2D_REF(T) ObjRef< ArrayHolder_2D< T >>
+//#define ArrayHolder_2D_REF(T) ObjRef< ArrayHolder_2D< T >>
 
+	
 	template<class T>
 	class ArrayHolder_2D : public Ncpp::Object
 	{
@@ -47,5 +48,11 @@ namespace Ncv
 		VirtArrayAccessor_2D m_virtAccessor;
 		ActualArrayAccessor_2D m_actualAccessor;
 	};
+
+
+	template<class T>
+	using ArrayHolder_2D_Ref = ObjRef< ArrayHolder_2D< T >>;
+
+
 
 }
