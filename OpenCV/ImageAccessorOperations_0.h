@@ -54,8 +54,8 @@ namespace Ncv
 		//		//F32ImageAccessor1C_Ref ret = F32ImageAccessor1C(
 		//		//F32Image::Create(a_imgAcc->GetSrcImg()->GetSize(), 1));
 
-		//	//F32ImageAccessor3C_Ref ret = a_imgAcc->CloneNew();
-		//	//ret->SetSrcImg(a_imgAcc->GetSrcImg()->CloneNew());
+		//	//F32ImageAccessor3C_Ref ret = a_imgAcc->CloneEmpty();
+		//	//ret->SetSrcImg(a_imgAcc->GetSrcImg()->CloneEmpty());
 		//	//ret->Lock();
 
 		//	//FillImage_Stripes_H(a_imgAcc, a_val1, a_val2, a_stripWidth);
@@ -65,7 +65,7 @@ namespace Ncv
 
 		////F32ImageAccessor3C_Ref imgAcc1 = new F32ImageAccessor3C(src);
 
-		////F32ImageAccessor3C_Ref imgAcc0 = new F32ImageAccessor3C(src->CloneNew());
+		////F32ImageAccessor3C_Ref imgAcc0 = new F32ImageAccessor3C(src->CloneEmpty());
 		////CopyImage(imgAcc0->GetMemAccessor(), imgAcc1->GetMemAccessor());
 
 

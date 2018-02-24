@@ -4,6 +4,7 @@ template<class T_ImgElm, class T_AccElm, int const V_NofChannels>
 class ImageAccessor;
 
 
+//#define ImageAccessor_REF(T_ImgElm, T_AccElm, V_NofChannels) ObjRef< ImageAccessor< T_ImgElm, T_AccElm, V_NofChannels >>
 #define ImageAccessor_REF(T_ImgElm, T_AccElm, V_NofChannels) ObjRef< ImageAccessor< T_ImgElm, T_AccElm, V_NofChannels >>
 
 //typedef ImageAccessor< float, float, 3 > F32Image3C_FloatAcc;

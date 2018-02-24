@@ -23,6 +23,14 @@
 namespace Ncv
 {
 
+#define IMAGE_REF(T) Ncpp::ObjRef< Ncv::Image< T > >
+
+	template<class T>
+	class Image;
+
+	template<class T>
+	using ImageRef = Ncpp::ObjRef<Ncv::Image<T>>;
+
 	template<class T>
 	class Image : public Ncpp::Object
 	{
@@ -105,17 +113,15 @@ namespace Ncv
 			return GetPixAt(0, 0);
 		}
 
-		IMAGE_REF(T) CloneNew()
+		IMAGE_REF(T) CloneEmpty()
 		{
 			IMAGE_REF(T) pRet = Image<T>::Create(this->GetSize(), this->GetNofChannels());
-
 			return pRet;
 		}
 
-		Image< T > * CloneNew_WithChannels(int a_nNew_nofChnnels)
+		Image< T > * CreateWithSameSize(int a_nNew_nofChnnels)
 		{
 			Image<T> * pRet = Image<T>::Create(this->GetSize(), a_nNew_nofChnnels);
-
 			return pRet;
 		}
 
@@ -123,7 +129,7 @@ namespace Ncv
 		{
 			CvSize siz = this->GetSize();
 
-			IMAGE_REF(T) pRet = this->CloneNew();
+			IMAGE_REF(T) pRet = this->CloneEmpty();
 			this->CopyTo(pRet);
 
 			return pRet;

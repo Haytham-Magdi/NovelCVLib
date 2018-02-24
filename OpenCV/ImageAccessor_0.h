@@ -100,7 +100,7 @@ namespace Ncv
 			m_isLocked = false;
 		}
 
-		//ImageAccessor_REF(T_ImgElm, T_AccElm, V_NofChannels) CloneNew()
+		//ImageAccessor_REF(T_ImgElm, T_AccElm, V_NofChannels) CloneEmpty()
 		//{
 		//	ImageAccessor_REF(T_ImgElm, T_AccElm, V_NofChannels) ret =
 		//		new ImageAccessor<T_ImgElm, T_AccElm, V_NofChannels>();

@@ -21,18 +21,26 @@ namespace Ncv
 	class ArrayHolderUtil;
 
 
-	template<class T>
-	class ArrayHolderUtil : public Ncpp::Object
-	{
-	public:
+	//template<class T>
+	//class ArrayHolderUtil : public Ncpp::Object
+	//{
+	//public:
 
-		static ArrayHolder_2D_Ref<T> CreateFrom(const Size_2D & a_size)
+	namespace ArrayHolderUtil
+	{
+		//using namespace Ncv;
+
+		//static ArrayHolder_2D_Ref<T> CreateFrom(const Size_2D & a_size)
+		template<class T>
+		ArrayHolder_2D_Ref<T> CreateFrom(const Size_2D & a_size)
 		{
 			ArrayHolder_2D_Ref<T> ret = new SimpleArrayHolder_2D(a_size);
 			return ret;
 		}
 
-		static ArrayHolder_2D_Ref<T> CreateWithoutDataFrom(ArrayHolder_2D_Ref<T> a_src)
+		//static ArrayHolder_2D_Ref<T> CreateWithoutDataFrom(ArrayHolder_2D_Ref<T> a_src)
+		template<class T>
+		ArrayHolder_2D_Ref<T> CreateWithoutDataFrom(ArrayHolder_2D_Ref<T> a_src)
 		{
 			ArrayHolder_2D_Ref<T> ret = new SimpleArrayHolder_2D(a_src->GetActualAccessor().GetSize());
 			VirtArrayAccessor_2D & retVirtAcc = ret->GetVirtAccessor();
@@ -43,7 +51,9 @@ namespace Ncv
 			return ret;
 		}
 
-		static ArrayHolder_2D_Ref<T> CreateCopyFrom(ArrayHolder_2D_Ref<T> a_src)
+		//static ArrayHolder_2D_Ref<T> CreateCopyFrom(ArrayHolder_2D_Ref<T> a_src)
+		template<class T>
+		ArrayHolder_2D_Ref<T> CreateCopyFrom(ArrayHolder_2D_Ref<T> a_src)
 		{
 			ArrayHolder_2D_Ref<T> ret = CreateWithoutDataFrom(a_src);
 
@@ -53,7 +63,9 @@ namespace Ncv
 			return ret;
 		}
 
-		static ArrayHolder_2D_Ref<T> CreateTransposedProxyFrom(ArrayHolder_2D_Ref<T> a_src)
+		//static ArrayHolder_2D_Ref<T> CreateTransposedProxyFrom(ArrayHolder_2D_Ref<T> a_src)
+		template<class T>
+		ArrayHolder_2D_Ref<T> CreateTransposedProxyFrom(ArrayHolder_2D_Ref<T> a_src)
 		{
 			ArrayHolder_2D_Ref<T> ret = new ArrayHolderProxy_2D(a_src);
 			ret->TransposeVirtAccessor();
@@ -61,12 +73,13 @@ namespace Ncv
 			return ret;
 		}
 
-	private:
+	//private:
 
-		ArrayHolderUtil() {}
+	//	ArrayHolderUtil() {}
 
-	protected:
+	//protected:
 
-	};
+	//};
+	}
 
 }
