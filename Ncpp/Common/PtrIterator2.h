@@ -6,7 +6,6 @@
 
 
 #include <NovelCVLib\Common\Debug.h>
-#include <NovelCVLib\Ncpp\Common\OffsetCalc_1D.h>
 
 
 namespace Ncpp

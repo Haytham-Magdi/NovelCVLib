@@ -11,9 +11,18 @@
 
 //#include <NovelCVLib\Ncv\ImageLineItrProvider.h>
 //#include <NovelCVLib\Ncv\ImageItrMgr.h>
-#include <NovelCVLib\Ncv\TempImageAccessor.h>
+
+#include <NovelCVLib\Ncv\ImageOperations2.h>
+#include <NovelCVLib\Ncpp\Common\ArrayHolderUtil.h>
+
+#include <NovelCVLib\OpenCV\OpenCV_Util.h>
+#include <NovelCVLib\OpenCV\ImageArrayHolder.h>
+#include <NovelCVLib\Apps\Binarization2\ImageArrayHolderTypeDefs.h>
+
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
-#include <NovelCVLib\Ncv\ConflictInfo.h>
+#include <NovelCVLib\Ncv\ConflictInfo2.h>
+
+#include <NovelCVLib\Apps\Binarization2\TypeDefs.h>
 
 #include <NovelCVLib\Apps\Binarization2\ImgAngleDirMgr.h>
 //#include <NovelCVLib\Apps\Binarization2\RotationMgrColl.h>
@@ -28,16 +37,12 @@ namespace Ncv
 		{
 		public:
 
-			TempImageAccessor_REF(PixelStandevInfo) m_standevInfoImg;
-			TempImageAccessor_REF(ConflictInfo_Ex) m_conflictInfoImg;
-			F32ImageAccessor1C_Ref m_wideConflictDiff_Img;
-			F32VectorValImageAcc_4C_Ref m_avgPStandev_InrWide_Img;
+			ArrayHolder_2D_Ref<PixelStandevInfo> m_standevInfoImg;
+			ArrayHolder_2D_Ref<ConflictInfo2_Ex> m_conflictInfoImg;
+			F32ImageArrayHolder1C_Ref m_wideConflictDiff_Img;
+			F32VectorValImageArrayHolder_4C_Ref m_avgPStandev_InrWide_Img;
 
-			F32ImageAccessor3C_Ref m_org_Img;
-
-			//TempImageAccessor_REF(int) m_standevInfoImg;
-			//PixelStandevInfo psi;
-
+			F32ImageArrayHolder3C_Ref m_org_Img;
 		};
 
 		typedef Ncpp::ObjRef< AngleDirMgrColl_Context > AngleDirMgrColl_Context_Ref;

@@ -51,9 +51,7 @@
 //#include <NovelCVLib\Ncv\ImgBiMixGrad.cpp>
 //#include <NovelCVLib\Ncv\ImgScanMgr.cpp>
 //#include <NovelCVLib\Ncv\ImgClusteringTry.cpp>
-#include <NovelCVLib\Ncv\ImageAccessor.cpp>
-#include <NovelCVLib\Ncv\ImageAccessorOperations.cpp>
-#include <NovelCVLib\Ncv\TempImageAccessor.cpp>
+
 #include <NovelCVLib\Ncv\PixelStandevInfo.cpp>
 #include <NovelCVLib\Ncv\ConflictInfo.cpp>
 

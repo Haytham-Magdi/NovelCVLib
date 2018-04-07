@@ -360,12 +360,14 @@ namespace Ncv
 				if (pOut->Exists)
 				{
 					pOut->pSide_1 = pAvg_1;
-					//pOut->Offset_Side_1 = pAvg_1 - a_avg_Acc->GetDataPtr_Org();
-					//Ncpp_ASSERT(pOut->Offset_Side_1 >= 0);
+
+					pOut->Offset_Side_1 = pAvg_1 - a_avg_Acc->GetData_FakeOrg();
+					Ncpp_ASSERT(pOut->Offset_Side_1 >= 0);
 
 					pOut->pSide_2 = pAvg_2;
-					//pOut->Offset_Side_2 = pAvg_2 - a_avg_Acc->GetDataPtr_Org();
-					//Ncpp_ASSERT(pOut->Offset_Side_2 >= 0);
+
+					pOut->Offset_Side_2 = pAvg_2 - a_avg_Acc->GetData_FakeOrg();
+					Ncpp_ASSERT(pOut->Offset_Side_2 >= 0);
 				}
 				//else
 				//{

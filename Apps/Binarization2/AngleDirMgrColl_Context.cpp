@@ -20,7 +20,6 @@ namespace Ncv
 
 	using namespace Ncv;
 	using namespace Ncv::ImageOperations2;
-	using namespace Ncv::ImageAccessorOperations;
 
 	namespace Ns_Binarization
 	{

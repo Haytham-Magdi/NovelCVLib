@@ -11,7 +11,14 @@
 
 //#include <NovelCVLib\Ncv\ImageLineItrProvider.h>
 //#include <NovelCVLib\Ncv\ImageItrMgr.h>
-#include <NovelCVLib\Ncv\TempImageAccessor.h>
+
+#include <NovelCVLib\Ncv\ImageOperations2.h>
+#include <NovelCVLib\Ncpp\Common\ArrayHolderUtil.h>
+
+#include <NovelCVLib\OpenCV\OpenCV_Util.h>
+#include <NovelCVLib\OpenCV\ImageArrayHolder.h>
+#include <NovelCVLib\Apps\Binarization2\ImageArrayHolderTypeDefs.h>
+
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
 #include <NovelCVLib\Ncv\ConflictInfo.h>
 
@@ -32,7 +39,7 @@ namespace Ncv
 			int X;
 			int Y;
 
-			ConflictInfo_Ex * pConflictInfo;
+			ConflictInfo2_Ex * pConflictInfo;
 
 			float Val_WideOutStandev;
 

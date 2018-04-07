@@ -20,8 +20,9 @@ namespace Ncv
 		bool Exists;
 		void * pSide_1;
 		void * pSide_2;
-		//int Offset_Side_1;
-		//int Offset_Side_2;
+
+		int Offset_Side_1;
+		int Offset_Side_2;
 	};
 
 	class ConflictInfo2_Ex : public ConflictInfo2//: public Ncpp::Object

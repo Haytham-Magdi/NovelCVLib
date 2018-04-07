@@ -8,7 +8,14 @@
 #include <vector>
 #include <NovelCVLib\OpenCV\Channel.h>
 #include <NovelCVLib\OpenCV\Image.h>
-#include <NovelCVLib\Ncv\ImageAccessor.h>
+
+#include <NovelCVLib\Ncv\ImageOperations2.h>
+#include <NovelCVLib\Ncpp\Common\ArrayHolderUtil.h>
+
+#include <NovelCVLib\OpenCV\OpenCV_Util.h>
+#include <NovelCVLib\OpenCV\ImageArrayHolder.h>
+#include <NovelCVLib\Apps\Binarization2\ImageArrayHolderTypeDefs.h>
+
 
 //#include <NovelCVLib\Ncv\ImageLineItrProvider.h>
 //#include <NovelCVLib\Ncv\ImageItrMgr.h>
@@ -35,7 +42,7 @@ namespace Ncv
 			{
 			public:
 
-				Context(int a_nIndex, ImgSizeRotationRef a_imgRot, F32ImageAccessor3C_Ref a_org_Img, F32ImageAccessor1C_Ref a_magSqr_Img, char a_hv);
+				Context(int a_nIndex, ImgSizeRotationRef a_imgRot, F32ImageArrayHolder3C_Ref a_org_Img, F32ImageArrayHolder1C_Ref a_magSqr_Img, char a_hv);
 
 				std::string & GetIdStr() {
 					return m_idStr;
@@ -50,23 +57,23 @@ namespace Ncv
 				int m_nIndex;
 				std::string m_idStr;
 
-				F32ImageAccessor3C_Ref m_org_Img;
-				F32ImageAccessor1C_Ref m_magSqr_Img;
+				F32ImageArrayHolder3C_Ref m_org_Img;
+				F32ImageArrayHolder1C_Ref m_magSqr_Img;
 
 				char m_hv;
 				ImgSizeRotationRef m_imgRot;
 
-				F32ImageAccessor1C_Ref m_avgStandev_H_Img;
+				F32ImageArrayHolder1C_Ref m_avgStandev_H_Img;
 
-				S32ImageAccessor1C_Ref m_rotToOrgMap_Img;
-				S32ImageAccessor1C_Ref m_orgToRotMap_Img;
+				S32ImageArrayHolder1C_Ref m_rotToOrgMap_Img;
+				S32ImageArrayHolder1C_Ref m_orgToRotMap_Img;
 				float m_angle;
-				TempImageAccessor_REF(ConflictInfo) m_conflict_Img;
+				ImageArrayHolderRef<ConflictInfo2> m_conflict_Img;
 
-				//F32ImageAccessor1C_Ref m_standev_InrWide_Img;
+				//F32ImageArrayHolder1C_Ref m_standev_InrWide_Img;
 
-				F32ImageAccessor1C_Ref m_wideConflictDiff_Img;
-				F32VectorValImageAcc_4C_Ref m_avgPStandev_InrWide_Img;
+				F32ImageArrayHolder1C_Ref m_wideConflictDiff_Img;
+				F32VectorValImageArrayHolder_4C_Ref m_avgPStandev_InrWide_Img;
 			};
 
 		public:

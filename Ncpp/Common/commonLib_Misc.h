@@ -17,8 +17,6 @@
 //#include <NovelCVLib\Ncpp\Common\MultiQue.h>
 
 #include <NovelCVLib\Ncpp\Common\IndexCalc.h>
-#include <NovelCVLib\Ncpp\Common\OffsetCalc_1D.h>
-#include <NovelCVLib\Ncpp\Common\OffsetCalc_2D.h>
 #include <NovelCVLib\Ncpp\Common\MultiListQue.h>
 #include <NovelCVLib\Ncpp\Common\ListQue.h>
 #include <NovelCVLib\Ncpp\Common\APtrList.h>

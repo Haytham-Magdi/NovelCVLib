@@ -45,6 +45,11 @@ namespace Ncpp
 			return m_data;
 		}
 
+		const T * GetData_FakeOrg() const
+		{
+			return m_data;
+		}
+
 		const int GetStepSize() const
 		{
 			return m_nStepSize;
@@ -55,7 +60,7 @@ namespace Ncpp
 			m_nofSteps = a_nofSteps;
 		}
 
-		void SetData(T * a_data)
+		void SetData(const T * a_data)
 		{
 			m_data = a_data;
 		}
