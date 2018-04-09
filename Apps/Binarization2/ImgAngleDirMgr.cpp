@@ -253,33 +253,21 @@ namespace Ncv
 			Context & cx = *m_context;
 			Context & ncx = *m_normalContext;
 
-			//int * orgToRotMap_Buf = cx.m_orgToRotMap_Img->GetVirtAccessor().GetData();
-						
-			//VirtArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetVirtAccessor();
-
-			//VirtArrayAccessor_1D<int> commonOffsetCalc_Y = orgToRotMap_Acc.GenAccessor_Y();
-			//VirtArrayAccessor_1D<int> commonOffsetCalc_X = orgToRotMap_Acc.GenAccessor_X();
-
 			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
+			const int * orgToRotMap_Buf = orgToRotMap_Acc.GetData();
+			
+			PixelStandevInfo * commonImgBuf = (PixelStandevInfo *)m_parentContext->m_standevInfoImg->GetActualAccessor().GetData();
 
-			int * orgToRotMap_Buf = orgToRotMap_Acc.GetData();
-
-			//VirtArrayAccessor_1D<int> commonOffsetCalc_Y = orgToRotMap_Acc.GenAccessor_Y();
-			//VirtArrayAccessor_1D<int> commonOffsetCalc_X = orgToRotMap_Acc.GenAccessor_X();
-
-			PixelStandevInfo * commonImgBuf = m_parentContext->m_standevInfoImg->GetActualAccessor()->GetData();
-
-			float * localPtr = cx.m_avgStandev_H_Img->GetActualAccessor()->GetData();
-			float * localPtr_Norm = ncx.m_avgStandev_H_Img->GetActualAccessor()->GetData();
+			float * localPtr = (float *)cx.m_avgStandev_H_Img->GetActualAccessor().GetData();
+			float * localPtr_Norm = (float *)ncx.m_avgStandev_H_Img->GetActualAccessor().GetData();
 
 			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			{
-				//const int * orgToRotMap_Ptr_Y
-				//commonOffsetCalc_X.SetData(&commonOffsetCalc_Y[y]);
+				const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
 
 				for (int x = 0; x < orgToRotMap_Acc.GetSize_X(); x++)
 				{
-					const int nOffset_YX = y + x;
+					const int nOffset_YX = nOffset_Y + x;
 
 					PixelStandevInfo & rCommonPsi = commonImgBuf[nOffset_YX];
 
@@ -306,25 +294,19 @@ namespace Ncv
 			Context & ncx = *m_normalContext;
 			AngleDirMgrColl_Context & pcx = *m_parentContext;
 
-			int * orgToRotMap_Buf = cx.m_orgToRotMap_Img->GetVirtAccessor().GetData();
-			//int * rotToOrgMap_Buf = cx.m_rotToOrgMap_Img->GetVirtAccessor().GetData();
+			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
+			const int * orgToRotMap_Buf = orgToRotMap_Acc.GetData();
 
-			VirtArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetVirtAccessor();
+			VectorVal<Float, 4> * commonImgBuf = (VectorVal<Float, 4> *)pcx.m_avgPStandev_InrWide_Img->GetActualAccessor().GetData();
+			VectorVal<Float, 4> * localPtr = (VectorVal<Float, 4> *)cx.m_avgPStandev_InrWide_Img->GetActualAccessor().GetData();
 
-			VirtArrayAccessor_1D<int> commonOffsetCalc_Y = orgToRotMap_Acc.GenAccessor_Y();
-			VirtArrayAccessor_1D<int> commonOffsetCalc_X = orgToRotMap_Acc.GenAccessor_X();
-
-			VectorVal<Float, 4> * commonImgBuf = pcx.m_avgPStandev_InrWide_Img->GetVirtAccessor().GetData();
-
-			VectorVal<Float, 4> * localPtr = cx.m_avgPStandev_InrWide_Img->GetVirtAccessor().GetData();
-
-			for (int y = 0; y < commonOffsetCalc_Y.GetSize(); y++)
+			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			{
-				commonOffsetCalc_X.SetData(&commonOffsetCalc_Y[y]);
+				const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
 
-				for (int x = 0; x < commonOffsetCalc_X.GetSize(); x++)
+				for (int x = 0; x < orgToRotMap_Acc.GetSize_X(); x++)
 				{
-					const int nOffset_YX = &commonOffsetCalc_X[x] - commonOffsetCalc_Y.GetData_FakeOrg();
+					const int nOffset_YX = nOffset_Y + x;
 
 					VectorVal<Float, 4> & rCommonVal = commonImgBuf[nOffset_YX];
 
@@ -344,28 +326,23 @@ namespace Ncv
 			Context & ncx = *m_normalContext;
 			AngleDirMgrColl_Context & pcx = *m_parentContext;
 
-			int * orgToRotMap_Buf = cx.m_orgToRotMap_Img->GetVirtAccessor().GetData();
-			int * rotToOrgMap_Buf = cx.m_rotToOrgMap_Img->GetVirtAccessor().GetData();
+			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
+			const int * orgToRotMap_Buf = orgToRotMap_Acc.GetData();
 
-			//pcx.m_conflictInfoImg->GetVirtAccessor();
+			int * rotToOrgMap_Buf = (int *)cx.m_rotToOrgMap_Img->GetActualAccessor().GetData();
 
-			VirtArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetVirtAccessor();
+			ConflictInfo2_Ex * commonImgBuf = (ConflictInfo2_Ex *)pcx.m_conflictInfoImg->GetActualAccessor().GetData();
 
-			VirtArrayAccessor_1D<int> commonOffsetCalc_Y = orgToRotMap_Acc.GenAccessor_Y();
-			VirtArrayAccessor_1D<int> commonOffsetCalc_X = orgToRotMap_Acc.GenAccessor_X();
-
-			ConflictInfo2_Ex * commonImgBuf = pcx.m_conflictInfoImg->GetVirtAccessor().GetData();
-
-			ConflictInfo2 * localPtr = cx.m_conflict_Img->GetVirtAccessor().GetData();
-			//ConflictInfo2 * localPtr_Norm = ncx.m_conflict_Img->GetVirtAccessor().GetData();
-
-			for (int y = 0; y < commonOffsetCalc_Y.GetSize(); y++)
+			ConflictInfo2 * localPtr = (ConflictInfo2 *)cx.m_conflict_Img->GetActualAccessor().GetData();
+			//ConflictInfo2 * localPtr_Norm = (ConflictInfo2 *)ncx.m_conflict_Img->GetActualAccessor().GetData();
+			
+			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			{
-				commonOffsetCalc_X.SetData(&commonOffsetCalc_Y[y]);
+				const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
 
-				for (int x = 0; x < commonOffsetCalc_X.GetSize(); x++)
+				for (int x = 0; x < orgToRotMap_Acc.GetSize_X(); x++)
 				{
-					const int nOffset_YX = &commonOffsetCalc_X[x] - commonOffsetCalc_Y.GetData_FakeOrg();
+					const int nOffset_YX = nOffset_Y + x;
 
 					ConflictInfo2_Ex & rCommonConf = commonImgBuf[nOffset_YX];
 
@@ -404,28 +381,21 @@ namespace Ncv
 			Context & ncx = *m_normalContext;
 			AngleDirMgrColl_Context & pcx = *m_parentContext;
 
-			int * orgToRotMap_Buf = cx.m_orgToRotMap_Img->GetVirtAccessor().GetData();
-			//int * rotToOrgMap_Buf = cx.m_rotToOrgMap_Img->GetVirtAccessor().GetData();
+			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
+			const int * orgToRotMap_Buf = orgToRotMap_Acc.GetData();
 
-			//pcx.m_wideConflictDiff_Img->GetVirtAccessor();
+			float * commonImgBuf = (float *)pcx.m_wideConflictDiff_Img->GetActualAccessor().GetData();
 
-			VirtArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetVirtAccessor();
+			float * localPtr = (float *)cx.m_wideConflictDiff_Img->GetActualAccessor().GetData();
+			//float * localPtr_Norm = (float *)ncx.m_wideConflictDiff_Img->GetActualAccessor().GetData();
 
-			VirtArrayAccessor_1D<int> commonOffsetCalc_Y = orgToRotMap_Acc.GenAccessor_Y();
-			VirtArrayAccessor_1D<int> commonOffsetCalc_X = orgToRotMap_Acc.GenAccessor_X();
-
-			float * commonImgBuf = pcx.m_wideConflictDiff_Img->GetVirtAccessor().GetData();
-
-			float * localPtr = cx.m_wideConflictDiff_Img->GetVirtAccessor().GetData();
-			//float * localPtr_Norm = ncx.m_wideConflictDiff_Img->GetVirtAccessor().GetData();
-
-			for (int y = 0; y < commonOffsetCalc_Y.GetSize(); y++)
+			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			{
-				commonOffsetCalc_X.SetData(&commonOffsetCalc_Y[y]);
+				const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
 
-				for (int x = 0; x < commonOffsetCalc_X.GetSize(); x++)
+				for (int x = 0; x < orgToRotMap_Acc.GetSize_X(); x++)
 				{
-					const int nOffset_YX = &commonOffsetCalc_X[x] - commonOffsetCalc_Y.GetData_FakeOrg();
+					const int nOffset_YX = nOffset_Y + x;
 
 					float & rCommonConf = commonImgBuf[nOffset_YX];
 

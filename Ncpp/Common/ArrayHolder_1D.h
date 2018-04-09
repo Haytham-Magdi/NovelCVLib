@@ -22,8 +22,8 @@ namespace Ncv
 
 		virtual ~ArrayHolder_1D() = 0;
 
-		//const VirtArrayAccessor_1D & GetVirtAccessor() const
-		VirtArrayAccessor_1D & GetVirtAccessor() const
+		const VirtArrayAccessor_1D & GetVirtAccessor() const
+		//VirtArrayAccessor_1D & GetVirtAccessor() const
 		{
 			return m_virtAccessor;
 		}
