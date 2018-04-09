@@ -62,14 +62,14 @@ namespace Ncv
 
 			//ShowImage(cx.m_org_Img->GetSrcImg(), cx.MakeStrWithId("org_Img->GetSrcImg()").c_str());
 
-			cx.m_avgStandev_H_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetOffsetCalc());
-			Cala_AvgStandevImage_H(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
-				cx.m_avgStandev_H_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
+			cx.m_avgStandev_X_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetOffsetCalc());
+			Cala_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
+				cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
 
-			//cx.m_avgStandev_H_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-1, 1));
-			//cx.m_avgStandev_H_Img->GetVirtAccessor(), Range<int>::New(-5, 5), Range<int>::New(-5, 5));
+			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-1, 1));
+			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-5, 5), Range<int>::New(-5, 5));
 
-			//ShowImage(cx.m_avgStandev_H_Img->GetSrcImg(), cx.MakeStrWithId("m_avgStandev_H_Img->GetSrcImg()").c_str());
+			//ShowImage(cx.m_avgStandev_X_Img->GetSrcImg(), cx.MakeStrWithId("m_avgStandev_X_Img->GetSrcImg()").c_str());
 
 			//AffectCommonAvgStandev();
 
@@ -109,7 +109,7 @@ namespace Ncv
 			Range<int> confRange = Range<int>::New(
 				-1 - avgWin.Get_X2(), 1 - avgWin.Get_X1());
 
-			CalcConflictImage_H(avg_Img->GetVirtAccessor(), avg_MagSqr_Img->GetVirtAccessor(),
+			CalcConflictImage_X(avg_Img->GetVirtAccessor(), avg_MagSqr_Img->GetVirtAccessor(),
 				cx.m_conflict_Img->GetVirtAccessor(), confRange);
 
 			//if (0 == cx.m_nIndex)
@@ -231,7 +231,7 @@ namespace Ncv
 			//		//-1 - avgWin.Get_X2(), 1 - avgWin.Get_X1());
 			//		-1 - nOutRad - nInrRad, 1 + nOutRad + nInrRad);
 
-			//	Calc_ConflictDiff_Image_H(avg_Img->GetVirtAccessor(), avg_MagSqr_Img->GetVirtAccessor(),
+			//	Calc_ConflictDiff_Image_X(avg_Img->GetVirtAccessor(), avg_MagSqr_Img->GetVirtAccessor(),
 			//		cx.m_wideConflictDiff_Img->GetVirtAccessor(), confRange);
 
 			//	//GlobalStuff::SetLinePathImg(GenTriChGrayImg(cx.m_wideConflictDiff_Img->GetSrcImg())); GlobalStuff::ShowLinePathImg();
@@ -258,8 +258,8 @@ namespace Ncv
 			
 			PixelStandevInfo * commonImgBuf = (PixelStandevInfo *)m_parentContext->m_standevInfoImg->GetActualAccessor().GetData();
 
-			float * localPtr = (float *)cx.m_avgStandev_H_Img->GetActualAccessor().GetData();
-			float * localPtr_Norm = (float *)ncx.m_avgStandev_H_Img->GetActualAccessor().GetData();
+			float * localPtr = (float *)cx.m_avgStandev_X_Img->GetActualAccessor().GetData();
+			float * localPtr_Norm = (float *)ncx.m_avgStandev_X_Img->GetActualAccessor().GetData();
 
 			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			{

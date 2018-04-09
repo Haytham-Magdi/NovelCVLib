@@ -80,7 +80,7 @@ namespace Ncv
 			}
 
 			m_context_H->m_wideConflictDiff_Img = new F32ImageArrayHolder1C(
-				org_Img_H->GetVirtAccessor()->GetOffsetCalc());
+				org_Img_H->GetVirtAccessor());
 			{
 				float initVal = -10000000;
 				FillImage(m_context_H->m_wideConflictDiff_Img->GetVirtAccessor(), initVal);

@@ -244,7 +244,7 @@ namespace Ncv
 		//F32ImageRef m_resImg;
 		S32ImageRef m_srcToResMapImg;
 
-		//FixedVector< LineLimit > m_lineLimit_H_Arr;
+		//FixedVector< LineLimit > m_lineLimit_X_Arr;
 		//FixedVector< LineLimit > m_lineLimit_V_Arr;
 
 		//ImageItrMgrRef m_imageItrMgr;

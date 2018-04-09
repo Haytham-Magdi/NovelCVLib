@@ -291,12 +291,12 @@ namespace Ncv
 
 
 		//{
-		//	m_lineLimit_H_Arr.SetSize(m_resSiz.height);
+		//	m_lineLimit_X_Arr.SetSize(m_resSiz.height);
 		//	m_lineLimit_V_Arr.SetSize(m_resSiz.width);
 
 		//	for (int y = 0; y < m_resSiz.height; y++)
 		//	{
-		//		LineLimit & rLimit_H = m_lineLimit_H_Arr[y];
+		//		LineLimit & rLimit_H = m_lineLimit_X_Arr[y];
 
 		//		//rLimit_H.nBgnIdx = 100000000;
 		//		rLimit_H.nBgnIdx = nGreatDist;
@@ -378,7 +378,7 @@ namespace Ncv
 	//void ImgSizeRotation::PrepareImageItrMgr()
 	//{
 	//	m_imageItrMgr = new ImageItrMgr(m_resSiz,
-	//		m_lineLimit_H_Arr, m_lineLimit_V_Arr);
+	//		m_lineLimit_X_Arr, m_lineLimit_V_Arr);
 	//}
 
 
