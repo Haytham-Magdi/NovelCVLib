@@ -7,6 +7,8 @@
 #include <NovelCVLib\OpenCV\Image.h>
 #include <NovelCVLib\OpenCV\funcs1.h>
 
+#include <NovelCVLib\Ncv\VectorVal.h>
+
 #include <NovelCVLib\Ncv\ImageOperations2.h>
 #include <NovelCVLib\Ncpp\Common\ArrayHolderUtil.h>
 
@@ -80,18 +82,20 @@ namespace Ncv
 			}
 
 			m_context_H->m_wideConflictDiff_Img = new F32ImageArrayHolder1C(
-				org_Img_H->GetVirtAccessor());
+				size_2D(org_Img_H->GetSize()));
 			{
 				float initVal = -10000000;
 				FillImage(m_context_H->m_wideConflictDiff_Img->GetVirtAccessor(), initVal);
 			}
 
 			m_context_H->m_avgPStandev_InrWide_Img = new F32VectorValImageArrayHolder_4C(
-				org_Img_H->GetVirtAccessor()->GetOffsetCalc());
+				size_2D(org_Img_H->GetSize()));
 			{
 				//float initVal = -10000000;
 				VectorVal<Float, 4> initVal;
-				initVal.Vals[0] = initVal.Vals[1] = initVal.Vals[2] = initVal.Vals[3] = 0;
+				SetToZero(&initVal);
+				//initVal.Vals[0] = initVal.Vals[1] = initVal.Vals[2] = initVal.Vals[3] = 0;
+				auto tmpAcc1 = m_context_H->m_avgPStandev_InrWide_Img->GetVirtAccessor();
 				FillImage(m_context_H->m_avgPStandev_InrWide_Img->GetVirtAccessor(), initVal);
 			}
 
