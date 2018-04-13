@@ -20,11 +20,10 @@
 #include <NovelCVLib\Apps\Binarization2\ImageArrayHolderTypeDefs.h>
 
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
-#include <NovelCVLib\Ncv\ConflictInfo.h>
+#include <NovelCVLib\Ncv\ConflictInfo2.h>
 
 #include <NovelCVLib\Apps\Binarization2\ImgAngleDirMgr.h>
 //#include <NovelCVLib\Apps\Binarization2\RotationMgrColl.h>
-#include <NovelCVLib\Ncv\ConflictInfo.h>
 
 
 namespace Ncv

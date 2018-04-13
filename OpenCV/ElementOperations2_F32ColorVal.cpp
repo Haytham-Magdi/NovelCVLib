@@ -75,10 +75,10 @@ namespace Ncv
 
 		bool IsUndefined(const F32ColorVal & a_arg)
 		{
-			return IsUndefined(&a_pArg[0]);
+			return IsUndefined(a_arg.val0);
 		}
 
-		void SetToUndefined(const F32ColorVal & a_arg)
+		void SetToUndefined(F32ColorVal * a_pArg)
 		{
 			SetToUndefined(&a_pArg->val0);
 			SetToUndefined(&a_pArg->val1);

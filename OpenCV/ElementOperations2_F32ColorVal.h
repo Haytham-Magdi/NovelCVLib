@@ -34,7 +34,7 @@ namespace Ncv
 
 		template<> bool IsUndefined(const F32ColorVal & a_arg);
 
-		template<> void SetToUndefined(const F32ColorVal & a_arg);
+		template<> void SetToUndefined(const F32ColorVal * a_pArg);
 
 
 

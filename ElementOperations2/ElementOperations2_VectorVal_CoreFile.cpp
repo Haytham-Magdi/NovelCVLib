@@ -146,7 +146,7 @@
 		//	return IsUndefined_ByPtr(&a_pArg[0]);
 		//}
 
-		void SetToUndefined(const VectorVal<T_Elm, N_Dims> & a_arg)
+		void SetToUndefined(VectorVal<T_Elm, N_Dims> * a_pArg)
 		{
 			for (int i = 0; i < a_pArg->GetNofDims(); i++)
 			{

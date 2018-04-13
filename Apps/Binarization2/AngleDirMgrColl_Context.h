@@ -22,7 +22,6 @@
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
 #include <NovelCVLib\Ncv\ConflictInfo2.h>
 
-#include <NovelCVLib\Apps\Binarization2\TypeDefs.h>
 
 #include <NovelCVLib\Apps\Binarization2\ImgAngleDirMgr.h>
 //#include <NovelCVLib\Apps\Binarization2\RotationMgrColl.h>

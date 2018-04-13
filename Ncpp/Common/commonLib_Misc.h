@@ -27,10 +27,6 @@
 #include <NovelCVLib\Ncpp\Common\FixedDeque.h>
 #include <NovelCVLib\Ncpp\Common\CircIndex.h>
 //#include <NovelCVLib\Ncpp\Common\Accessor2D.h>
-#include <NovelCVLib\Ncpp\Common\MemAccessor_1D.h>
-#include <NovelCVLib\Ncpp\Common\MemAccessor_2D.h>
-#include <NovelCVLib\Ncpp\Common\MemSimpleAccessor_1D.h>
-#include <NovelCVLib\Ncpp\Common\MemSimpleAccessor_2D.h>
 #include <NovelCVLib\Ncpp\Common\Size_2D.h>
 #include <NovelCVLib\Ncpp\Common\VirtArrayAccessor_1D.h>
 #include <NovelCVLib\Ncpp\Common\ArrayHolder_1D.h>
@@ -44,7 +40,6 @@
 #include <NovelCVLib\Ncpp\Common\ArrayHolderUtil.h>
 #include <NovelCVLib\Ncpp\Common\Range.h>
 #include <NovelCVLib\Ncpp\Common\Window.h>
-#include <NovelCVLib\Ncpp\Common\PtrIterator.h>
 #include <NovelCVLib\Ncpp\Common\PtrIterator2.h>
 #include <NovelCVLib\Ncpp\Common\MultiListQueMgr.h>
 #include <NovelCVLib\Ncpp\Common\MaxFinder.h>

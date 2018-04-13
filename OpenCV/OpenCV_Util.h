@@ -13,7 +13,7 @@
 
 namespace Ncv
 {
-	namespace OpenCV_Util;
+	namespace OpenCV_Util
 	{
 		using namespace Ncpp;
 
