@@ -42,7 +42,7 @@ namespace Ncv
 		};
 	
 		typedef Ncpp::ObjRef< BinarizationProcess1 > BinarizationProcess1Ref;
-	};
+	}
 
 
 

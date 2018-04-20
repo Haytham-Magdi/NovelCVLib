@@ -45,6 +45,16 @@ namespace Ncv
 			m_actualAccessor.AssignVirtAccessorTo(&m_virtAccessor);
 		}
 
+		ImageArrayHolder(const Size_2D & size)
+		{
+			Ncpp_ASSERT(a_srcImg->GetNofChannels() == V_NofChannels);
+
+			m_srcImg = Image<T_ImgElm>::Create(cvSize(size), V_NofChannels);
+
+			m_actualAccessor.Init((T_AccElm *)a_srcImg->GetDataPtr(), size_2D(a_srcImg->GetSize()));
+			m_actualAccessor.AssignVirtAccessorTo(&m_virtAccessor);
+		}
+
 		ImageRef<T_ImgElm> GetSrcImg()
 		{
 			return m_srcImg;

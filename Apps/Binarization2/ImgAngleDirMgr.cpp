@@ -62,7 +62,7 @@ namespace Ncv
 
 			//ShowImage(cx.m_org_Img->GetSrcImg(), cx.MakeStrWithId("org_Img->GetSrcImg()").c_str());
 
-			cx.m_avgStandev_X_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetOffsetCalc());
+			cx.m_avgStandev_X_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
 			Cala_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
 				cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
 
@@ -98,9 +98,10 @@ namespace Ncv
 			//Window<int> avgWin = Window<int>::New(-2, 2, -2, 2);
 			//Window<int> avgWin = Window<int>::New(-2, 1, -2, 2);
 
-			cx.m_conflict_Img = new TempImageArrayHolder<ConflictInfo2>(cx.m_org_Img->GetOffsetCalc());
+			//cx.m_conflict_Img = new TempImageArrayHolder<ConflictInfo2>(cx.m_org_Img->GetActualAccessor().GetSize());
+			cx.m_conflict_Img = ArrayHolderUtil::CreateFrom<ConflictInfo2>(cx.m_org_Img->GetActualAccessor().GetSize());
 
-			F32ImageArrayHolder3C_Ref avg_Img = cx.m_org_Img->CloneAccAndImage();
+			F32ImageArrayHolder3C_Ref avg_Img = cx.m_org_Img->CloneEmpty();
 			AvgImage(cx.m_org_Img->GetVirtAccessor(), avg_Img->GetVirtAccessor(), avgWin);
 
 			F32ImageArrayHolder1C_Ref avg_MagSqr_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetSize());
@@ -135,13 +136,13 @@ namespace Ncv
 			AngleDirMgrColl_Context & pcx = *m_parentContext;
 
 
-			F32ImageArrayHolder1C_Ref standev_InrWide_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetOffsetCalc());
+			F32ImageArrayHolder1C_Ref standev_InrWide_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
 
 			const int nInrRad = 5;
 			//const int nInrRad = 5 * 2;
 			//const int nInrRad = 8;
-			F32ImageArrayHolder3C_Ref avg_InrWide_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetOffsetCalc());
-			//F32VectorValImageArrayHolder_3C_Ref avg_InrWide_Img = new F32VectorValImageArrayHolder_3C(cx.m_org_Img->GetOffsetCalc());
+			F32ImageArrayHolder3C_Ref avg_InrWide_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetActualAccessor().GetSize());
+			//F32VectorValImageArrayHolder_3C_Ref avg_InrWide_Img = new F32VectorValImageArrayHolder_3C(cx.m_org_Img->GetActualAccessor().GetSize());
 			{
 				Calc_Avg_And_Standev_Image(cx.m_org_Img->GetVirtAccessor(), avg_InrWide_Img->GetVirtAccessor(), standev_InrWide_Img->GetVirtAccessor(),
 					Window<int>::New(-nInrRad, nInrRad, -nInrRad, nInrRad));
@@ -156,8 +157,8 @@ namespace Ncv
 				ShowImage(standev_InrWide_Img->GetSrcImg(), "standev_InrWide_Img->GetSrcImg()");
 			}
 
-			//F32VectorValImageArrayHolder_4C_Ref cx.m_avgPStandev_InrWide_Img = new F32VectorValImageArrayHolder_4C(cx.m_org_Img->GetOffsetCalc());
-			cx.m_avgPStandev_InrWide_Img = new F32VectorValImageArrayHolder_4C(cx.m_org_Img->GetOffsetCalc());
+			//F32VectorValImageArrayHolder_4C_Ref cx.m_avgPStandev_InrWide_Img = new F32VectorValImageArrayHolder_4C(cx.m_org_Img->GetActualAccessor().GetSize());
+			cx.m_avgPStandev_InrWide_Img = new F32VectorValImageArrayHolder_4C(cx.m_org_Img->GetActualAccessor().GetSize());
 			{
 				const int nSize_1D = avg_InrWide_Img->GetSize_1D();
 
@@ -193,8 +194,8 @@ namespace Ncv
 			const int nOutRad = 8;
 			//const int nOutRad = 8 * 2;
 			{
-				F32ImageArrayHolder1C_Ref standev_OutWide_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetOffsetCalc());
-				F32VectorValImageArrayHolder_4C_Ref avg_OutWide_Img = new F32VectorValImageArrayHolder_4C(cx.m_org_Img->GetOffsetCalc());
+				F32ImageArrayHolder1C_Ref standev_OutWide_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
+				F32VectorValImageArrayHolder_4C_Ref avg_OutWide_Img = new F32VectorValImageArrayHolder_4C(cx.m_org_Img->GetActualAccessor().GetSize());
 
 				Calc_Avg_And_Standev_Image(cx.m_avgPStandev_InrWide_Img->GetVirtAccessor(), avg_OutWide_Img->GetVirtAccessor(), standev_OutWide_Img->GetVirtAccessor(),
 					//Window<int>::New(-nOutRad, nOutRad, -nOutRad, nOutRad));
@@ -209,7 +210,7 @@ namespace Ncv
 
 			////------------
 
-			//cx.m_wideConflictDiff_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetOffsetCalc());
+			//cx.m_wideConflictDiff_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
 			//{
 			//	////Window<int> avgWin = Window<int>::New(-1, 1, -5, 5);
 			//	////Window<int> avgWin = Window<int>::New(-1, 1, -2, 2);
@@ -217,13 +218,13 @@ namespace Ncv
 			//	////Window<int> avgWin = Window<int>::New(0, 0, -2, 2);
 			//	Window<int> avgWin = Window<int>::New(-nOutRad, nOutRad, -nOutRad, nOutRad);
 
-			//	F32VectorValImageArrayHolder_4C_Ref avg_Img = new F32VectorValImageArrayHolder_4C(cx.m_org_Img->GetOffsetCalc());
+			//	F32VectorValImageArrayHolder_4C_Ref avg_Img = new F32VectorValImageArrayHolder_4C(cx.m_org_Img->GetActualAccessor().GetSize());
 			//	AvgImage(cx.m_avgPStandev_InrWide_Img->GetVirtAccessor(), avg_Img->GetVirtAccessor(), avgWin);
 
-			//	F32ImageArrayHolder1C_Ref magSqr_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetOffsetCalc());
+			//	F32ImageArrayHolder1C_Ref magSqr_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
 			//	CalcMagSqrImage(cx.m_avgPStandev_InrWide_Img->GetVirtAccessor(), magSqr_Img->GetVirtAccessor());
 
-			//	F32ImageArrayHolder1C_Ref avg_MagSqr_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetOffsetCalc());
+			//	F32ImageArrayHolder1C_Ref avg_MagSqr_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
 			//	AvgImage(magSqr_Img->GetVirtAccessor(), avg_MagSqr_Img->GetVirtAccessor(), avgWin);
 
 			//	Range<int> confRange = Range<int>::New(

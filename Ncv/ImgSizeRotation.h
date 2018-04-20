@@ -3,6 +3,9 @@
 #include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
 #include <NovelCVLib\Ncpp\Math\mathLib.h>
 
+#include <NovelCVLib\Ncpp\Common\ActualArrayAccessor_2D.h>
+
+
 //#include <NovelCVLib\OpenCV\CvIncludes.h>
 //#include <NovelCVLib\OpenCV\Types.h>
 //#include <NovelCVLib\OpenCV\error.h>
@@ -45,24 +48,32 @@ namespace Ncv
 
 		CvPoint & GetBgnPnt() { return m_bgnPnt; }
 
+
+		template<class T>
+		void RotateImage(const ActualArrayAccessor_2D<T> & a_destAcc, const ActualArrayAccessor_2D<T> & a_srcAcc)
+		{
+			RotateImage(a_destAcc.GetData(), a_destAcc.GetSize(), a_srcAcc.GetData(), a_srcAcc.GetSize());
+		}
+
+
 		template<class T>
 		//void RotateImage(MemAccessor_2D_REF(T) a_inpAcc, MemAccessor_2D_REF(T) a_outAcc)
 		void RotateImage(T * a_destBuf, Size_2D a_destSiz, T * a_srcBuf, Size_2D a_srcSiz)
 		{
-			//Ncpp_ASSERT(a_inpAcc->GetNofSteps_X() == m_srcSiz.width);
-			//Ncpp_ASSERT(a_inpAcc->GetNofSteps_Y() == m_srcSiz.height);
+			//Ncpp_ASSERT(a_inpAcc->GetNofSteps_X() == m_srcSiz.GetX());
+			//Ncpp_ASSERT(a_inpAcc->GetNofSteps_Y() == m_srcSiz.GetY());
 
-			//Ncpp_ASSERT(a_outAcc->GetNofSteps_X() == m_resSiz.width);
-			//Ncpp_ASSERT(a_outAcc->GetNofSteps_Y() == m_resSiz.height);
+			//Ncpp_ASSERT(a_outAcc->GetNofSteps_X() == m_resSiz.GetX());
+			//Ncpp_ASSERT(a_outAcc->GetNofSteps_Y() == m_resSiz.GetY());
 
-			Ncpp_ASSERT(a_srcSiz.width == m_srcSiz.width);
-			Ncpp_ASSERT(a_srcSiz.height == m_srcSiz.height);
+			Ncpp_ASSERT(a_srcSiz.GetX() == m_srcSiz.GetX());
+			Ncpp_ASSERT(a_srcSiz.GetY() == m_srcSiz.GetY());
 
-			Ncpp_ASSERT(a_destSiz.width == m_resSiz.width);
-			Ncpp_ASSERT(a_destSiz.height == m_resSiz.height);
+			Ncpp_ASSERT(a_destSiz.GetX() == m_resSiz.GetX());
+			Ncpp_ASSERT(a_destSiz.GetY() == m_resSiz.GetY());
 
-			const int nScaled_SrcWidth = m_srcSiz.width * m_nScale;
-			const int nScaled_SrcHeight = m_srcSiz.height * m_nScale;
+			const int nScaled_SrcWidth = m_srcSiz.GetX() * m_nScale;
+			const int nScaled_SrcHeight = m_srcSiz.GetY() * m_nScale;
 
 			//MemSimpleAccessor_2D<T> sac_Out = a_outAcc->GenSimpleAccessor();
 
@@ -73,13 +84,13 @@ namespace Ncv
 
 			int * resToSrcBuf = (int *)m_resToSrcMapImg->GetPixAt(0, 0);
 
-			IndexCalc2D idxCalc_Src(m_srcSiz.width, m_srcSiz.height);
+			IndexCalc2D idxCalc_Src(m_srcSiz.GetX(), m_srcSiz.GetY());
 
-			IndexCalc2D idxCalc_Res(m_resSiz.width, m_resSiz.height);
+			IndexCalc2D idxCalc_Res(m_resSiz.GetX(), m_resSiz.GetY());
 
 
 
-			for (int y = 0; y < m_resSiz.height; y++)
+			for (int y = 0; y < m_resSiz.GetY(); y++)
 				//for (int y = 0; y < sac_Out.GetSize_Y(); y++)
 			{
 				CvPoint curPnt_Y;
@@ -87,7 +98,7 @@ namespace Ncv
 				curPnt_Y.x = m_bgnPnt.x - y * m_nSin;
 				curPnt_Y.y = m_bgnPnt.y + y * m_nCos;
 
-				for (int x = 0; x < m_resSiz.width; x++)
+				for (int x = 0; x < m_resSiz.GetX(); x++)
 					//for (int x = 0; x < sac_Out.GetSize_X(); x++)
 				{
 					int nIdx_Res = idxCalc_Res.Calc(x, y);

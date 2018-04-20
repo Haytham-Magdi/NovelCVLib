@@ -17,11 +17,8 @@ namespace Ncv
 	{
 		using namespace Ncpp;
 
-		Size_2D size_2D(CvSize & src);
-
-
-
-
+		Size_2D size_2D(const CvSize & src);
+		CvSize cvSize(const Size_2D & src);
 
 	}
 }

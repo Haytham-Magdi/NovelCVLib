@@ -92,6 +92,6 @@ namespace Ncv
 		};
 
 		typedef Ncpp::ObjRef< AngleDirMgrColl > AngleDirMgrCollRef;
-	};
+	}
 
 }
