@@ -33,7 +33,7 @@ namespace Ncv
 	//}
 
 	ImgSizeRotationColl::ImgSizeRotationColl(
-		CvSize a_srcSiz, int a_nofRots)
+		Size_2D a_srcSiz, int a_nofRots)
 	{
 		Ncpp_ASSERT(a_nofRots >= 0);
 

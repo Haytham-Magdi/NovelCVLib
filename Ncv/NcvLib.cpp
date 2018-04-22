@@ -53,12 +53,12 @@
 //#include <NovelCVLib\Ncv\ImgClusteringTry.cpp>
 
 #include <NovelCVLib\Ncv\PixelStandevInfo.cpp>
-#include <NovelCVLib\Ncv\ConflictInfo.cpp>
+#include <NovelCVLib\Ncv\ConflictInfo2.cpp>
 
 
-#include <NovelCVLib\Element_Operations\Element_Operations_Float.cpp>
-#include <NovelCVLib\OpenCV\Element_Operations_F32ColorVal.cpp>
-#include <NovelCVLib\Element_Operations\Element_Operations_VectorVal.cpp>
+#include <NovelCVLib\ElementOperations2\ElementOperations2_Float.cpp>
+#include <NovelCVLib\OpenCV\ElementOperations2_F32ColorVal.cpp>
+#include <NovelCVLib\ElementOperations2\ElementOperations2_VectorVal.cpp>
 
 #include <NovelCVLib\ElementOperations2\ElementOperations2_Float.cpp>
 #include <NovelCVLib\OpenCV\ElementOperations2_F32ColorVal.cpp>

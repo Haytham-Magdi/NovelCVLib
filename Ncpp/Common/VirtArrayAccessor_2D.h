@@ -32,7 +32,7 @@ namespace Ncpp
 			m_nStepSize_Y = a_nStepSize_Y;
 		}
 
-		const T & GetAt(int a_pos_X, int a_pos_Y) const
+		T & GetAt(int a_pos_X, int a_pos_Y) const
 		{
 			Ncpp_ASSERT(a_pos_X >= 0);
 			Ncpp_ASSERT(a_pos_X < m_nofSteps_X);

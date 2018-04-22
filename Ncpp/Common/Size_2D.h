@@ -30,21 +30,6 @@ namespace Ncpp
 			sizeY = a_nSizY;
 		}
 
-		//int Calc(int a_x, int a_y)
-		//{
-		//	return a_x + a_y * sizeX;
-		//}
-
-		//int Calc_X(int a_nIdx)
-		//{
-		//	return a_nIdx % sizeX;
-		//}
-
-		//int Calc_Y(int a_nIdx)
-		//{
-		//	return a_nIdx / sizeX;
-		//}
-
 		const int GetX() const
 		{
 			return sizeX;
@@ -54,6 +39,17 @@ namespace Ncpp
 		{
 			return sizeY;
 		}
+
+		void SetX(const int a_sizeX)
+		{
+			 sizeX = a_sizeX;
+		}
+
+		void SetY(const int a_sizeY)
+		{
+			sizeY = a_sizeY;
+		}
+
 
 		const int CalcSize_1D() const
 		{

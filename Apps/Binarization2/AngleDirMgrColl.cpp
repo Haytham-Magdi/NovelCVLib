@@ -97,18 +97,26 @@ namespace Ncv
 				VectorVal<Float, 4> initVal;
 				SetToZero(&initVal);
 				//initVal.Vals[0] = initVal.Vals[1] = initVal.Vals[2] = initVal.Vals[3] = 0;
-				auto tmpAcc1 = m_context_H->m_avgPStandev_InrWide_Img->GetVirtAccessor();
-				FillImage(m_context_H->m_avgPStandev_InrWide_Img->GetVirtAccessor(), initVal);
+				//auto tmpAcc1 = m_context_H->m_avgPStandev_InrWide_Img->GetVirtAccessor();
+				const VirtArrayAccessor_2D< VectorVal<Float, 4>> & tmpAcc1 = m_context_H->m_avgPStandev_InrWide_Img->GetVirtAccessor();
+
+				//FillImage(m_context_H->m_avgPStandev_InrWide_Img->GetVirtAccessor(), initVal);
+				FillImage(tmpAcc1, initVal);
 			}
 
 
+			//m_context_V->m_org_Img = m_context_H->m_org_Img->CloneAccessorOnly(); m_context_V->m_org_Img->SwitchXY();
+			//m_context_V->m_standevInfoImg = m_context_H->m_standevInfoImg->CloneAccessorOnly(); m_context_V->m_standevInfoImg->SwitchXY();
+			//m_context_V->m_conflictInfoImg = m_context_H->m_conflictInfoImg->CloneAccessorOnly(); m_context_V->m_conflictInfoImg->SwitchXY();
+			//m_context_V->m_wideConflictDiff_Img = m_context_H->m_wideConflictDiff_Img->CloneAccessorOnly(); m_context_V->m_wideConflictDiff_Img->SwitchXY();
+			//m_context_V->m_avgPStandev_InrWide_Img = m_context_H->m_avgPStandev_InrWide_Img->CloneAccessorOnly(); m_context_V->m_avgPStandev_InrWide_Img->SwitchXY();
 
 
-			m_context_V->m_org_Img = m_context_H->m_org_Img->CloneAccessorOnly(); m_context_V->m_org_Img->SwitchXY();
-			m_context_V->m_standevInfoImg = m_context_H->m_standevInfoImg->CloneAccessorOnly(); m_context_V->m_standevInfoImg->SwitchXY();
-			m_context_V->m_conflictInfoImg = m_context_H->m_conflictInfoImg->CloneAccessorOnly(); m_context_V->m_conflictInfoImg->SwitchXY();
-			m_context_V->m_wideConflictDiff_Img = m_context_H->m_wideConflictDiff_Img->CloneAccessorOnly(); m_context_V->m_wideConflictDiff_Img->SwitchXY();
-			m_context_V->m_avgPStandev_InrWide_Img = m_context_H->m_avgPStandev_InrWide_Img->CloneAccessorOnly(); m_context_V->m_avgPStandev_InrWide_Img->SwitchXY();
+			m_context_V->m_org_Img = m_context_H->m_org_Img->CreateTransposedProxy();
+			m_context_V->m_standevInfoImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_standevInfoImg);
+			m_context_V->m_conflictInfoImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_conflictInfoImg);
+			m_context_V->m_wideConflictDiff_Img = m_context_H->m_wideConflictDiff_Img->CreateTransposedProxy();
+			m_context_V->m_avgPStandev_InrWide_Img = m_context_H->m_avgPStandev_InrWide_Img->CreateTransposedProxy();
 
 
 			m_angleDirMgrArr.SetSize(m_rotColl->GetNofRots() * 2);
@@ -138,14 +146,14 @@ namespace Ncv
 				//dirContext_H->m_conflict_Img = ArrayHolderUtil::CreateFrom<ConflictInfo2>(
 				//	size_2D(rot_Img_H->GetSize()));
 
-				F32ImageArrayHolder3C_Ref rot_Img_V = rot_Img_H->CloneAccessorOnly(); rot_Img_V->SwitchXY();
-				F32ImageArrayHolder1C_Ref magSqr_Img_V = magSqr_Img_H->CloneAccessorOnly(); magSqr_Img_V->SwitchXY();
+				F32ImageArrayHolder3C_Ref rot_Img_V = rot_Img_H->CreateTransposedProxy();
+				F32ImageArrayHolder1C_Ref magSqr_Img_V = magSqr_Img_H->CreateTransposedProxy();
 
 				ImgAngleDirMgr_Context_Ref dirContext_V = new ImgAngleDirMgr::Context(i + m_rotColl->GetNofRots(),
 					rotMgr, rot_Img_V, magSqr_Img_V, 'V');
 
-				dirContext_V->m_rotToOrgMap_Img = dirContext_H->m_rotToOrgMap_Img->CloneAccessorOnly(); dirContext_V->m_rotToOrgMap_Img->SwitchXY();
-				dirContext_V->m_orgToRotMap_Img = dirContext_H->m_orgToRotMap_Img->CloneAccessorOnly(); dirContext_V->m_orgToRotMap_Img->SwitchXY();
+				dirContext_V->m_rotToOrgMap_Img = dirContext_H->m_rotToOrgMap_Img->CreateTransposedProxy();
+				dirContext_V->m_orgToRotMap_Img = dirContext_H->m_orgToRotMap_Img->CreateTransposedProxy();
 				dirContext_V->m_angle = rotMgr->GetAngleByRad() + M_PI / 2;
 				//dirContext_V->m_conflict_Img = dirContext_H->m_conflict_Img->CloneAccessorOnly(); dirContext_V->m_conflict_Img->SwitchXY();
 
@@ -196,8 +204,7 @@ namespace Ncv
 
 				dirMgr_H->GetContext()->m_avgPStandev_InrWide_Img = avgPStandev_InrWide_Img_H;
 
-				F32VectorValImageArrayHolder_4C_Ref avgPStandev_InrWide_Img_V = avgPStandev_InrWide_Img_H->CloneAccessorOnly();
-				avgPStandev_InrWide_Img_V->SwitchXY();
+				F32VectorValImageArrayHolder_4C_Ref avgPStandev_InrWide_Img_V = avgPStandev_InrWide_Img_H->CreateTransposedProxy();
 
 				dirMgr_V->GetContext()->m_avgPStandev_InrWide_Img = avgPStandev_InrWide_Img_V;
 			}
@@ -238,7 +245,7 @@ namespace Ncv
 			const int nSize_1D = psiAcc.CalcSize_1D();
 
 			PixelStandevInfo * srcPtr = (PixelStandevInfo *)psiAcc.GetData();
-			//float * destPtr_Values = dspImg_Values->GetDataPtr();
+			//float * destPtr_Values = (float *)dspImg_Values->GetDataPtr();
 			F32ColorVal * destPtr_Colored = (F32ColorVal *)dspImg_Colored->GetDataPtr();
 
 			float angle_Old = -1;
@@ -474,13 +481,17 @@ namespace Ncv
 
 			const int nQueScale = 10;
 
-			MemSimpleAccessor_2D<float> sac_WideOutStandev = cx.m_wideConflictDiff_Img->GetVirtAccessor()->GenSimpleAccessor();
-			MemSimpleAccessor_2D<ConflictInfo2_Ex> sac_Conflicts = cx.m_conflictInfoImg->GetVirtAccessor()->GenSimpleAccessor();
+			//MemSimpleAccessor_2D<float> sac_WideOutStandev = cx.m_wideConflictDiff_Img->GetVirtAccessor()->GenSimpleAccessor();
+			//MemSimpleAccessor_2D<ConflictInfo2_Ex> sac_Conflicts = cx.m_conflictInfoImg->GetVirtAccessor()->GenSimpleAccessor();
+
+			const VirtArrayAccessor_2D<float> & sac_WideOutStandev = cx.m_wideConflictDiff_Img->GetVirtAccessor();
+			const VirtArrayAccessor_2D<ConflictInfo2_Ex> & sac_Conflicts = cx.m_conflictInfoImg->GetVirtAccessor();
 
 			MultiListQueMgr< PixelInfo_1 > rgnGrowQues;
 			rgnGrowQues.InitSize(700 * nQueScale + 2);
 
-			MemSimpleAccessor_2D<PixelInfo_1> sac_RgnGrow = rgnGrow_Img->GetVirtAccessor()->GenSimpleAccessor();
+			//MemSimpleAccessor_2D<PixelInfo_1> sac_RgnGrow = rgnGrow_Img->GetVirtAccessor()->GenSimpleAccessor();
+			const VirtArrayAccessor_2D<PixelInfo_1> & sac_RgnGrow = rgnGrow_Img->GetVirtAccessor();
 
 			for (int y = 0; y < sac_RgnGrow.GetSize_Y(); y++)
 			{
@@ -580,11 +591,11 @@ namespace Ncv
 			//ConflictInfo2_Ex * conf_Ptr = cx.m_conflictInfoImg->GetDataPtr();
 
 
-			const int nSize_1D = cx.m_conflictInfoImg->GetSize_1D();
+			const int nSize_1D = cx.m_conflictInfoImg->GetActualAccessor().CalcSize_1D();
 
 			F32ImageArrayHolder3C_Ref threshold_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetActualAccessor().GetSize());
-			F32ColorVal * threshold_Ptr = (F32ColorVal *)threshold_Img->GetDataPtr();
-			PixelInfo_1 * pixelInfo_Ptr = rgnGrow_Img->GetDataPtr();
+			F32ColorVal * threshold_Ptr = (F32ColorVal *)threshold_Img->GetActualAccessor().GetData();
+			PixelInfo_1 * pixelInfo_Ptr = (PixelInfo_1 *)rgnGrow_Img->GetActualAccessor().GetData();
 
 			{
 				for (int i = 0; i < nSize_1D; i++)
@@ -622,13 +633,13 @@ namespace Ncv
 
 			F32ImageArrayHolder1C_Ref mag_Avg_Threshold_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
 			CalcMagImage(avg_Threshold_Img->GetVirtAccessor(), mag_Avg_Threshold_Img->GetVirtAccessor());
-			float * mag_Avg_Threshold_Ptr = mag_Avg_Threshold_Img->GetDataPtr();
+			float * mag_Avg_Threshold_Ptr = (float *)mag_Avg_Threshold_Img->GetActualAccessor().GetData();
 
 			ShowImage(mag_Avg_Threshold_Img->GetSrcImg(), "mag_Avg_Threshold_Img->GetSrcImg()");
 
 			F32ImageArrayHolder1C_Ref magImg = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
 			CalcMagImage(cx.m_org_Img->GetVirtAccessor(), magImg->GetVirtAccessor());
-			float * mag_Ptr = magImg->GetDataPtr();
+			float * mag_Ptr = (float *)magImg->GetActualAccessor().GetData();
 
 
 			//PixelInfo_1 & rPI = pixelInfo_Ptr[i];
@@ -640,7 +651,7 @@ namespace Ncv
 				//	float init_Val = 0.0f;
 				//	FillImage(bin_Img->GetVirtAccessor(), init_Val);
 				//}
-				float * bin_Ptr = bin_Img->GetDataPtr();
+				float * bin_Ptr = (float *)bin_Img->GetActualAccessor().GetData();
 
 				for (int i = 0; i < nSize_1D; i++)
 				{
