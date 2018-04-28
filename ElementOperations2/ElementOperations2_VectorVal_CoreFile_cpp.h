@@ -3,7 +3,7 @@
 
 		void Assign(VectorVal<T_Elm, N_Dims> * a_pDest, const VectorVal<T_Elm, N_Dims> & a_src)
 		{
-			for (int i = 0; i < a_pArg->GetNofDims(); i++)
+			for (int i = 0; i < a_src.GetNofDims(); i++)
 			{
 				Assign(&a_pDest->Vals[i], a_src.Vals[i]);
 				//a_pDest->Vals[i] = a_src.Vals[i];
@@ -138,7 +138,8 @@
 
 		bool IsUndefined(const VectorVal<T_Elm, N_Dims> & a_arg)
 		{
-			return IsUndefined(&a_pArg[0]);
+			//return IsUndefined(&a_pArg[0]);
+			return IsUndefined(a_arg.Vals[0]);
 		}
 
 		//bool IsUndefined_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg)

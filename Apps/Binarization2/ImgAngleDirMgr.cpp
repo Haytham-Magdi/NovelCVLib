@@ -160,11 +160,11 @@ namespace Ncv
 			//F32VectorValImageArrayHolder_4C_Ref cx.m_avgPStandev_InrWide_Img = new F32VectorValImageArrayHolder_4C(cx.m_org_Img->GetActualAccessor().GetSize());
 			cx.m_avgPStandev_InrWide_Img = new F32VectorValImageArrayHolder_4C(cx.m_org_Img->GetActualAccessor().GetSize());
 			{
-				const int nSize_1D = avg_InrWide_Img->GetSize_1D();
+				const int nSize_1D = avg_InrWide_Img->GetActualAccessor().CalcSize_1D();
 
-				F32VectorVal<4> * dest_Ptr = (F32VectorVal<4> *)cx.m_avgPStandev_InrWide_Img->GetData();
-				F32VectorVal<3> * src_Avg_Ptr = (F32VectorVal<3> *)avg_InrWide_Img->GetData();
-				float * src_Standev_Ptr = standev_InrWide_Img->GetData();
+				F32VectorVal<4> * dest_Ptr = (F32VectorVal<4> *)cx.m_avgPStandev_InrWide_Img->GetActualAccessor().GetData();
+				F32VectorVal<3> * src_Avg_Ptr = (F32VectorVal<3> *)avg_InrWide_Img->GetActualAccessor().GetData();
+				float * src_Standev_Ptr = (float *)standev_InrWide_Img->GetActualAccessor().GetData();
 
 				for (int i = 0; i < nSize_1D; i++)
 				{

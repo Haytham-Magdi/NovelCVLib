@@ -18,7 +18,7 @@ namespace Ncv
 #define T_Elm float
 #define N_Dims 2
 
-#include <NovelCVLib\ElementOperations2\ElementOperations2_VectorVal_CoreFile.cpp>
+#include <NovelCVLib\ElementOperations2\ElementOperations2_VectorVal_CoreFile_cpp.h>
 
 #undef T_Elm
 #undef N_Dims
@@ -26,7 +26,7 @@ namespace Ncv
 #define T_Elm float
 #define N_Dims 3
 
-#include <NovelCVLib\ElementOperations2\ElementOperations2_VectorVal_CoreFile.cpp>
+#include <NovelCVLib\ElementOperations2\ElementOperations2_VectorVal_CoreFile_cpp.h>
 
 #undef T_Elm
 #undef N_Dims
@@ -35,7 +35,7 @@ namespace Ncv
 #define T_Elm float
 #define N_Dims 4
 
-#include <NovelCVLib\ElementOperations2\ElementOperations2_VectorVal_CoreFile.cpp>
+#include <NovelCVLib\ElementOperations2\ElementOperations2_VectorVal_CoreFile_cpp.h>
 
 #undef T_Elm
 #undef N_Dims
