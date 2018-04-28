@@ -20,7 +20,8 @@
 #include <NovelCVLib\Ncv\LinePathInt.h>
 #include <NovelCVLib\Ncv\Signal1D.h>
 #include <NovelCVLib\Ncv\Signal1DViewer.h>
-#include <NovelCVLib\Ncv\MultiColorSignal1DViewer.h>#include <NovelCVLib\Ncv\ImgSizeRotation.h>
+#include <NovelCVLib\Ncv\MultiColorSignal1DViewer.h>
+#include <NovelCVLib\Ncv\ImgSizeRotation.h>
 #include <NovelCVLib\Ncv\ImgSizeRotationColl.h>
 
 #include <NovelCVLib\Ncv\LineOperations2.h>

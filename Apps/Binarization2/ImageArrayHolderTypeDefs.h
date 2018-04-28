@@ -1,4 +1,4 @@
-
+#pragma once
 
 #include <NovelCVLib\OpenCV\ImageArrayHolder.h>
 #include <NovelCVLib\OpenCV\funcs1.h>
@@ -23,10 +23,15 @@ namespace Ncv
 	using VectorValImageArrayHolder = ImageArrayHolder<T_ImgElm, VectorVal<T_ImgElm, V_NofChannels>, V_NofChannels>;
 
 	template<class T_ImgElm, int const V_NofChannels>
-	using VectorValImageArrayHolderRef = Ncpp::ObjRef<ImageArrayHolder<T_ImgElm, VectorVal<T_ImgElm, V_NofChannels>, V_NofChannels>>;
+	using VectorValImageArrayHolderRef = Ncpp::ObjRef<VectorValImageArrayHolder<T_ImgElm, V_NofChannels>>;
+	//using VectorValImageArrayHolderRef = Ncpp::ObjRef<ImageArrayHolder<T_ImgElm, VectorVal<T_ImgElm, V_NofChannels>, V_NofChannels>>;
 
-
-	///////////////////////////////////////////////
+//}
+//
+//	///////////////////////////////////////////////
+//
+//namespace Ncv
+//{
 
 	typedef VectorValImageArrayHolder< Ncpp::Float, 4 > F32VectorValImageArrayHolder_4C;
 	typedef Ncpp::ObjRef< F32VectorValImageArrayHolder_4C > F32VectorValImageArrayHolder_4C_Ref;

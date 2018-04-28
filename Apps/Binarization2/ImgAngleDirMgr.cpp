@@ -420,15 +420,16 @@ namespace Ncv
 		{
 			Context & cx = *m_context;
 
-			VirtArrayAccessor_2D<ConflictInfo2> & confAcc = cx.m_conflict_Img->GetVirtAccessor();
-			F32ImageRef confDsp_Img = F32Image::Create(cvSize(confAcc->GetNofSteps_X_Org(), confAcc->GetNofSteps_Y_Org()), 3);
+			const ActualArrayAccessor_2D<ConflictInfo2> & confAcc = cx.m_conflict_Img->GetActualAccessor();
+			//F32ImageRef confDsp_Img = F32Image::Create(cvSize(confAcc->GetNofSteps_X_Org(), confAcc->GetNofSteps_Y_Org()), 3);
+			F32ImageRef confDsp_Img = F32Image::Create(cvSize(confAcc.GetSize()), 3);
 
 			confDsp_Img->SetAll(0);
 
-			const int nSize_1D = confAcc->GetNofSteps_X() * confAcc->GetNofSteps_Y();
+			const int nSize_1D = confAcc.CalcSize_1D();
 
-			F32ColorVal * destPtr = (F32ColorVal *)confDsp_Img->GetData();
-			ConflictInfo2 * srcPtr = confAcc->GetData();
+			F32ColorVal * destPtr = (F32ColorVal *)confDsp_Img->GetDataPtr();
+			ConflictInfo2 * srcPtr = (ConflictInfo2 *)confAcc.GetData();
 
 			float angle_Old = -1;
 			for (int i = 0; i < nSize_1D; i++)

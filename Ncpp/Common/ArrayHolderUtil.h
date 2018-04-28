@@ -17,8 +17,8 @@ namespace Ncv
 {
 	using namespace Ncpp;
 
-	template<class T>
-	class ArrayHolderUtil;
+	//template<class T>
+	//class ArrayHolderUtil;
 
 
 	//template<class T>

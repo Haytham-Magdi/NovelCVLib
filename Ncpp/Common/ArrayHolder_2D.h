@@ -46,8 +46,8 @@ namespace Ncv
 
 	protected:
 
-		VirtArrayAccessor_2D m_virtAccessor;
-		ActualArrayAccessor_2D m_actualAccessor;
+		VirtArrayAccessor_2D<T> m_virtAccessor;
+		ActualArrayAccessor_2D<T> m_actualAccessor;
 	};
 
 

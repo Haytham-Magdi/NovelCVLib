@@ -1,45 +1,45 @@
 
 // ElementOperations2.
 
-		template<> void Assign(VectorVal<T_Elm, N_Dims> * a_pDest, const VectorVal<T_Elm, N_Dims> & a_src);
+		template<> void Assign(Ncv::VectorVal<T_Elm, N_Dims> * a_pDest, const Ncv::VectorVal<T_Elm, N_Dims> & a_src);
 
-		template<> float CalcMagSqr(const VectorVal<T_Elm, N_Dims> & a_arg);
+		template<> float CalcMagSqr(const Ncv::VectorVal<T_Elm, N_Dims> & a_arg);
 
-		//template<> void AssertValue(const VectorVal<T_Elm, N_Dims> & a_arg);
+		//template<> void AssertValue(const Ncv::VectorVal<T_Elm, N_Dims> & a_arg);
 
-		template<> void Add(const VectorVal<T_Elm, N_Dims> & a_inp1, const VectorVal<T_Elm, N_Dims> & a_inp2, VectorVal<T_Elm, N_Dims> * a_pOut);
+		template<> void Add(const Ncv::VectorVal<T_Elm, N_Dims> & a_inp1, const Ncv::VectorVal<T_Elm, N_Dims> & a_inp2, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut);
 
-		template<> void Subtract(const VectorVal<T_Elm, N_Dims> & a_inp1, const VectorVal<T_Elm, N_Dims> & a_inp2, VectorVal<T_Elm, N_Dims> * a_pOut);
+		template<> void Subtract(const Ncv::VectorVal<T_Elm, N_Dims> & a_inp1, const Ncv::VectorVal<T_Elm, N_Dims> & a_inp2, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut);
 
-		template<> void DivideByNum(const VectorVal<T_Elm, N_Dims> & a_inp, const float a_num, VectorVal<T_Elm, N_Dims> * a_pOut);
+		template<> void DivideByNum(const Ncv::VectorVal<T_Elm, N_Dims> & a_inp, const float a_num, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut);
 
-		template<> void MultiplyByNum(const VectorVal<T_Elm, N_Dims> & a_inp, const float a_num, VectorVal<T_Elm, N_Dims> * a_pOut);
+		template<> void MultiplyByNum(const Ncv::VectorVal<T_Elm, N_Dims> & a_inp, const float a_num, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut);
 
-		template<> void SetToZero(VectorVal<T_Elm, N_Dims> * a_pArg);
+		template<> void SetToZero(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg);
 
-		template<> bool IsUndefined(const VectorVal<T_Elm, N_Dims> & a_arg);
+		template<> bool IsUndefined(const Ncv::VectorVal<T_Elm, N_Dims> & a_arg);
 
-		template<> void SetToUndefined(VectorVal<T_Elm, N_Dims> * a_pArg);
-
-
+		template<> void SetToUndefined(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg);
 
 
-		//template<> float CalcMagSqr_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg);
 
-		//template<> void AssertValue_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg);
 
-		//template<> void Add_ByPtr(VectorVal<T_Elm, N_Dims> * a_pInp1, VectorVal<T_Elm, N_Dims> * a_pInp2, VectorVal<T_Elm, N_Dims> * a_pOut);
+		//template<> float CalcMagSqr_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg);
 
-		//template<> void Subtract_ByPtr(VectorVal<T_Elm, N_Dims> * a_pInp1, VectorVal<T_Elm, N_Dims> * a_pInp2, VectorVal<T_Elm, N_Dims> * a_pOut);
+		//template<> void AssertValue_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg);
 
-		//template<> void DivideByNum_ByPtr(VectorVal<T_Elm, N_Dims> * a_pInp, float a_num, VectorVal<T_Elm, N_Dims> * a_pOut);
+		//template<> void Add_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pInp1, Ncv::VectorVal<T_Elm, N_Dims> * a_pInp2, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut);
 
-		//template<> void MultiplyByNum_ByPtr(VectorVal<T_Elm, N_Dims> * a_pInp, float a_num, VectorVal<T_Elm, N_Dims> * a_pOut);
+		//template<> void Subtract_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pInp1, Ncv::VectorVal<T_Elm, N_Dims> * a_pInp2, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut);
 
-		//template<> void SetToZero_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg);
+		//template<> void DivideByNum_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pInp, float a_num, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut);
 
-		//template<> bool IsUndefined_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg);
+		//template<> void MultiplyByNum_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pInp, float a_num, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut);
 
-		//template<> void SetToUndefined_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg);
+		//template<> void SetToZero_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg);
+
+		//template<> bool IsUndefined_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg);
+
+		//template<> void SetToUndefined_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg);
 
 
