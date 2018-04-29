@@ -1,17 +1,17 @@
 #pragma once
 
-#include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
-#include <NovelCVLib\OpenCV\CvIncludes.h>
-#include <NovelCVLib\OpenCV\Types.h>
-#include <NovelCVLib\OpenCV\error.h>
-#include <NovelCVLib\OpenCV\funcs1.h>
-#include <vector>
-#include <NovelCVLib\OpenCV\Image.h>
-
 #include <NovelCVLib\ElementOperations2\ElementOperations2.h>
 #include <NovelCVLib\ElementOperations2\ElementOperations2_Float.h>
 #include <NovelCVLib\OpenCV\ElementOperations2_F32ColorVal.h>
-#include <NovelCVLib\ElementOperations2\ElementOperations2_Float.h>
+
+//#include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
+//#include <NovelCVLib\OpenCV\CvIncludes.h>
+//#include <NovelCVLib\OpenCV\Types.h>
+//#include <NovelCVLib\OpenCV\error.h>
+#include <NovelCVLib\OpenCV\funcs1.h>
+//#include <vector>
+//#include <NovelCVLib\OpenCV\Image.h>
+
 
 
 namespace Ncv
@@ -161,5 +161,5 @@ namespace Ncv
 		//	SetToUndefined_ByPtr<float>(&a_pArg->val2);
 		//}
 
-	};
+	}
 }

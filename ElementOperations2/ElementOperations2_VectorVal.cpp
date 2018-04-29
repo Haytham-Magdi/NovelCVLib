@@ -1,11 +1,11 @@
 #pragma once
 
-#include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
-#include <NovelCVLib\OpenCV\Types.h>
-#include <NovelCVLib\OpenCV\error.h>
-
 #include <NovelCVLib\ElementOperations2\ElementOperations2.h>
 #include <NovelCVLib\ElementOperations2\ElementOperations2_VectorVal.h>
+
+//#include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
+////#include <NovelCVLib\OpenCV\Types.h>
+////#include <NovelCVLib\OpenCV\error.h>
 
 
 namespace Ncv
@@ -41,5 +41,5 @@ namespace Ncv
 #undef N_Dims
 
 
-	};
+	}
 }

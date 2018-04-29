@@ -6,8 +6,10 @@
 #include <NovelCVLib\OpenCV\Channel.h>
 #include <NovelCVLib\OpenCV\Image.h>
 #include <vector>
+#include <NovelCVLib\Ncv\Signal1DViewer.h>
 
 #include <NovelCVLib\OpenCV\funcs1.h>
+#include <NovelCVLib\OpenCV\Hsv.h>
 
 
 namespace Ncv

@@ -18,7 +18,8 @@ namespace Ncv
 		using namespace Ncpp;
 
 		Size_2D size_2D(const CvSize & src);
-		CvSize cvSize(const Size_2D & src);
+		//CvSize cvSize(const Size_2D & src);
+		CvSize toCvSize(const Size_2D & src);
 
 	}
 }

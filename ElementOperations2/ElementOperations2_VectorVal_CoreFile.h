@@ -1,4 +1,9 @@
 
+
+
+
+
+
 // ElementOperations2.
 
 		template<> void Assign(Ncv::VectorVal<T_Elm, N_Dims> * a_pDest, const Ncv::VectorVal<T_Elm, N_Dims> & a_src);
