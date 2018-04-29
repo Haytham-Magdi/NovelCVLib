@@ -128,7 +128,7 @@ namespace Ncv
 				//F32ImageArrayHolder3C_Ref rot_Img_H = new F32ImageArrayHolder3C(rotMgr->GetResImg());
 				//F32ImageArrayHolder3C_Ref rot_Img_H = new F32ImageArrayHolder3C(rotMgr->GetResImgSiz());
 				F32ImageArrayHolder3C_Ref rot_Img_H = new F32ImageArrayHolder3C(
-					F32Image::Create(cvSize(rotMgr->GetResImgSiz()), m_srcImg->GetNofChannels()));
+					F32Image::Create(toCvSize(rotMgr->GetResImgSiz()), m_srcImg->GetNofChannels()));
 
 				rotMgr->RotateImage(rot_Img_H->GetActualAccessor(), org_Img_H->GetActualAccessor());
 
@@ -240,7 +240,7 @@ namespace Ncv
 			const ActualArrayAccessor_2D<PixelStandevInfo> & psiAcc = m_context_H->m_standevInfoImg->GetActualAccessor();
 			//F32ImageRef dspImg_Values = F32Image::Create(cvSize(psiAcc.GetSize()), 1);
 			
-			F32ImageRef dspImg_Colored = F32Image::Create(cvSize(psiAcc.GetSize()), 3);
+			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(psiAcc.GetSize()), 3);
 
 			const int nSize_1D = psiAcc.CalcSize_1D();
 
@@ -309,7 +309,7 @@ namespace Ncv
 		void AngleDirMgrColl::DisplayConflictImg()
 		{
 			const ActualArrayAccessor_2D<ConflictInfo2_Ex> & confAcc = m_context_H->m_conflictInfoImg->GetActualAccessor();
-			F32ImageRef confDsp_Img = F32Image::Create(cvSize(confAcc.GetSize()), 3);
+			F32ImageRef confDsp_Img = F32Image::Create(toCvSize(confAcc.GetSize()), 3);
 
 			confDsp_Img->SetAll(0);
 

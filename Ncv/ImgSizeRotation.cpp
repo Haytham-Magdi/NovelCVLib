@@ -140,7 +140,7 @@ namespace Ncv
 		//	m_resSiz.SetX( m_resSiz.GetX() / m_nScale);
 		//}
 
-		m_resToSrcMapImg = S32Image::Create(cvSize(m_resSiz), 1);
+		m_resToSrcMapImg = S32Image::Create(toCvSize(m_resSiz), 1);
 		int * resToSrcBuf = (int *)m_resToSrcMapImg->GetPixAt(0, 0);
 
 		//m_resToSrcMapImg_X_Scaled = S32Image::Create(m_resSiz, 1);
@@ -151,10 +151,10 @@ namespace Ncv
 
 		//m_srcPntOfRes_Arr.SetSize(m_resSiz.GetX() * m_resSiz.GetY());
 
-		m_srcToResMapImg = S32Image::Create(cvSize(m_srcSiz), 1);
+		m_srcToResMapImg = S32Image::Create(toCvSize(m_srcSiz), 1);
 		int *  srcToResBuf = (int *)m_srcToResMapImg->GetPixAt(0, 0);
 
-		S32ImageRef srcMinDistImg = S32Image::Create(cvSize(m_srcSiz), 1);
+		S32ImageRef srcMinDistImg = S32Image::Create(toCvSize(m_srcSiz), 1);
 		int *  srcMinDistBuf = (int *)srcMinDistImg->GetPixAt(0, 0);
 
 		//m_resImg = F32Image::Create(m_resSiz, 3);

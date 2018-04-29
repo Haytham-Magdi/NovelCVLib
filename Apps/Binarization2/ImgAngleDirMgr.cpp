@@ -422,7 +422,7 @@ namespace Ncv
 
 			const ActualArrayAccessor_2D<ConflictInfo2> & confAcc = cx.m_conflict_Img->GetActualAccessor();
 			//F32ImageRef confDsp_Img = F32Image::Create(cvSize(confAcc->GetNofSteps_X_Org(), confAcc->GetNofSteps_Y_Org()), 3);
-			F32ImageRef confDsp_Img = F32Image::Create(cvSize(confAcc.GetSize()), 3);
+			F32ImageRef confDsp_Img = F32Image::Create(toCvSize(confAcc.GetSize()), 3);
 
 			confDsp_Img->SetAll(0);
 
