@@ -15,7 +15,6 @@ namespace Ncv
 	class SimpleArrayHolder_2D;
 
 
-//#define SimpleArrayHolder_2D_REF(T) ObjRef< SimpleArrayHolder_2D< T >>
 
 	template<class T>
 	class SimpleArrayHolder_2D : public ArrayHolder_2D<T>

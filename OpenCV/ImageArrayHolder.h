@@ -47,11 +47,9 @@ namespace Ncv
 
 		ImageArrayHolder(const Size_2D & size)
 		{
-			Ncpp_ASSERT(a_srcImg->GetNofChannels() == V_NofChannels);
+			m_srcImg = Image<T_ImgElm>::Create(toCvSize(size), V_NofChannels);
 
-			m_srcImg = Image<T_ImgElm>::Create(cvSize(size), V_NofChannels);
-
-			m_actualAccessor.Init((T_AccElm *)a_srcImg->GetDataPtr(), size_2D(a_srcImg->GetSize()));
+			m_actualAccessor.Init((T_AccElm *)m_srcImg->GetDataPtr(), size_2D(m_srcImg->GetSize()));
 			m_actualAccessor.AssignVirtAccessorTo(&m_virtAccessor);
 		}
 
@@ -92,7 +90,7 @@ namespace Ncv
 
 	protected:
 
-		ImageRef<T_ImgElm> a_srcImg;
+		ImageRef<T_ImgElm> m_srcImg;
 	};
 
 

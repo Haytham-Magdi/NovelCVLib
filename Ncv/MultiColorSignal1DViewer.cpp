@@ -35,7 +35,7 @@ namespace Ncv
 			const int nScaleW = 800 / valArr.GetSize() + 1;
 
 			//Signal1DViewerRef a_sv1 = new Signal1DViewer();
-			int i;
+			//int i;
 
 			for( int i=0; i < valArr.GetSize(); i++ )
 			{

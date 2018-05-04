@@ -1,21 +1,25 @@
 
 // ElementOperations2.
 
-		void Assign(VectorVal<T_Elm, N_Dims> * a_pDest, const VectorVal<T_Elm, N_Dims> & a_src)
+		void Assign(Ncv::VectorVal<T_Elm, N_Dims> * a_pDest, const Ncv::VectorVal<T_Elm, N_Dims> & a_src)
 		{
 			for (int i = 0; i < a_src.GetNofDims(); i++)
 			{
+				//Assign<Ncpp::Float>(&a_pDest->Vals[i], a_src.Vals[i]);
+				//Assign<Ncpp::Float>(&a_pDest->Vals[i], a_src.Vals[i]);
 				Assign(&a_pDest->Vals[i], a_src.Vals[i]);
+				//Assign<T_Elm>(&a_pDest->Vals[i], a_src.Vals[i]);
+				
 				//a_pDest->Vals[i] = a_src.Vals[i];
 			}
 		}
 
-		//void Copy_ByPtr(VectorVal<T_Elm, N_Dims> * a_pDest, VectorVal<T_Elm, N_Dims> * a_pSrc)
+		//void Copy_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pDest, Ncv::VectorVal<T_Elm, N_Dims> * a_pSrc)
 		//{
-		//	memcpy(a_pDest, a_pSrc, sizeof(VectorVal));
+		//	memcpy(a_pDest, a_pSrc, sizeof(Ncv::VectorVal));
 		//}
 
-		float CalcMagSqr(const VectorVal<T_Elm, N_Dims> & a_arg)
+		float CalcMagSqr(const Ncv::VectorVal<T_Elm, N_Dims> & a_arg)
 		{
 			float sum = 0;
 			for (int i = 0; i < a_arg.GetNofDims(); i++)
@@ -26,7 +30,7 @@
 			return sum;
 		}
 
-		//float CalcMagSqr_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg)
+		//float CalcMagSqr_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg)
 		//{
 		//	float sum = 0;
 		//	for (int i = 0; i < a_pArg->GetNofDims(); i++)
@@ -37,7 +41,7 @@
 		//	return sum;
 		//}
 
-		//void AssertValue_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg)
+		//void AssertValue_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg)
 		//{
 		//	for (int i = 0; i < a_pArg->GetNofDims(); i++)
 		//	{
@@ -46,7 +50,7 @@
 		//	}
 		//}
 
-		void Add(const VectorVal<T_Elm, N_Dims> & a_inp1, const VectorVal<T_Elm, N_Dims> & a_inp2, VectorVal<T_Elm, N_Dims> * a_pOut)
+		void Add(const Ncv::VectorVal<T_Elm, N_Dims> & a_inp1, const Ncv::VectorVal<T_Elm, N_Dims> & a_inp2, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut)
 		{
 			for (int i = 0; i < a_pOut->GetNofDims(); i++)
 			{
@@ -58,7 +62,7 @@
 			}
 		}
 
-		//void Add_ByPtr(VectorVal<T_Elm, N_Dims> * a_pInp1, VectorVal<T_Elm, N_Dims> * a_pInp2, VectorVal<T_Elm, N_Dims> * a_pOut)
+		//void Add_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pInp1, Ncv::VectorVal<T_Elm, N_Dims> * a_pInp2, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut)
 		//{
 		//	for (int i = 0; i < a_pOut->GetNofDims(); i++)
 		//	{
@@ -69,7 +73,7 @@
 		//	}
 		//}
 
-		void Subtract(const VectorVal<T_Elm, N_Dims> & a_inp1, const VectorVal<T_Elm, N_Dims> & a_inp2, VectorVal<T_Elm, N_Dims> * a_pOut)
+		void Subtract(const Ncv::VectorVal<T_Elm, N_Dims> & a_inp1, const Ncv::VectorVal<T_Elm, N_Dims> & a_inp2, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut)
 		{
 			for (int i = 0; i < a_pOut->GetNofDims(); i++)
 			{
@@ -78,7 +82,7 @@
 			}
 		}
 
-		//void Subtract_ByPtr(VectorVal<T_Elm, N_Dims> * a_pInp1, VectorVal<T_Elm, N_Dims> * a_pInp2, VectorVal<T_Elm, N_Dims> * a_pOut)
+		//void Subtract_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pInp1, Ncv::VectorVal<T_Elm, N_Dims> * a_pInp2, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut)
 		//{
 		//	for (int i = 0; i < a_pOut->GetNofDims(); i++)
 		//	{
@@ -86,7 +90,7 @@
 		//	}
 		//}
 
-		void DivideByNum(const VectorVal<T_Elm, N_Dims> & a_inp, const float a_num, VectorVal<T_Elm, N_Dims> * a_pOut)
+		void DivideByNum(const Ncv::VectorVal<T_Elm, N_Dims> & a_inp, const float a_num, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut)
 		{
 			for (int i = 0; i < a_pOut->GetNofDims(); i++)
 			{
@@ -95,7 +99,7 @@
 			}
 		}
 
-		//void DivideByNum_ByPtr(VectorVal<T_Elm, N_Dims> * a_pInp, const float a_num, VectorVal<T_Elm, N_Dims> * a_pOut)
+		//void DivideByNum_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pInp, const float a_num, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut)
 		//{
 		//	for (int i = 0; i < a_pOut->GetNofDims(); i++)
 		//	{
@@ -103,7 +107,7 @@
 		//	}
 		//}
 
-		void MultiplyByNum(const VectorVal<T_Elm, N_Dims> & a_inp, const float a_num, VectorVal<T_Elm, N_Dims> * a_pOut)
+		void MultiplyByNum(const Ncv::VectorVal<T_Elm, N_Dims> & a_inp, const float a_num, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut)
 		{
 			for (int i = 0; i < a_pOut->GetNofDims(); i++)
 			{
@@ -112,7 +116,7 @@
 			}
 		}
 
-		//void MultiplyByNum_ByPtr(VectorVal<T_Elm, N_Dims> * a_pInp, const float a_num, VectorVal<T_Elm, N_Dims> * a_pOut)
+		//void MultiplyByNum_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pInp, const float a_num, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut)
 		//{
 		//	for (int i = 0; i < a_pOut->GetNofDims(); i++)
 		//	{
@@ -120,7 +124,7 @@
 		//	}
 		//}
 
-		void SetToZero(VectorVal<T_Elm, N_Dims> * a_pArg)
+		void SetToZero(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg)
 		{
 			for (int i = 0; i < a_pArg->GetNofDims(); i++)
 			{
@@ -128,7 +132,7 @@
 			}
 		}
 
-		//void SetToZero_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg)
+		//void SetToZero_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg)
 		//{
 		//	for (int i = 0; i < a_pArg->GetNofDims(); i++)
 		//	{
@@ -136,18 +140,18 @@
 		//	}
 		//}
 
-		bool IsUndefined(const VectorVal<T_Elm, N_Dims> & a_arg)
+		bool IsUndefined(const Ncv::VectorVal<T_Elm, N_Dims> & a_arg)
 		{
 			//return IsUndefined(&a_pArg[0]);
 			return IsUndefined(a_arg.Vals[0]);
 		}
 
-		//bool IsUndefined_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg)
+		//bool IsUndefined_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg)
 		//{
 		//	return IsUndefined_ByPtr(&a_pArg[0]);
 		//}
 
-		void SetToUndefined(VectorVal<T_Elm, N_Dims> * a_pArg)
+		void SetToUndefined(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg)
 		{
 			for (int i = 0; i < a_pArg->GetNofDims(); i++)
 			{
@@ -155,7 +159,7 @@
 			}
 		}
 
-		//void SetToUndefined_ByPtr(VectorVal<T_Elm, N_Dims> * a_pArg)
+		//void SetToUndefined_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg)
 		//{
 		//	for (int i = 0; i < a_pArg->GetNofDims(); i++)
 		//	{

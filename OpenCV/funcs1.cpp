@@ -2736,8 +2736,8 @@ namespace Ncv
 
 					for (int nSrcX = 0; nSrcX < a_nAprSiz; nSrcX++)
 					{
-						nSumSbg += srcByGradCh->GetAt(nSrcX, y);
-						nSumGrad += gradCh->GetAt(nSrcX, y);
+						nSumSbg += (int)srcByGradCh->GetAt(nSrcX, y);
+						nSumGrad += (int)gradCh->GetAt(nSrcX, y);
 
 					}
 					retCh->SetAt(0, y, nSumSbg / nSumGrad);
@@ -2750,8 +2750,8 @@ namespace Ncv
 						nSumSbg -= srcByGradCh->GetAt(nSrcXSub, y);
 						nSumSbg += srcByGradCh->GetAt(nSrcXAdd, y);
 
-						nSumGrad -= gradCh->GetAt(nSrcXSub, y);
-						nSumGrad += gradCh->GetAt(nSrcXAdd, y);
+						nSumGrad -= (int)gradCh->GetAt(nSrcXSub, y);
+						nSumGrad += (int)gradCh->GetAt(nSrcXAdd, y);
 
 						if (nSumGrad < 70)
 							nSumGrad = nSumGrad;
@@ -2822,7 +2822,7 @@ namespace Ncv
 					{
 						nSumSbg += srcByGradCh->GetAt(x, nSrcY);
 						//nSumGrad += gradCh->GetAt( x, nSrcY);
-						nSumGrad += gradCh->GetAt(x + nMarg, nSrcY);
+						nSumGrad += (int)gradCh->GetAt(x + nMarg, nSrcY);
 
 					}
 					retCh->SetAt(x, 0, nSumSbg / nSumGrad);
@@ -2840,8 +2840,8 @@ namespace Ncv
 						//nSumGrad -= gradCh->GetAt( x, nSrcYSub);
 						//nSumGrad += gradCh->GetAt( x, nSrcYAdd);
 
-						nSumGrad -= gradCh->GetAt(x + nMarg, nSrcYSub);
-						nSumGrad += gradCh->GetAt(x + nMarg, nSrcYAdd);
+						nSumGrad -= (int)gradCh->GetAt(x + nMarg, nSrcYSub);
+						nSumGrad += (int)gradCh->GetAt(x + nMarg, nSrcYAdd);
 
 						retCh->SetAt(x, y, nSumSbg / nSumGrad);
 						//retCh->SetAt( x, y, 
@@ -4537,7 +4537,7 @@ namespace Ncv
 						if (subVal < 0)
 							subVal = 0;
 
-						valArr[i++] = inrVal * 100;
+						valArr[i++] = (int)(inrVal * 100);
 
 						//sumAbsVal += fabs( subVal );
 						sumAbsVal += subVal;
@@ -4896,7 +4896,7 @@ namespace Ncv
 						else if (subVal < 0)
 							subVal = subVal;
 
-						valArr[i++] = inrVal * 100;
+						valArr[i++] = (int)(inrVal * 100);
 
 						//sumAbsVal += fabs( subVal );
 						sumAbsVal += subVal;
@@ -5091,7 +5091,7 @@ namespace Ncv
 			const int nScaleW = 800 / valArr.GetSize() + 1;
 
 			Signal1DViewerRef a_sv1 = new Signal1DViewer();
-			int i;
+			//int i;
 
 			for (int i = 0; i < valArr.GetSize(); i++)
 			{

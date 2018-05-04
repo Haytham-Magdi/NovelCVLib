@@ -13,8 +13,6 @@ namespace Ncv
 	class ArrayHolder_2D;
 
 
-//#define ArrayHolder_2D_REF(T) ObjRef< ArrayHolder_2D< T >>
-
 	
 	template<class T>
 	class ArrayHolder_2D : public Ncpp::Object

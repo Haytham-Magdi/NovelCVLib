@@ -219,7 +219,7 @@ namespace Ncv
 		template<class T>
 		void AvgImage(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const Window<int> & a_window)
 		{
-			ArrayHolder_2D_Ref<T> tmpHolder = ArrayHolderUtil<T>::CreateFrom(a_outAcc.GetSize());
+			ArrayHolder_2D_Ref<T> tmpHolder = ArrayHolderUtil::CreateFrom<T>(a_outAcc.GetSize());
 			AvgImage_X<T>(a_inpAcc, tmpHolder->GetVirtAccessor(), a_window.GetRange_X());
 
 			//tmpHolder_T = ArrayHolderUtil<T>::CreateTransposedProxyFrom(tmpHolder);
@@ -310,10 +310,10 @@ namespace Ncv
 		{
 			AvgImage(a_inp_Acc, a_out_Avg_Acc, a_Win);
 
-			ArrayHolder_2D_REF(float) magSqrHolder = ArrayHolderUtil<float>::CreateFrom(a_inp_Acc.GetSize());
+			ArrayHolder_2D_Ref<float> magSqrHolder = ArrayHolderUtil::CreateFrom<float>(a_inp_Acc.GetSize());
 			CalcMagSqrImage(a_inp_Acc, magSqrHolder->GetVirtAccessor());
 
-			ArrayHolder_2D_REF(float) avg_MagSqr_Holder = ArrayHolderUtil<float>::CreateFrom(a_inp_Acc.GetSize());
+			ArrayHolder_2D_Ref<float> avg_MagSqr_Holder = ArrayHolderUtil::CreateFrom<float>(a_inp_Acc.GetSize());
 			AvgImage(magSqrHolder->GetVirtAccessor(), avg_MagSqr_Holder->GetVirtAccessor(), a_Win);
 
 			CalcStandevImage(a_out_Avg_Acc, avg_MagSqr_Holder->GetVirtAccessor(), a_out_Standev_Acc);
@@ -438,13 +438,13 @@ namespace Ncv
 			Ncpp_ASSERT(a_inpAcc.GetSize_X() == a_outAcc.GetSize_X());
 
 
-			ArrayHolder_2D_Ref<T> tmpAvgHolder_X = ArrayHolderUtil<T>::CreateFrom(a_inpAcc.GetSize());
+			ArrayHolder_2D_Ref<T> tmpAvgHolder_X = ArrayHolderUtil::CreateFrom<T>(a_inpAcc.GetSize());
 			AvgImage_X(a_inpAcc, tmpAvgHolder_X->GetVirtAccessor(), a_standevRange_X);
 
-			ArrayHolder_2D_REF(float) tmpAvg_MagSqr_X_Holder = ArrayHolderUtil<float>::CreateFrom(a_outAcc->GetSize());
+			ArrayHolder_2D_Ref<float> tmpAvg_MagSqr_X_Holder = ArrayHolderUtil::CreateFrom<float>(a_outAcc.GetSize());
 			AvgImage_X(a_magSqrAcc, tmpAvg_MagSqr_X_Holder->GetVirtAccessor(), a_standevRange_X);
 
-			ArrayHolder_2D_REF(float) tmpStandev_X_Holder = ArrayHolderUtil<float>::CreateFrom(a_outAcc->GetSize());
+			ArrayHolder_2D_Ref<float> tmpStandev_X_Holder = ArrayHolderUtil::CreateFrom<float>(a_outAcc.GetSize());
 			CalcStandevImage(tmpAvgHolder_X->GetVirtAccessor(), tmpAvg_MagSqr_X_Holder->GetVirtAccessor(),
 				tmpStandev_X_Holder->GetVirtAccessor());
 

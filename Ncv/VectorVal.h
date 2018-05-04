@@ -15,7 +15,7 @@ namespace Ncv
 	class VectorVal
 	{
 	public:
-		const int GetNofDims()
+		const int GetNofDims() const
 		{
 			return N;
 		}
