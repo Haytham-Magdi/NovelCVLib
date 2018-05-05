@@ -30,12 +30,12 @@ namespace Ncpp
 			sizeY = a_nSizY;
 		}
 
-		const int GetX() const
+		int GetX() const
 		{
 			return sizeX;
 		}
 
-		const int GetY() const
+		int GetY() const
 		{
 			return sizeY;
 		}
@@ -51,7 +51,7 @@ namespace Ncpp
 		}
 
 
-		const int CalcSize_1D() const
+		int CalcSize_1D() const
 		{
 			return sizeX * sizeY;
 		}

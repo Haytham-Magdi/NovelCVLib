@@ -37,32 +37,32 @@ namespace Ncpp
 			return ret;
 		}
 
-		T Get_X1()
+		T Get_X1() const
 		{
 			return m_x1;
 		}
 
-		T Get_X2()
+		T Get_X2() const
 		{
 			return m_x2;
 		}
 
-		T Get_Y1()
+		T Get_Y1() const
 		{
 			return m_y1;
 		}
 
-		T Get_Y2()
+		T Get_Y2() const
 		{
 			return m_y2;
 		}
 
-		Range<T> GetRange_X()
+		Range<T> GetRange_X() const
 		{
 			return Range<T>::New(m_x1, m_x2);
 		}
 
-		Range<T> GetRange_Y()
+		Range<T> GetRange_Y() const
 		{
 			return Range<T>::New(m_y1, m_y2);
 		}

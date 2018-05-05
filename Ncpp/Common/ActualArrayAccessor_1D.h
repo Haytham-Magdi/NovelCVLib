@@ -37,12 +37,12 @@ namespace Ncpp
 			return m_data[a_pos];
 		}
 
-		const T * GetData() const
+		T * GetData() const
 		{
 			return m_data;
 		}
 
-		const int GetSize() const
+		int GetSize() const
 		{
 			return m_nSize;
 		}

@@ -223,7 +223,8 @@ namespace Ncv
 			AvgImage_X<T>(a_inpAcc, tmpHolder->GetVirtAccessor(), a_window.GetRange_X());
 
 			//tmpHolder_T = ArrayHolderUtil<T>::CreateTransposedProxyFrom(tmpHolder);
-			const VirtArrayAccessor_2D<float> tmpHolder_Acc_T = tmpHolder->GetVirtAccessor().GenTranspose();
+			//const VirtArrayAccessor_2D<float> tmpHolder_Acc_T = tmpHolder->GetVirtAccessor().GenTranspose();
+			const VirtArrayAccessor_2D<T> tmpHolder_Acc_T = tmpHolder->GetVirtAccessor().GenTranspose();
 
 			VirtArrayAccessor_2D<T> outAcc_T = a_outAcc.GenTranspose();
 			//AvgImage_X<T>(tmpHolder_T->GetVirtAccessor(), outAcc_T, a_window.GetRange_Y());

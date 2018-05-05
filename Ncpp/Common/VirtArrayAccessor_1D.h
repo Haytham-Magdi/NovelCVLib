@@ -27,7 +27,10 @@ namespace Ncpp
 			m_nStepSize = a_nStepSize;
 		}
 
-		const T & operator[](int a_pos) const
+
+
+		//const T & operator[](int a_pos) const
+		T & operator[](int a_pos)
 		{
 			Ncpp_ASSERT(a_pos >= 0);
 			Ncpp_ASSERT(a_pos < m_nofSteps);
@@ -35,12 +38,25 @@ namespace Ncpp
 			return m_data[a_pos * m_nStepSize];
 		}
 
-		const int GetSize() const
+		const T & operator[](int a_pos) const
+		//T & operator[](int a_pos) const
+		{
+			Ncpp_ASSERT(a_pos >= 0);
+			Ncpp_ASSERT(a_pos < m_nofSteps);
+
+			return m_data[a_pos * m_nStepSize];
+		}
+
+
+
+
+
+		int GetSize() const
 		{
 			return m_nofSteps;
 		}
 
-		const T * GetData() const
+		T * GetData() const
 		{
 			return m_data;
 		}
@@ -50,7 +66,7 @@ namespace Ncpp
 			return m_data;
 		}
 
-		const int GetStepSize() const
+		int GetStepSize() const
 		{
 			return m_nStepSize;
 		}
@@ -60,7 +76,8 @@ namespace Ncpp
 			m_nofSteps = a_nofSteps;
 		}
 
-		void SetData(const T * a_data)
+		//void SetData(const T * a_data)
+		void SetData(T * a_data)
 		{
 			m_data = a_data;
 		}

@@ -33,7 +33,7 @@ namespace Ncv
 			return m_actualAccessor;
 		}
 
-		const int GetSize() const
+		int GetSize() const
 		{
 			return m_actualAccessor.GetSize();
 		}

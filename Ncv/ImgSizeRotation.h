@@ -180,11 +180,21 @@ namespace Ncv
 								//	rColor_Src_X2_Y1.MultBy(m_nScale - nWt_X1)
 								//	).DividBy(m_nScale);
 
-								WaitedAdd_ByPtr(&rColor_Src_X1_Y1, (float)nWt_X1 / m_nScale,
-									&rColor_Src_X2_Y1, (float)(m_nScale - nWt_X1) / m_nScale, &color_Src_X_Y1);
 
-								WaitedAdd_ByPtr(&rColor_Src_X1_Y2, (float)nWt_X1 / m_nScale,
-									&rColor_Src_X2_Y2, (float)(m_nScale - nWt_X1) / m_nScale, &color_Src_X_Y2);
+
+								//WaitedAdd_ByPtr(&rColor_Src_X1_Y1, (float)nWt_X1 / m_nScale,
+								//	&rColor_Src_X2_Y1, (float)(m_nScale - nWt_X1) / m_nScale, &color_Src_X_Y1);
+
+								//WaitedAdd_ByPtr(&rColor_Src_X1_Y2, (float)nWt_X1 / m_nScale,
+								//	&rColor_Src_X2_Y2, (float)(m_nScale - nWt_X1) / m_nScale, &color_Src_X_Y2);
+
+								WaitedAdd(rColor_Src_X1_Y1, (float)nWt_X1 / m_nScale,
+									rColor_Src_X2_Y1, (float)(m_nScale - nWt_X1) / m_nScale, &color_Src_X_Y1);
+
+								WaitedAdd(rColor_Src_X1_Y2, (float)nWt_X1 / m_nScale,
+									rColor_Src_X2_Y2, (float)(m_nScale - nWt_X1) / m_nScale, &color_Src_X_Y2);
+
+
 
 								//T color_Src_X_Y2 = T::Add(
 								//	rColor_Src_X1_Y2.MultBy(nWt_X1),
@@ -196,8 +206,16 @@ namespace Ncv
 								int nWt_Y1 = (nY1 == nY2) ? m_nScale : abs(curPnt_X.y - nY2);
 								Ncpp_ASSERT(nWt_Y1 <= m_nScale);
 
-								WaitedAdd_ByPtr(&color_Src_X_Y1, (float)nWt_Y1 / m_nScale,
-									&color_Src_X_Y2, (float)(m_nScale - nWt_Y1) / m_nScale, &rColor_Res);
+
+								//WaitedAdd_ByPtr(&color_Src_X_Y1, (float)nWt_Y1 / m_nScale,
+								//	&color_Src_X_Y2, (float)(m_nScale - nWt_Y1) / m_nScale, &rColor_Res);
+
+								WaitedAdd(color_Src_X_Y1, (float)nWt_Y1 / m_nScale,
+									color_Src_X_Y2, (float)(m_nScale - nWt_Y1) / m_nScale, &rColor_Res);
+
+
+
+
 								//rColor_Res = T::Add(
 								//	color_Src_X_Y1.MultBy(nWt_Y1),
 								//	color_Src_X_Y2.MultBy(m_nScale - nWt_Y1)
@@ -207,7 +225,7 @@ namespace Ncv
 						else
 						{
 							//rColor_Res.AssignVal(0, 0, 0);
-							SetToZero_ByPtr(&rColor_Res);
+							SetToZero(&rColor_Res);
 						}
 					}
 

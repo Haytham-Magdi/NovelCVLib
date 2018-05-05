@@ -34,7 +34,7 @@ namespace Ncv
 		template<class T>
 		ArrayHolder_2D_Ref<T> CreateFrom(const Size_2D & a_size)
 		{
-			ArrayHolder_2D_Ref<T> ret = new SimpleArrayHolder_2D(a_size);
+			ArrayHolder_2D_Ref<T> ret = new SimpleArrayHolder_2D<T>(a_size);
 			return ret;
 		}
 
@@ -67,7 +67,7 @@ namespace Ncv
 		template<class T>
 		ArrayHolder_2D_Ref<T> CreateTransposedProxyFrom(ArrayHolder_2D_Ref<T> a_src)
 		{
-			ArrayHolder_2D_Ref<T> ret = new ArrayHolderProxy_2D(a_src);
+			ArrayHolder_2D_Ref<T> ret = new ArrayHolderProxy_2D<T>(a_src);
 			ret->TransposeVirtAccessor();
 
 			return ret;

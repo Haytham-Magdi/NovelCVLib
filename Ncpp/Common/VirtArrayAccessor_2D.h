@@ -43,37 +43,37 @@ namespace Ncpp
 			return m_data[a_pos_X * m_nStepSize_X + a_pos_Y * m_nStepSize_Y];
 		}
 
-		const T * GetData() const
+		T * GetData() const
 		{
 			return m_data;
 		}
 
-		const int GetSize_X() const
+		int GetSize_X() const
 		{
 			return m_nofSteps_X;
 		}
 
-		const int GetStepSize_X() const
+		int GetStepSize_X() const
 		{
 			return m_nStepSize_X;
 		}
 
-		const int GetSize_Y() const
+		int GetSize_Y() const
 		{
 			return m_nofSteps_Y;
 		}
 
-		const int GetStepSize_Y() const
+		int GetStepSize_Y() const
 		{
 			return m_nStepSize_Y;
 		}
 
-		const int CalcSize_1D() const
+		int CalcSize_1D() const
 		{
 			return m_nofSteps_X * m_nofSteps_Y;
 		}
 
-		const Size_2D GetSize() const
+		Size_2D GetSize() const
 		{
 			return Size_2D(m_nofSteps_X, m_nofSteps_Y);
 		}

@@ -47,7 +47,7 @@ namespace Ncv
 		template<class T>
 		float CalcMag(const T & a_arg)
 		{
-			return sqrt((float)CalcMagSqr_ByPtr(a_arg));
+			return sqrt((float)CalcMagSqr(a_arg));
 		}
 
 		//template<class T>
@@ -73,10 +73,11 @@ namespace Ncv
 		{
 			T inp11, inp22;
 
-			MultiplyByNum_ByPtr(a_inp1, a_weight1, &inp11);
-			MultiplyByNum_ByPtr(a_inp2, a_weight2, &inp22);
+			MultiplyByNum(a_inp1, a_weight1, &inp11);
+			MultiplyByNum(a_inp2, a_weight2, &inp22);
 
-			Add(&inp11, &inp22, a_pOut);
+			//Add(&inp11, &inp22, a_pOut);
+			Add(inp11, inp22, a_pOut);
 		}
 
 		//template<class T>
@@ -212,12 +213,12 @@ namespace Ncv
 
 			float avg_MagSqr_12 = (a_avg_MagSqr_1 + a_avg_MagSqr_2) / 2;
 
-			float magSqr_Avg_1 = CalcMagSqr(avg_1);
-			float magSqr_Avg_2 = CalcMagSqr(avg_2);
+			float magSqr_Avg_1 = CalcMagSqr(a_avg_1);
+			float magSqr_Avg_2 = CalcMagSqr(a_avg_2);
 			float magSqr_Avg_12 = CalcMagSqr(avg_12);
 
-			float standev_1 = CalcStandev(avg_1, a_avg_MagSqr_1);
-			float standev_2 = CalcStandev(avg_2, a_avg_MagSqr_2);
+			float standev_1 = CalcStandev(a_avg_1, a_avg_MagSqr_1);
+			float standev_2 = CalcStandev(a_avg_2, a_avg_MagSqr_2);
 			float standev_12 = CalcStandev(avg_12, avg_MagSqr_12);
 
 			float standev_MaxSide = (standev_1 > standev_2) ? standev_1 : standev_2;
