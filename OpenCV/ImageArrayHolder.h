@@ -41,15 +41,21 @@ namespace Ncv
 
 			m_srcImg = a_srcImg;
 
-			m_actualAccessor.Init((T_AccElm *)a_srcImg->GetDataPtr(), size_2D(a_srcImg->GetSize()));
+			const Size_2D size11 = size_2D(a_srcImg->GetSize());
+			//const Size_2D size11 = Ncv::OpenCV_Util::size_2D(a_srcImg->GetSize());
+			//const Size_2D size11 = size_2D(cvSize(400, 300));
+
+			//m_actualAccessor.Init((T_AccElm *)a_srcImg->GetDataPtr(), size_2D(a_srcImg->GetSize()));
+			m_actualAccessor.Init((T_AccElm *)a_srcImg->GetDataPtr(), size11);
 			m_actualAccessor.AssignVirtAccessorTo(&m_virtAccessor);
 		}
 
-		ImageArrayHolder(const Size_2D & size)
+		ImageArrayHolder(const Size_2D & a_size)
 		{
-			m_srcImg = Image<T_ImgElm>::Create(toCvSize(size), V_NofChannels);
+			m_srcImg = Image<T_ImgElm>::Create(toCvSize(a_size), V_NofChannels);
 
-			m_actualAccessor.Init((T_AccElm *)m_srcImg->GetDataPtr(), size_2D(m_srcImg->GetSize()));
+			//m_actualAccessor.Init((T_AccElm *)m_srcImg->GetDataPtr(), size_2D(m_srcImg->GetSize()));
+			m_actualAccessor.Init((T_AccElm *)m_srcImg->GetDataPtr(), a_size);
 			m_actualAccessor.AssignVirtAccessorTo(&m_virtAccessor);
 		}
 

@@ -21,12 +21,12 @@ namespace Ncpp
 		{
 		}
 
-		void Init(T * a_data, Size_2D & a_size)
+		void Init(T * a_data, const Size_2D & a_size)
 		{
 			Init(a_data, a_size.GetX(), a_size.GetY());
 		}
 
-		void Init(T * a_data, int a_nSize_X, int a_nSize_Y)
+		void Init(T * a_data, const int a_nSize_X, const int a_nSize_Y)
 		{
 			Ncpp_ASSERT(a_nSize_X >= 0);
 			Ncpp_ASSERT(a_nSize_Y >= 0);
@@ -37,7 +37,7 @@ namespace Ncpp
 			m_nSize_Y = a_nSize_Y;
 		}
 
-		const T & GetAt(int a_pos_X, int a_pos_Y) const
+		const T & GetAt(const int a_pos_X, const int a_pos_Y) const
 		{
 			Ncpp_ASSERT(a_pos_X >= 0);
 			Ncpp_ASSERT(a_pos_X < m_nSize_X);

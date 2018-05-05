@@ -5,6 +5,8 @@
 
 #include <NovelCVLib\OpenCV\OpenCVKillers.cpp>
 
+#include <NovelCVLib\OpenCV\OpenCV_Util.cpp>
+
 //#include <NovelCVLib\Ncv\RegionSegmentor44.cpp>
 //#include <NovelCVLib\Ncv\RegionSegmentor45.cpp>
 //#include <NovelCVLib\Ncv\RegionSegmentor46.cpp>
@@ -85,7 +87,6 @@
 //#include <NovelCVLib\Apps\Binarization2\RotationMgrColl.cpp>
 #include <NovelCVLib\Apps\Binarization2\BinarizationProcess1.cpp>
 #include <NovelCVLib\Apps\Binarization2\PixelInfo_1.cpp>
-
 
 
 
