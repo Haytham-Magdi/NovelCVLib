@@ -19,7 +19,8 @@ namespace Ncv
 	{
 	public:
 
-		virtual ~ArrayHolder_2D() = 0;
+		//virtual ~ArrayHolder_2D() = 0;
+		virtual ~ArrayHolder_2D() {}
 
 		const VirtArrayAccessor_2D<T> & GetVirtAccessor() const
 		//VirtArrayAccessor_2D<T> & GetVirtAccessor() const
