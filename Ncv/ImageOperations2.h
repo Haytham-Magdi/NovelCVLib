@@ -429,7 +429,7 @@ namespace Ncv
 		}
 
 		template<class T>
-		void Cala_AvgStandevImage_X(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<float> & a_magSqrAcc,
+		void Calc_AvgStandevImage_X(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<float> & a_magSqrAcc,
 			const VirtArrayAccessor_2D<float> & a_outAcc, const Range<int> a_standevRange_X, const Range<int> a_avgRange_Y)
 		{
 			Ncpp_ASSERT(a_inpAcc.GetSize_Y() == a_magSqrAcc.GetSize_Y());

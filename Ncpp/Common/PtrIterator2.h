@@ -37,13 +37,13 @@ namespace Ncpp
 
 		void MoveBgn()
 		{
-			Ncpp_ASSERT(!CanMove());
+			Ncpp_ASSERT(CanMove());
 			m_bgn += m_nStepSize;
 		}
 
 		void MoveEnd()
 		{
-			Ncpp_ASSERT(!CanMove());
+			Ncpp_ASSERT(CanMove());
 			m_end -= m_nStepSize;
 		}
 
