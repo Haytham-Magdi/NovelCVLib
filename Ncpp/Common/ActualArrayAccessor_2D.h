@@ -45,7 +45,8 @@ namespace Ncpp
 			Ncpp_ASSERT(a_pos_Y >= 0);
 			Ncpp_ASSERT(a_pos_Y < m_nSize_Y);
 
-			return m_data[a_pos_X * m_nStepSize_X + a_pos_Y * m_nStepSize_Y];
+			//return m_data[a_pos_X * m_nStepSize_X + a_pos_Y * m_nStepSize_Y];
+			return m_data[a_pos_X + a_pos_Y * m_nSize_X];
 		}
 
 		T * GetData() const

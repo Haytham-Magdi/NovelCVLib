@@ -64,8 +64,8 @@ namespace Ncv
 
 			m_context_H->m_org_Img = org_Img_H;
 
-			m_context_H->m_standevInfoImg = ArrayHolderUtil::CreateFrom<PixelStandevInfo>(
-				org_Img_H->GetActualAccessor().GetSize());
+			//m_context_H->m_standevInfoImg = ArrayHolderUtil::CreateFrom<PixelStandevInfo>(org_Img_H->GetVirtAccessor().GetSize());
+			m_context_H->m_standevInfoImg = ArrayHolderUtil::CreateEmptyFrom<PixelStandevInfo>(org_Img_H->AsHolderRef());
 
 			{
 				PixelStandevInfo initPsi;
@@ -76,7 +76,7 @@ namespace Ncv
 			}
 
 			m_context_H->m_conflictInfoImg = ArrayHolderUtil::CreateFrom<ConflictInfo2_Ex>(
-				org_Img_H->GetSize());
+				org_Img_H->GetActualSize());
 			{
 				ConflictInfo2_Ex ci_Init;
 				ci_Init.Dir = -1;
@@ -85,14 +85,14 @@ namespace Ncv
 			}
 
 			m_context_H->m_wideConflictDiff_Img = new F32ImageArrayHolder1C(
-				org_Img_H->GetSize());
+				org_Img_H->GetActualSize());
 			{
 				float initVal = -10000000;
 				FillImage(m_context_H->m_wideConflictDiff_Img->GetVirtAccessor(), initVal);
 			}
 
 			m_context_H->m_avgPStandev_InrWide_Img = new F32VectorValImageArrayHolder_4C(
-				org_Img_H->GetSize());
+				org_Img_H->GetActualSize());
 			{
 				//float initVal = -10000000;
 				VectorVal<Float, 4> initVal;
@@ -133,7 +133,8 @@ namespace Ncv
 
 				rotMgr->RotateImage(rot_Img_H->GetActualAccessor(), org_Img_H->GetActualAccessor());
 
-				F32ImageArrayHolder1C_Ref magSqr_Img_H = new F32ImageArrayHolder1C(rot_Img_H->GetActualAccessor().GetSize());
+				//F32ImageArrayHolder1C_Ref magSqr_Img_H = new F32ImageArrayHolder1C(rot_Img_H->GetVirtAccessor().GetSize());
+				F32ImageArrayHolder1C_Ref magSqr_Img_H = F32ImageArrayHolder1C::CreateEmptyFrom(rot_Img_H);
 				CalcMagSqrImage(rot_Img_H->GetVirtAccessor(), magSqr_Img_H->GetVirtAccessor());
 
 				ImgAngleDirMgr_Context_Ref dirContext_H = new ImgAngleDirMgr::Context(i, rotMgr,
@@ -365,10 +366,12 @@ namespace Ncv
 
 			const int nSize_1D = cx.m_conflictInfoImg->GetActualAccessor().CalcSize_1D();
 
-			F32ImageArrayHolder3C_Ref threshold_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetActualAccessor().GetSize());
+			//F32ImageArrayHolder3C_Ref threshold_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetVirtAccessor().GetSize());
+			F32ImageArrayHolder3C_Ref threshold_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 			F32ColorVal * threshold_Ptr = (F32ColorVal *)threshold_Img->GetActualAccessor().GetData();
 
-			F32ImageArrayHolder1C_Ref weight_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
+			//F32ImageArrayHolder1C_Ref weight_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetVirtAccessor().GetSize());
+			F32ImageArrayHolder1C_Ref weight_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			float * weight_Ptr = (float *)weight_Img->GetActualAccessor().GetData();
 			{
 				{
@@ -404,7 +407,8 @@ namespace Ncv
 			//ShowImage(threshold_Img->GetSrcImg(), "threshold_Img->GetSrcImg()");
 
 			F32ImageArrayHolder3C_Ref avg_Threshold_Img = threshold_Img;
-			//F32ImageArrayHolder3C_Ref avg_Threshold_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetActualAccessor().GetSize());
+			////F32ImageArrayHolder3C_Ref avg_Threshold_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetVirtAccessor().GetSize());
+			//F32ImageArrayHolder3C_Ref avg_Threshold_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 			//{
 			//	//const int nWinRadius = 5;
 			//	//const int nWinRadius = 8;
@@ -414,17 +418,20 @@ namespace Ncv
 			//}
 			//ShowImage(avg_Threshold_Img->GetSrcImg(), "avg_Threshold_Img->GetSrcImg()");
 
-			F32ImageArrayHolder1C_Ref mag_Avg_Threshold_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
+			//F32ImageArrayHolder1C_Ref mag_Avg_Threshold_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetVirtAccessor().GetSize());
+			F32ImageArrayHolder1C_Ref mag_Avg_Threshold_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			CalcMagImage(avg_Threshold_Img->GetVirtAccessor(), mag_Avg_Threshold_Img->GetVirtAccessor());
 			float * mag_Avg_Threshold_Ptr = (float *)mag_Avg_Threshold_Img->GetActualAccessor().GetData();
 
 			ShowImage(mag_Avg_Threshold_Img->GetSrcImg(), "mag_Avg_Threshold_Img->GetSrcImg()");
 
-			F32ImageArrayHolder1C_Ref magImg = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
+			//F32ImageArrayHolder1C_Ref magImg = new F32ImageArrayHolder1C(cx.m_org_Img->GetVirtAccessor().GetSize());
+			F32ImageArrayHolder1C_Ref magImg = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			CalcMagImage(cx.m_org_Img->GetVirtAccessor(), magImg->GetVirtAccessor());
 			float * mag_Ptr = (float *)magImg->GetActualAccessor().GetData();
 
-			F32ImageArrayHolder1C_Ref bin_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
+			//F32ImageArrayHolder1C_Ref bin_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetVirtAccessor().GetSize());
+			F32ImageArrayHolder1C_Ref bin_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			{
 				//{
 				//	float init_Val = 0.0f;
@@ -482,9 +489,6 @@ namespace Ncv
 
 			const int nQueScale = 10;
 
-			//MemSimpleAccessor_2D<float> sac_WideOutStandev = cx.m_wideConflictDiff_Img->GetVirtAccessor()->GenSimpleAccessor();
-			//MemSimpleAccessor_2D<ConflictInfo2_Ex> sac_Conflicts = cx.m_conflictInfoImg->GetVirtAccessor()->GenSimpleAccessor();
-
 			const VirtArrayAccessor_2D<float> & sac_WideOutStandev = cx.m_wideConflictDiff_Img->GetVirtAccessor();
 			const VirtArrayAccessor_2D<ConflictInfo2_Ex> & sac_Conflicts = cx.m_conflictInfoImg->GetVirtAccessor();
 
@@ -518,8 +522,8 @@ namespace Ncv
 				}
 			}
 
-			//F32ImageArrayHolder3C_Ref disp1_Img = new F32ImageArrayHolder3C(
-			//	cx.m_org_Img->GetActualAccessor().GetSize());
+			////F32ImageArrayHolder3C_Ref disp1_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetVirtAccessor().GetSize());
+			//F32ImageArrayHolder3C_Ref disp1_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 
 			//MemSimpleAccessor_2D<F32ColorVal> sac_Disp1 = disp1_Img->GetVirtAccessor()->GenSimpleAccessor();
 
@@ -594,7 +598,8 @@ namespace Ncv
 
 			const int nSize_1D = cx.m_conflictInfoImg->GetActualAccessor().CalcSize_1D();
 
-			F32ImageArrayHolder3C_Ref threshold_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetActualAccessor().GetSize());
+			//F32ImageArrayHolder3C_Ref threshold_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetVirtAccessor().GetSize());
+			F32ImageArrayHolder3C_Ref threshold_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 			F32ColorVal * threshold_Ptr = (F32ColorVal *)threshold_Img->GetActualAccessor().GetData();
 			PixelInfo_1 * pixelInfo_Ptr = (PixelInfo_1 *)rgnGrow_Img->GetActualAccessor().GetData();
 
@@ -622,7 +627,8 @@ namespace Ncv
 			//ShowImage(threshold_Img->GetSrcImg(), "threshold_Img->GetSrcImg()");
 
 			F32ImageArrayHolder3C_Ref avg_Threshold_Img = threshold_Img;
-			//F32ImageArrayHolder3C_Ref avg_Threshold_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetActualAccessor().GetSize());
+			////F32ImageArrayHolder3C_Ref avg_Threshold_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetVirtAccessor().GetSize());
+			//F32ImageArrayHolder3C_Ref avg_Threshold_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 			//{
 			//	//const int nWinRadius = 5;
 			//	//const int nWinRadius = 8;
@@ -632,13 +638,15 @@ namespace Ncv
 			//}
 			ShowImage(avg_Threshold_Img->GetSrcImg(), "avg_Threshold_Img->GetSrcImg()");
 
-			F32ImageArrayHolder1C_Ref mag_Avg_Threshold_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
+			//F32ImageArrayHolder1C_Ref mag_Avg_Threshold_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetVirtAccessor().GetSize());
+			F32ImageArrayHolder1C_Ref mag_Avg_Threshold_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			CalcMagImage(avg_Threshold_Img->GetVirtAccessor(), mag_Avg_Threshold_Img->GetVirtAccessor());
 			float * mag_Avg_Threshold_Ptr = (float *)mag_Avg_Threshold_Img->GetActualAccessor().GetData();
 
 			ShowImage(mag_Avg_Threshold_Img->GetSrcImg(), "mag_Avg_Threshold_Img->GetSrcImg()");
 
-			F32ImageArrayHolder1C_Ref magImg = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
+			//F32ImageArrayHolder1C_Ref magImg = new F32ImageArrayHolder1C(cx.m_org_Img->GetVirtAccessor().GetSize());
+			F32ImageArrayHolder1C_Ref magImg = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			CalcMagImage(cx.m_org_Img->GetVirtAccessor(), magImg->GetVirtAccessor());
 			float * mag_Ptr = (float *)magImg->GetActualAccessor().GetData();
 
@@ -646,7 +654,8 @@ namespace Ncv
 			//PixelInfo_1 & rPI = pixelInfo_Ptr[i];
 
 
-			F32ImageArrayHolder1C_Ref bin_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualAccessor().GetSize());
+			//F32ImageArrayHolder1C_Ref bin_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetVirtAccessor().GetSize());
+			F32ImageArrayHolder1C_Ref bin_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			{
 				//{
 				//	float init_Val = 0.0f;

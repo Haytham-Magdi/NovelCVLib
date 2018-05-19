@@ -57,6 +57,11 @@ namespace Ncpp
 			return m_pObj;
 		}
 
+		T * AsPtr()
+		{
+			return m_pObj;
+		}
+
 	protected:
 
 		static void AddObjectRef(T * a_pObj)

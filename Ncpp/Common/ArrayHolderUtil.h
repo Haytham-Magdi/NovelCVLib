@@ -38,37 +38,62 @@ namespace Ncv
 			return ret;
 		}
 
-		//static ArrayHolder_2D_Ref<T> CreateWithoutDataFrom(ArrayHolder_2D_Ref<T> a_src)
-		template<class T>
-		ArrayHolder_2D_Ref<T> CreateWithoutDataFrom(ArrayHolder_2D_Ref<T> a_src)
+		template<class T, class Y>
+		ArrayHolder_2D_Ref<T> CreateEmptyFrom(ArrayHolder_2D_Ref<Y> a_src)
 		{
-			ArrayHolder_2D_Ref<T> ret = new SimpleArrayHolder_2D(a_src->GetActualAccessor().GetSize());
-			VirtArrayAccessor_2D & retVirtAcc = ret->GetVirtAccessor();
-			a_src->GetVirtAccessor().CopyTo(&retVirtAcc);
+			const ActualArrayAccessor_2D<Y> & srcActualAcc = a_src->GetActualAccessor();
+			const VirtArrayAccessor_2D<Y> & srcVirtAcc = a_src->GetVirtAccessor();
 
-			retVirtAcc.SetData(ret->GetActualAccessor());
+			const int headerDif = srcVirtAcc.GetData() - srcActualAcc.GetData();
+
+			ArrayHolder_2D_Ref<T> ret = new SimpleArrayHolder_2D<T>(srcActualAcc.GetSize());
+			//VirtArrayAccessor_2D<Y> * pRetVirtAcc = (VirtArrayAccessor_2D<Y> *)&ret->GetVirtAccessor();
+			VirtArrayAccessor_2D<T> * pRetVirtAcc = (VirtArrayAccessor_2D<T> *)&ret->GetVirtAccessor();
+			//VirtArrayAccessor_2D<Y> & pRetVirtAcc = ret->GetVirtAccessor();
+
+			pRetVirtAcc->Init(pRetVirtAcc->GetData() + headerDif,
+				//pRetVirtAcc.Init(pRetVirtAcc.GetData() + headerDif,
+				srcVirtAcc.GetSize_X(), srcVirtAcc.GetStepSize_X(),
+				srcVirtAcc.GetSize_Y(), srcVirtAcc.GetStepSize_Y());
 
 			return ret;
 		}
 
-		//static ArrayHolder_2D_Ref<T> CreateCopyFrom(ArrayHolder_2D_Ref<T> a_src)
-		template<class T>
-		ArrayHolder_2D_Ref<T> CreateCopyFrom(ArrayHolder_2D_Ref<T> a_src)
-		{
-			ArrayHolder_2D_Ref<T> ret = CreateWithoutDataFrom(a_src);
+		////static ArrayHolder_2D_Ref<T> CreateWithoutDataFrom(ArrayHolder_2D_Ref<T> a_src)
+		//template<class T>
+		//ArrayHolder_2D_Ref<T> CreateWithoutDataFrom(ArrayHolder_2D_Ref<T> a_src)
+		//{
+		//	ArrayHolder_2D_Ref<T> ret = new SimpleArrayHolder_2D(a_src->GetActualAccessor().GetSize());
+		//	VirtArrayAccessor_2D & retVirtAcc = ret->GetVirtAccessor();
+		//	a_src->GetVirtAccessor().CopyTo(&retVirtAcc);
 
-			const ActualArrayAccessor_2D & srcActAcc = a_src->GetActualAccessor();
-			memcpy(ret->GetActualAccessor().GetData(), srcActAcc.GetData(), srcActAcc.CalcSize_1D() * sizeof(T));
+		//	retVirtAcc.SetData(ret->GetActualAccessor().GetData());
 
-			return ret;
-		}
+		//	return ret;
+		//}
+
+		////static ArrayHolder_2D_Ref<T> CreateCopyFrom(ArrayHolder_2D_Ref<T> a_src)
+		//template<class T>
+		//ArrayHolder_2D_Ref<T> CreateCopyFrom(ArrayHolder_2D_Ref<T> a_src)
+		//{
+		//	ArrayHolder_2D_Ref<T> ret = CreateWithoutDataFrom(a_src);
+
+		//	const ActualArrayAccessor_2D & srcActAcc = a_src->GetActualAccessor();
+		//	memcpy(ret->GetActualAccessor().GetData(), srcActAcc.GetData(), srcActAcc.CalcSize_1D() * sizeof(T));
+
+		//	return ret;
+		//}
 
 		//static ArrayHolder_2D_Ref<T> CreateTransposedProxyFrom(ArrayHolder_2D_Ref<T> a_src)
 		template<class T>
 		ArrayHolder_2D_Ref<T> CreateTransposedProxyFrom(ArrayHolder_2D_Ref<T> a_src)
 		{
 			ArrayHolder_2D_Ref<T> ret = new ArrayHolderProxy_2D<T>(a_src);
-			ret->TransposeVirtAccessor();
+			
+			VirtArrayAccessor_2D<T> * pRetVirtAcc = (VirtArrayAccessor_2D<T> *)&ret->GetVirtAccessor();
+			a_src->GetVirtAccessor().AssignTransposeTo(pRetVirtAcc);
+
+			//ret->TransposeVirtAccessor();
 
 			return ret;
 		}

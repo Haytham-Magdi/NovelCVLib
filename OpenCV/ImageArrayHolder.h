@@ -51,37 +51,77 @@ namespace Ncv
 			m_actualAccessor.AssignVirtAccessorTo(&m_virtAccessor);
 		}
 
+		template<class Y_ImgElm, class Y_AccElm, int const YV_NofChannels>
+		static ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> CreateEmptyFrom(ImageArrayHolderRef<Y_ImgElm, Y_AccElm, YV_NofChannels> a_src)
+		
+		//static ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> CreateEmptyFrom()
+		//static Ncpp::ObjRef< ImageArrayHolder_2D_Ref<T_ImgElm, T_AccElm, V_NofChannels> > CreateEmptyFrom()
+		//static ObjRef< ImageArrayHolder<T_ImgElm, T_AccElm, V_NofChannels> > CreateEmptyFrom()
+		{
+			ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> ret = 
+				new ImageArrayHolder<T_ImgElm, T_AccElm, V_NofChannels>(a_src->GetActualAccessor().GetSize());
+
+			const ActualArrayAccessor_2D<Y_AccElm> & srcActualAcc = a_src->GetActualAccessor();
+			const VirtArrayAccessor_2D<Y_AccElm> & srcVirtAcc = a_src->GetVirtAccessor();
+
+			const int headerDif = srcVirtAcc.GetData() - srcActualAcc.GetData();
+
+			VirtArrayAccessor_2D<Y_AccElm> * pRetVirtAcc = (VirtArrayAccessor_2D<Y_AccElm> *)&ret->GetVirtAccessor();
+
+			pRetVirtAcc->Init(pRetVirtAcc->GetData() + headerDif,
+				srcVirtAcc.GetSize_X(), srcVirtAcc.GetStepSize_X(),
+				srcVirtAcc.GetSize_Y(), srcVirtAcc.GetStepSize_Y());
+
+			return ret;
+		}
+
+
+
+
+
+		//ArrayHolder_2D<T_AccElm> * AsHolder()
+		//{
+		//	return this;
+		//}
+
 		ImageRef<T_ImgElm> GetSrcImg()
 		{
 			return m_srcImg;
 		}
 
-		ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> CloneWithData()
-		{
-			ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> ret = new ImageArrayHolder<T_ImgElm, T_AccElm, V_NofChannels>(
-				m_srcImg->Clone());
-			return ret;
-		}
+		//ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> CloneWithData()
+		//{
+		//	ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> ret = new ImageArrayHolder<T_ImgElm, T_AccElm, V_NofChannels>(
+		//		m_srcImg->Clone());
+		//	return ret;
+		//}
 
-		ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> CloneEmpty()
-		{
-			ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> ret = new ImageArrayHolder<T_ImgElm, T_AccElm, V_NofChannels>(
-				m_srcImg->CloneEmpty());
-			return ret;
-		}
+		//ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> CloneEmpty()
+		//{
+		//	ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> ret = new ImageArrayHolder<T_ImgElm, T_AccElm, V_NofChannels>(
+		//		//m_srcImg->CloneEmpty());
+		//		this->GetVirtAccessor().GetSize());
+		//	return ret;
+		//}
 
 		ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> CreateProxy()
 		{
 			ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> ret = 
 				new ImageArrayHolder<T_ImgElm, T_AccElm, V_NofChannels>(m_srcImg);
 
+			VirtArrayAccessor_2D<T_AccElm> * pRetVirtAcc = (VirtArrayAccessor_2D<T_AccElm> *)&ret->GetVirtAccessor();
+			m_virtAccessor.CopyTo(pRetVirtAcc);
+
 			return ret;
 		}
 
 		ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> CreateTransposedProxy()
 		{
-			ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> ret = this->CreateProxy();
-			ret->TransposeVirtAccessor();
+			ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> ret =
+				new ImageArrayHolder<T_ImgElm, T_AccElm, V_NofChannels>(m_srcImg);
+
+			VirtArrayAccessor_2D<T_AccElm> * pRetVirtAcc = (VirtArrayAccessor_2D<T_AccElm> *)&ret->GetVirtAccessor();
+			m_virtAccessor.AssignTransposeTo(pRetVirtAcc);
 
 			return ret;
 		}

@@ -366,6 +366,13 @@ namespace Ncv
 					// to be revised.
 					//pOut->pSide_1 = &avg_1;
 
+					//if ((Ncv::ConflictInfo2 *)0x0000000004a09038 == pOut)
+					//if ((Ncv::ConflictInfo2 *)0x0000000004882580 == pOut)
+					if ((Ncv::ConflictInfo2 *)0x0000000004882340 == pOut)
+					{
+						pOut = pOut;
+					}
+
 					pOut->Offset_Side_1 = &avg_1 - a_avg_Acc.GetData_FakeOrg();
 					Ncpp_ASSERT(pOut->Offset_Side_1 >= 0);
 

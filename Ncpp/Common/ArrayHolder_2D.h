@@ -12,6 +12,8 @@ namespace Ncv
 	template<class T>
 	class ArrayHolder_2D;
 
+	template<class T>
+	using ArrayHolder_2D_Ref = ObjRef< ArrayHolder_2D< T >>;
 
 	
 	template<class T>
@@ -33,9 +35,19 @@ namespace Ncv
 			return m_actualAccessor;
 		}
 
-		Size_2D GetSize() const
+		Size_2D GetActualSize() const
 		{
 			return m_actualAccessor.GetSize();
+		}
+
+		ArrayHolder_2D<T> * AsHolderPtr()
+		{
+			return this;
+		}
+
+		ArrayHolder_2D_Ref<T> AsHolderRef()
+		{
+			return this;
 		}
 
 		void TransposeVirtAccessor()
@@ -50,8 +62,6 @@ namespace Ncv
 	};
 
 
-	template<class T>
-	using ArrayHolder_2D_Ref = ObjRef< ArrayHolder_2D< T >>;
 
 
 
