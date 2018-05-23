@@ -240,6 +240,7 @@ namespace Ncv
 		void AngleDirMgrColl::DisplayStandiv_Dir_Img()
 		{
 			const ActualArrayAccessor_2D<PixelStandevInfo> & psiAcc = m_context_H->m_standevInfoImg->GetActualAccessor();
+			const VirtArrayAccessor_2D<PixelStandevInfo> & psiVirtAcc = m_context_H->m_standevInfoImg->GetVirtAccessor();
 			//F32ImageRef dspImg_Values = F32Image::Create(cvSize(psiAcc.GetSize()), 1);
 			
 			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(psiAcc.GetSize()), 3);
@@ -258,6 +259,7 @@ namespace Ncv
 				F32ColorVal & rDest_Colored = destPtr_Colored[i];
 
 				Ncpp_ASSERT(-1 != rSrc.Dir);
+				Ncpp_ASSERT(rSrc.Dir >= 0);
 
 				float angle = m_angleDirMgrArr[rSrc.Dir]->GetContext()->m_angle;
 

@@ -66,7 +66,8 @@ namespace Ncv
 
 			const int headerDif = srcVirtAcc.GetData() - srcActualAcc.GetData();
 
-			VirtArrayAccessor_2D<Y_AccElm> * pRetVirtAcc = (VirtArrayAccessor_2D<Y_AccElm> *)&ret->GetVirtAccessor();
+			const ActualArrayAccessor_2D<T_AccElm> & retActualAcc = ret->GetActualAccessor();
+			VirtArrayAccessor_2D<T_AccElm> * pRetVirtAcc = (VirtArrayAccessor_2D<T_AccElm> *)&ret->GetVirtAccessor();
 
 			pRetVirtAcc->Init(pRetVirtAcc->GetData() + headerDif,
 				srcVirtAcc.GetSize_X(), srcVirtAcc.GetStepSize_X(),

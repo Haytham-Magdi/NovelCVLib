@@ -1,18 +1,23 @@
 
 // ElementOperations2.
 
+
 		void Assign(Ncv::VectorVal<T_Elm, N_Dims> * a_pDest, const Ncv::VectorVal<T_Elm, N_Dims> & a_src)
 		{
 			for (int i = 0; i < a_src.GetNofDims(); i++)
 			{
-				//Assign<Ncpp::Float>(&a_pDest->Vals[i], a_src.Vals[i]);
-				//Assign<Ncpp::Float>(&a_pDest->Vals[i], a_src.Vals[i]);
 				Assign(&a_pDest->Vals[i], a_src.Vals[i]);
-				//Assign<T_Elm>(&a_pDest->Vals[i], a_src.Vals[i]);
-				
-				//a_pDest->Vals[i] = a_src.Vals[i];
 			}
 		}
+
+		//void AssertValue(const Ncv::VectorVal<T_Elm, N_Dims> & a_arg)
+		//{
+		//	for (int i = 0; i < a_arg.GetNofDims(); i++)
+		//	{
+		//		AssertValue(a_arg.Vals[i]);
+		//	}
+		//}
+
 
 		//void Copy_ByPtr(Ncv::VectorVal<T_Elm, N_Dims> * a_pDest, Ncv::VectorVal<T_Elm, N_Dims> * a_pSrc)
 		//{

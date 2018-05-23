@@ -20,6 +20,8 @@ namespace Ncv
 	{
 	
 		template<> void Assign(F32ColorVal * a_pDest, const F32ColorVal & a_src);
+		
+		//template<> void AssertValue(const F32ColorVal & a_arg);
 
 		template<> float CalcMagSqr(const F32ColorVal & a_arg);
 

@@ -28,6 +28,13 @@ namespace Ncv
 			Assign(&a_pDest->val2, a_src.val2);
 		}
 
+		//void AssertValue(const F32ColorVal & a_arg)
+		//{
+		//	AssertValue(a_arg.val0);
+		//	AssertValue(a_arg.val1);
+		//	AssertValue(a_arg.val2);
+		//}
+
 		float CalcMagSqr(const F32ColorVal & a_arg)
 		{
 			float sum = 0;

@@ -68,6 +68,16 @@ namespace Ncv
 			Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
 				cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
 
+			float * localPtr = (float *)cx.m_avgStandev_X_Img->GetActualAccessor().GetData();
+
+			IndexCalc2D calc1(cx.m_avgStandev_X_Img->GetActualAccessor().GetSize_X(),
+				cx.m_avgStandev_X_Img->GetActualAccessor().GetSize_Y());
+
+			int x1 = calc1.Calc_X(51216);
+			int y1 = calc1.Calc_Y(51216);
+
+			//nOffset_Mapped = 51216
+
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-1, 1));
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-5, 5), Range<int>::New(-5, 5));
 
@@ -291,6 +301,7 @@ namespace Ncv
 					Ncpp_ASSERT(nOffset_Mapped >= 0);
 
 					float standev_Local = localPtr[nOffset_Mapped];
+					Ncpp_ASSERT(standev_Local >= 0.0f || standev_Local > -5000.0f);
 
 					if (standev_Local < rCommonPsi.Val)
 					{

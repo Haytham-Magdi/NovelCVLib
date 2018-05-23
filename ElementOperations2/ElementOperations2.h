@@ -11,12 +11,24 @@ namespace Ncv
 	namespace ElementOperations2
 	{
 
+		//template<class T>
+		//void AssertValue(const T & a_arg)
+		//{
+		//	////Hcpl_ASSERT(a_arg > -3000000.0f && arg < 3000000.0f);
+		//	//Hcpl_ASSERT(a_arg > -3000000.0f);
+		//}
+
+
 		template<class T>
 		void Assign(T * a_pDest, const T & a_src)
 		{
+			//AssertValue(a_src);
+
 			*a_pDest = a_src;
 			//memcpy(a_pDest, &a_src, sizeof(T));
 		}
+
+
 
 		//template<class T>
 		//void Copy_ByPtr(T * a_pDest, T * a_pSrc)
