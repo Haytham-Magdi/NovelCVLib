@@ -55,7 +55,10 @@
 //#include <NovelCVLib\Ncv\ImgClusteringTry.cpp>
 
 #include <NovelCVLib\Ncv\PixelStandevInfo.cpp>
+#include <NovelCVLib\Ncv\ElementOperations2_PixelStandevInfo.cpp>
+
 #include <NovelCVLib\Ncv\ConflictInfo2.cpp>
+#include <NovelCVLib\Ncv\ElementOperations2_ConflictInfo2.cpp>
 
 
 #include <NovelCVLib\ElementOperations2\ElementOperations2_Float.cpp>

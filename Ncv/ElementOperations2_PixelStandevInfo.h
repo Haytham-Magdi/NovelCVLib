@@ -1,26 +1,26 @@
 #pragma once
 
+
+//#include <NovelCVLib\Common\commonLib.h>
+
 //#include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
-//#include <NovelCVLib\Ncpp\Math\mathLib.h>
 //#include <NovelCVLib\OpenCV\CvIncludes.h>
 //#include <NovelCVLib\OpenCV\Types.h>
 //#include <NovelCVLib\OpenCV\error.h>
+//#include <NovelCVLib\OpenCV\funcs1.h>
 //#include <vector>
-//#include <NovelCVLib\OpenCV\Channel.h>
 //#include <NovelCVLib\OpenCV\Image.h>
 
+#include <NovelCVLib\ElementOperations2\ElementOperations2.h>
 
 
 namespace Ncv
 {
+	using namespace Ncpp;
 
-	class PixelStandevInfo //: public Ncpp::Object
+	namespace ElementOperations2
 	{
-	public:
-		int Dir;
-		float Val;
-		float NormVal;
+		template<> void AssertValue(const ConflictInfo2_Ex & a_arg);
 	};
-
-	//typedef Ncpp::ObjRef< PixelStandevInfo > PixelStandevInfoRef;
 }
+

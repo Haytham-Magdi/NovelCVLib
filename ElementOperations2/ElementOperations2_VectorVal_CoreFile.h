@@ -6,7 +6,7 @@
 
 // ElementOperations2.
 
-		//template<> void AssertValue(const Ncv::VectorVal<T_Elm, N_Dims> & a_arg);
+		template<> void AssertValue(const Ncv::VectorVal<T_Elm, N_Dims> & a_arg);
 
 		template<> void Assign(Ncv::VectorVal<T_Elm, N_Dims> * a_pDest, const Ncv::VectorVal<T_Elm, N_Dims> & a_src);
 

@@ -11,18 +11,18 @@ namespace Ncv
 	namespace ElementOperations2
 	{
 
-		//template<class T>
-		//void AssertValue(const T & a_arg)
-		//{
-		//	////Hcpl_ASSERT(a_arg > -3000000.0f && arg < 3000000.0f);
-		//	//Hcpl_ASSERT(a_arg > -3000000.0f);
-		//}
+		template<class T>
+		void AssertValue(const T & a_arg)
+		{
+			//Hcpl_ASSERT(a_arg > -30000000.0f && arg < 30000000.0f);
+			Ncpp_ASSERT(a_arg > -30000000.0f);
+		}
 
 
 		template<class T>
 		void Assign(T * a_pDest, const T & a_src)
 		{
-			//AssertValue(a_src);
+			AssertValue(a_src);
 
 			*a_pDest = a_src;
 			//memcpy(a_pDest, &a_src, sizeof(T));
@@ -39,6 +39,8 @@ namespace Ncv
 		template<class T>
 		float CalcMagSqr(const T & a_arg)
 		{
+			AssertValue(a_arg);
+
 			//return Sqr<T>(a_arg);
 			return Sqr<float>((float)a_arg);
 		}
@@ -59,6 +61,8 @@ namespace Ncv
 		template<class T>
 		float CalcMag(const T & a_arg)
 		{
+			AssertValue(a_arg);
+
 			return sqrt((float)CalcMagSqr(a_arg));
 		}
 
@@ -71,7 +75,12 @@ namespace Ncv
 		template<class T>
 		void Add(const T & a_inp1, const T & a_inp2, T * a_pOut)
 		{
-			*a_pOut = a_inp1 + a_inp2;
+			//AssertValue(a_inp1);
+			//AssertValue(a_inp2);
+
+			//*a_pOut = a_inp1 + a_inp2;
+
+			Assign(a_pOut, a_inp1 + a_inp2);
 		}
 
 		//template<class T>
@@ -83,6 +92,9 @@ namespace Ncv
 		template<class T>
 		void WaitedAdd(const T & a_inp1, const float a_weight1, const T & a_inp2, const float a_weight2, T * a_pOut)
 		{
+			//AssertValue(a_inp1);
+			//AssertValue(a_inp2);
+
 			T inp11, inp22;
 
 			MultiplyByNum(a_inp1, a_weight1, &inp11);
@@ -106,7 +118,9 @@ namespace Ncv
 		template<class T>
 		void Subtract(const T & a_inp1, const T & a_inp2, T * a_pOut)
 		{
-			*a_pOut = a_inp1 - a_inp2;
+			Assign(a_pOut, a_inp1 - a_inp2);
+
+			//*a_pOut = a_inp1 - a_inp2;
 		}
 
 		//template<class T>
@@ -118,7 +132,11 @@ namespace Ncv
 		template<class T>
 		void DivideByNum(const T & a_inp, const float a_num, T * a_pOut)
 		{
-			*a_pOut = (float)(a_inp / a_num);
+			//AssertValue(a_inp);
+
+			Assign(a_pOut, (float)(a_inp / a_num));
+
+			//*a_pOut = (float)(a_inp / a_num);
 		}
 
 		//template<class T>
@@ -130,7 +148,11 @@ namespace Ncv
 		template<class T>
 		void MultiplyByNum(const T & a_inp, const float a_num, T * a_pOut)
 		{
-			*a_pOut = (float)(a_inp * a_num);
+			//AssertValue(a_inp);
+
+			Assign(a_pOut, (float)(a_inp * a_num));
+			
+			//*a_pOut = (float)(a_inp * a_num);
 		}
 
 		//template<class T>
@@ -181,11 +203,11 @@ namespace Ncv
 		//	Exception::ThrowNotImplemented();
 		//}
 
-		template<class T>
-		float CalcSqrt(const T * a_arg)
-		{
-			return sqrt((float)a_arg);
-		}
+		//template<class T>
+		//float CalcSqrt(const T & a_arg)
+		//{
+		//	return sqrt((float)a_arg);
+		//}
 
 		//template<class T>
 		//float CalcSqrt_ByPtr(T * a_pArg)
@@ -196,6 +218,9 @@ namespace Ncv
 		template<class T>
 		float CalcStandev(const T & a_avg, const float a_avg_MagSqr)
 		{
+			AssertValue(a_avg);
+			AssertValue(a_avg_MagSqr);
+
 			float magSqr_Avg = CalcMagSqr(a_avg);
 
 			float variance = a_avg_MagSqr - magSqr_Avg;
@@ -219,6 +244,11 @@ namespace Ncv
 		float CalcConflict(const T & a_avg_1, const float a_avg_MagSqr_1,
 			const T & a_avg_2, const float a_avg_MagSqr_2)
 		{
+			AssertValue(a_avg_1);
+			AssertValue(a_avg_MagSqr_1);
+			AssertValue(a_avg_2);
+			AssertValue(a_avg_MagSqr_2);
+
 			T avg_12;
 			Add(a_avg_1, a_avg_2, &avg_12);
 			DivideByNum(avg_12, 2, &avg_12);
@@ -283,6 +313,11 @@ namespace Ncv
 		float Calc_ConflictDiff(const T & a_avg_1, const float a_avg_MagSqr_1,
 			const T & a_avg_2, const float a_avg_MagSqr_2)
 		{
+			AssertValue(a_avg_1);
+			AssertValue(a_avg_MagSqr_1);
+			AssertValue(a_avg_2);
+			AssertValue(a_avg_MagSqr_2);
+
 			T avg_12;
 			Add(a_avg_1, a_avg_2, &avg_12);
 			DivideByNum(avg_12, 2, &avg_12);
