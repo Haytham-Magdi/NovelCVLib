@@ -32,7 +32,8 @@ namespace Ncpp
 
 		bool CanMove() const
 		{
-			return m_bgn != m_end;
+			//return m_bgn != m_end;
+			return m_bgn != (m_end + m_nStepSize);
 		}
 
 		void MoveBgn()

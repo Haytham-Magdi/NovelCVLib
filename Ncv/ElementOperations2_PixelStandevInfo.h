@@ -12,6 +12,8 @@
 //#include <NovelCVLib\OpenCV\Image.h>
 
 #include <NovelCVLib\ElementOperations2\ElementOperations2.h>
+#include <NovelCVLib\Ncv\PixelStandevInfo.h>
+
 
 
 namespace Ncv
@@ -20,7 +22,7 @@ namespace Ncv
 
 	namespace ElementOperations2
 	{
-		template<> void AssertValue(const ConflictInfo2_Ex & a_arg);
+		template<> void AssertValue(const PixelStandevInfo & a_arg);
 	};
 }
 

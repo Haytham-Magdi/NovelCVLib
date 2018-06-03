@@ -241,7 +241,8 @@ namespace Ncv
 		//}
 
 		template<class T>
-		float CalcConflict(const T & a_avg_1, const float a_avg_MagSqr_1,
+		//float CalcConflict(const T & a_avg_1, const float a_avg_MagSqr_1,
+		bool CalcConflict(const T & a_avg_1, const float a_avg_MagSqr_1,
 			const T & a_avg_2, const float a_avg_MagSqr_2)
 		{
 			AssertValue(a_avg_1);

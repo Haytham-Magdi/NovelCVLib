@@ -20,8 +20,10 @@ namespace Ncv
 	{
 		void AssertValue(const ConflictInfo2 & a_arg)
 		{
-			throw "Not Implemented";
+			//throw "Not Implemented";
 			//AssertValue(a_arg.Dir);
+		
+			Ncpp_ASSERT(a_arg.Offset_Side_1 > -100000);
 		}
 
 
@@ -29,7 +31,9 @@ namespace Ncv
 
 		void AssertValue(const ConflictInfo2_Ex & a_arg)
 		{
-			AssertValue(a_arg.Dir);
+			//AssertValue(a_arg.Dir);
+			//Ncpp_ASSERT(a_arg.Dir >= 0);
+			Ncpp_ASSERT(a_arg.Dir > -10000);
 		}
 	};
 }

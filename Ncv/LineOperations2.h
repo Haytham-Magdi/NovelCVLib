@@ -32,6 +32,27 @@ namespace Ncv
 		}
 
 		template<class T>
+		void AssertLineValues(const VirtArrayAccessor_1D<T> & a_acc)
+		{
+			PtrIterator2<T> ptrItr = a_acc.GenPtrIterator();
+
+			T * ptr;
+			int cnt = 0;
+
+			for (; ptrItr.CanMove(); ptrItr.MoveBgn(), cnt++)
+			{
+				ptr = ptrItr.GetBgn();
+				ElementOperations2::AssertValue<T>(*ptr);
+			}
+
+			for (int i = 0; i < a_acc.GetSize(); i++)
+			{
+				const T & val = a_acc[i];
+				ElementOperations2::AssertValue<T>(val);
+			}
+		}
+
+		template<class T>
 		void DivideLineByNum(const VirtArrayAccessor_1D<T> & a_acc, const float a_num)
 		{
 			PtrIterator2<T> ptrItr = a_acc.GenPtrIterator();
@@ -122,6 +143,13 @@ namespace Ncv
 		template<class T>
 		void AvgLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const Range<int> & a_range)
 		{
+			AssertLineValues(a_inpAcc);
+			
+			const T & v11 = a_inpAcc[193];
+			T v12;
+			//Assign(&v1, a_inpAcc[193]);
+			Assign(&v12, v11);
+
 			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
 			Ncpp_ASSERT(a_range.GetBgn() <= 0);
 			Ncpp_ASSERT(0 <= a_range.GetEnd());
@@ -365,13 +393,6 @@ namespace Ncv
 				{
 					// to be revised.
 					//pOut->pSide_1 = &avg_1;
-
-					//if ((Ncv::ConflictInfo2 *)0x0000000004a09038 == pOut)
-					//if ((Ncv::ConflictInfo2 *)0x0000000004882580 == pOut)
-					if ((Ncv::ConflictInfo2 *)0x0000000004882340 == pOut)
-					{
-						pOut = pOut;
-					}
 
 					pOut->Offset_Side_1 = &avg_1 - a_avg_Acc.GetData_FakeOrg();
 					Ncpp_ASSERT(pOut->Offset_Side_1 >= 0);
