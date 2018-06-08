@@ -23,6 +23,8 @@ namespace Ncv
 	namespace ElementOperations2
 	{
 		template<> void AssertValue(const PixelStandevInfo & a_arg);
+		template<> void SetToBadValue(PixelStandevInfo * a_pArg);
+
 	};
 }
 

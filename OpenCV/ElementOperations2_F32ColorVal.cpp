@@ -88,8 +88,15 @@ namespace Ncv
 		void SetToUndefined(F32ColorVal * a_pArg)
 		{
 			SetToUndefined(&a_pArg->val0);
-			SetToUndefined(&a_pArg->val1);
-			SetToUndefined(&a_pArg->val2);
+			//SetToUndefined(&a_pArg->val1);
+			//SetToUndefined(&a_pArg->val2);
+		}
+
+		void SetToBadValue(F32ColorVal * a_pArg)
+		{
+			SetToBadValue(&a_pArg->val0);
+			//SetToUndefined(&a_pArg->val1);
+			//SetToUndefined(&a_pArg->val2);
 		}
 
 

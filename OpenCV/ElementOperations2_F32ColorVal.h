@@ -37,30 +37,10 @@ namespace Ncv
 
 		template<> bool IsUndefined(const F32ColorVal & a_arg);
 
-		template<> void SetToUndefined(const F32ColorVal * a_pArg);
+		template<> void SetToUndefined(F32ColorVal * a_pArg);
+		
+		template<> void SetToBadValue(F32ColorVal * a_pArg);
 
 
-
-
-
-		//template<> void Copy_ByPtr<F32ColorVal>(F32ColorVal * a_pDest, F32ColorVal * a_pSrc);
-
-		//template<> float CalcMagSqr_ByPtr(F32ColorVal * a_pArg);
-
-		//template<> void AssertValue_ByPtr(F32ColorVal * a_pArg);
-
-		//template<> void Add_ByPtr(F32ColorVal * a_pInp1, F32ColorVal * a_pInp2, F32ColorVal * a_pOut);
-
-		//template<> void Subtract_ByPtr(F32ColorVal * a_pInp1, F32ColorVal * a_pInp2, F32ColorVal * a_pOut);
-
-		//template<> void DivideByNum_ByPtr(F32ColorVal * a_pInp, float a_num, F32ColorVal * a_pOut);
-		//
-		//template<> void MultiplyByNum_ByPtr(F32ColorVal * a_pInp, float a_num, F32ColorVal * a_pOut);
-
-		//template<> void SetToZero_ByPtr(F32ColorVal * a_pArg);
-		//
-		//template<> bool IsUndefined_ByPtr(F32ColorVal * a_pArg);
-		//
-		//template<> void SetToUndefined_ByPtr(F32ColorVal * a_pArg);
 	}
 }

@@ -21,7 +21,9 @@ namespace Ncv
 	namespace ElementOperations2
 	{
 		template<> void SetToZero(float * a_pArg);
+		template<> void AssertValue(const float & a_pArg);
 		template<> bool IsUndefined(const float & a_arg);
 		template<> void SetToUndefined(float * a_pArg);
+		template<> void SetToBadValue(float * a_pArg);
 	};
 }

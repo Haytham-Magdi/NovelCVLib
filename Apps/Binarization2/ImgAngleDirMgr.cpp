@@ -110,7 +110,6 @@ namespace Ncv
 			//Window<int> avgWin = Window<int>::New(-2, 2, -2, 2);
 			//Window<int> avgWin = Window<int>::New(-2, 1, -2, 2);
 
-			//cx.m_conflict_Img = ArrayHolderUtil::CreateFrom<ConflictInfo2>(cx.m_org_Img->GetVirtAccessor().GetSize());
 			cx.m_conflict_Img = ArrayHolderUtil::CreateEmptyFrom<ConflictInfo2>(cx.m_org_Img->AsHolderRef());
 
 			//F32ImageArrayHolder3C_Ref avg_Img = cx.m_org_Img->CloneEmpty();
@@ -296,6 +295,8 @@ namespace Ncv
 					const int nOffset_YX = nOffset_Y + x;
 
 					PixelStandevInfo & rCommonPsi = commonImgBuf[nOffset_YX];
+					AssertValue(rCommonPsi);
+
 
 					int nOffset_Mapped = orgToRotMap_Buf[nOffset_YX];
 					Ncpp_ASSERT(nOffset_Mapped >= 0);
@@ -336,6 +337,8 @@ namespace Ncv
 					const int nOffset_YX = nOffset_Y + x;
 
 					VectorVal<Float, 4> & rCommonVal = commonImgBuf[nOffset_YX];
+					AssertValue(rCommonVal);
+
 
 					int nOffset_Mapped = orgToRotMap_Buf[nOffset_YX];
 					Ncpp_ASSERT(nOffset_Mapped >= 0);
@@ -395,6 +398,7 @@ namespace Ncv
 
 
 					ConflictInfo2_Ex & rCommonConf = commonImgBuf[nOffset_YX];
+					AssertValue(rCommonConf);
 
 					//const int nOffset_Mapped_ga = orgToRotMap_Acc.GetAt(x, y);
 
@@ -461,6 +465,7 @@ namespace Ncv
 					const int nOffset_YX = nOffset_Y + x;
 
 					float & rCommonConf = commonImgBuf[nOffset_YX];
+					AssertValue(rCommonConf);
 
 					int nOffset_Mapped = orgToRotMap_Buf[nOffset_YX];
 					Ncpp_ASSERT(nOffset_Mapped >= 0);
@@ -497,6 +502,8 @@ namespace Ncv
 			for (int i = 0; i < nSize_1D; i++)
 			{
 				ConflictInfo2 & rSrc = srcPtr[i];
+				AssertValue(rSrc);
+
 				F32ColorVal & rDest = destPtr[i];
 
 				//rDest.val0 = 0;

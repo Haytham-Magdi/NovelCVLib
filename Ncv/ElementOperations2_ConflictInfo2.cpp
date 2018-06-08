@@ -26,6 +26,10 @@ namespace Ncv
 			Ncpp_ASSERT(a_arg.Offset_Side_1 > -100000);
 		}
 
+		void SetToBadValue(ConflictInfo2 * a_pArg)
+		{
+			a_pArg->Offset_Side_1 = -55555555;
+		}
 
 
 
@@ -33,7 +37,15 @@ namespace Ncv
 		{
 			//AssertValue(a_arg.Dir);
 			//Ncpp_ASSERT(a_arg.Dir >= 0);
-			Ncpp_ASSERT(a_arg.Dir > -10000);
+		
+			//Ncpp_ASSERT(a_arg.Dir > -10000);
+			Ncpp_ASSERT(a_arg.Dir >= 0 && a_arg.Dir < 500);
 		}
+
+		void SetToBadValue(ConflictInfo2_Ex * a_pArg)
+		{
+			a_pArg->Dir = -55555555;
+		}
+
 	};
 }

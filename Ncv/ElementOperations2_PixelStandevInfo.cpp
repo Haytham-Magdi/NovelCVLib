@@ -21,7 +21,17 @@ namespace Ncv
 	{
 		void AssertValue(const PixelStandevInfo & a_arg)
 		{
-			AssertValue(a_arg.Dir);
+			////AssertValue(a_arg.Dir);
+			//AssertValue(a_arg.Dir);
+
+			Ncpp_ASSERT(a_arg.Dir >= 0 && a_arg.Dir < 500);
+
+			AssertValue(a_arg.Val);
+		}
+
+		void SetToBadValue(PixelStandevInfo * a_pArg)
+		{
+			SetToBadValue(&a_pArg->Val);
 		}
 	};
 }

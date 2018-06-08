@@ -62,6 +62,44 @@ namespace Ncv
 		}
 
 		template<class T>
+		void SetToUndefined(const VirtArrayAccessor_2D<T> & a_acc)
+		{
+			const VirtArrayAccessor_1D<T> acc_Y = a_acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_X = a_acc.GenAccessor_X();
+
+			PtrIterator2<T> ptrItr_Y = acc_Y.GenPtrIterator();
+
+			//for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
+			for (; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn())
+			{
+				T * ptr_Y = ptrItr_Y.GetBgn();
+
+				acc_X.SetData(ptr_Y);
+				SetToUndefined<T>(acc_X);
+			}
+		}
+
+
+		template<class T>
+		void SetImageToBadValue(const VirtArrayAccessor_2D<T> & a_acc)
+		{
+			const VirtArrayAccessor_1D<T> acc_Y = a_acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_X = a_acc.GenAccessor_X();
+
+			PtrIterator2<T> ptrItr_Y = acc_Y.GenPtrIterator();
+
+			//for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
+			for (; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn())
+			{
+				T * ptr_Y = ptrItr_Y.GetBgn();
+
+				acc_X.SetData(ptr_Y);
+				SetLineToBadValue<T>(acc_X);
+			}
+		}
+
+
+		template<class T>
 		void AssertImageValues(const VirtArrayAccessor_2D<T> & a_acc)
 		{
 			const VirtArrayAccessor_1D<T> acc_Y = a_acc.GenAccessor_Y();

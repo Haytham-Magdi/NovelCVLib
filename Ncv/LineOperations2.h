@@ -32,6 +32,30 @@ namespace Ncv
 		}
 
 		template<class T>
+		void SetToUndefined(const VirtArrayAccessor_1D<T> & a_acc)
+		{
+			PtrIterator2<T> ptrItr = a_acc.GenPtrIterator();
+
+			for (; ptrItr.CanMove(); ptrItr.MoveBgn())
+			{
+				T * ptr = ptrItr.GetBgn();
+				ElementOperations2::SetToUndefined<T>(ptr);
+			}
+		}
+
+		template<class T>
+		void SetLineToBadValue(const VirtArrayAccessor_1D<T> & a_acc)
+		{
+			PtrIterator2<T> ptrItr = a_acc.GenPtrIterator();
+
+			for (; ptrItr.CanMove(); ptrItr.MoveBgn())
+			{
+				T * ptr = ptrItr.GetBgn();
+				ElementOperations2::SetToBadValue<T>(ptr);
+			}
+		}
+
+		template<class T>
 		void AssertLineValues(const VirtArrayAccessor_1D<T> & a_acc)
 		{
 			PtrIterator2<T> ptrItr = a_acc.GenPtrIterator();
@@ -389,7 +413,7 @@ namespace Ncv
 				float avg_MagSqr_2 = a_avg_MagSqr_Acc[i + nAftDiff];
 
 				pOut->Exists = ElementOperations2::CalcConflict(avg_1, avg_MagSqr_1, avg_2, avg_MagSqr_2);
-				if (pOut->Exists)
+				//if (pOut->Exists)
 				{
 					// to be revised.
 					//pOut->pSide_1 = &avg_1;
@@ -404,8 +428,10 @@ namespace Ncv
 				}
 				//else
 				//{
-				//	pOut->Offset_Side_1 = -7;
-				//	pOut->Offset_Side_2 = -7;
+				//	pOut->Offset_Side_1 = -700;
+				//	
+				//	//pOut->Offset_Side_1 = -7;
+				//	//pOut->Offset_Side_2 = -7;
 				//}
 			}
 		}

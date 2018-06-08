@@ -69,19 +69,26 @@ namespace Ncv
 
 			{
 				PixelStandevInfo initPsi;
-				initPsi.Dir = -1;
+				//initPsi.Dir = -1;
+				initPsi.Dir = 0;
 				initPsi.Val = 10000000;
+				//SetToUndefined(&initPsi.Val);
 				initPsi.NormVal = 0;
 				FillImage(m_context_H->m_standevInfoImg->GetVirtAccessor(), initPsi);
+				//SetImageToBadValue(m_context_H->m_standevInfoImg->GetVirtAccessor());
 			}
 
 			m_context_H->m_conflictInfoImg = ArrayHolderUtil::CreateFrom<ConflictInfo2_Ex>(
 				org_Img_H->GetActualSize());
 			{
 				ConflictInfo2_Ex ci_Init;
-				ci_Init.Dir = -1;
+				//ci_Init.Dir = -1;
+				ci_Init.Dir = 0;
+				ci_Init.Offset_Side_1 = -5;
+				ci_Init.Offset_Side_2 = 5;
 				ci_Init.Exists = false;
 				FillImage(m_context_H->m_conflictInfoImg->GetVirtAccessor(), ci_Init);
+				//SetImageToBadValue(m_context_H->m_conflictInfoImg->GetVirtAccessor());
 			}
 
 			m_context_H->m_wideConflictDiff_Img = new F32ImageArrayHolder1C(
@@ -326,6 +333,7 @@ namespace Ncv
 			for (int i = 0; i < nSize_1D; i++)
 			{
 				ConflictInfo2_Ex & rSrc = srcPtr[i];
+				AssertValue(rSrc);
 				F32ColorVal & rDest = destPtr[i];
 
 				//Ncpp_ASSERT(-1 != rSrc.Dir);
@@ -509,7 +517,9 @@ namespace Ncv
 					rPixInfo.X = x;
 					rPixInfo.Y = y;
 
-					rPixInfo.pConflictInfo = &sac_Conflicts.GetAt(x, y);
+					ConflictInfo2_Ex * pConflictInfo = &sac_Conflicts.GetAt(x, y);
+					AssertValue(*pConflictInfo);
+					rPixInfo.pConflictInfo = pConflictInfo;
 
 					rPixInfo.Val_WideOutStandev = sac_WideOutStandev.GetAt(x, y);
 					if (rPixInfo.pConflictInfo->Exists)
@@ -577,6 +587,7 @@ namespace Ncv
 						Ncpp_ASSERT(!pPI_Dest->pConflictInfo->Exists);
 						Ncpp_ASSERT(pPI->pConflictInfo->Exists);
 
+						AssertValue(*pPI->pConflictInfo);
 						pPI_Dest->pConflictInfo = pPI->pConflictInfo;
 
 						rgnGrowQues.PushPtr(pPI_Dest->Val_WideOutStandev * nQueScale, pPI_Dest);
