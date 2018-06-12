@@ -17,9 +17,9 @@ namespace Ncpp
 	{
 	public :
 
-		static T_Int GetScaleVal(T_Int a_inp)
+		static T_Int GetScaleVal()
 		{
-			return ScaleVal
+			return ScaleVal;
 		}
 
 		static T_Int Scale(T_Float a_fInp)
@@ -30,6 +30,11 @@ namespace Ncpp
 		static T_Float Unscale(T_Int a_scaledInp)
 		{
 			return ((T_Float)a_scaledInp / ScaleVal);
+		}
+
+		static T_Int DividByScale(T_Int a_inp)
+		{
+			return a_inp / ScaleVal;
 		}
 
 		static T_Int Round(T_Int a_inp)
@@ -45,8 +50,8 @@ namespace Ncpp
 				nRet = (T_Int)(a_inp - m_nRoundAdd);
 			}
 
-			nRet /= m_nScale;
-			nRet *= m_nScale;
+			nRet /= ScaleVal;
+			nRet *= ScaleVal;
 
 			return nRet;
 		}
@@ -64,8 +69,8 @@ namespace Ncpp
 				nRet = (T_Int)(a_inp - m_nCeilAdd);
 			}
 
-			nRet /= m_nScale;
-			nRet *= m_nScale;
+			nRet /= ScaleVal;
+			nRet *= ScaleVal;
 
 			return nRet;
 		}
@@ -74,8 +79,8 @@ namespace Ncpp
 		{
 			T_Int nRet = a_inp;
 
-			nRet /= m_nScale;
-			nRet *= m_nScale;
+			nRet /= ScaleVal;
+			nRet *= ScaleVal;
 
 			return nRet;
 		}

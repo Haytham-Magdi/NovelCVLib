@@ -33,65 +33,22 @@ namespace Ncv
 		m_angDig = a_angDig;
 		m_angRad = a_angDig * M_PI / 180;
 
-		m_nScale = 1000;
-		//m_nScale = 10000;
-		m_nRound = 0.555555 * m_nScale;
-		m_nRoundByMin = 0.999999 * m_nScale;
-
-		m_nCos = cos(m_angRad) * m_nScale;
-		m_nSin = sin(m_angRad) * m_nScale;
+		m_nCos = SRIntScale::Scale(cos(m_angRad));
+		m_nSin = SRIntScale::Scale(sin(m_angRad));
 
 		m_nCos++;
 		m_nSin++;
 
 		int mag1 = Sqr(m_nCos) + Sqr(m_nSin);
-		Ncpp_ASSERT(mag1 >= Sqr(m_nScale));
+		Ncpp_ASSERT(mag1 >= Sqr(SRIntScale::Scale(1)));
 
 		Prepare();
 	}
 
-	int ImgSizeRotation::AddRound(int a_num)
-	{
-		int nRet;
-
-		if (a_num > 0)
-		{
-			nRet = (int)(a_num + m_nRound);
-		}
-		else
-		{
-			nRet = (int)(a_num - m_nRound);
-		}
-
-		nRet /= m_nScale;
-		nRet *= m_nScale;
-
-		return nRet;
-	}
-
-	int ImgSizeRotation::AddRoundByMin(int a_num)
-	{
-		int nRet;
-
-		if (a_num > 0)
-		{
-			nRet = (int)(a_num + m_nRoundByMin);
-		}
-		else
-		{
-			nRet = (int)(a_num - m_nRoundByMin);
-		}
-
-		nRet /= m_nScale;
-		nRet *= m_nScale;
-
-		return nRet;
-	}
-
 	void ImgSizeRotation::Prepare()
 	{
-		const int nScaled_SrcWidth = m_srcSiz.GetX() * m_nScale;
-		const int nScaled_SrcHeight = m_srcSiz.GetY() * m_nScale;
+		const int nScaled_SrcWidth = SRIntScale::Scale(m_srcSiz.GetX());
+		const int nScaled_SrcHeight = SRIntScale::Scale(m_srcSiz.GetY());
 
 		//m_bgnPnt;
 
@@ -99,19 +56,19 @@ namespace Ncv
 		//int nSafeMarg = 20;
 
 		{
-			//int nofLinesBef = AddRound(
-			int nofLinesBef = AddRoundByMin(
+			//int nofLinesBef = SRIntScale::Round(
+			int nofLinesBef = SRIntScale::Ceil(
 				m_nSin * (m_srcSiz.GetX() + nSafeMarg));
 
-			nofLinesBef /= m_nScale;
+			nofLinesBef /= SRIntScale::GetScaleVal();
 
 			m_bgnPnt.x = nofLinesBef * m_nSin;
 			m_bgnPnt.y = -nofLinesBef * m_nCos;
 
-			int nofLinesAft = AddRoundByMin(
+			int nofLinesAft = SRIntScale::Ceil(
 				m_nCos * (m_srcSiz.GetY() + nSafeMarg));
 
-			nofLinesAft /= m_nScale;
+			nofLinesAft /= SRIntScale::GetScaleVal();
 
 			//m_resSiz.SetY(nofLinesBef + nofLinesAft);
 			m_resSiz.SetY(nofLinesBef + nofLinesAft + 1);
@@ -119,14 +76,14 @@ namespace Ncv
 
 		{
 			int nofLinesBef = m_nCos * (m_srcSiz.GetX() + nSafeMarg);
-			nofLinesBef = AddRoundByMin(nofLinesBef);
+			nofLinesBef = SRIntScale::Ceil(nofLinesBef);
 
-			nofLinesBef /= m_nScale;
+			nofLinesBef /= SRIntScale::GetScaleVal();
 
 			int nofLinesAft = m_nSin * (m_srcSiz.GetY() + nSafeMarg);
-			nofLinesAft = AddRoundByMin(nofLinesAft);
+			nofLinesAft = SRIntScale::Ceil(nofLinesAft);
 
-			nofLinesAft /= m_nScale;
+			nofLinesAft /= SRIntScale::GetScaleVal();
 
 			m_resSiz.SetX(nofLinesBef + nofLinesAft + 1);
 		}
@@ -136,8 +93,8 @@ namespace Ncv
 
 		//	int nofLinesAft = m_nSin * (m_srcSiz.GetY() + nSafeMarg);
 
-		//	//m_resSiz.SetX( AddRound(
-		//	m_resSiz.SetX( AddRoundByMin(
+		//	//m_resSiz.SetX( SRIntScale::Round(
+		//	m_resSiz.SetX( SRIntScale::Ceil(
 		//		nofLinesBef + nofLinesAft ));
 
 		//	m_resSiz.SetX( m_resSiz.GetX() / m_nScale);
@@ -214,9 +171,9 @@ namespace Ncv
 				//{
 				int nX1, nX2, nY1, nY2;
 
-				nY1 = (curPnt_X.y / m_nScale) * m_nScale;
+				nY1 = SRIntScale::Floor(curPnt_X.y);
 
-				nX1 = (curPnt_X.x / m_nScale) * m_nScale;
+				nX1 = SRIntScale::Floor(curPnt_X.x);
 
 				if (!(nY1 >= 0 && nY1 < nScaled_SrcHeight))
 					goto SrcToResEnd;
@@ -228,9 +185,9 @@ namespace Ncv
 
 				srcPntArr.PushBack(S32Point(nX1, nY1));
 
-				nY2 = AddRoundByMin(curPnt_X.y);
+				nY2 = SRIntScale::Ceil(curPnt_X.y);
 
-				nX2 = AddRoundByMin(curPnt_X.x);
+				nX2 = SRIntScale::Ceil(curPnt_X.x);
 
 				if (nY2 < 0 || nY2 >= nScaled_SrcHeight)
 					nY2 = nY1;
@@ -249,7 +206,7 @@ namespace Ncv
 					S32Point & rSrcPnt = srcPntArr[i];
 
 					int nIdx_Src = idxCalc_Src.Calc(
-						rSrcPnt.x / m_nScale, rSrcPnt.y / m_nScale);
+						rSrcPnt.x / SRIntScale::GetScaleVal(), rSrcPnt.y / SRIntScale::GetScaleVal());
 
 					int nOldDist = srcMinDistBuf[nIdx_Src];
 
@@ -271,14 +228,14 @@ namespace Ncv
 
 				bool bInImg = true;
 
-				int nX_Src = AddRound(curPnt_X.x);
-				nX_Src /= m_nScale;
+				int nX_Src = SRIntScale::Round(curPnt_X.x);
+				nX_Src /= SRIntScale::GetScaleVal();
 
 				if (!(nX_Src >= 0 && nX_Src < m_srcSiz.GetX()))
 					bInImg = false;
 
-				int nY_Src = AddRound(curPnt_X.y);
-				nY_Src /= m_nScale;
+				int nY_Src = SRIntScale::Round(curPnt_X.y);
+				nY_Src /= SRIntScale::GetScaleVal();
 
 				if (!(nY_Src >= 0 && nY_Src < m_srcSiz.GetY()))
 					bInImg = false;
@@ -449,9 +406,9 @@ namespace Ncv
 
 	//			//srcPntArr.PushBack(cvPoint(nX1, nY1));
 
-	//			nY2 = AddRoundByMin(curPnt_X.y);
+	//			nY2 = SRIntScale::Ceil(curPnt_X.y);
 
-	//			nX2 = AddRoundByMin(curPnt_X.x);
+	//			nX2 = SRIntScale::Ceil(curPnt_X.x);
 
 	//			if (nY2 < 0 || nY2 >= nScaled_SrcHeight)
 	//				nY2 = nY1;

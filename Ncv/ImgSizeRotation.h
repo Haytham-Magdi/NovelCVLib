@@ -23,8 +23,12 @@
 namespace Ncv
 {
 
+
 	class ImgSizeRotation : public Ncpp::Object
 	{
+		//typedef IntScale<int, float, 1000> SizeRotIntScale;
+		typedef IntScale<int, float, 1000> SRIntScale;
+
 	public:
 
 		ImgSizeRotation(Size_2D a_srcSiz, float a_angDig);
@@ -76,8 +80,8 @@ namespace Ncv
 			Ncpp_ASSERT(a_destSiz.GetX() == m_resSiz.GetX());
 			Ncpp_ASSERT(a_destSiz.GetY() == m_resSiz.GetY());
 
-			const int nScaled_SrcWidth = m_srcSiz.GetX() * m_nScale;
-			const int nScaled_SrcHeight = m_srcSiz.GetY() * m_nScale;
+			const int nScaled_SrcWidth = m_srcSiz.GetX() * SRIntScale::GetScaleVal();
+			const int nScaled_SrcHeight = m_srcSiz.GetY() * SRIntScale::GetScaleVal();
 
 			//MemSimpleAccessor_2D<T> sac_Out = a_outAcc->GenSimpleAccessor();
 
@@ -120,9 +124,9 @@ namespace Ncv
 					//{
 					int nX1, nX2, nY1, nY2;
 
-					nY1 = (curPnt_X.y / m_nScale) * m_nScale;
+					nY1 = SRIntScale::Floor(curPnt_X.y);
 
-					nX1 = (curPnt_X.x / m_nScale) * m_nScale;
+					nX1 = SRIntScale::Floor(curPnt_X.x);
 
 					if (!(nY1 >= 0 && nY1 < nScaled_SrcHeight))
 						goto SrcToResEnd;
@@ -134,9 +138,9 @@ namespace Ncv
 
 					//srcPntArr.PushBack(cvPoint(nX1, nY1));
 
-					nY2 = AddRoundByMin(curPnt_X.y);
+					nY2 = SRIntScale::Ceil(curPnt_X.y);
 
-					nX2 = AddRoundByMin(curPnt_X.x);
+					nX2 = SRIntScale::Ceil(curPnt_X.x);
 
 					if (nY2 < 0 || nY2 >= nScaled_SrcHeight)
 						nY2 = nY1;
@@ -166,18 +170,18 @@ namespace Ncv
 							//Ncpp_ASSERT(nX2 >= 0);
 							//Ncpp_ASSERT(nY2 >= 0);
 
-							T & rColor_Src_X1_Y1 = a_srcBuf[idxCalc_Src.Calc(nX1 / m_nScale, nY1 / m_nScale)];
-							T & rColor_Src_X1_Y2 = a_srcBuf[idxCalc_Src.Calc(nX1 / m_nScale, nY2 / m_nScale)];
-							T & rColor_Src_X2_Y1 = a_srcBuf[idxCalc_Src.Calc(nX2 / m_nScale, nY1 / m_nScale)];
-							T & rColor_Src_X2_Y2 = a_srcBuf[idxCalc_Src.Calc(nX2 / m_nScale, nY2 / m_nScale)];
+							T & rColor_Src_X1_Y1 = a_srcBuf[idxCalc_Src.Calc(SRIntScale::DividByScale(nX1), SRIntScale::DividByScale(nY1))];
+							T & rColor_Src_X1_Y2 = a_srcBuf[idxCalc_Src.Calc(SRIntScale::DividByScale(nX1), SRIntScale::DividByScale(nY2))];
+							T & rColor_Src_X2_Y1 = a_srcBuf[idxCalc_Src.Calc(SRIntScale::DividByScale(nX2), SRIntScale::DividByScale(nY1))];
+							T & rColor_Src_X2_Y2 = a_srcBuf[idxCalc_Src.Calc(SRIntScale::DividByScale(nX2), SRIntScale::DividByScale(nY2))];
 
 
 							T color_Src_X_Y1;
 							T color_Src_X_Y2;
 							{
 								//int nCur_X = (nX1 == nX2) ? nX1 : curPnt_X.x;
-								int nWt_X1 = (nX1 == nX2) ? m_nScale : abs(curPnt_X.x - nX2);
-								Ncpp_ASSERT(nWt_X1 <= m_nScale);
+								int nWt_X1 = (nX1 == nX2) ? SRIntScale::GetScaleVal() : abs(curPnt_X.x - nX2);
+								Ncpp_ASSERT(nWt_X1 <= SRIntScale::GetScaleVal());
 
 								//T color_Src_X_Y1 = T::Add(
 								//	rColor_Src_X1_Y1.MultBy(nWt_X1),
@@ -192,11 +196,11 @@ namespace Ncv
 								//WaitedAdd_ByPtr(&rColor_Src_X1_Y2, (float)nWt_X1 / m_nScale,
 								//	&rColor_Src_X2_Y2, (float)(m_nScale - nWt_X1) / m_nScale, &color_Src_X_Y2);
 
-								WaitedAdd(rColor_Src_X1_Y1, (float)nWt_X1 / m_nScale,
-									rColor_Src_X2_Y1, (float)(m_nScale - nWt_X1) / m_nScale, &color_Src_X_Y1);
+								WaitedAdd(rColor_Src_X1_Y1, SRIntScale::Unscale(nWt_X1),
+									rColor_Src_X2_Y1, 1 - SRIntScale::Unscale(nWt_X1), &color_Src_X_Y1);
 
-								WaitedAdd(rColor_Src_X1_Y2, (float)nWt_X1 / m_nScale,
-									rColor_Src_X2_Y2, (float)(m_nScale - nWt_X1) / m_nScale, &color_Src_X_Y2);
+								WaitedAdd(rColor_Src_X1_Y2, SRIntScale::Unscale(nWt_X1),
+									rColor_Src_X2_Y2, 1 - SRIntScale::Unscale(nWt_X1), &color_Src_X_Y2);
 
 
 
@@ -207,15 +211,15 @@ namespace Ncv
 							}
 
 							{
-								int nWt_Y1 = (nY1 == nY2) ? m_nScale : abs(curPnt_X.y - nY2);
-								Ncpp_ASSERT(nWt_Y1 <= m_nScale);
+								int nWt_Y1 = (nY1 == nY2) ? SRIntScale::GetScaleVal() : abs(curPnt_X.y - nY2);
+								Ncpp_ASSERT(nWt_Y1 <= SRIntScale::GetScaleVal());
 
 
 								//WaitedAdd_ByPtr(&color_Src_X_Y1, (float)nWt_Y1 / m_nScale,
 								//	&color_Src_X_Y2, (float)(m_nScale - nWt_Y1) / m_nScale, &rColor_Res);
 
-								WaitedAdd(color_Src_X_Y1, (float)nWt_Y1 / m_nScale,
-									color_Src_X_Y2, (float)(m_nScale - nWt_Y1) / m_nScale, &rColor_Res);
+								WaitedAdd(color_Src_X_Y1, SRIntScale::Unscale(nWt_Y1),
+									color_Src_X_Y2, 1 - SRIntScale::Unscale(nWt_Y1), &rColor_Res);
 
 
 
@@ -249,23 +253,15 @@ namespace Ncv
 
 		//void PrepareResImg();
 
-		int AddRound(int a_num);
-
-		int AddRoundByMin(int a_num);
-
 		//void PrepareImageItrMgr();
 
 
 
 	protected:
 
-		//F32ImageRef m_srcImg;
 		float m_angDig;
 		float m_angRad;
 
-		int m_nScale;
-		int m_nRound;
-		int m_nRoundByMin;
 		int m_nCos;
 		int m_nSin;
 
