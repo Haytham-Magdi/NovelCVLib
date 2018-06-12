@@ -65,8 +65,12 @@ namespace Ncv
 
 				F32ImageArrayHolder1C_Ref m_avgStandev_X_Img;
 
-				S32ImageArrayHolder1C_Ref m_rotToOrgMap_Img;
-				S32ImageArrayHolder1C_Ref m_orgToRotMap_Img;
+				//S32ImageArrayHolder1C_Ref m_rotToOrgMap_Img;
+				//S32ImageArrayHolder1C_Ref m_orgToRotMap_Img;
+
+				ArrayHolder_2D_Ref<int> m_rotToOrgMap_Img;
+				ArrayHolder_2D_Ref<int> m_orgToRotMap_Img;
+
 				float m_angle;
 				ArrayHolder_2D_Ref<ConflictInfo2> m_conflict_Img;
 

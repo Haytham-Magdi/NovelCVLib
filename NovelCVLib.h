@@ -23,6 +23,7 @@
 //#include <NovelCVLib\Ncpp\Common\MaxFinder.h>
 //#include <NovelCVLib\Ncpp\Common\MinFinder.h>
 //#include <NovelCVLib\Ncpp\Common\AvgFinder.h>
+//#include <NovelCVLib\Ncpp\Common\IntScale.h>
 //#include <NovelCVLib\Ncpp\Common\ListElm.h>
 //#include <NovelCVLib\Ncpp\Common\MaxIndexFinder.h>
 //#include <NovelCVLib\Ncpp\Common\MinIndexFinder.h>

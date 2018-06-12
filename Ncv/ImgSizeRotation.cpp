@@ -1,4 +1,5 @@
 #include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
+#include <NovelCVLib\Ncpp\Common\ArrayHolderUtil.h>
 #include <NovelCVLib\OpenCV\CvIncludes.h>
 #include <NovelCVLib\OpenCV\Types.h>
 #include <NovelCVLib\OpenCV\error.h>
@@ -19,6 +20,7 @@ namespace Ncv
 	using namespace Ncpp;
 	//using namespace Ncpp::Math;
 
+	using namespace Ncv::ImageOperations2;
 
 	ImgSizeRotation::ImgSizeRotation(Size_2D a_srcSiz, float a_angDig)
 	{
@@ -141,8 +143,11 @@ namespace Ncv
 		//	m_resSiz.SetX( m_resSiz.GetX() / m_nScale);
 		//}
 
-		m_resToSrcMapImg = S32Image::Create(toCvSize(m_resSiz), 1);
-		int * resToSrcBuf = (int *)m_resToSrcMapImg->GetPixAt(0, 0);
+		//m_resToSrcMapImg = S32Image::Create(toCvSize(m_resSiz), 1);
+		//int * resToSrcBuf = (int *)m_resToSrcMapImg->GetPixAt(0, 0);
+
+		m_resToSrcMapImg = ArrayHolderUtil::CreateFrom<int>(m_resSiz);
+		int * resToSrcBuf = (int *)m_resToSrcMapImg->GetActualAccessor().GetData();
 
 		//m_resToSrcMapImg_X_Scaled = S32Image::Create(m_resSiz, 1);
 		//int * resToSrcBuf_X_Scaled = (int *)m_resToSrcMapImg_X_Scaled->GetPixAt(0, 0);
@@ -152,11 +157,15 @@ namespace Ncv
 
 		//m_srcPntOfRes_Arr.SetSize(m_resSiz.GetX() * m_resSiz.GetY());
 
-		m_srcToResMapImg = S32Image::Create(toCvSize(m_srcSiz), 1);
-		int *  srcToResBuf = (int *)m_srcToResMapImg->GetPixAt(0, 0);
+		//m_srcToResMapImg = S32Image::Create(toCvSize(m_srcSiz), 1);
+		//int *  srcToResBuf = (int *)m_srcToResMapImg->GetPixAt(0, 0);
 
-		S32ImageRef srcMinDistImg = S32Image::Create(toCvSize(m_srcSiz), 1);
-		int *  srcMinDistBuf = (int *)srcMinDistImg->GetPixAt(0, 0);
+		m_srcToResMapImg = ArrayHolderUtil::CreateFrom<int>(m_srcSiz);
+		int * srcToResBuf = (int *)m_srcToResMapImg->GetActualAccessor().GetData();
+
+
+		ArrayHolder_2D_Ref<int> srcMinDistImg = ArrayHolderUtil::CreateFrom<int>(m_srcSiz);
+		int *  srcMinDistBuf = (int *)srcMinDistImg->GetActualAccessor().GetData();
 
 		//m_resImg = F32Image::Create(m_resSiz, 3);
 		//F32ColorVal * resBuf = (F32ColorVal *)m_resImg->GetPixAt(0, 0);
@@ -164,7 +173,8 @@ namespace Ncv
 		//F32ColorVal * srcBuf = (F32ColorVal *)m_srcImg->GetPixAt(0, 0);
 
 		const int nGreatDist = 10000000;
-		srcMinDistImg->SetAll(nGreatDist);
+		//srcMinDistImg->SetAll(nGreatDist);
+		FillImage(srcMinDistImg->GetVirtAccessor(), nGreatDist);
 
 		int nMappedSrcCnt = 0;
 
@@ -176,13 +186,13 @@ namespace Ncv
 
 		IndexCalc2D idxCalc_Res(m_resSiz.GetX(), m_resSiz.GetY());
 
-		//CvPoint curPnt = m_bgnPnt;
+		//S32Point curPnt = m_bgnPnt;
 
-		FixedVector< CvPoint > srcPntArr(100);
+		FixedVector< S32Point > srcPntArr(100);
 
 		for (int y = 0; y < m_resSiz.GetY(); y++)
 		{
-			CvPoint curPnt_Y;
+			S32Point curPnt_Y;
 
 			curPnt_Y.x = m_bgnPnt.x - y * m_nSin;
 			curPnt_Y.y = m_bgnPnt.y + y * m_nCos;
@@ -191,8 +201,8 @@ namespace Ncv
 			{
 				int nIdx_Res = idxCalc_Res.Calc(x, y);
 
-				CvPoint curPnt_X;
-				//CvPoint curPnt_X = m_srcPntOfRes_Arr[nIdx_Res];
+				S32Point curPnt_X;
+				//S32Point curPnt_X = m_srcPntOfRes_Arr[nIdx_Res];
 
 
 
@@ -216,7 +226,7 @@ namespace Ncv
 
 				srcPntArr.ResetSize();
 
-				srcPntArr.PushBack(cvPoint(nX1, nY1));
+				srcPntArr.PushBack(S32Point(nX1, nY1));
 
 				nY2 = AddRoundByMin(curPnt_X.y);
 
@@ -228,15 +238,15 @@ namespace Ncv
 				if (nX2 < 0 || nX2 >= nScaled_SrcWidth)
 					nX2 = nX1;
 
-				srcPntArr.PushBack(cvPoint(nX2, nY1));
-				srcPntArr.PushBack(cvPoint(nX2, nY2));
-				srcPntArr.PushBack(cvPoint(nX1, nY2));
+				srcPntArr.PushBack(S32Point(nX2, nY1));
+				srcPntArr.PushBack(S32Point(nX2, nY2));
+				srcPntArr.PushBack(S32Point(nX1, nY2));
 
 			SrcToResEnd:
 
 				for (int i = 0; i < srcPntArr.GetSize(); i++)
 				{
-					CvPoint & rSrcPnt = srcPntArr[i];
+					S32Point & rSrcPnt = srcPntArr[i];
 
 					int nIdx_Src = idxCalc_Src.Calc(
 						rSrcPnt.x / m_nScale, rSrcPnt.y / m_nScale);
@@ -403,7 +413,7 @@ namespace Ncv
 
 	//	for (int y = 0; y < m_resSiz.GetY(); y++)
 	//	{
-	//		CvPoint curPnt_Y;
+	//		S32Point curPnt_Y;
 
 	//		curPnt_Y.x = m_bgnPnt.x - y * m_nSin;
 	//		curPnt_Y.y = m_bgnPnt.y + y * m_nCos;
@@ -412,8 +422,8 @@ namespace Ncv
 	//		{
 	//			int nIdx_Res = idxCalc_Res.Calc(x, y);
 
-	//			CvPoint curPnt_X;
-	//			//CvPoint curPnt_X = m_srcPntOfRes_Arr[nIdx_Res];
+	//			S32Point curPnt_X;
+	//			//S32Point curPnt_X = m_srcPntOfRes_Arr[nIdx_Res];
 
 
 

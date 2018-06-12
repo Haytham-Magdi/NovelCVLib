@@ -147,8 +147,11 @@ namespace Ncv
 				ImgAngleDirMgr_Context_Ref dirContext_H = new ImgAngleDirMgr::Context(i, rotMgr,
 					rot_Img_H, magSqr_Img_H, 'H');
 
-				dirContext_H->m_rotToOrgMap_Img = new S32ImageArrayHolder1C(rotMgr->Get_ResToSrcMapImage());
-				dirContext_H->m_orgToRotMap_Img = new S32ImageArrayHolder1C(rotMgr->Get_SrcToResMapImage());
+				//dirContext_H->m_rotToOrgMap_Img = new S32ImageArrayHolder1C(rotMgr->Get_ResToSrcMapImage());
+				//dirContext_H->m_orgToRotMap_Img = new S32ImageArrayHolder1C(rotMgr->Get_SrcToResMapImage());
+
+				dirContext_H->m_rotToOrgMap_Img = rotMgr->Get_ResToSrcMapImage();
+				dirContext_H->m_orgToRotMap_Img = rotMgr->Get_SrcToResMapImage();
 
 				dirContext_H->m_angle = rotMgr->GetAngleByRad();
 
@@ -161,8 +164,12 @@ namespace Ncv
 				ImgAngleDirMgr_Context_Ref dirContext_V = new ImgAngleDirMgr::Context(i + m_rotColl->GetNofRots(),
 					rotMgr, rot_Img_V, magSqr_Img_V, 'V');
 
-				dirContext_V->m_rotToOrgMap_Img = dirContext_H->m_rotToOrgMap_Img->CreateTransposedProxy();
-				dirContext_V->m_orgToRotMap_Img = dirContext_H->m_orgToRotMap_Img->CreateTransposedProxy();
+				//dirContext_V->m_rotToOrgMap_Img = dirContext_H->m_rotToOrgMap_Img->CreateTransposedProxy();
+				//dirContext_V->m_orgToRotMap_Img = dirContext_H->m_orgToRotMap_Img->CreateTransposedProxy();
+
+				dirContext_V->m_rotToOrgMap_Img = ArrayHolderUtil::CreateTransposedProxyFrom(dirContext_H->m_rotToOrgMap_Img);
+				dirContext_V->m_orgToRotMap_Img = ArrayHolderUtil::CreateTransposedProxyFrom(dirContext_H->m_orgToRotMap_Img);
+
 				dirContext_V->m_angle = rotMgr->GetAngleByRad() + M_PI / 2;
 				//dirContext_V->m_conflict_Img = dirContext_H->m_conflict_Img->CloneAccessorOnly(); dirContext_V->m_conflict_Img->SwitchXY();
 

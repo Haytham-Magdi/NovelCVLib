@@ -62,10 +62,7 @@
 
 
 #include <NovelCVLib\ElementOperations2\ElementOperations2_Float.cpp>
-#include <NovelCVLib\OpenCV\ElementOperations2_F32ColorVal.cpp>
-#include <NovelCVLib\ElementOperations2\ElementOperations2_VectorVal.cpp>
-
-#include <NovelCVLib\ElementOperations2\ElementOperations2_Float.cpp>
+#include <NovelCVLib\ElementOperations2\ElementOperations2_Int.cpp>
 #include <NovelCVLib\OpenCV\ElementOperations2_F32ColorVal.cpp>
 #include <NovelCVLib\ElementOperations2\ElementOperations2_VectorVal.cpp>
 

@@ -39,15 +39,18 @@ namespace Ncv
 
 		Size_2D GetResImgSiz() { return m_resSiz; }
 
-		S32ImageRef Get_ResToSrcMapImage() { return m_resToSrcMapImg; }
+		//S32ImageRef Get_ResToSrcMapImage() { return m_resToSrcMapImg; }
+		ArrayHolder_2D_Ref<int> Get_ResToSrcMapImage() { return m_resToSrcMapImg; }
 
 		//F32ImageRef GetResImg() { return m_resImg; }
 
-		S32ImageRef Get_SrcToResMapImage() { return m_srcToResMapImg; }
+		//S32ImageRef Get_SrcToResMapImage() { return m_srcToResMapImg; }
+		ArrayHolder_2D_Ref<int> Get_SrcToResMapImage() { return m_srcToResMapImg; }
+		
+		
+			//ImageItrMgrRef GetImageItrMgr() { return m_imageItrMgr; }
 
-		//ImageItrMgrRef GetImageItrMgr() { return m_imageItrMgr; }
-
-		CvPoint & GetBgnPnt() { return m_bgnPnt; }
+		S32Point & GetBgnPnt() { return m_bgnPnt; }
 
 
 		template<class T>
@@ -83,7 +86,8 @@ namespace Ncv
 
 			//F32ColorVal * resBuf = (F32ColorVal *)m_resImg->GetPixAt(0, 0);
 
-			int * resToSrcBuf = (int *)m_resToSrcMapImg->GetPixAt(0, 0);
+			//int * resToSrcBuf = (int *)m_resToSrcMapImg->GetPixAt(0, 0);
+			int * resToSrcBuf = (int *)m_resToSrcMapImg->GetActualAccessor().GetData();
 
 			IndexCalc2D idxCalc_Src(m_srcSiz.GetX(), m_srcSiz.GetY());
 
@@ -94,7 +98,7 @@ namespace Ncv
 			for (int y = 0; y < m_resSiz.GetY(); y++)
 				//for (int y = 0; y < sac_Out.GetSize_Y(); y++)
 			{
-				CvPoint curPnt_Y;
+				S32Point curPnt_Y;
 
 				curPnt_Y.x = m_bgnPnt.x - y * m_nSin;
 				curPnt_Y.y = m_bgnPnt.y + y * m_nCos;
@@ -105,8 +109,8 @@ namespace Ncv
 					int nIdx_Res = idxCalc_Res.Calc(x, y);
 					//int nIdx_Res = sac_Out->GetAt(x, y);
 
-					CvPoint curPnt_X;
-					//CvPoint curPnt_X = m_srcPntOfRes_Arr[nIdx_Res];
+					S32Point curPnt_X;
+					//S32Point curPnt_X = m_srcPntOfRes_Arr[nIdx_Res];
 
 					curPnt_X.x = curPnt_Y.x + x * m_nCos;
 					curPnt_X.y = curPnt_Y.y + x * m_nSin;
@@ -265,14 +269,20 @@ namespace Ncv
 		int m_nCos;
 		int m_nSin;
 
-		CvPoint m_bgnPnt;
+		S32Point m_bgnPnt;
 
 		Size_2D m_srcSiz;
 
 		Size_2D m_resSiz;
-		S32ImageRef m_resToSrcMapImg;
+
+		//S32ImageRef m_resToSrcMapImg;
+		ArrayHolder_2D_Ref<int> m_resToSrcMapImg;
+
 		//F32ImageRef m_resImg;
-		S32ImageRef m_srcToResMapImg;
+
+		//S32ImageRef m_srcToResMapImg;
+		ArrayHolder_2D_Ref<int> m_srcToResMapImg;
+		
 
 		//FixedVector< LineLimit > m_lineLimit_X_Arr;
 		//FixedVector< LineLimit > m_lineLimit_V_Arr;

@@ -28,6 +28,7 @@
 #include <NovelCVLib\Ncpp\Common\CircIndex.h>
 //#include <NovelCVLib\Ncpp\Common\Accessor2D.h>
 #include <NovelCVLib\Ncpp\Common\Size_2D.h>
+#include <NovelCVLib\Ncpp\Common\S32Point.h>
 #include <NovelCVLib\Ncpp\Common\VirtArrayAccessor_1D.h>
 #include <NovelCVLib\Ncpp\Common\ArrayHolder_1D.h>
 #include <NovelCVLib\Ncpp\Common\SimpleArrayHolder_1D.h>
@@ -45,6 +46,7 @@
 #include <NovelCVLib\Ncpp\Common\MaxFinder.h>
 #include <NovelCVLib\Ncpp\Common\MinFinder.h>
 #include <NovelCVLib\Ncpp\Common\AvgFinder.h>
+#include <NovelCVLib\Ncpp\Common\IntScale.h>
 #include <NovelCVLib\Ncpp\Common\ListElm.h>
 #include <NovelCVLib\Ncpp\Common\MaxIndexFinder.h>
 #include <NovelCVLib\Ncpp\Common\MinIndexFinder.h>

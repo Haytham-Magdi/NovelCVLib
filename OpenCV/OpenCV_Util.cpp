@@ -24,6 +24,20 @@ namespace Ncv
 			return cvSize(src.GetX(), src.GetY());
 		}
 
+
+		S32Point toS32Point(const CvPoint & src)
+		{
+			S32Point ret(src.x, src.y);
+			return ret;
+		}
+
+		CvPoint toCvPoint(const S32Point & src)
+		{
+			return cvPoint(src.GetX(), src.GetY());
+		}
+
+
+
 	}
 }
 
