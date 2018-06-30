@@ -232,8 +232,10 @@ namespace Ncv
 						}
 						else
 						{
-							//rColor_Res.AssignVal(0, 0, 0);
-							SetToZero(&rColor_Res);
+							////rColor_Res.AssignVal(0, 0, 0);
+							//SetToZero(&rColor_Res);
+
+							SetToUndefined(&rColor_Res);
 						}
 					}
 
