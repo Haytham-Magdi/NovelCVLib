@@ -143,6 +143,17 @@ namespace Ncv
 
 
 		template<class T>
+		void AssertUndefinedOrValid(const T & a_arg)
+		{
+			if (IsUndefined(a_arg))
+			{
+				return;
+			}
+			AssertValue<T>(a_arg);
+		}
+
+
+		template<class T>
 		float CalcStandev(const T & a_avg, const float a_avg_MagSqr)
 		{
 			AssertValue(a_avg);

@@ -31,7 +31,9 @@ namespace Ncv
 
 		bool IsUndefined(const float & a_arg)
 		{
-			return a_arg < -88888888.0f;
+			//return a_arg < -88888888.0f;
+			return a_arg > -100000999.0f && a_arg < -99998999.0f;
+			
 		}
 
 		void SetToUndefined(float * a_pArg)

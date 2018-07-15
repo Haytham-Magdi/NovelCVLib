@@ -62,7 +62,7 @@ namespace Ncv
 		}
 
 		template<class T>
-		void SetToUndefined(const VirtArrayAccessor_2D<T> & a_acc)
+		void SetImageToUndefined(const VirtArrayAccessor_2D<T> & a_acc)
 		{
 			const VirtArrayAccessor_1D<T> acc_Y = a_acc.GenAccessor_Y();
 			VirtArrayAccessor_1D<T> acc_X = a_acc.GenAccessor_X();
@@ -75,7 +75,7 @@ namespace Ncv
 				T * ptr_Y = ptrItr_Y.GetBgn();
 
 				acc_X.SetData(ptr_Y);
-				SetToUndefined<T>(acc_X);
+				SetLineToUndefined<T>(acc_X);
 			}
 		}
 
