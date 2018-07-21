@@ -118,6 +118,24 @@ namespace Ncv
 		}
 
 		template<class T>
+		void AssertImageUndefinedOrValid(const VirtArrayAccessor_2D<T> & a_acc)
+		{
+			const VirtArrayAccessor_1D<T> acc_Y = a_acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_X = a_acc.GenAccessor_X();
+
+			PtrIterator2<T> ptrItr_Y = acc_Y.GenPtrIterator();
+
+			//for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
+			for (; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn())
+			{
+				T * ptr_Y = ptrItr_Y.GetBgn();
+
+				acc_X.SetData(ptr_Y);
+				AssertLineUndefinedOrValid<T>(acc_X);
+			}
+		}
+
+		template<class T>
 		void DivideImageByNum(const VirtArrayAccessor_2D<T> & a_acc, const float a_num)
 		{
 			const VirtArrayAccessor_1D<T> acc_Y = a_acc.GenAccessor_Y();
@@ -392,9 +410,6 @@ namespace Ncv
 			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_Avg_MagSqr_Y.GetSize());
 			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_Out_Y.GetSize());
 
-			//Ncpp_ASSERT(acc_Avg_X.GetSize() == acc_Avg_MagSqr_X.GetSize());
-			//Ncpp_ASSERT(acc_Avg_X.GetSize() == acc_Out_X.GetSize());
-
 			PtrIterator2<T> ptrItr_Avg_Y = acc_Avg_Y.GenPtrIterator();
 			PtrIterator2<float> ptrItr_Avg_MagSqr_Y = acc_Avg_MagSqr_Y.GenPtrIterator();
 			PtrIterator2<float> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
@@ -498,7 +513,8 @@ namespace Ncv
 			ArrayHolder_2D_Ref<T> tmpAvgHolder_X = ArrayHolderUtil::CreateFrom<T>(a_inpAcc.GetSize());
 			AvgImage_X(a_inpAcc, tmpAvgHolder_X->GetVirtAccessor(), a_standevRange_X);
 
-			AssertImageValues(a_magSqrAcc);
+			//AssertImageValues(a_magSqrAcc);
+			//AssertImageUndefinedOrValid(a_magSqrAcc);
 
 			ArrayHolder_2D_Ref<float> tmpAvg_MagSqr_X_Holder = ArrayHolderUtil::CreateFrom<float>(a_outAcc.GetSize());
 			AvgImage_X(a_magSqrAcc, tmpAvg_MagSqr_X_Holder->GetVirtAccessor(), a_standevRange_X);

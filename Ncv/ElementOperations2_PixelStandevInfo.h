@@ -24,7 +24,8 @@ namespace Ncv
 	{
 		template<> void AssertValue(const PixelStandevInfo & a_arg);
 		template<> void SetToBadValue(PixelStandevInfo * a_pArg);
-
+		template<> bool IsUndefined(const PixelStandevInfo & a_arg);
+		template<> void SetToUndefined(PixelStandevInfo * a_pArg);
 	};
 }
 

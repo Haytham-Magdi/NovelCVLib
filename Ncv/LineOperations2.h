@@ -196,6 +196,7 @@ namespace Ncv
 				}
 			}
 
+			// do actual stuff.
 			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
@@ -545,6 +546,43 @@ namespace Ncv
 			PtrIterator2<float> ptrItr_Avg_MagSqr = a_avg_MagSqr_Acc.GenPtrIterator();
 			PtrIterator2<float> ptrItr_Out = a_outAcc.GenPtrIterator();
 
+
+			// manage undefined from bgn.
+			for (; ptrItr_Avg.CanMove(); ptrItr_Avg.MoveBgn(), ptrItr_Avg_MagSqr.MoveBgn(), ptrItr_Out.MoveBgn())
+			{   
+				T * ptr_Avg = ptrItr_Avg.GetBgn();
+				float * ptr_Avg_MagSqr = ptrItr_Avg_MagSqr.GetBgn();
+				
+				float * ptr_Out = ptrItr_Out.GetBgn();
+
+				if (IsUndefined(*ptr_Avg) || IsUndefined(*ptr_Avg_MagSqr))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Avg.CanMove(); ptrItr_Avg.MoveEnd(), ptrItr_Avg_MagSqr.MoveEnd(), ptrItr_Out.MoveEnd())
+			{
+				T * ptr_Avg = ptrItr_Avg.GetEnd();
+				float * ptr_Avg_MagSqr = ptrItr_Avg_MagSqr.GetEnd();
+				float * ptr_Out = ptrItr_Out.GetEnd();
+
+				if (IsUndefined(*ptr_Avg) || IsUndefined(*ptr_Avg_MagSqr))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			//	do actual stuff.
 			for (; ptrItr_Avg.CanMove();
 				ptrItr_Avg.MoveBgn(), ptrItr_Avg_MagSqr.MoveBgn(), ptrItr_Out.MoveBgn())
 			{

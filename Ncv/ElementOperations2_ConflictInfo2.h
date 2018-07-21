@@ -22,9 +22,13 @@ namespace Ncv
 	namespace ElementOperations2
 	{
 		template<> void AssertValue(const ConflictInfo2 & a_arg);
+		template<> bool IsUndefined(const ConflictInfo2 & a_arg);
+		template<> void SetToUndefined(ConflictInfo2 * a_pArg);
 		template<> void SetToBadValue(ConflictInfo2 * a_pArg);
 
 		template<> void AssertValue(const ConflictInfo2_Ex & a_arg);
+		template<> bool IsUndefined(const ConflictInfo2_Ex & a_arg);
+		template<> void SetToUndefined(ConflictInfo2_Ex * a_pArg);
 		template<> void SetToBadValue(ConflictInfo2_Ex * a_pArg);
 	};
 }

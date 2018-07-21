@@ -29,6 +29,16 @@ namespace Ncv
 			AssertValue(a_arg.Val);
 		}
 
+		bool IsUndefined(const PixelStandevInfo & a_arg)
+		{
+			return IsUndefined(a_arg.Val);
+		}
+
+		void SetToUndefined(PixelStandevInfo * a_pArg)
+		{
+			SetToUndefined(&a_pArg->Val);
+		}
+
 		void SetToBadValue(PixelStandevInfo * a_pArg)
 		{
 			SetToBadValue(&a_pArg->Val);

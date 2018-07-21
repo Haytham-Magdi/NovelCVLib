@@ -295,20 +295,36 @@ namespace Ncv
 					const int nOffset_YX = nOffset_Y + x;
 
 					PixelStandevInfo & rCommonPsi = commonImgBuf[nOffset_YX];
-					AssertValue(rCommonPsi);
 
+					if (IsUndefined(rCommonPsi))
+					{
+						continue;
+					}
+					AssertValue(rCommonPsi);
 
 					int nOffset_Mapped = orgToRotMap_Buf[nOffset_YX];
 					Ncpp_ASSERT(nOffset_Mapped >= 0);
 
 					float standev_Local = localPtr[nOffset_Mapped];
-					Ncpp_ASSERT(standev_Local >= 0.0f || standev_Local > -5000.0f);
+					
+					if (IsUndefined(standev_Local))
+					{
+						SetToUndefined(&rCommonPsi);
+						continue;
+					}
+					
+					//Ncpp_ASSERT(standev_Local >= 0.0f || standev_Local > -5000.0f);
+					AssertValue(standev_Local);
 
 					if (standev_Local < rCommonPsi.Val)
 					{
-						rCommonPsi.Val = standev_Local;
-						rCommonPsi.NormVal = localPtr_Norm[nOffset_Mapped];
-						rCommonPsi.Dir = cx.m_nIndex;
+						Assign(&rCommonPsi.Val, standev_Local);
+						Assign(&rCommonPsi.NormVal, localPtr_Norm[nOffset_Mapped]);
+						Assign(&rCommonPsi.Dir, cx.m_nIndex);
+
+						//rCommonPsi.Val = standev_Local;
+						//rCommonPsi.NormVal = localPtr_Norm[nOffset_Mapped];
+						//rCommonPsi.Dir = cx.m_nIndex;
 					}
 
 				}

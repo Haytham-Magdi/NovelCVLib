@@ -18,6 +18,7 @@ namespace Ncv
 
 	namespace ElementOperations2
 	{
+		
 		void AssertValue(const ConflictInfo2 & a_arg)
 		{
 			//throw "Not Implemented";
@@ -26,11 +27,21 @@ namespace Ncv
 			Ncpp_ASSERT(a_arg.Offset_Side_1 > -100000);
 		}
 
-		void SetToBadValue(ConflictInfo2 * a_pArg)
+		bool IsUndefined(const ConflictInfo2 & a_arg)
 		{
-			a_pArg->Offset_Side_1 = -55555555;
+			return IsUndefined(a_arg.Offset_Side_1);
 		}
 
+		void SetToUndefined(ConflictInfo2 * a_pArg)
+		{
+			SetToUndefined(&a_pArg->Offset_Side_1);
+		}
+
+		void SetToBadValue(ConflictInfo2 * a_pArg)
+		{
+			SetToBadValue(&a_pArg->Offset_Side_1);
+			//a_pArg->Offset_Side_1 = -55555555;
+		}
 
 
 		void AssertValue(const ConflictInfo2_Ex & a_arg)
@@ -42,9 +53,21 @@ namespace Ncv
 			Ncpp_ASSERT(a_arg.Dir >= 0 && a_arg.Dir < 500);
 		}
 
+		bool IsUndefined(const ConflictInfo2_Ex & a_arg)
+		{
+			return IsUndefined(a_arg.Offset_Side_1);
+		}
+
+		void SetToUndefined(ConflictInfo2_Ex * a_pArg)
+		{
+			SetToUndefined(&a_pArg->Offset_Side_1);
+		}
+
 		void SetToBadValue(ConflictInfo2_Ex * a_pArg)
 		{
-			a_pArg->Dir = -55555555;
+			SetToBadValue(&a_pArg->Dir);
+			SetToBadValue(&a_pArg->Offset_Side_1);
+			//a_pArg->Dir = -55555555;
 		}
 
 	};
