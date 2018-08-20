@@ -204,7 +204,8 @@ namespace Ncv
 				m_angleDirMgrArr[i]->Proceed_5_2();
 			}
 
-			DivideImageByNum(m_context_H->m_avgPStandev_InrWide_Img->GetVirtAccessor(), this->m_angleDirMgrArr.GetSize());
+			DivideImageByNum(m_context_H->m_avgPStandev_InrWide_Img->GetVirtAccessor(), 
+				m_context_H->m_avgPStandev_InrWide_Img->GetVirtAccessor(), this->m_angleDirMgrArr.GetSize());
 			
 			for (int i = 0; i < m_rotColl->GetNofRots(); i++) {
 				

@@ -163,7 +163,7 @@ namespace Ncv
 				Calc_Avg_And_Standev_Image(cx.m_org_Img->GetVirtAccessor(), avg_InrWide_Img->GetVirtAccessor(), standev_InrWide_Img->GetVirtAccessor(),
 					Window<int>::New(-nInrRad, nInrRad, -nInrRad, nInrRad));
 
-				MultiplyImageByNum(standev_InrWide_Img->GetVirtAccessor(), 2);
+				MultiplyImageByNum(standev_InrWide_Img->GetVirtAccessor(), standev_InrWide_Img->GetVirtAccessor(), 2);
 				//AssertValues_Image(avg_InrWide_Img->GetVirtAccessor());
 			}
 
@@ -423,6 +423,8 @@ namespace Ncv
 
 					ConflictInfo2 & conf_Local = localPtr[nOffset_Mapped];
 
+					if (IsUndefined(conf_Local))
+						continue;
 
 					//const int nOffset_Mapped_1 = orgToRotMap_Buf[nOffset_YX_1];
 					//ConflictInfo2 & conf_Local_1 = localPtr[nOffset_Mapped_1];
