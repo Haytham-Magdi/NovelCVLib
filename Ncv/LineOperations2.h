@@ -71,12 +71,6 @@ namespace Ncv
 				ptr = ptrItr.GetBgn();
 				ElementOperations2::AssertValue<T>(*ptr);
 			}
-
-			//for (int i = 0; i < a_acc.GetSize(); i++)
-			//{
-			//	const T & val = a_acc[i];
-			//	ElementOperations2::AssertValue<T>(val);
-			//}
 		}
 
 		template<class T>
@@ -368,30 +362,11 @@ namespace Ncv
 			}
 		}
 
-		//template<class T>
-		//void AssertValues_Line(const VirtArrayAccessor_1D<T> & a_inpAcc)
-		//{
-		//	PtrIterator2<T> ptrItr_Inp = a_inpAcc.GenPtrIterator();
-
-		//	for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn())
-		//	{
-		//		T * ptr_Inp = ptrItr_Inp.GetBgn();
-
-		//		ElementOperations2::AssertValue<T>(ptr_Inp);
-		//	}
-		//}
-
 
 		template<class T>
 		void AvgLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const Range<int> & a_range)
 		{
-			//AssertLineValues(a_inpAcc);
 			AssertLineUndefinedOrValid(a_inpAcc);
-
-			//const T & v11 = a_inpAcc[193];
-			//T v12;
-			////Assign(&v1, a_inpAcc[193]);
-			//Assign(&v12, v11);
 
 			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
 			Ncpp_ASSERT(a_range.GetBgn() <= 0);
@@ -399,8 +374,6 @@ namespace Ncv
 
 			T zeroVal;
 			SetToZero<T>(&zeroVal);
-
-			// FillLine<T>(a_outAcc, zeroVal);
 
 			const int nSize_1D = a_inpAcc.GetSize();
 
@@ -446,34 +419,36 @@ namespace Ncv
 				return;
 			}
 
-			//const int nCenterEnd = nSize_1D - 1 - nAftDiff;
 			const int nCenterEnd = end - nAftDiff;
 
 			T sum;
 			SetToZero<T>(&sum);
-			//for (int i = 0; i < nRangeLen; i++)
 			for (int i = start; i < start + nRangeLen; i++)
 			{
-				Add(sum, a_inpAcc[i], &sum);
+				//Add(sum, a_inpAcc[i], &sum);
+				IncBy(sum, a_inpAcc[i]);
 			}
 
 			T * pDest;
-			//pDest = (T *)&a_outAcc[nBefDiff];
 			pDest = (T *)&a_outAcc[start + nBefDiff];
-			Assign(pDest, sum);
-			DivideByNum(*pDest, nRangeLen, pDest);
+			//Assign(pDest, sum);
+			//DivideByNum(*pDest, nRangeLen, pDest);
+			DivideByNum(sum, nRangeLen, pDest);
 
 			for (int i = start + nBefDiff + 1; i <= nCenterEnd; i++)
 			{
 				pDest = (T *)&a_outAcc[i];
 
 				Subtract(sum, a_inpAcc[(i - 1) - nBefDiff], &sum);
-				Add(sum, a_inpAcc[i + nAftDiff], &sum);
+				//Add(sum, a_inpAcc[i + nAftDiff], &sum);
+				IncBy(sum, a_inpAcc[i + nAftDiff]);
 
-				Assign(pDest, sum);
-				DivideByNum(*pDest, nRangeLen, pDest);
 
-				//AssertValue(*pDest);
+				//Assign(pDest, sum);
+				//DivideByNum(*pDest, nRangeLen, pDest);
+
+				DivideByNum(sum, nRangeLen, pDest);
+
 				//AssertUndefinedOrValid(*pDest);
 			}
 
@@ -481,38 +456,177 @@ namespace Ncv
 
 			//	Fill bgn gap in output
 			{
-				//const T & rSrc = a_outAcc[nBefDiff];
-				//for (int i = 0; i < nBefDiff; i++)
 				for (int i = 0; i < start + nBefDiff; i++)
 				{
 					pDest = (T *)&a_outAcc[i];
-					//Assign(pDest, rSrc);
 					SetToUndefined(pDest);
 				}
 			}
 
 			//	Fill end gap in output
 			{
-				//const int nSrcIdx = (nSize_1D - 1) - nAftDiff;
 				const int nSrcIdx = (end) - nAftDiff;
-				//const T & rSrc = a_outAcc[nSrcIdx];
 
 				for (int i = nSrcIdx + 1; i < nSize_1D; i++)
 				{
 					pDest = (T *)&a_outAcc[i];
-					//Assign(pDest, rSrc);
 					SetToUndefined(pDest);
 				}
 			}
 
 
 			AssertLineUndefinedOrValid(a_outAcc);
-
 		}
 
 
 		template<class T>
+		//void AvgLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const Range<int> & a_range)
 		void AvgLine_Weighted(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<float> & a_weightAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const Range<int> & a_range)
+		{
+			AssertLineUndefinedOrValid(a_inpAcc);
+
+			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
+			Ncpp_ASSERT(a_inpAcc.GetSize() == a_weightAcc.GetSize());
+			Ncpp_ASSERT(a_range.GetBgn() <= 0);
+			Ncpp_ASSERT(0 <= a_range.GetEnd());
+
+			T zeroVal;
+			SetToZero<T>(&zeroVal);
+
+			const int nSize_1D = a_inpAcc.GetSize();
+
+			const int nBefDiff = -a_range.GetBgn();
+			const int nAftDiff = a_range.GetEnd();
+
+			const int nRangeLen = nBefDiff + 1 + nAftDiff;
+
+
+			int start = 0;
+			for (; start < nSize_1D; start++)
+			{
+				const T & inpVal = a_inpAcc[start];
+				const T & weightVal = a_weightAcc[start];
+				if (IsUndefined(inpVal) || IsUndefined(weight))
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			int end = nSize_1D - 1;
+			for (; end >= start; end--)
+			{
+				const T & inpVal = a_inpAcc[end];
+				const T & weightVal = a_weightAcc[end];
+				if (IsUndefined(inpVal) || IsUndefined(weight))
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			//------
+
+			if (end + 1 - start < nRangeLen)
+			{
+				SetLineToUndefined(a_outAcc);
+				return;
+			}
+
+			const int nCenterEnd = end - nAftDiff;
+
+			T sum;
+			SetToZero<T>(&sum);
+			
+			int sum_Wt = 0;
+			T inp2;
+
+			for (int i = start; i < start + nRangeLen; i++)
+			{
+				Assign(&inp2, &a_inpAcc[i]);
+				MultiplyByNum(inp2, a_weightAcc[i], &inp2);
+
+				//sum_Wt += a_weightAcc[i];
+				//Add(sum, inp2, &sum);
+
+				IncBy(sum_Wt, a_weightAcc[i]);
+				IncBy(sum, inp2);
+			}
+
+			T * pDest;
+
+			{
+				pDest = (T *)&a_outAcc[start + nBefDiff];
+				//Assign(pDest, sum);
+				float denom = (sum_Wt > 0.2f) ? sum_Wt : 0.2f;
+				//DivideByNum(*pDest, denom, pDest);
+				DivideByNum(sum, denom, pDest);
+			}
+
+
+
+			for (int i = start + nBefDiff + 1; i <= nCenterEnd; i++)
+			{
+				int idx_Sub = (i - 1) - nBefDiff;
+				Assign(&inp2, &a_inpAcc[idx_Sub]);
+				MultiplyByNum(inp2, a_weightAcc[idx_Sub], &inp2);
+
+				Subtract(sum, inp2, &sum);
+				sum_Wt -= a_weightAcc[idx_Sub];
+
+				int idx_Add = i + nAftDiff;
+				Assign(&inp2, &a_inpAcc[idx_Add]);
+				MultiplyByNum(inp2, a_weightAcc[idx_Add], &inp2);
+
+				//Add(sum, inp2, &sum);
+				IncBy(sum, inp2);
+				sum_Wt += a_weightAcc[idx_Add];
+
+				{
+					pDest = (T *)&a_outAcc[i];
+					float denom = (sum_Wt > 0.2f) ? sum_Wt : 0.2f;
+					DivideByNum(sum, denom, pDest);
+				}
+
+				//AssertUndefinedOrValid(*pDest);
+			}
+
+			///////////////////////////////
+
+			//	Fill bgn gap in output
+			{
+				for (int i = 0; i < start + nBefDiff; i++)
+				{
+					pDest = (T *)&a_outAcc[i];
+					SetToUndefined(pDest);
+				}
+			}
+
+			//	Fill end gap in output
+			{
+				const int nSrcIdx = (end)-nAftDiff;
+
+				for (int i = nSrcIdx + 1; i < nSize_1D; i++)
+				{
+					pDest = (T *)&a_outAcc[i];
+					SetToUndefined(pDest);
+				}
+			}
+
+
+			AssertLineUndefinedOrValid(a_outAcc);
+		}
+
+
+		template<class T>
+		void AvgLine_Weighted_0(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<float> & a_weightAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const Range<int> & a_range)
 		{
 			AssertLineValues(a_inpAcc);
 

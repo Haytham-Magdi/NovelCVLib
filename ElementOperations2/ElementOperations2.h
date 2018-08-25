@@ -58,9 +58,14 @@ namespace Ncv
 			//AssertValue(a_inp1);
 			//AssertValue(a_inp2);
 
-			//*a_pOut = a_inp1 + a_inp2;
-
 			Assign(a_pOut, a_inp1 + a_inp2);
+		}
+
+
+		template<class T>
+		void IncBy(T & a_inp, const T & a_inc)
+		{
+			Add(a_inp, a_inc, &a_inp1);
 		}
 
 
@@ -86,6 +91,13 @@ namespace Ncv
 			Assign(a_pOut, a_inp1 - a_inp2);
 
 			//*a_pOut = a_inp1 - a_inp2;
+		}
+
+
+		template<class T>
+		void DecBy(T & a_inp, const T & a_dec)
+		{
+			Subtracta_inp, a_dec, &a_inp);
 		}
 
 
