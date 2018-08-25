@@ -425,7 +425,6 @@ namespace Ncv
 			SetToZero<T>(&sum);
 			for (int i = start; i < start + nRangeLen; i++)
 			{
-				//Add(sum, a_inpAcc[i], &sum);
 				IncBy(sum, a_inpAcc[i]);
 			}
 
@@ -437,16 +436,13 @@ namespace Ncv
 
 			for (int i = start + nBefDiff + 1; i <= nCenterEnd; i++)
 			{
-				pDest = (T *)&a_outAcc[i];
-
-				Subtract(sum, a_inpAcc[(i - 1) - nBefDiff], &sum);
-				//Add(sum, a_inpAcc[i + nAftDiff], &sum);
+				DecBy(sum, a_inpAcc[(i - 1) - nBefDiff]);
 				IncBy(sum, a_inpAcc[i + nAftDiff]);
-
 
 				//Assign(pDest, sum);
 				//DivideByNum(*pDest, nRangeLen, pDest);
 
+				pDest = (T *)&a_outAcc[i];
 				DivideByNum(sum, nRangeLen, pDest);
 
 				//AssertUndefinedOrValid(*pDest);
@@ -553,9 +549,6 @@ namespace Ncv
 				Assign(&inp2, &a_inpAcc[i]);
 				MultiplyByNum(inp2, a_weightAcc[i], &inp2);
 
-				//sum_Wt += a_weightAcc[i];
-				//Add(sum, inp2, &sum);
-
 				IncBy(sum_Wt, a_weightAcc[i]);
 				IncBy(sum, inp2);
 			}
@@ -578,16 +571,15 @@ namespace Ncv
 				Assign(&inp2, &a_inpAcc[idx_Sub]);
 				MultiplyByNum(inp2, a_weightAcc[idx_Sub], &inp2);
 
-				Subtract(sum, inp2, &sum);
-				sum_Wt -= a_weightAcc[idx_Sub];
+				DecBy(sum, inp2);
+				DecBy(sum_Wt, a_weightAcc[idx_Sub]);
 
 				int idx_Add = i + nAftDiff;
 				Assign(&inp2, &a_inpAcc[idx_Add]);
 				MultiplyByNum(inp2, a_weightAcc[idx_Add], &inp2);
 
-				//Add(sum, inp2, &sum);
 				IncBy(sum, inp2);
-				sum_Wt += a_weightAcc[idx_Add];
+				IncBy(sum_Wt, a_weightAcc[idx_Add]);
 
 				{
 					pDest = (T *)&a_outAcc[i];
