@@ -163,7 +163,7 @@ namespace Ncv
 				Calc_Avg_And_Standev_Image(cx.m_org_Img->GetVirtAccessor(), avg_InrWide_Img->GetVirtAccessor(), standev_InrWide_Img->GetVirtAccessor(),
 					Window<int>::New(-nInrRad, nInrRad, -nInrRad, nInrRad));
 
-				MultiplyImageByNum(standev_InrWide_Img->GetVirtAccessor(), standev_InrWide_Img->GetVirtAccessor(), 2);
+				MultiplyImageByNum(standev_InrWide_Img->GetVirtAccessor(), 2);
 				//AssertValues_Image(avg_InrWide_Img->GetVirtAccessor());
 			}
 

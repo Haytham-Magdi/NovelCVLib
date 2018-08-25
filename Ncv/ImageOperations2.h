@@ -165,6 +165,13 @@ namespace Ncv
 
 
 		template<class T>
+		void DivideImageByNum(const VirtArrayAccessor_2D<T> & a_inpAcc, const float a_num)
+		{
+			DivideImageByNum(a_inpAcc, a_inpAcc, a_num);
+		}
+
+
+		template<class T>
 		void MultiplyImageByNum(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const float a_num)
 		{
 			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_inpAcc.GenAccessor_Y();
@@ -189,6 +196,13 @@ namespace Ncv
 
 				MultiplyLineByNum<T>(acc_Inp_X, acc_Out_X, a_num);
 			}
+		}
+
+
+		template<class T>
+		void MultiplyImageByNum(const VirtArrayAccessor_2D<T> & a_inpAcc, const float a_num)
+		{
+			MultiplyImageByNum(a_inpAcc, a_inpAcc, a_num);
 		}
 
 

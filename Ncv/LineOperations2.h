@@ -92,12 +92,6 @@ namespace Ncv
 				ptr = ptrItr.GetBgn();
 				ElementOperations2::AssertUndefinedOrValid<T>(*ptr);
 			}
-
-			//for (int i = 0; i < a_acc.GetSize(); i++)
-			//{
-			//	const T & val = a_acc[i];
-			//	ElementOperations2::AssertUndefinedOrValid<T>(val);
-			//}
 		}
 
 
@@ -113,6 +107,41 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Inp = a_inpAcc.GenPtrIterator();
 			PtrIterator2<T> ptrItr_Out = a_outAcc.GenPtrIterator();
 
+
+			// manage undefined from bgn.
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetEnd();
+				T * ptr_Out = ptrItr_Out.GetEnd();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// do main job.
 			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
@@ -134,6 +163,41 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Inp = a_inpAcc.GenPtrIterator();
 			PtrIterator2<T> ptrItr_Out = a_outAcc.GenPtrIterator();
 
+
+			// manage undefined from bgn.
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetEnd();
+				T * ptr_Out = ptrItr_Out.GetEnd();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// do main job.
 			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
@@ -143,20 +207,6 @@ namespace Ncv
 			}
 		}
 
-
-		//template<class T>
-		//void MultiplyLineByNum(const VirtArrayAccessor_1D<T> & a_acc, const float a_num)
-		//{
-		//	AssertLineValues(a_acc);
-
-		//	PtrIterator2<T> ptrItr = a_acc.GenPtrIterator();
-
-		//	for (; ptrItr.CanMove(); ptrItr.MoveBgn())
-		//	{
-		//		T * ptr = ptrItr.GetBgn();
-		//		ElementOperations2::MultiplyByNum<T>(*ptr, a_num, ptr);
-		//	}
-		//}
 
 		template<class T>
 		void CopyLine(const VirtArrayAccessor_1D<T> & a_destAcc, const VirtArrayAccessor_1D<T> & a_srcAcc)
@@ -168,6 +218,41 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Src = a_srcAcc.GenPtrIterator();
 			PtrIterator2<T> ptrItr_Dest = a_destAcc.GenPtrIterator();
 
+
+			// manage undefined from bgn.
+			for (; ptrItr_Src.CanMove(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
+			{
+				T * ptr_Src = ptrItr_Src.GetBgn();
+				T * ptr_Dest = ptrItr_Dest.GetBgn();
+
+				if (IsUndefined(*ptr_Src))
+				{
+					SetToUndefined(ptr_Dest);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Src.CanMove(); ptrItr_Src.MoveEnd(), ptrItr_Dest.MoveEnd())
+			{
+				T * ptr_Src = ptrItr_Src.GetEnd();
+				T * ptr_Dest = ptrItr_Dest.GetEnd();
+
+				if (IsUndefined(*ptr_Src))
+				{
+					SetToUndefined(ptr_Dest);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// do main job.
 			for (; ptrItr_Src.CanMove(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
 			{
 				T * ptr_Src = ptrItr_Src.GetBgn();
@@ -187,6 +272,41 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Inp = a_inpAcc.GenPtrIterator();
 			PtrIterator2<float> ptrItr_Out = a_outAcc.GenPtrIterator();
 
+
+			// manage undefined from bgn.
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				float * ptr_Out = ptrItr_Out.GetBgn();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetEnd();
+				float * ptr_Out = ptrItr_Out.GetEnd();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// do actual stuff.
 			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
