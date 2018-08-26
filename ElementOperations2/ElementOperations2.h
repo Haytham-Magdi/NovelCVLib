@@ -63,9 +63,9 @@ namespace Ncv
 
 
 		template<class T>
-		void IncBy(T & a_inp, const T & a_inc)
+		void IncBy(T & a_arg, const T & a_inc)
 		{
-			Add(a_inp, a_inc, &a_inp1);
+			Add(a_arg, a_inc, &a_arg);
 		}
 
 
@@ -89,15 +89,13 @@ namespace Ncv
 		void Subtract(const T & a_inp1, const T & a_inp2, T * a_pOut)
 		{
 			Assign(a_pOut, a_inp1 - a_inp2);
-
-			//*a_pOut = a_inp1 - a_inp2;
 		}
 
 
 		template<class T>
-		void DecBy(T & a_inp, const T & a_dec)
+		void DecBy(T & a_arg, const T & a_dec)
 		{
-			Subtracta_inp, a_dec, &a_inp);
+			Subtract(a_arg, a_dec, &a_arg);
 		}
 
 
