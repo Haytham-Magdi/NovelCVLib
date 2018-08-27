@@ -911,7 +911,6 @@ namespace Ncv
 
 
 
-
 			//for (int i = start + nBefDiff + 1; i <= nCenterEnd; i++)
 			for (int i = start + nBefDiff; i <= nCenterEnd; i++)
 			{
@@ -952,44 +951,6 @@ namespace Ncv
 		}
 
 
-		template<class T>
-		void Calc_ConflictDiff_Line_0(const VirtArrayAccessor_1D<T> & a_avg_Acc, const VirtArrayAccessor_1D<float> & a_avg_MagSqr_Acc,
-			const VirtArrayAccessor_1D<float> & a_outAcc, const Range<int> & a_range)
-		{
-			AssertLineValues(a_avg_Acc);
-
-			{
-				float val_Init;
-				val_Init = 0;
-				FillLine<float>(a_outAcc, val_Init);
-			}
-
-			Ncpp_ASSERT(a_avg_Acc.GetSize() == a_avg_MagSqr_Acc.GetSize());
-			Ncpp_ASSERT(a_avg_Acc.GetSize() == a_outAcc.GetSize());
-
-			const int nSize_1D = a_outAcc.GetSize();
-
-			const int nBefDiff = -a_range.GetBgn();
-			const int nAftDiff = a_range.GetEnd();
-
-			const int nCenterEnd = nSize_1D - 1 - nAftDiff;
-			const int nRangeLen = nBefDiff + 1 + nAftDiff;
-
-			for (int i = nBefDiff + 1; i <= nCenterEnd; i++)
-			{
-				float * pOut = &a_outAcc[i];
-
-				const T & avg_1 = &a_avg_Acc[i - nBefDiff];
-				//float avg_MagSqr_1 = &sac_Avg_MagSqr[i - nBefDiff];
-				float avg_MagSqr_1 = &a_avg_MagSqr_Acc[i - nBefDiff];
-
-				const T & avg_2 = &a_avg_Acc[i + nAftDiff];
-				//float avg_MagSqr_2 = &sac_Avg_MagSqr[i + nAftDiff];
-				float avg_MagSqr_2 = &a_avg_MagSqr_Acc[i + nAftDiff];
-
-				*pOut = ElementOperations2::Calc_ConflictDiff(avg_1, avg_MagSqr_1, avg_2, avg_MagSqr_2);
-			}
-		}
 
 	};
 }
