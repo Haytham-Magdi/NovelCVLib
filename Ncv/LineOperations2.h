@@ -707,22 +707,12 @@ namespace Ncv
 		template<class T>
 		void CalcConflictLine(const VirtArrayAccessor_1D<T> & a_avg_Acc, const VirtArrayAccessor_1D<float> & a_avg_MagSqr_Acc,
 			const VirtArrayAccessor_1D<ConflictInfo2> & a_outAcc, const Range<int> & a_range)
-			//VirtArrayAccessor_1D<ConflictInfo2> & a_outAcc, const Range<int> & a_range)
 		{
 			Ncpp_ASSERT(a_avg_Acc.GetSize() == a_avg_MagSqr_Acc.GetSize());
 			Ncpp_ASSERT(a_avg_Acc.GetSize() == a_outAcc.GetSize());
 
-			//AssertLineValues(a_avg_Acc);
-
 			AssertLineUndefinedOrValid(a_avg_Acc);
 			AssertLineUndefinedOrValid(a_avg_MagSqr_Acc);
-
-			//{
-			//	ConflictInfo2 val_Init;
-			//	val_Init.Exists = false;
-			//	FillLine<ConflictInfo2>(a_outAcc, val_Init);
-			//}
-
 
 
 			const int nSize_1D = a_outAcc.GetSize();
@@ -786,7 +776,6 @@ namespace Ncv
 
 
 
-			//const int nCenterEnd = nSize_1D - 1 - nAftDiff;
 
 			//for (int i = start + nBefDiff + 1; i <= nCenterEnd; i++)
 			for (int i = start + nBefDiff; i <= nCenterEnd; i++)
@@ -852,6 +841,119 @@ namespace Ncv
 
 		template<class T>
 		void Calc_ConflictDiff_Line(const VirtArrayAccessor_1D<T> & a_avg_Acc, const VirtArrayAccessor_1D<float> & a_avg_MagSqr_Acc,
+			const VirtArrayAccessor_1D<float> & a_outAcc, const Range<int> & a_range)
+		{
+			Ncpp_ASSERT(a_avg_Acc.GetSize() == a_avg_MagSqr_Acc.GetSize());
+			Ncpp_ASSERT(a_avg_Acc.GetSize() == a_outAcc.GetSize());
+
+			AssertLineUndefinedOrValid(a_avg_Acc);
+			AssertLineUndefinedOrValid(a_avg_MagSqr_Acc);
+
+
+			const int nSize_1D = a_outAcc.GetSize();
+
+			const int nBefDiff = -a_range.GetBgn();
+			const int nAftDiff = a_range.GetEnd();
+
+			const int nRangeLen = nBefDiff + 1 + nAftDiff;
+
+
+			//--------------
+
+
+
+			int start = 0;
+			for (; start < nSize_1D; start++)
+			{
+				const T & avgVal = a_avg_Acc[start];
+				const float & avgMagSqrVal = a_avg_MagSqr_Acc[start];
+
+				if (IsUndefined(avgVal) || IsUndefined(avgMagSqrVal))
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			int end = nSize_1D - 1;
+			for (; end >= start; end--)
+			{
+				const T & avgVal = a_avg_Acc[end];
+				const float & avgMagSqrVal = a_avg_MagSqr_Acc[end];
+
+				if (IsUndefined(avgVal) || IsUndefined(avgMagSqrVal))
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			//------
+
+			if (end + 1 - start < nRangeLen)
+			{
+				SetLineToUndefined(a_outAcc);
+				return;
+			}
+
+			//const int nCenterEnd = nSize_1D - 1 - nAftDiff;
+			const int nCenterEnd = end - nAftDiff;
+
+
+			//--------------
+
+
+
+
+			//for (int i = start + nBefDiff + 1; i <= nCenterEnd; i++)
+			for (int i = start + nBefDiff; i <= nCenterEnd; i++)
+			{
+				//float * pOut = &a_outAcc[i];
+				float * pOut = (float *)&a_outAcc[i];
+
+				const T & avg_1 = a_avg_Acc[i - nBefDiff];
+				float avg_MagSqr_1 = a_avg_MagSqr_Acc[i - nBefDiff];
+
+				const T & avg_2 = a_avg_Acc[i + nAftDiff];
+				float avg_MagSqr_2 = a_avg_MagSqr_Acc[i + nAftDiff];
+
+				*pOut = ElementOperations2::CalcConflict(avg_1, avg_MagSqr_1, avg_2, avg_MagSqr_2);
+			}
+
+			///////////////////////////////
+
+			//	Fill bgn gap in output
+			{
+				for (int i = 0; i < start + nBefDiff; i++)
+				{
+					ConflictInfo2 * pDest = (ConflictInfo2 *)&a_outAcc[i];
+					SetToUndefined(pDest);
+				}
+			}
+
+			//	Fill end gap in output
+			{
+				for (int i = end - nAftDiff + 1; i < nSize_1D; i++)
+				{
+					ConflictInfo2 * pDest = (ConflictInfo2 *)&a_outAcc[i];
+					SetToUndefined(pDest);
+				}
+			}
+
+
+			AssertLineUndefinedOrValid(a_outAcc);
+		}
+
+
+		template<class T>
+		void Calc_ConflictDiff_Line_0(const VirtArrayAccessor_1D<T> & a_avg_Acc, const VirtArrayAccessor_1D<float> & a_avg_MagSqr_Acc,
 			const VirtArrayAccessor_1D<float> & a_outAcc, const Range<int> & a_range)
 		{
 			AssertLineValues(a_avg_Acc);
