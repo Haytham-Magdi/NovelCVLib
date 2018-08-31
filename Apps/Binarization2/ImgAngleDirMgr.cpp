@@ -352,15 +352,23 @@ namespace Ncv
 				{
 					const int nOffset_YX = nOffset_Y + x;
 
-					VectorVal<Float, 4> & rCommonVal = commonImgBuf[nOffset_YX];
-					AssertValue(rCommonVal);
+					VectorVal<Float, 4> * pCommonVal = &commonImgBuf[nOffset_YX];
+					if (IsUndefined(*pCommonVal))
+						continue;
 
+					AssertValue(*pCommonVal);
 
 					int nOffset_Mapped = orgToRotMap_Buf[nOffset_YX];
 					Ncpp_ASSERT(nOffset_Mapped >= 0);
 
 					VectorVal<Float, 4> & val_Local = localPtr[nOffset_Mapped];
-					Add(rCommonVal, val_Local, &rCommonVal);
+					if (IsUndefined(val_Local))
+					{
+						SetToUndefined(pCommonVal);
+						continue;
+					}
+					
+					IncBy(*pCommonVal, val_Local);
 				}
 			}
 
