@@ -92,8 +92,8 @@ namespace Ncv
 		template<class T>
 		void DivideLineByNum(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const float a_num)
 		{
-			AssertLineValues(a_inpAcc);
-			AssertLineValues(a_outAcc);
+			AssertLineUndefinedOrValid(a_inpAcc);
+			AssertLineUndefinedOrValid(a_outAcc);
 
 			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
 
@@ -148,8 +148,8 @@ namespace Ncv
 		template<class T>
 		void MultiplyLineByNum(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const float a_num)
 		{
-			AssertLineValues(a_inpAcc);
-			AssertLineValues(a_outAcc);
+			AssertLineUndefinedOrValid(a_inpAcc);
+			AssertLineUndefinedOrValid(a_outAcc);
 
 			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
 
@@ -205,7 +205,7 @@ namespace Ncv
 		template<class T>
 		void CopyLine(const VirtArrayAccessor_1D<T> & a_destAcc, const VirtArrayAccessor_1D<T> & a_srcAcc)
 		{
-			AssertLineValues(a_srcAcc);
+			AssertLineUndefinedOrValid(a_srcAcc);
 
 			Ncpp_ASSERT(a_srcAcc.GetSize() == a_destAcc.GetSize());
 
@@ -259,7 +259,7 @@ namespace Ncv
 		template<class T>
 		void CalcMagLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<float> & a_outAcc)
 		{
-			AssertLineValues(a_inpAcc);
+			AssertLineUndefinedOrValid(a_inpAcc);
 
 			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
 
@@ -620,20 +620,58 @@ namespace Ncv
 		template<class T>
 		void CalcSqrtLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<float> & a_outAcc)
 		{
-			AssertLineValues(a_inpAcc);
+
+			AssertLineUndefinedOrValid(a_inpAcc);
 
 			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
 
 			PtrIterator2<T> ptrItr_Inp = a_inpAcc.GenPtrIterator();
 			PtrIterator2<float> ptrItr_Out = a_outAcc.GenPtrIterator();
 
+
+			// manage undefined from bgn.
 			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
 				float * ptr_Out = ptrItr_Out.GetBgn();
 
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetEnd();
+				float * ptr_Out = ptrItr_Out.GetEnd();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// do actual stuff.
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				float * ptr_Out = ptrItr_Out.GetBgn();
+
+				//*ptr_Out = ElementOperations2::CalcMag<T>(*ptr_Inp);
 				*ptr_Out = ElementOperations2::CalcSqrt<T>(*ptr_Inp);
 			}
+
 		}
 
 		template<class T>
