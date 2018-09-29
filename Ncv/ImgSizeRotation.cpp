@@ -11,8 +11,8 @@
 #include <NovelCVLib\Ncv\ImgSizeRotation.h>
 
 
-//#define M_PI 3.14159265358979323846
-#define M_PI 3.14159265358979323846f
+#define M_PI 3.14159265358979323846
+//#define M_PI 3.14159265358979323846f
 
 
 namespace Ncv
@@ -31,10 +31,10 @@ namespace Ncv
 
 		//m_srcImg = a_srcImg;
 		m_angDig = a_angDig;
-		m_angRad = a_angDig * M_PI / 180;
+		m_angRad = (float)(a_angDig * M_PI / 180);
 
-		m_nCos = SRIntScale::Scale(cos(m_angRad));
-		m_nSin = SRIntScale::Scale(sin(m_angRad));
+		m_nCos = SRIntScale::ScaleToI(cos(m_angRad));
+		m_nSin = SRIntScale::ScaleToI(sin(m_angRad));
 
 		if (m_nCos != SRIntScale::Ceil(m_nCos))
 		{
@@ -47,15 +47,15 @@ namespace Ncv
 		}
 
 		int mag1 = Sqr(m_nCos) + Sqr(m_nSin);
-		Ncpp_ASSERT(mag1 >= Sqr(SRIntScale::Scale(1)));
+		Ncpp_ASSERT(mag1 >= Sqr(SRIntScale::ScaleToI(1)));
 
 		Prepare();
 	}
 
 	void ImgSizeRotation::Prepare()
 	{
-		const int nScaled_SrcWidth = SRIntScale::Scale(m_srcSiz.GetX());
-		const int nScaled_SrcHeight = SRIntScale::Scale(m_srcSiz.GetY());
+		const int nScaled_SrcWidth = SRIntScale::ScaleToI(m_srcSiz.GetX());
+		const int nScaled_SrcHeight = SRIntScale::ScaleToI(m_srcSiz.GetY());
 
 		//m_bgnPnt;
 
@@ -194,7 +194,7 @@ namespace Ncv
 
 					int nIdx_Src = idxCalc_Src.Calc(
 						//rSrcPnt.x / SRIntScale::GetScaleVal(), rSrcPnt.y / SRIntScale::GetScaleVal());
-						SRIntScale::DividByScale(rSrcPnt.x), SRIntScale::DividByScale(rSrcPnt.y));
+						SRIntScale::IntDividByScale(rSrcPnt.x), SRIntScale::IntDividByScale(rSrcPnt.y));
 
 					int nOldDist = srcMinDistBuf[nIdx_Src];
 

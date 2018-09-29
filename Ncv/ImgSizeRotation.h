@@ -183,10 +183,10 @@ namespace Ncv
 							//Ncpp_ASSERT(nX2 >= 0);
 							//Ncpp_ASSERT(nY2 >= 0);
 
-							T & rColor_Src_X1_Y1 = a_srcBuf[idxCalc_Src.Calc(SRIntScale::DividByScale(nX1), SRIntScale::DividByScale(nY1))];
-							T & rColor_Src_X1_Y2 = a_srcBuf[idxCalc_Src.Calc(SRIntScale::DividByScale(nX1), SRIntScale::DividByScale(nY2))];
-							T & rColor_Src_X2_Y1 = a_srcBuf[idxCalc_Src.Calc(SRIntScale::DividByScale(nX2), SRIntScale::DividByScale(nY1))];
-							T & rColor_Src_X2_Y2 = a_srcBuf[idxCalc_Src.Calc(SRIntScale::DividByScale(nX2), SRIntScale::DividByScale(nY2))];
+							T & rColor_Src_X1_Y1 = a_srcBuf[idxCalc_Src.Calc(SRIntScale::IntDividByScale(nX1), SRIntScale::IntDividByScale(nY1))];
+							T & rColor_Src_X1_Y2 = a_srcBuf[idxCalc_Src.Calc(SRIntScale::IntDividByScale(nX1), SRIntScale::IntDividByScale(nY2))];
+							T & rColor_Src_X2_Y1 = a_srcBuf[idxCalc_Src.Calc(SRIntScale::IntDividByScale(nX2), SRIntScale::IntDividByScale(nY1))];
+							T & rColor_Src_X2_Y2 = a_srcBuf[idxCalc_Src.Calc(SRIntScale::IntDividByScale(nX2), SRIntScale::IntDividByScale(nY2))];
 
 							if (
 								IsUndefined(rColor_Src_X1_Y1) ||
@@ -223,11 +223,11 @@ namespace Ncv
 									//WaitedAdd_ByPtr(&rColor_Src_X1_Y2, (float)nWt_X1 / m_nScale,
 									//	&rColor_Src_X2_Y2, (float)(m_nScale - nWt_X1) / m_nScale, &color_Src_X_Y2);
 
-									WaitedAdd(rColor_Src_X1_Y1, SRIntScale::Unscale(nWt_X1),
-										rColor_Src_X2_Y1, 1 - SRIntScale::Unscale(nWt_X1), &color_Src_X_Y1);
+									WaitedAdd(rColor_Src_X1_Y1, SRIntScale::UnscaleToF(nWt_X1),
+										rColor_Src_X2_Y1, 1 - SRIntScale::UnscaleToF(nWt_X1), &color_Src_X_Y1);
 
-									WaitedAdd(rColor_Src_X1_Y2, SRIntScale::Unscale(nWt_X1),
-										rColor_Src_X2_Y2, 1 - SRIntScale::Unscale(nWt_X1), &color_Src_X_Y2);
+									WaitedAdd(rColor_Src_X1_Y2, SRIntScale::UnscaleToF(nWt_X1),
+										rColor_Src_X2_Y2, 1 - SRIntScale::UnscaleToF(nWt_X1), &color_Src_X_Y2);
 
 
 
@@ -245,8 +245,8 @@ namespace Ncv
 									//WaitedAdd_ByPtr(&color_Src_X_Y1, (float)nWt_Y1 / m_nScale,
 									//	&color_Src_X_Y2, (float)(m_nScale - nWt_Y1) / m_nScale, &rColor_Res);
 
-									WaitedAdd(color_Src_X_Y1, SRIntScale::Unscale(nWt_Y1),
-										color_Src_X_Y2, 1 - SRIntScale::Unscale(nWt_Y1), &rColor_Res);
+									WaitedAdd(color_Src_X_Y1, SRIntScale::UnscaleToF(nWt_Y1),
+										color_Src_X_Y2, 1 - SRIntScale::UnscaleToF(nWt_Y1), &rColor_Res);
 
 
 

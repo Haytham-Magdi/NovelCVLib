@@ -22,17 +22,17 @@ namespace Ncpp
 			return ScaleVal;
 		}
 
-		static T_Int Scale(T_Float a_fInp)
+		static T_Int ScaleToI(T_Float a_fInp)
 		{
 			return (T_Int)(ScaleVal * a_fInp);
 		}
 
-		static T_Float Unscale(T_Int a_scaledInp)
+		static T_Float UnscaleToF(T_Int a_scaledInp)
 		{
 			return ((T_Float)a_scaledInp / ScaleVal);
 		}
 
-		static T_Int DividByScale(T_Int a_inp)
+		static T_Int IntDividByScale(T_Int a_inp)
 		{
 			return a_inp / ScaleVal;
 		}
