@@ -44,6 +44,10 @@ namespace Ncv
 		}
 
 
+
+//	ConflictInfo2_Ex stuff:
+
+
 		void AssertValue(const ConflictInfo2_Ex & a_arg)
 		{
 			//AssertValue(a_arg.Dir);

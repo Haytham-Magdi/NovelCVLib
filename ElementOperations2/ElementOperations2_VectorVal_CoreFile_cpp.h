@@ -1,9 +1,13 @@
 
 // ElementOperations2.
 
+#include <NovelCVLib\Common\debug.h>
+
 
 		void Assign(Ncv::VectorVal<T_Elm, N_Dims> * a_pDest, const Ncv::VectorVal<T_Elm, N_Dims> & a_src)
 		{
+			//AssertValue(a_src);
+
 			for (int i = 0; i < a_src.GetNofDims(); i++)
 			{
 				Assign(&a_pDest->Vals[i], a_src.Vals[i]);
@@ -23,11 +27,12 @@
 
 		float CalcMagSqr(const Ncv::VectorVal<T_Elm, N_Dims> & a_arg)
 		{
+			//AssertValue(a_arg);
+
 			float sum = 0;
 			for (int i = 0; i < a_arg.GetNofDims(); i++)
 			{
-				sum += CalcMagSqr(a_arg.Vals[i]);
-				//sum += Sqr<float>((float)a_arg.Vals[i]);
+				IncBy(sum, CalcMagSqr(a_arg.Vals[i]));
 			}
 			return sum;
 		}
@@ -87,21 +92,11 @@
 		void SetToUndefined(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg)
 		{
 			SetToUndefined(&a_pArg->Vals[0]);
-
-			//for (int i = 0; i < a_pArg->GetNofDims(); i++)
-			//{
-			//	SetToUndefined(&a_pArg->Vals[i]);
-			//}
 		}
 
 		void SetToBadValue(Ncv::VectorVal<T_Elm, N_Dims> * a_pArg)
 		{
 			SetToBadValue(&a_pArg->Vals[0]);
-
-			//for (int i = 0; i < a_pArg->GetNofDims(); i++)
-			//{
-			//	SetToUndefined(&a_pArg->Vals[i]);
-			//}
 		}
 
 

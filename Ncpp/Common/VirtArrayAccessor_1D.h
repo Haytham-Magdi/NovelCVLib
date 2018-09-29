@@ -122,6 +122,12 @@ namespace Ncpp
 			a_pArr->Init(m_data, m_nofSteps, m_nStepSize);
 		}
 
+		void CopyTo(VirtArrayAccessor_1D * a_pArr, int a_bgn, int a_end) const
+		{
+			//a_pArr->Init(m_data, m_nofSteps, m_nStepSize);
+			a_pArr->Init((T *)&(*this)[a_bgn], a_end - a_bgn + 1, m_nStepSize);
+		}
+
 		VirtArrayAccessor_1D Clone() const
 		{
 			VirtArrayAccessor_1D arr;

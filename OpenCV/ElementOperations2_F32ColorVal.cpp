@@ -31,16 +31,21 @@ namespace Ncv
 		void AssertValue(const F32ColorVal & a_arg)
 		{
 			AssertValue(a_arg.val0);
-			AssertValue(a_arg.val1);
-			AssertValue(a_arg.val2);
+			//AssertValue(a_arg.val1);
+			//AssertValue(a_arg.val2);
 		}
 
 		float CalcMagSqr(const F32ColorVal & a_arg)
 		{
 			float sum = 0;
-			sum += CalcMagSqr(a_arg.val0);
-			sum += CalcMagSqr(a_arg.val1);
-			sum += CalcMagSqr(a_arg.val2);
+			
+			// sum += CalcMagSqr(a_arg.val0);
+			// sum += CalcMagSqr(a_arg.val1);
+			// sum += CalcMagSqr(a_arg.val2);
+
+			IncBy(sum, CalcMagSqr(a_arg.val0));
+			IncBy(sum, CalcMagSqr(a_arg.val1));
+			IncBy(sum, CalcMagSqr(a_arg.val2));
 
 			return sum;
 		}

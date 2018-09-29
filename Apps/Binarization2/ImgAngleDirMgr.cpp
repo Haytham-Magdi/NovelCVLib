@@ -362,6 +362,7 @@ namespace Ncv
 					Ncpp_ASSERT(nOffset_Mapped >= 0);
 
 					VectorVal<Float, 4> & val_Local = localPtr[nOffset_Mapped];
+					AssertUndefinedOrValid(val_Local);
 					if (IsUndefined(val_Local))
 					{
 						SetToUndefined(pCommonVal);

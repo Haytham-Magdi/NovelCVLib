@@ -136,7 +136,8 @@ namespace Ncv
 
 
 			// do main job.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			int cnt = 0;
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
 				T * ptr_Out = ptrItr_Out.GetBgn();
@@ -419,6 +420,16 @@ namespace Ncv
 				return;
 			}
 
+			// T * orgAccData = a_inpAcc.GetData();
+
+			// VirtArrayAccessor_1D<T> inpAccTest;
+			// a_inpAcc.CopyTo(&inpAccTest, start, end);
+
+			// T * testAccData = inpAccTest.GetData();
+
+			// AssertLineValues(inpAccTest);
+
+
 			const int nCenterEnd = end - nAftDiff;
 
 			T sum;
@@ -430,17 +441,12 @@ namespace Ncv
 
 			T * pDest;
 			pDest = (T *)&a_outAcc[start + nBefDiff];
-			//Assign(pDest, sum);
-			//DivideByNum(*pDest, nRangeLen, pDest);
 			DivideByNum(sum, nRangeLen, pDest);
 
 			for (int i = start + nBefDiff + 1; i <= nCenterEnd; i++)
 			{
 				DecBy(sum, a_inpAcc[(i - 1) - nBefDiff]);
 				IncBy(sum, a_inpAcc[i + nAftDiff]);
-
-				//Assign(pDest, sum);
-				//DivideByNum(*pDest, nRangeLen, pDest);
 
 				pDest = (T *)&a_outAcc[i];
 				DivideByNum(sum, nRangeLen, pDest);
@@ -557,9 +563,7 @@ namespace Ncv
 
 			{
 				pDest = (T *)&a_outAcc[start + nBefDiff];
-				//Assign(pDest, sum);
 				float denom = (sum_Wt > 0.2f) ? sum_Wt : 0.2f;
-				//DivideByNum(*pDest, denom, pDest);
 				DivideByNum(sum, denom, pDest);
 			}
 

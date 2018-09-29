@@ -18,6 +18,17 @@ namespace Ncv
 
 	namespace ElementOperations2
 	{
+		void Assign(float * a_pDest, const float & a_src)
+		{
+			//if (-12500000.0f == a_src) {
+			//	Ncpp::Debug::Break();
+			//}
+
+			AssertValue(a_src);
+
+			*a_pDest = a_src;
+		}
+
 		void SetToZero(float * a_pArg)
 		{
 			*a_pArg = 0.0f;

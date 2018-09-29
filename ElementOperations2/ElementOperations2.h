@@ -28,7 +28,6 @@ namespace Ncv
 		void Assign(T * a_pDest, const T & a_src)
 		{
 			AssertValue(a_src);
-
 			*a_pDest = a_src;
 		}
 
@@ -55,8 +54,8 @@ namespace Ncv
 		template<class T>
 		void Add(const T & a_inp1, const T & a_inp2, T * a_pOut)
 		{
-			//AssertValue(a_inp1);
-			//AssertValue(a_inp2);
+			AssertValue(a_inp1);
+			AssertValue(a_inp2);
 
 			Assign(a_pOut, a_inp1 + a_inp2);
 		}
@@ -72,15 +71,17 @@ namespace Ncv
 		template<class T>
 		void WaitedAdd(const T & a_inp1, const float a_weight1, const T & a_inp2, const float a_weight2, T * a_pOut)
 		{
-			//AssertValue(a_inp1);
-			//AssertValue(a_inp2);
+			AssertValue(a_inp1);
+			AssertValue(a_inp2);
+
+			AssertValue(a_weight1);
+			AssertValue(a_weight2);
 
 			T inp11, inp22;
 
 			MultiplyByNum(a_inp1, a_weight1, &inp11);
 			MultiplyByNum(a_inp2, a_weight2, &inp22);
 
-			//Add(&inp11, &inp22, a_pOut);
 			Add(inp11, inp22, a_pOut);
 		}
 
@@ -88,6 +89,9 @@ namespace Ncv
 		template<class T>
 		void Subtract(const T & a_inp1, const T & a_inp2, T * a_pOut)
 		{
+			AssertValue(a_inp1);
+			AssertValue(a_inp2);
+
 			Assign(a_pOut, a_inp1 - a_inp2);
 		}
 
@@ -102,22 +106,40 @@ namespace Ncv
 		template<class T>
 		void DivideByNum(const T & a_inp, const float a_num, T * a_pOut)
 		{
-			//AssertValue(a_inp);
+			AssertValue(a_inp);
+			AssertValue(a_num);
 
-			Assign(a_pOut, (float)(a_inp / a_num));
+			Assign(a_pOut, a_inp / a_num);
 
+			//Assign(a_pOut, (float)(a_inp / a_num));
 			//*a_pOut = (float)(a_inp / a_num);
+		}
+
+
+		template<class T>
+		void DivideSelfByNum(T & a_arg, const float a_num)
+		{
+			DivideByNum(a_arg, a_num, &a_arg);
 		}
 
 
 		template<class T>
 		void MultiplyByNum(const T & a_inp, const float a_num, T * a_pOut)
 		{
-			//AssertValue(a_inp);
+			AssertValue(a_inp);
+			AssertValue(a_num);
 
-			Assign(a_pOut, (float)(a_inp * a_num));
-			
+			Assign(a_pOut, a_inp * a_num);
+
+			//Assign(a_pOut, (float)(a_inp * a_num));
 			//*a_pOut = (float)(a_inp * a_num);
+		}
+
+
+		template<class T>
+		void MultiplySelfByNum(T & a_arg, const float a_num)
+		{
+			MultiplyByNum(a_arg, a_num, &a_arg);
 		}
 
 
@@ -172,7 +194,10 @@ namespace Ncv
 			float magSqr_Avg = CalcMagSqr(a_avg);
 
 			float variance = a_avg_MagSqr - magSqr_Avg;
-			float standev = sqrt(fabs(variance));
+
+			//float standev = sqrt(fabs(variance));
+			float standev;
+			Assign(&standev, sqrt(fabs(variance)));
 
 			return standev;
 		}
@@ -190,7 +215,7 @@ namespace Ncv
 
 			T avg_12;
 			Add(a_avg_1, a_avg_2, &avg_12);
-			DivideByNum(avg_12, 2, &avg_12);
+			DivideSelfByNum(avg_12, 2);
 
 			float avg_MagSqr_12 = (a_avg_MagSqr_1 + a_avg_MagSqr_2) / 2;
 
@@ -228,7 +253,7 @@ namespace Ncv
 
 			T avg_12;
 			Add(a_avg_1, a_avg_2, &avg_12);
-			DivideByNum(avg_12, 2, &avg_12);
+			DivideSelfByNum(avg_12, 2);
 
 			float avg_MagSqr_12 = (a_avg_MagSqr_1 + a_avg_MagSqr_2) / 2;
 
@@ -241,6 +266,7 @@ namespace Ncv
 			float standev_12 = CalcStandev(avg_12, avg_MagSqr_12);
 
 			float standev_MaxSide = (standev_1 > standev_2) ? standev_1 : standev_2;
+
 			float ret = (standev_12 > standev_MaxSide) ? (standev_12 - standev_MaxSide) : 0;
 			return ret;
 		}

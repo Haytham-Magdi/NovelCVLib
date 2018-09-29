@@ -36,8 +36,15 @@ namespace Ncv
 		m_nCos = SRIntScale::Scale(cos(m_angRad));
 		m_nSin = SRIntScale::Scale(sin(m_angRad));
 
-		m_nCos++;
-		m_nSin++;
+		if (m_nCos != SRIntScale::Ceil(m_nCos))
+		{
+			m_nCos++;
+		}
+
+		if (m_nSin != SRIntScale::Ceil(m_nSin))
+		{
+			m_nSin++;
+		}
 
 		int mag1 = Sqr(m_nCos) + Sqr(m_nSin);
 		Ncpp_ASSERT(mag1 >= Sqr(SRIntScale::Scale(1)));
@@ -116,55 +123,68 @@ namespace Ncv
 
 		for (int y = 0; y < m_resSiz.GetY(); y++)
 		{
-			S32Point curPnt_Y;
+			S32Point curSrcPnt_Y;
 
-			curPnt_Y.x = m_bgnPnt.x - y * m_nSin;
-			curPnt_Y.y = m_bgnPnt.y + y * m_nCos;
+			curSrcPnt_Y.x = m_bgnPnt.x - y * m_nSin;
+			curSrcPnt_Y.y = m_bgnPnt.y + y * m_nCos;
 
 			for (int x = 0; x < m_resSiz.GetX(); x++)
 			{
 				int nIdx_Res = idxCalc_Res.Calc(x, y);
 
-				S32Point curPnt_X;
-				//S32Point curPnt_X = m_srcPntOfRes_Arr[nIdx_Res];
+				S32Point curSrcPnt_YX;
+				//S32Point curSrcPnt_YX = m_srcPntOfRes_Arr[nIdx_Res];
 
 
 
-				curPnt_X.x = curPnt_Y.x + x * m_nCos;
-				curPnt_X.y = curPnt_Y.y + x * m_nSin;
+				curSrcPnt_YX.x = curSrcPnt_Y.x + x * m_nCos;
+				curSrcPnt_YX.y = curSrcPnt_Y.y + x * m_nSin;
 
 				//resToSrcBuf_X_Scaled[idxCalc_Res.Calc(x, y)] =
 
 				//{
 				int nX1, nX2, nY1, nY2;
 
-				nY1 = SRIntScale::Floor(curPnt_X.y);
+				nY1 = SRIntScale::Floor(curSrcPnt_YX.y);
 
-				nX1 = SRIntScale::Floor(curPnt_X.x);
+				nX1 = SRIntScale::Floor(curSrcPnt_YX.x);
 
 				if (!(nY1 >= 0 && nY1 < nScaled_SrcHeight))
-					goto SrcToResEnd;
+					//goto SrcToResEnd;
+					goto SetResIdxToNegative;
 
 				if (!(nX1 >= 0 && nX1 < nScaled_SrcWidth))
-					goto SrcToResEnd;
+					//goto SrcToResEnd;
+					goto SetResIdxToNegative;
 
 				srcPntArr.ResetSize();
 
 				srcPntArr.PushBack(S32Point(nX1, nY1));
 
-				nY2 = SRIntScale::Ceil(curPnt_X.y);
+				nY2 = SRIntScale::Ceil(curSrcPnt_YX.y);
 
-				nX2 = SRIntScale::Ceil(curPnt_X.x);
+				nX2 = SRIntScale::Ceil(curSrcPnt_YX.x);
 
 				if (nY2 < 0 || nY2 >= nScaled_SrcHeight)
-					nY2 = nY1;
+					//nY2 = nY1;
+					goto SetResIdxToNegative;
 
 				if (nX2 < 0 || nX2 >= nScaled_SrcWidth)
-					nX2 = nX1;
+					//nX2 = nX1;
+					goto SetResIdxToNegative;
 
 				srcPntArr.PushBack(S32Point(nX2, nY1));
 				srcPntArr.PushBack(S32Point(nX2, nY2));
 				srcPntArr.PushBack(S32Point(nX1, nY2));
+
+
+				goto SrcToResEnd;
+
+
+			SetResIdxToNegative:
+				resToSrcBuf[nIdx_Res] = -1;
+				continue;
+
 
 			SrcToResEnd:
 
@@ -173,15 +193,16 @@ namespace Ncv
 					S32Point & rSrcPnt = srcPntArr[i];
 
 					int nIdx_Src = idxCalc_Src.Calc(
-						rSrcPnt.x / SRIntScale::GetScaleVal(), rSrcPnt.y / SRIntScale::GetScaleVal());
+						//rSrcPnt.x / SRIntScale::GetScaleVal(), rSrcPnt.y / SRIntScale::GetScaleVal());
+						SRIntScale::DividByScale(rSrcPnt.x), SRIntScale::DividByScale(rSrcPnt.y));
 
 					int nOldDist = srcMinDistBuf[nIdx_Src];
 
 					if (nGreatDist == nOldDist)
 						nMappedSrcCnt++;
 
-					int nNewDist = abs(curPnt_X.x - rSrcPnt.x) +
-						abs(curPnt_X.y - rSrcPnt.y);
+					int nNewDist = abs(curSrcPnt_YX.x - rSrcPnt.x) +
+						abs(curSrcPnt_YX.y - rSrcPnt.y);
 
 					if (nNewDist < nOldDist)
 					{
@@ -195,13 +216,13 @@ namespace Ncv
 
 				bool bInImg = true;
 
-				int nX_Src = SRIntScale::Round(curPnt_X.x);
+				int nX_Src = SRIntScale::Round(curSrcPnt_YX.x);
 				nX_Src /= SRIntScale::GetScaleVal();
 
 				if (!(nX_Src >= 0 && nX_Src < m_srcSiz.GetX()))
 					bInImg = false;
 
-				int nY_Src = SRIntScale::Round(curPnt_X.y);
+				int nY_Src = SRIntScale::Round(curSrcPnt_YX.y);
 				nY_Src /= SRIntScale::GetScaleVal();
 
 				if (!(nY_Src >= 0 && nY_Src < m_srcSiz.GetY()))

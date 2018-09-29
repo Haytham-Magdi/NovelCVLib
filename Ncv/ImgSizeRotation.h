@@ -113,6 +113,8 @@ namespace Ncv
 					int nIdx_Res = idxCalc_Res.Calc(x, y);
 					//int nIdx_Res = sac_Out->GetAt(x, y);
 
+					T & rColor_Res = a_destBuf[nIdx_Res];
+
 					S32Point curPnt_YX;
 					//S32Point curPnt_YX = m_srcPntOfRes_Arr[nIdx_Res];
 
@@ -129,10 +131,12 @@ namespace Ncv
 					nX1 = SRIntScale::Floor(curPnt_YX.x);
 
 					if (!(nY1 >= 0 && nY1 < nScaled_SrcHeight))
-						goto SrcToResEnd;
+						//goto SrcToResEnd;
+						goto SetResToUndefined;
 
 					if (!(nX1 >= 0 && nX1 < nScaled_SrcWidth))
-						goto SrcToResEnd;
+						//goto SrcToResEnd;
+						goto SetResToUndefined;
 
 					//srcPntArr.ResetSize();
 
@@ -142,22 +146,31 @@ namespace Ncv
 
 					nX2 = SRIntScale::Ceil(curPnt_YX.x);
 
-					if (nY2 < 0 || nY2 >= nScaled_SrcHeight)
-						nY2 = nY1;
+					//if (nY2 < 0 || nY2 >= nScaled_SrcHeight)
+					//	nY2 = nY1;
 
-					if (nX2 < 0 || nX2 >= nScaled_SrcWidth)
-						nX2 = nX1;
+					//if (nX2 < 0 || nX2 >= nScaled_SrcWidth)
+					//	nX2 = nX1;
+
+					if (!(nY2 >= 0 && nY2 < nScaled_SrcHeight))
+						//goto SrcToResEnd;
+						goto SetResToUndefined;
+
+					if (!(nX2 >= 0 && nX2 < nScaled_SrcWidth))
+						//goto SrcToResEnd;
+						goto SetResToUndefined;
+
 
 					//srcPntArr.PushBack(cvPoint(nX2, nY1));
 					//srcPntArr.PushBack(cvPoint(nX2, nY2));
 					//srcPntArr.PushBack(cvPoint(nX1, nY2));
 
-				SrcToResEnd:
+				//SrcToResEnd:
 
 					//	PrepareResImg
 					//if (bInImg)
 					{
-						T & rColor_Res = a_destBuf[nIdx_Res];
+						//T & rColor_Res = a_destBuf[nIdx_Res];
 
 						int nIdx_Src = resToSrcBuf[nIdx_Res];
 
@@ -182,9 +195,12 @@ namespace Ncv
 								IsUndefined(rColor_Src_X2_Y2)
 								)
 							{
-								SetToUndefined(&rColor_Res);
+								//SetToUndefined(&rColor_Res);
+								goto SetResToUndefined;
 							}
-							else
+
+
+							//else
 							{
 
 								T color_Src_X_Y1;
@@ -244,6 +260,7 @@ namespace Ncv
 						}
 						else
 						{
+						SetResToUndefined:
 							////rColor_Res.AssignVal(0, 0, 0);
 							//SetToZero(&rColor_Res);
 
