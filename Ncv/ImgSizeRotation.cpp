@@ -36,17 +36,10 @@ namespace Ncv
 		m_nCos = SRIntScale::ScaleToI(cos(m_angRad));
 		m_nSin = SRIntScale::ScaleToI(sin(m_angRad));
 
-		if (m_nCos != SRIntScale::Ceil(m_nCos))
-		{
-			m_nCos++;
-		}
+		m_nCos = SRIntScale::GoNearCeilByOne(m_nCos);
+		m_nSin = SRIntScale::GoNearCeilByOne(m_nSin);
 
-		if (m_nSin != SRIntScale::Ceil(m_nSin))
-		{
-			m_nSin++;
-		}
-
-		int mag1 = Sqr(m_nCos) + Sqr(m_nSin);
+		const int mag1 = Sqr(m_nCos) + Sqr(m_nSin);
 		Ncpp_ASSERT(mag1 >= Sqr(SRIntScale::ScaleToI(1)));
 
 		Prepare();

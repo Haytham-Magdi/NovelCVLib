@@ -22,22 +22,22 @@ namespace Ncpp
 			return ScaleVal;
 		}
 
-		static T_Int ScaleToI(T_Float a_fInp)
+		static T_Int ScaleToI(const T_Float a_fInp)
 		{
 			return (T_Int)(ScaleVal * a_fInp);
 		}
 
-		static T_Float UnscaleToF(T_Int a_scaledInp)
+		static T_Float UnscaleToF(const T_Int a_scaledInp)
 		{
 			return ((T_Float)a_scaledInp / ScaleVal);
 		}
 
-		static T_Int IntDividByScale(T_Int a_inp)
+		static T_Int IntDividByScale(const T_Int a_inp)
 		{
 			return a_inp / ScaleVal;
 		}
 
-		static T_Int Round(T_Int a_inp)
+		static T_Int Round(const T_Int a_inp)
 		{
 			T_Int nRet;
 
@@ -56,7 +56,7 @@ namespace Ncpp
 			return nRet;
 		}
 
-		static T_Int Ceil(T_Int a_inp)
+		static T_Int Ceil(const T_Int a_inp)
 		{
 			T_Int nRet;
 
@@ -75,7 +75,7 @@ namespace Ncpp
 			return nRet;
 		}
 
-		static T_Int Floor(T_Int a_inp)
+		static T_Int Floor(const T_Int a_inp)
 		{
 			T_Int nRet = a_inp;
 
@@ -85,6 +85,25 @@ namespace Ncpp
 			return nRet;
 		}
 
+		//static T_Int GoToCeilBy(T_Int a_inp, T_Int a_step)
+		static T_Int GoNearCeilByOne(const T_Int a_inp)
+		{
+			T_Int nRet;
+
+			if (a_inp == SRIntScale::Ceil(a_inp))
+			{
+				return a_inp;
+			}
+
+			if (a_inp > 0)
+			{
+				return a_inp + 1;
+			}
+			else
+			{
+				return a_inp - 1;
+			}
+		}
 
 	protected:
 
