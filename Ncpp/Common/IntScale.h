@@ -90,7 +90,7 @@ namespace Ncpp
 		{
 			T_Int nRet;
 
-			if (a_inp == SRIntScale::Ceil(a_inp))
+			if (a_inp == IntScale::Ceil(a_inp))
 			{
 				return a_inp;
 			}
