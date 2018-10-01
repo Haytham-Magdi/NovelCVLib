@@ -37,6 +37,7 @@
 //#include <NovelCVLib\Ncv\ImgPopulation_CovMat.cpp>
 //#include <NovelCVLib\Ncv\ImgRotationMgr.cpp>
 //#include <NovelCVLib\Ncv\ImgRotationMgr_3.cpp>
+#include <NovelCVLib\Ncv\AngleRotation.cpp>
 #include <NovelCVLib\Ncv\ImgSizeRotation.cpp>
 #include <NovelCVLib\Ncv\ImgSizeRotationColl.cpp>
 //#include <NovelCVLib\Ncv\ImageLineItr.cpp>

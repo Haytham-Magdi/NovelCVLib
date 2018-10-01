@@ -21,6 +21,7 @@
 #include <NovelCVLib\Ncv\Signal1D.h>
 #include <NovelCVLib\Ncv\Signal1DViewer.h>
 #include <NovelCVLib\Ncv\MultiColorSignal1DViewer.h>
+#include <NovelCVLib\Ncv\AngleRotation.h>
 #include <NovelCVLib\Ncv\ImgSizeRotation.h>
 #include <NovelCVLib\Ncv\ImgSizeRotationColl.h>
 
