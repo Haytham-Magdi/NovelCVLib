@@ -53,6 +53,6 @@ namespace Ncv
 	};
 
 
-	typedef Ncpp::ObjRef< AngleRotation > ImgSizeRotationRef;
+	typedef Ncpp::ObjRef< AngleRotation > AngleRotationRef;
 
 }
