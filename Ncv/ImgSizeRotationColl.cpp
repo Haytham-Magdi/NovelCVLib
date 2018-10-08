@@ -48,6 +48,12 @@ namespace Ncv
 
 		float angStep = 90.0F / a_nofRots;
 
+
+		// to be removed
+		//float angDig1 = i * angStep;
+		ImgSizeRotationRef rot1 = new ImgSizeRotation(m_srcSiz, 22.5);
+
+
 		for (int i = 0; i < a_nofRots; i++)
 		{
 			float angDig = i * angStep;

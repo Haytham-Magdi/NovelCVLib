@@ -24,7 +24,7 @@ namespace Ncpp
 			m_valCur = a_valOrg;
 		}
 
-		void AddValue( T a_val )
+		void PushValue( T a_val )
 		{
 			if( a_val > m_valCur )
 				m_valCur = a_val;

@@ -47,6 +47,36 @@ namespace Ncpp
 			return ret;
 		}
 
+		static void Add(S32Point & a_inp1, S32Point & a_inp2, S32Point * a_pOut)
+		{
+			a_pOut->x = a_inp1.x + a_inp2.x;
+			a_pOut->y = a_inp1.y + a_inp2.y;
+		}
+
+		static S32Point Add(S32Point & a_inp1, S32Point & a_inp2)
+		{
+			S32Point ret;
+			
+			Add(a_inp1, a_inp2, &ret);
+			return ret;
+		}
+
+		static void Subtract(S32Point & a_inp1, S32Point & a_inp2, S32Point * a_pOut)
+		{
+			a_pOut->x = a_inp1.x - a_inp2.x;
+			a_pOut->y = a_inp1.y - a_inp2.y;
+		}
+
+		static S32Point Subtract(S32Point & a_inp1, S32Point & a_inp2)
+		{
+			S32Point ret;
+
+			Subtract(a_inp1, a_inp2, &ret);
+			return ret;
+		}
+
+
+
 		//void SetX(const int a_sizeX)
 		//{
 		//	 x = a_sizeX;

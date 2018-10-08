@@ -3,7 +3,6 @@
 #include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
 #include <NovelCVLib\Ncpp\Math\mathLib.h>
 
-//#include <NovelCVLib\Ncpp\Common\ActualArrayAccessor_2D.h>
 
 
 
@@ -17,8 +16,7 @@ namespace Ncv
 
 	class AngleRotation : public Ncpp::Object
 	{
-		//typedef IntScale<int, float, 1000> SizeRotIntScale;
-		typedef IntScale<int, float, 1000> SRIntScale;
+		typedef IntScale<int, float, 1000> ARIntScale;
 
 	public:
 
@@ -29,14 +27,28 @@ namespace Ncv
 		
 		void RotateScaledPoint(const S32Point & a_inp, S32Point * a_pOut)
 		{
-			a_pOut->x = a_inp.x * m_nCos - a_inp.y * m_nSin;
-			a_pOut->y = a_inp.x * m_nSin + a_inp.y * m_nCos;
+			a_pOut->x = ARIntScale::IntDividByScale(a_inp.x * m_nCos - a_inp.y * m_nSin);
+			a_pOut->y = ARIntScale::IntDividByScale(a_inp.x * m_nSin + a_inp.y * m_nCos);
+		}
+
+		S32Point  RotateScaledPoint(const S32Point & a_inp)
+		{
+			S32Point a_out;
+			RotateScaledPoint(a_inp, &a_out);
+			return a_out;
 		}
 
 		void ReverseRotateScaledPoint(const S32Point & a_inp, S32Point * a_pOut)
 		{
-			a_pOut->x = a_inp.x * m_nCos + a_inp.y * m_nSin;
-			a_pOut->y = -a_inp.x * m_nSin + a_inp.y * m_nCos;
+			a_pOut->x = ARIntScale::IntDividByScale(a_inp.x * m_nCos + a_inp.y * m_nSin);
+			a_pOut->y = ARIntScale::IntDividByScale(-a_inp.x * m_nSin + a_inp.y * m_nCos);
+		}
+
+		S32Point  ReverseRotateScaledPoint(const S32Point & a_inp)
+		{
+			S32Point a_out;
+			ReverseRotateScaledPoint(a_inp, &a_out);
+			return a_out;
 		}
 
 

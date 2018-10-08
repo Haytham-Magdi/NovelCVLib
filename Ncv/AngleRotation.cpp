@@ -17,21 +17,21 @@ namespace Ncv
 
 	AngleRotation::AngleRotation(float a_angDig)
 	{
-		Ncpp_ASSERT(a_angDig >= 0);
-		Ncpp_ASSERT(a_angDig <= 90);
+		// Ncpp_ASSERT(a_angDig >= 0);
+		// Ncpp_ASSERT(a_angDig <= 90);
 
 
 		m_angDig = a_angDig;
 		m_angRad = (float)(a_angDig * M_PI / 180);
 
-		m_nCos = SRIntScale::ScaleToI(cos(m_angRad));
-		m_nSin = SRIntScale::ScaleToI(sin(m_angRad));
+		m_nCos = ARIntScale::ScaleToI(cos(m_angRad));
+		m_nSin = ARIntScale::ScaleToI(sin(m_angRad));
 
-		m_nCos = SRIntScale::GoNearCeilByOne(m_nCos);
-		m_nSin = SRIntScale::GoNearCeilByOne(m_nSin);
+		m_nCos = ARIntScale::GoNearCeilByOne(m_nCos);
+		m_nSin = ARIntScale::GoNearCeilByOne(m_nSin);
 
 		const int mag1 = Sqr(m_nCos) + Sqr(m_nSin);
-		Ncpp_ASSERT(mag1 >= Sqr(SRIntScale::ScaleToI(1)));
+		Ncpp_ASSERT(mag1 >= Sqr(ARIntScale::ScaleToI(1)));
 
 	}
 
