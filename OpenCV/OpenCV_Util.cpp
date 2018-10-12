@@ -37,6 +37,17 @@ namespace Ncv
 		}
 
 
+		S64Point toS64Point(const CvPoint & src)
+		{
+			S64Point ret(src.x, src.y);
+			return ret;
+		}
+
+		CvPoint toCvPoint(const S64Point & src)
+		{
+			return cvPoint(src.GetX(), src.GetY());
+		}
+
 
 	}
 }

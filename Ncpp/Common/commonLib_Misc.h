@@ -29,6 +29,7 @@
 //#include <NovelCVLib\Ncpp\Common\Accessor2D.h>
 #include <NovelCVLib\Ncpp\Common\Size_2D.h>
 #include <NovelCVLib\Ncpp\Common\S32Point.h>
+#include <NovelCVLib\Ncpp\Common\S64Point.h>
 #include <NovelCVLib\Ncpp\Common\VirtArrayAccessor_1D.h>
 #include <NovelCVLib\Ncpp\Common\ArrayHolder_1D.h>
 #include <NovelCVLib\Ncpp\Common\SimpleArrayHolder_1D.h>

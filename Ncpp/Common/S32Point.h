@@ -76,6 +76,20 @@ namespace Ncpp
 		}
 
 
+		static void DivideByNum(const S32Point & a_inp, const float a_num, S32Point * a_pOut)
+		{
+			a_pOut->x = a_inp.x / a_num;
+			a_pOut->y = a_inp.y / a_num;
+		}
+
+		static S32Point DivideByNum(const S32Point & a_inp, const float a_num)
+		{
+			S32Point ret;
+
+			DivideByNum(a_inp, a_num, &ret);
+			return ret;
+		}
+
 
 		//void SetX(const int a_sizeX)
 		//{

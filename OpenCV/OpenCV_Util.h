@@ -12,6 +12,7 @@
 //#include <NovelCVLib\Ncpp\Common\ArrayHolder_2D.h>
 #include <NovelCVLib\Ncpp\Common\Size_2D.h>
 #include <NovelCVLib\Ncpp\Common\S32Point.h>
+#include <NovelCVLib\Ncpp\Common\S64Point.h>
 
 
 namespace Ncv
@@ -25,5 +26,8 @@ namespace Ncv
 
 		S32Point toS32Point(const CvPoint & src);
 		CvPoint toCvPoint(const S32Point & src);
+
+		S64Point toS64Point(const CvPoint & src);
+		CvPoint toCvPoint(const S64Point & src);
 	}
 }

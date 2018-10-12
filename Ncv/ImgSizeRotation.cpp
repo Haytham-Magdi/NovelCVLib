@@ -32,14 +32,14 @@ namespace Ncv
 		//m_angDig = a_angDig;
 		//m_angRad = (float)(a_angDig * M_PI / 180);
 
-		//m_nCos = SRIntScale::ScaleToI(cos(m_angRad));
-		//m_nSin = SRIntScale::ScaleToI(sin(m_angRad));
+		//m_nCos = SRResIntScale::ScaleToI(cos(m_angRad));
+		//m_nSin = SRResIntScale::ScaleToI(sin(m_angRad));
 
-		//m_nCos = SRIntScale::GoNearCeilByOne(m_nCos);
-		//m_nSin = SRIntScale::GoNearCeilByOne(m_nSin);
+		//m_nCos = SRResIntScale::GoNearCeilByOne(m_nCos);
+		//m_nSin = SRResIntScale::GoNearCeilByOne(m_nSin);
 
 		//const int mag1 = Sqr(m_nCos) + Sqr(m_nSin);
-		//Ncpp_ASSERT(mag1 >= Sqr(SRIntScale::ScaleToI(1)));
+		//Ncpp_ASSERT(mag1 >= Sqr(SRResIntScale::ScaleToI(1)));
 
 		//m_angleRot
 
@@ -48,23 +48,26 @@ namespace Ncv
 
 	void ImgSizeRotation::Prepare()
 	{
-		const int nScaled_SrcWidth_Org = SRIntScale::ScaleToI(m_srcSiz.GetX());
-		const int nScaled_SrcHeight_Org = SRIntScale::ScaleToI(m_srcSiz.GetY());
+		const int nScaled_SrcWidth_Org = SRRotIntScale::ScaleToI(m_srcSiz.GetX());
+		const int nScaled_SrcHeight_Org = SRRotIntScale::ScaleToI(m_srcSiz.GetY());
 
-		S32Point addedToResMin;
+		S64Point addedToResMin;
 		Size_2D resSize_Scaled;
-		FixedVector<S32Point> resOfOrgSrcCornersArr(4);
+		FixedVector<S64Point> resOfOrgSrcCornersArr(4);
 		{
-			FixedVector<S32Point> srcCornersArr(4);
+			FixedVector<S64Point> srcCornersArr(4);
 
-			srcCornersArr.PushBack(S32Point(0, 0));
-			srcCornersArr.PushBack(S32Point(0, nScaled_SrcHeight_Org));
-			srcCornersArr.PushBack(S32Point(nScaled_SrcWidth_Org, 0));
-			srcCornersArr.PushBack(S32Point(nScaled_SrcWidth_Org, nScaled_SrcHeight_Org));
+			srcCornersArr.PushBack(S64Point(0, 0));
+			srcCornersArr.PushBack(S64Point(0, nScaled_SrcHeight_Org));
+			srcCornersArr.PushBack(S64Point(nScaled_SrcWidth_Org, 0));
+			srcCornersArr.PushBack(S64Point(nScaled_SrcWidth_Org, nScaled_SrcHeight_Org));
 
 			for (int i = 0; i < srcCornersArr.GetSize(); i++)
 			{
-				resOfOrgSrcCornersArr.PushBack(m_angleRot.RotateScaledPoint(srcCornersArr[i]));
+				S64Point pnt1 = m_angleRot.RotateScaledPoint(srcCornersArr[i]);
+				resOfOrgSrcCornersArr.PushBack(pnt1);
+				
+				//resOfOrgSrcCornersArr.PushBack(m_angleRot.RotateScaledPoint(srcCornersArr[i]));
 			}
 
 			MinFinder<int> minFind_X;
@@ -74,7 +77,7 @@ namespace Ncv
 
 			for (int i = 0; i < resOfOrgSrcCornersArr.GetSize(); i++)
 			{
-				S32Point & rResPnt = resOfOrgSrcCornersArr[i];
+				S64Point & rResPnt = resOfOrgSrcCornersArr[i];
 
 				minFind_X.PushValue(rResPnt.x);
 				minFind_Y.PushValue(rResPnt.y);
@@ -91,39 +94,42 @@ namespace Ncv
 
 			for (int i = 0; i < resOfOrgSrcCornersArr.GetSize(); i++)
 			{
-				S32Point & rResPnt = resOfOrgSrcCornersArr[i];
-				S32Point::Add(rResPnt, addedToResMin, &rResPnt);
+				S64Point & rResPnt = resOfOrgSrcCornersArr[i];
+				S64Point::Add(rResPnt, addedToResMin, &rResPnt);
 				int a = 0;
 			}
 
-			resSize_Scaled.SetX(SRIntScale::Ceil(max_X + addedToResMin.x));
-			resSize_Scaled.SetY(SRIntScale::Ceil(max_Y + addedToResMin.y));
+			resSize_Scaled.SetX(SRRotIntScale::Ceil(max_X + addedToResMin.x));
+			resSize_Scaled.SetY(SRRotIntScale::Ceil(max_Y + addedToResMin.y));
 		}
 
 
-		m_resSiz.SetX(SRIntScale::IntDividByScale(resSize_Scaled.GetX()));
-		m_resSiz.SetY(SRIntScale::IntDividByScale(resSize_Scaled.GetY()));
+		m_resSiz.SetX(SRRotIntScale::IntDividByScale(resSize_Scaled.GetX()));
+		m_resSiz.SetY(SRRotIntScale::IntDividByScale(resSize_Scaled.GetY()));
 
 
 
 		Size_2D revSrcSize_Scaled;
 
-		int orgToRevRatio_X_Scaled, orgToRevRatio_Y_Scaled;
+		//int orgToRevRatio_X_Scaled, orgToRevRatio_Y_Scaled;
+		long long orgToRevRatio_X_Scaled, orgToRevRatio_Y_Scaled;
 
 		{
-			FixedVector<S32Point> revSrcCornersArr(4);
+			FixedVector<S64Point> revSrcCornersArr(4);
 
 			for (int i = 0; i < resOfOrgSrcCornersArr.GetSize(); i++)
 			{
-				S32Point resCornerPnt = resOfOrgSrcCornersArr[i];
-				S32Point pnt1 = S32Point::Subtract(resCornerPnt, addedToResMin);
-				S32Point pnt11 = m_angleRot.ReverseRotateScaledPoint(pnt1);
+				S64Point resCornerPnt = resOfOrgSrcCornersArr[i];
+				S64Point pnt1 = S64Point::Subtract(resCornerPnt, addedToResMin);
+				S64Point pnt11 = m_angleRot.ReverseRotateScaledPoint(pnt1);
+					//.DivideByNum((float)SRRotIntScale::GetScaleVal() / SRRotIntScale::GetScaleVal()).toS32Point();
 
 				revSrcCornersArr.PushBack(pnt11);
 				//revSrcCornersArr.PushBack(m_angleRot.ReverseRotateScaledPoint(
-				//	//S32Point::Subtract(cornerPnt, addedToResMin)));
+				//	//S64Point::Subtract(cornerPnt, addedToResMin)));
 				//	pnt1));
 			}
+
 
 			MinFinder<int> minFind_X;
 			MinFinder<int> minFind_Y;
@@ -132,7 +138,7 @@ namespace Ncv
 
 			for (int i = 0; i < revSrcCornersArr.GetSize(); i++)
 			{
-				S32Point & rRevSrcPnt = revSrcCornersArr[i];
+				S64Point & rRevSrcPnt = revSrcCornersArr[i];
 
 				minFind_X.PushValue(rRevSrcPnt.x);
 				minFind_Y.PushValue(rRevSrcPnt.y);
@@ -147,28 +153,39 @@ namespace Ncv
 			Ncpp_ASSERT(0 == min_X);
 			Ncpp_ASSERT(0 == min_Y);
 
+
+
+			//{
+			//	S64Point resCornerPnt = resOfOrgSrcCornersArr[i];
+			//	S64Point pnt1 = S64Point::Subtract(resCornerPnt, addedToResMin);
+			//	S64Point pnt11 = m_angleRot.ReverseRotateScaledPoint(pnt1);
+
+			//	int a;
+			//}
+
+
 			revSrcSize_Scaled.SetX(max_X);
 			revSrcSize_Scaled.SetY(max_Y);
 
 			Size_2D orgSrcSize_Scaled;
-			orgSrcSize_Scaled.SetX(SRIntScale::ScaleToI(this->m_srcSiz.GetX()));
-			orgSrcSize_Scaled.SetY(SRIntScale::ScaleToI(this->m_srcSiz.GetY()));
+			orgSrcSize_Scaled.SetX(SRRotIntScale::ScaleToI(this->m_srcSiz.GetX()));
+			orgSrcSize_Scaled.SetY(SRRotIntScale::ScaleToI(this->m_srcSiz.GetY()));
 
 
 			while (revSrcSize_Scaled.GetX() > orgSrcSize_Scaled.GetX())
 			{
 				orgToRevRatio_X_Scaled =
-					(orgSrcSize_Scaled.GetX() * SRIntScale::GetScaleVal()) / revSrcSize_Scaled.GetX();
+					(orgSrcSize_Scaled.GetX() * SRRotIntScale::GetScaleVal()) / revSrcSize_Scaled.GetX();
 
-				revSrcSize_Scaled.SetX((revSrcSize_Scaled.GetX() * orgToRevRatio_X_Scaled) / SRIntScale::GetScaleVal());
+				revSrcSize_Scaled.SetX((revSrcSize_Scaled.GetX() * orgToRevRatio_X_Scaled) / SRRotIntScale::GetScaleVal());
 			}
 
 			while (revSrcSize_Scaled.GetY() > orgSrcSize_Scaled.GetY())
 			{
 				orgToRevRatio_Y_Scaled =
-					(orgSrcSize_Scaled.GetY() * SRIntScale::GetScaleVal()) / revSrcSize_Scaled.GetY();
+					(orgSrcSize_Scaled.GetY() * SRRotIntScale::GetScaleVal()) / revSrcSize_Scaled.GetY();
 
-				revSrcSize_Scaled.SetY((revSrcSize_Scaled.GetY() * orgToRevRatio_Y_Scaled) / SRIntScale::GetScaleVal());
+				revSrcSize_Scaled.SetY((revSrcSize_Scaled.GetY() * orgToRevRatio_Y_Scaled) / SRRotIntScale::GetScaleVal());
 			}
 
 
@@ -238,9 +255,9 @@ namespace Ncv
 		//		//{
 		//		int nX1, nX2, nY1, nY2;
 
-		//		nY1 = SRIntScale::Floor(curSrcPnt_YX.y);
+		//		nY1 = SRResIntScale::Floor(curSrcPnt_YX.y);
 
-		//		nX1 = SRIntScale::Floor(curSrcPnt_YX.x);
+		//		nX1 = SRResIntScale::Floor(curSrcPnt_YX.x);
 
 		//		if (!(nY1 >= 0 && nY1 < nScaled_SrcHeight_Org))
 		//			//goto SrcToResEnd;
@@ -254,9 +271,9 @@ namespace Ncv
 
 		//		srcPntArr.PushBack(S32Point(nX1, nY1));
 
-		//		nY2 = SRIntScale::Ceil(curSrcPnt_YX.y);
+		//		nY2 = SRResIntScale::Ceil(curSrcPnt_YX.y);
 
-		//		nX2 = SRIntScale::Ceil(curSrcPnt_YX.x);
+		//		nX2 = SRResIntScale::Ceil(curSrcPnt_YX.x);
 
 		//		if (nY2 < 0 || nY2 >= nScaled_SrcHeight_Org)
 		//			//nY2 = nY1;
@@ -286,8 +303,8 @@ namespace Ncv
 		//			S32Point & rSrcPnt = srcPntArr[i];
 
 		//			int nIdx_Src = idxCalc_Src.Calc(
-		//				//rSrcPnt.x / SRIntScale::GetScaleVal(), rSrcPnt.y / SRIntScale::GetScaleVal());
-		//				SRIntScale::IntDividByScale(rSrcPnt.x), SRIntScale::IntDividByScale(rSrcPnt.y));
+		//				//rSrcPnt.x / SRResIntScale::GetScaleVal(), rSrcPnt.y / SRResIntScale::GetScaleVal());
+		//				SRResIntScale::IntDividByScale(rSrcPnt.x), SRResIntScale::IntDividByScale(rSrcPnt.y));
 
 		//			int nOldDist = srcMinDistBuf[nIdx_Src];
 
@@ -309,14 +326,14 @@ namespace Ncv
 
 		//		bool bInImg = true;
 
-		//		int nX_Src = SRIntScale::Round(curSrcPnt_YX.x);
-		//		nX_Src /= SRIntScale::GetScaleVal();
+		//		int nX_Src = SRResIntScale::Round(curSrcPnt_YX.x);
+		//		nX_Src /= SRResIntScale::GetScaleVal();
 
 		//		if (!(nX_Src >= 0 && nX_Src < m_srcSiz.GetX()))
 		//			bInImg = false;
 
-		//		int nY_Src = SRIntScale::Round(curSrcPnt_YX.y);
-		//		nY_Src /= SRIntScale::GetScaleVal();
+		//		int nY_Src = SRResIntScale::Round(curSrcPnt_YX.y);
+		//		nY_Src /= SRResIntScale::GetScaleVal();
 
 		//		if (!(nY_Src >= 0 && nY_Src < m_srcSiz.GetY()))
 		//			bInImg = false;

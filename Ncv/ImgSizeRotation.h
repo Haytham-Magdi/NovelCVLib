@@ -29,7 +29,9 @@ namespace Ncv
 	class ImgSizeRotation : public Ncpp::Object
 	{
 		//typedef IntScale<int, float, 1000> SizeRotIntScale;
-		typedef IntScale<int, float, 1000> SRIntScale;
+		//typedef IntScale<int, float, 1000> SRIntScale;
+		typedef IntScale<long long, float, 100000> SRRotIntScale;
+		typedef IntScale<int, float, 1000> SRResIntScale;
 
 	public:
 
@@ -300,7 +302,7 @@ namespace Ncv
 		//int m_nCos;
 		//int m_nSin;
 
-		AngleRotation m_angleRot;
+		AngleRotation<SRRotIntScale> m_angleRot;
 
 		S32Point m_bgnPnt;
 
