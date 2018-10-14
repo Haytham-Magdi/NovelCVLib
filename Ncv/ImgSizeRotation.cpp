@@ -46,8 +46,33 @@ namespace Ncv
 		Prepare();
 	}
 
+	void ImgSizeRotation::FindMinMaxXYForPointArr(const FixedVector<S64Point> & a_pointArr,
+		int * a_pMin_X, int * a_pMin_Y, int * a_pMax_X, int * a_pMax_Y)
+	{
+		MinFinder<int> minFind_X;
+		MinFinder<int> minFind_Y;
+		MaxFinder<int> maxFind_X;
+		MaxFinder<int> maxFind_Y;
+
+		for (int i = 0; i < a_pointArr.GetSize(); i++)
+		{
+			S64Point & rPnt = a_pointArr[i];
+
+			minFind_X.PushValue(rPnt.x);
+			minFind_Y.PushValue(rPnt.y);
+			maxFind_X.PushValue(rPnt.x);
+			maxFind_Y.PushValue(rPnt.y);
+		}
+		*a_pMin_X = minFind_X.FindMin();
+		*a_pMin_Y = minFind_Y.FindMin();
+		*a_pMax_X = maxFind_X.FindMax();
+		*a_pMax_Y = maxFind_Y.FindMax();
+	}
+
 	void ImgSizeRotation::Prepare()
 	{
+		const int nRotToResScaleRatio = SRRotIntScale::GetScaleVal() / SRResIntScale::GetScaleVal();
+
 		const int nScaled_SrcWidth_Org = SRRotIntScale::ScaleToI(m_srcSiz.GetX());
 		const int nScaled_SrcHeight_Org = SRRotIntScale::ScaleToI(m_srcSiz.GetY());
 
@@ -66,28 +91,12 @@ namespace Ncv
 			{
 				S64Point pnt1 = m_angleRot.RotateScaledPoint(srcCornersArr[i]);
 				resOfOrgSrcCornersArr.PushBack(pnt1);
-				
+
 				//resOfOrgSrcCornersArr.PushBack(m_angleRot.RotateScaledPoint(srcCornersArr[i]));
 			}
 
-			MinFinder<int> minFind_X;
-			MinFinder<int> minFind_Y;
-			MaxFinder<int> maxFind_X;
-			MaxFinder<int> maxFind_Y;
-
-			for (int i = 0; i < resOfOrgSrcCornersArr.GetSize(); i++)
-			{
-				S64Point & rResPnt = resOfOrgSrcCornersArr[i];
-
-				minFind_X.PushValue(rResPnt.x);
-				minFind_Y.PushValue(rResPnt.y);
-				maxFind_X.PushValue(rResPnt.x);
-				maxFind_Y.PushValue(rResPnt.y);
-			}
-			int min_X = minFind_X.FindMin();
-			int min_Y = minFind_Y.FindMin();
-			int max_X = maxFind_X.FindMax();
-			int max_Y = maxFind_Y.FindMax();
+			int min_X, min_Y, max_X, max_Y;
+			FindMinMaxXYForPointArr(resOfOrgSrcCornersArr, &min_X, &min_Y, &max_X, &max_Y);
 
 			addedToResMin.x = 0 - min_X;
 			addedToResMin.y = 0 - min_Y;
@@ -109,6 +118,15 @@ namespace Ncv
 
 
 
+
+		/////////////////////////////////////////////
+
+
+		m_resToScaledSrcMapImg = ArrayHolderUtil::CreateFrom<S32Point>(m_resSiz);
+
+
+
+
 		Size_2D revSrcSize_Scaled;
 
 		//int orgToRevRatio_X_Scaled, orgToRevRatio_Y_Scaled;
@@ -122,7 +140,7 @@ namespace Ncv
 				S64Point resCornerPnt = resOfOrgSrcCornersArr[i];
 				S64Point pnt1 = S64Point::Subtract(resCornerPnt, addedToResMin);
 				S64Point pnt11 = m_angleRot.ReverseRotateScaledPoint(pnt1);
-					//.DivideByNum((float)SRRotIntScale::GetScaleVal() / SRRotIntScale::GetScaleVal()).toS32Point();
+				//.DivideByNum((float)SRRotIntScale::GetScaleVal() / SRRotIntScale::GetScaleVal()).toS32Point();
 
 				revSrcCornersArr.PushBack(pnt11);
 				//revSrcCornersArr.PushBack(m_angleRot.ReverseRotateScaledPoint(
@@ -131,28 +149,11 @@ namespace Ncv
 			}
 
 
-			MinFinder<int> minFind_X;
-			MinFinder<int> minFind_Y;
-			MaxFinder<int> maxFind_X;
-			MaxFinder<int> maxFind_Y;
-
-			for (int i = 0; i < revSrcCornersArr.GetSize(); i++)
-			{
-				S64Point & rRevSrcPnt = revSrcCornersArr[i];
-
-				minFind_X.PushValue(rRevSrcPnt.x);
-				minFind_Y.PushValue(rRevSrcPnt.y);
-				maxFind_X.PushValue(rRevSrcPnt.x);
-				maxFind_Y.PushValue(rRevSrcPnt.y);
-			}
-			int min_X = minFind_X.FindMin();
-			int min_Y = minFind_Y.FindMin();
-			int max_X = maxFind_X.FindMax();
-			int max_Y = maxFind_Y.FindMax();
+			int min_X, min_Y, max_X, max_Y;
+			FindMinMaxXYForPointArr(revSrcCornersArr, &min_X, &min_Y, &max_X, &max_Y);
 
 			Ncpp_ASSERT(0 == min_X);
 			Ncpp_ASSERT(0 == min_Y);
-
 
 
 			//{
@@ -197,12 +198,11 @@ namespace Ncv
 
 
 
-		m_resToScaledSrcMapImg = ArrayHolderUtil::CreateFrom<S32Point>(m_resSiz);
 
 
 
 
-//-----------------------------
+		//-----------------------------
 
 		//m_resToSrcMapImg = ArrayHolderUtil::CreateFrom<int>(m_resSiz);
 		//int * resToSrcBuf = (int *)m_resToSrcMapImg->GetActualAccessor().GetData();

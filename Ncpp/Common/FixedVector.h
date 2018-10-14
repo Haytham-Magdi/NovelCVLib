@@ -200,7 +200,7 @@ namespace Ncpp
 		FixedVector() { Init(); }
 		FixedVector( int a_capacity ) { Init(); SetCapacity( a_capacity ); }
 
-		T * GetHeadPtr()
+		T * GetHeadPtr() const
 		{
 			return m_data;
 		}
@@ -224,7 +224,7 @@ namespace Ncpp
 
 		}
 
-		int GetSize() { return m_size; }
+		int GetSize() const { return m_size; }
 
 		void SetAllToVal( T a_val ) 
 		{ 
@@ -241,7 +241,7 @@ namespace Ncpp
 
 
 
-		int GetCapacity( )
+		int GetCapacity() const
 		{
 			return m_capacity;
 		}
@@ -299,12 +299,12 @@ namespace Ncpp
 			FixedVectorDebug::Update();
 		}
 
-		T & operator[](int a_pos)
+		T & operator[](int a_pos) const
 		{
 			return m_data[a_pos];
 		}
 
-		T & GetAtBack(int a_nBackIndex)
+		T & GetAtBack(int a_nBackIndex) const
 		{
 			return m_data[ m_size - 1 - a_nBackIndex ];
 		}
@@ -332,7 +332,7 @@ namespace Ncpp
 			m_size++;
 		}
 
-		T & GetBack()
+		T & GetBack() const
 		{
 			return m_data[m_size - 1];
 		}

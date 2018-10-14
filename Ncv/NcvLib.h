@@ -37,6 +37,7 @@
 #include <NovelCVLib\ElementOperations2\ElementOperations2_VectorVal.h>
 #include <NovelCVLib\ElementOperations2\ElementOperations2_Float.h>
 #include <NovelCVLib\ElementOperations2\ElementOperations2_Int.h>
+#include <NovelCVLib\ElementOperations2\ElementOperations2_LongLong.h>
 #include <NovelCVLib\OpenCV\ElementOperations2_F32ColorVal.h>
 #include <NovelCVLib\ElementOperations2\ElementOperations2.h>
 

@@ -31,7 +31,7 @@ namespace Ncv
 		//typedef IntScale<int, float, 1000> SizeRotIntScale;
 		//typedef IntScale<int, float, 1000> SRIntScale;
 		typedef IntScale<long long, float, 100000> SRRotIntScale;
-		typedef IntScale<int, float, 1000> SRResIntScale;
+		typedef IntScale<int, float, 100> SRResIntScale;
 
 	public:
 
@@ -285,8 +285,12 @@ namespace Ncv
 
 
 	protected:
+		
+		void FindMinMaxXYForPointArr(const FixedVector<S64Point> & a_pointArr,
+			int * a_pMin_X, int * a_pMin_Y, int * a_pMax_X, int * a_pMax_Y);
 
 		void Prepare();
+
 
 		//void PrepareResImg();
 

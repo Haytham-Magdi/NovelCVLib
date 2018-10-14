@@ -9,6 +9,9 @@
 #include <NovelCVLib\Common\Object.h>
 #include <NovelCVLib\Ncpp\Common\S32Point.h>
 
+#include <NovelCVLib\ElementOperations2\ElementOperations2.h>
+#include <NovelCVLib\ElementOperations2\ElementOperations2_LongLong.h>
+
 
 namespace Ncpp
 {
@@ -79,8 +82,8 @@ namespace Ncpp
 
 		static void DivideByNum(const S64Point & a_inp, const float a_num, S64Point * a_pOut)
 		{
-			a_pOut->x = a_inp.x / a_num;
-			a_pOut->y = a_inp.y / a_num;
+			a_pOut->x = (long long)(a_inp.x / a_num);
+			a_pOut->y = (long long)(a_inp.y / a_num);
 		}
 
 		static S64Point DivideByNum(const S64Point & a_inp, const float a_num)
@@ -106,6 +109,16 @@ namespace Ncpp
 
 			S32Point ret((int)src.x, (int)src.y);
 			return ret;
+		}
+
+		static void SetToUndefined(S64Point * a_pArg)
+		{
+			Ncv::ElementOperations2::SetToUndefined(&a_pArg->x);
+		}
+
+		static bool IsUndefined(const S64Point & a_arg)
+		{
+			return Ncv::ElementOperations2::IsUndefined(a_arg.x);
 		}
 
 
