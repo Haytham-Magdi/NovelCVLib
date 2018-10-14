@@ -119,11 +119,6 @@ namespace Ncv
 
 
 
-		/////////////////////////////////////////////
-
-
-		m_resToScaledSrcMapImg = ArrayHolderUtil::CreateFrom<S32Point>(m_resSiz);
-
 
 
 
@@ -196,6 +191,11 @@ namespace Ncv
 
 
 
+
+		/////////////////////////////////////////////
+
+
+		m_resToScaledSrcMapImg = ArrayHolderUtil::CreateFrom<S32Point>(m_resSiz);
 
 
 
