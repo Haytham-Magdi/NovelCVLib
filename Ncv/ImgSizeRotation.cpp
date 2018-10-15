@@ -69,47 +69,82 @@ namespace Ncv
 		*a_pMax_Y = maxFind_Y.FindMax();
 	}
 
+
+	void ImgSizeRotation::GetScaledCornersOfSize2D(const Size_2D & a_size, FixedVector<S64Point> & a_outArr)
+	{
+		const int nScaled_Width = SRRotIntScale::ScaleToI(a_size.GetX());
+		const int nScaled_Height = SRRotIntScale::ScaleToI(a_size.GetY());
+
+		a_outArr.SetCapacity(4);
+
+		a_outArr.PushBack(S64Point(0, 0));
+		a_outArr.PushBack(S64Point(0, nScaled_Height));
+		a_outArr.PushBack(S64Point(nScaled_Width, 0));
+		a_outArr.PushBack(S64Point(nScaled_Width, nScaled_Height));
+	}
+
+
+	void ImgSizeRotation::GetVerticesPointsOfRectangle(
+		long long a_x1, long long a_y1, long long a_x2, long long a_y2, FixedVector<S64Point> & a_outArr)
+	{
+		a_outArr.SetCapacity(4);
+
+		a_outArr.PushBack(S64Point(a_x1, a_y1));
+		a_outArr.PushBack(S64Point(a_x1, a_y2));
+		a_outArr.PushBack(S64Point(a_x2, a_y1));
+		a_outArr.PushBack(S64Point(a_x2, a_y2));
+	}
+
+
+	void ImgSizeRotation::InitResPointInfoArr(const ActualArrayAccessor_2D<ResPointInfo> & a_resPointInfoAcc, const Size_2D & a_resSize)
+	{
+		for (int resY = 0; resY < a_resSize.GetY(); resY++)
+		{
+			for (int resX = 0; resX < a_resSize.GetX(); resX++)
+			{
+				ResPointInfo & rResPntInfo = a_resPointInfoAcc.GetAt(resX, resY);
+				rResPntInfo.WasVisited = false;
+				rResPntInfo.PosInRes = S64Point(resX, resY);
+				rResPntInfo.PosInRes_Scaled = rResPntInfo.PosInRes.MultiplyByIntNum(SRRotIntScale::GetScaleVal());
+			}
+		}
+	}
+
+
 	void ImgSizeRotation::Prepare()
 	{
 		const int nRotToResScaleRatio = SRRotIntScale::GetScaleVal() / SRResIntScale::GetScaleVal();
 
-		const int nScaled_SrcWidth_Org = SRRotIntScale::ScaleToI(m_srcSiz.GetX());
-		const int nScaled_SrcHeight_Org = SRRotIntScale::ScaleToI(m_srcSiz.GetY());
+		//const int nScaled_SrcWidth_Org = SRRotIntScale::ScaleToI(m_srcSiz.GetX());
+		//const int nScaled_SrcHeight_Org = SRRotIntScale::ScaleToI(m_srcSiz.GetY());
 
 		S64Point addedToResMin;
 		Size_2D resSize_Scaled;
 		FixedVector<S64Point> resOfOrgSrcCornersArr(4);
-		{
-			FixedVector<S64Point> srcCornersArr(4);
 
-			srcCornersArr.PushBack(S64Point(0, 0));
-			srcCornersArr.PushBack(S64Point(0, nScaled_SrcHeight_Org));
-			srcCornersArr.PushBack(S64Point(nScaled_SrcWidth_Org, 0));
-			srcCornersArr.PushBack(S64Point(nScaled_SrcWidth_Org, nScaled_SrcHeight_Org));
+		{
+			FixedVector<S64Point> srcCornersArr;
+			GetScaledCornersOfSize2D(m_srcSiz, srcCornersArr);
 
 			for (int i = 0; i < srcCornersArr.GetSize(); i++)
 			{
-				S64Point pnt1 = m_angleRot.RotateScaledPoint(srcCornersArr[i]);
-				resOfOrgSrcCornersArr.PushBack(pnt1);
-
-				//resOfOrgSrcCornersArr.PushBack(m_angleRot.RotateScaledPoint(srcCornersArr[i]));
+				resOfOrgSrcCornersArr.PushBack(m_angleRot.RotateScaledPoint(srcCornersArr[i]));
 			}
 
 			int min_X, min_Y, max_X, max_Y;
 			FindMinMaxXYForPointArr(resOfOrgSrcCornersArr, &min_X, &min_Y, &max_X, &max_Y);
 
-			addedToResMin.x = 0 - min_X;
-			addedToResMin.y = 0 - min_Y;
+			addedToResMin.SetValue(-min_X, -min_Y);
 
 			for (int i = 0; i < resOfOrgSrcCornersArr.GetSize(); i++)
 			{
 				S64Point & rResPnt = resOfOrgSrcCornersArr[i];
-				S64Point::Add(rResPnt, addedToResMin, &rResPnt);
-				int a = 0;
+				//S64Point::Add(rResPnt, addedToResMin, &rResPnt);
+				rResPnt.IncBy(addedToResMin);
 			}
 
-			resSize_Scaled.SetX(SRRotIntScale::Ceil(max_X + addedToResMin.x));
-			resSize_Scaled.SetY(SRRotIntScale::Ceil(max_Y + addedToResMin.y));
+			resSize_Scaled.SetX(SRRotIntScale::Ceil(max_X + addedToResMin.x) + SRRotIntScale::GetScaleVal());
+			resSize_Scaled.SetY(SRRotIntScale::Ceil(max_Y + addedToResMin.y) + SRRotIntScale::GetScaleVal());
 		}
 
 
@@ -118,7 +153,138 @@ namespace Ncv
 
 
 
+		/////-------------------------------------------------------------
 
+
+		ArrayHolder_2D_Ref<ResPointInfo> resPointInfoImg = ArrayHolderUtil::CreateFrom<ResPointInfo>(m_resSiz);
+		ActualArrayAccessor_2D<ResPointInfo> resPointInfoAcc = resPointInfoImg->GetActualAccessor();
+
+		InitResPointInfoArr(resPointInfoAcc, m_resSiz);
+
+		/////-------------------------------------------------------------
+
+
+		Size_2D srcSize_Scaled(m_srcSiz.GetX() * SRRotIntScale::GetScaleVal(), m_srcSiz.GetY() * SRRotIntScale::GetScaleVal());
+
+		m_srcToResPointMapImg = ArrayHolderUtil::CreateFrom<S64Point>(m_srcSiz);
+		ActualArrayAccessor_2D<S64Point> srcToResPointMapAcc = m_srcToResPointMapImg->GetActualAccessor();
+
+		for (int srcY = 0; srcY < m_srcSiz.GetY(); srcY++)
+		{
+			for (int srcX = 0; srcX < m_srcSiz.GetX(); srcX++)
+			{
+				S64Point srcPnt(srcX, srcY);
+				S64Point srcPnt_Scaled = srcPnt.MultiplyByIntNum(SRRotIntScale::GetScaleVal());
+
+				S64Point & rResPnt_Scaled = srcToResPointMapAcc.GetAt(srcX, srcY);
+				m_angleRot.RotateScaledPoint(srcPnt_Scaled, &rResPnt_Scaled);
+
+				rResPnt_Scaled.IncBy(addedToResMin);
+
+				Ncpp_ASSERT(rResPnt_Scaled.GetX() >= 0);
+				Ncpp_ASSERT(rResPnt_Scaled.GetY() >= 0);
+
+				long long resX_Bef_Scaled = SRRotIntScale::Floor(rResPnt_Scaled.GetX());
+				long long resY_Bef_Scaled = SRRotIntScale::Floor(rResPnt_Scaled.GetY());
+
+				Ncpp_ASSERT(resX_Bef_Scaled >= 0);
+				Ncpp_ASSERT(resY_Bef_Scaled >= 0);
+
+				long long resX_Aft_Scaled = SRRotIntScale::Ceil(rResPnt_Scaled.GetX());
+				long long resY_Aft_Scaled = SRRotIntScale::Ceil(rResPnt_Scaled.GetY());
+
+				Ncpp_ASSERT(resX_Aft_Scaled <= resSize_Scaled.GetX() - SRRotIntScale::GetScaleVal());
+				Ncpp_ASSERT(resY_Aft_Scaled <= resSize_Scaled.GetY() - SRRotIntScale::GetScaleVal());
+
+				FixedVector<S64Point> neighboursInResArr;
+
+				GetVerticesPointsOfRectangle(resX_Bef_Scaled, resY_Bef_Scaled,
+					resX_Aft_Scaled, resY_Aft_Scaled, neighboursInResArr);
+
+				for (int i = 0; i < neighboursInResArr.GetSize(); i++)
+				{
+					S64Point & rNbrInResPnt_Scaled = neighboursInResArr[i];
+					S64Point nbrInResPnt = rNbrInResPnt_Scaled.DivideByIntNum(SRRotIntScale::GetScaleVal());
+
+					ResPointInfo & rNbrPntInfo = resPointInfoAcc.GetAt(nbrInResPnt.GetX(), nbrInResPnt.GetY());
+
+					if (!rNbrPntInfo.WasVisited)
+					{
+						rNbrPntInfo.WasVisited = true;
+					}
+
+					Ncpp_ASSERT(S64Point::AreEqual(rNbrInResPnt_Scaled, rNbrPntInfo.PosInRes_Scaled));
+
+
+
+					double distance = S64Point::CalcDistance(
+						rNbrPntInfo.PosInRes_Scaled, rResPnt_Scaled);
+
+					if (distance < rNbrPntInfo.NearestDistanceToSrcPosInRes)
+					{
+						rNbrPntInfo.NearestDistanceToSrcPosInRes = distance;
+						rNbrPntInfo.NearstSrcPosInRes_Scaled = rResPnt_Scaled;
+
+						S64Point diffPnt = S64Point::Subtract(rNbrPntInfo.PosInRes_Scaled, rResPnt_Scaled);
+						S64Point revRotDiffPnt;
+						m_angleRot.ReverseRotateScaledPoint(diffPnt, &revRotDiffPnt);
+
+						S64Point::Add(srcPnt_Scaled, revRotDiffPnt, &rNbrPntInfo.PosInSrc_Scaled);
+					}
+					else
+					{
+						//S64Point diffPnt = S64Point::Subtract(rNbrPntInfo.PosInRes_Scaled, rResPnt_Scaled);
+						//S64Point revRotDiffPnt;
+						//m_angleRot.ReverseRotateScaledPoint(diffPnt, &revRotDiffPnt);
+
+						//S64Point nbrPosInSrc_Scaled;
+						//S64Point::Add(srcPnt_Scaled, revRotDiffPnt, &nbrPosInSrc_Scaled);
+
+						//if (!S64Point::AreEqual(nbrPosInSrc_Scaled, rNbrPntInfo.PosInSrc_Scaled))
+						//{
+						//	distance = distance;
+						//}
+
+						continue;
+					}
+
+
+					//Ncpp_ASSERT(rNbrPntInfo.PosInSrc_Scaled.GetX() >= 0);
+					//Ncpp_ASSERT(rNbrPntInfo.PosInSrc_Scaled.GetY() >= 0);
+
+					//Ncpp_ASSERT(rNbrPntInfo.PosInSrc_Scaled.GetX() <= srcSize_Scaled.GetX() - SRRotIntScale::GetScaleVal());
+					//Ncpp_ASSERT(rNbrPntInfo.PosInSrc_Scaled.GetY() <= srcSize_Scaled.GetY() - SRRotIntScale::GetScaleVal());
+
+					if (
+						rNbrPntInfo.PosInSrc_Scaled.GetX() < 0 ||
+						rNbrPntInfo.PosInSrc_Scaled.GetY() < 0 ||
+
+						(rNbrPntInfo.PosInSrc_Scaled.GetX() > srcSize_Scaled.GetX() - SRRotIntScale::GetScaleVal()) ||
+						(rNbrPntInfo.PosInSrc_Scaled.GetY() > srcSize_Scaled.GetY() - SRRotIntScale::GetScaleVal())
+						)
+					{
+						rNbrPntInfo.HasDefinedSrc = false;
+					}
+					else
+					{
+						rNbrPntInfo.HasDefinedSrc = true;
+					}
+
+
+
+				}
+
+			}
+		}
+
+
+
+
+
+
+
+
+		///////////////////////////////////////////////
 
 
 

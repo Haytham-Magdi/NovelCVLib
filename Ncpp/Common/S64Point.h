@@ -12,6 +12,7 @@
 #include <NovelCVLib\ElementOperations2\ElementOperations2.h>
 #include <NovelCVLib\ElementOperations2\ElementOperations2_LongLong.h>
 
+#include <NovelCVLib\Ncpp\Math\mathLib.h>
 
 namespace Ncpp
 {
@@ -51,13 +52,13 @@ namespace Ncpp
 			return ret;
 		}
 
-		static void Add(S64Point & a_inp1, S64Point & a_inp2, S64Point * a_pOut)
+		static void Add(const S64Point & a_inp1, const S64Point & a_inp2, S64Point * a_pOut)
 		{
 			a_pOut->x = a_inp1.x + a_inp2.x;
 			a_pOut->y = a_inp1.y + a_inp2.y;
 		}
 
-		static S64Point Add(S64Point & a_inp1, S64Point & a_inp2)
+		static S64Point Add(const S64Point & a_inp1, const S64Point & a_inp2)
 		{
 			S64Point ret;
 			
@@ -65,13 +66,19 @@ namespace Ncpp
 			return ret;
 		}
 
-		static void Subtract(S64Point & a_inp1, S64Point & a_inp2, S64Point * a_pOut)
+		void IncBy(const S64Point & a_incPnt)
+		{
+			S64Point::Add(*this, a_incPnt, this);
+		}
+
+
+		static void Subtract(const S64Point & a_inp1, const S64Point & a_inp2, S64Point * a_pOut)
 		{
 			a_pOut->x = a_inp1.x - a_inp2.x;
 			a_pOut->y = a_inp1.y - a_inp2.y;
 		}
 
-		static S64Point Subtract(S64Point & a_inp1, S64Point & a_inp2)
+		static S64Point Subtract(const S64Point & a_inp1, const S64Point & a_inp2)
 		{
 			S64Point ret;
 
@@ -102,6 +109,53 @@ namespace Ncpp
 		}
 
 
+		static void DivideByIntNum(const S64Point & a_inp, const long long a_num, S64Point * a_pOut)
+		{
+			a_pOut->x = a_inp.x / a_num;
+			a_pOut->y = a_inp.y / a_num;
+		}
+
+		static S64Point DivideByIntNum(const S64Point & a_inp, const long long a_num)
+		{
+			S64Point ret;
+
+			DivideByIntNum(a_inp, a_num, &ret);
+			return ret;
+		}
+
+		S64Point DivideByIntNum(const long long a_num)
+		{
+			const S64Point & a_inp = *this;
+
+			return S64Point::DivideByIntNum(a_inp, a_num);
+		}
+
+
+		static void MultiplyByIntNum(const S64Point & a_inp, const long long a_num, S64Point * a_pOut)
+		{
+			a_pOut->x = a_inp.x * a_num;
+			a_pOut->y = a_inp.y * a_num;
+		}
+
+		static S64Point MultiplyByIntNum(const S64Point & a_inp, const long long a_num)
+		{
+			S64Point ret;
+
+			MultiplyByIntNum(a_inp, a_num, &ret);
+			return ret;
+		}
+
+		S64Point MultiplyByIntNum(const long long a_num)
+		{
+			const S64Point & a_inp = *this;
+
+			return S64Point::MultiplyByIntNum(a_inp, a_num);
+		}
+
+
+
+
+
 
 		S32Point toS32Point()
 		{
@@ -121,6 +175,20 @@ namespace Ncpp
 			return Ncv::ElementOperations2::IsUndefined(a_arg.x);
 		}
 
+		static double CalcDistance(const S64Point & a_inp1, const S64Point & a_inp2)
+		{
+			S64Point ret;
+
+			Subtract(a_inp1, a_inp2, &ret);
+			return sqrt(Math::Sqr(ret.GetX()) + Math::Sqr(ret.GetY()));
+		}
+
+
+		static bool AreEqual(const S64Point & a_pnt1, const S64Point & a_pnt2)
+		{
+			return a_pnt1.GetX() == a_pnt2.GetX() &&
+				a_pnt1.GetY() == a_pnt2.GetY();
+		}
 
 
 		//void SetX(const long long a_sizeX)

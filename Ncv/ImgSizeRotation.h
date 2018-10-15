@@ -30,7 +30,9 @@ namespace Ncv
 	{
 		//typedef IntScale<int, float, 1000> SizeRotIntScale;
 		//typedef IntScale<int, float, 1000> SRIntScale;
-		typedef IntScale<long long, float, 100000> SRRotIntScale;
+		
+		//typedef IntScale<long long, float, 100000> SRRotIntScale;
+		typedef IntScale<long long, double, 100000> SRRotIntScale;
 		typedef IntScale<int, float, 100> SRResIntScale;
 
 	public:
@@ -285,9 +287,43 @@ namespace Ncv
 
 
 	protected:
+
+		class ResPointInfo
+		{
+		public:
+			ResPointInfo()
+			{
+				WasVisited = false;
+				//HasDefinedSrc = false;
+				NearestDistanceToSrcPosInRes = 1000000000000;
+			}
+
+
+		public:
+			bool WasVisited;
+			bool HasDefinedSrc;
+			S64Point PosInRes;
+			S64Point PosInRes_Scaled;
+			S64Point NearstSrcPosInRes_Scaled;
+			S64Point PosInSrc_Scaled;
+
+			double NearestDistanceToSrcPosInRes;
+
+		};
+
+
+
+	protected:
 		
 		void FindMinMaxXYForPointArr(const FixedVector<S64Point> & a_pointArr,
 			int * a_pMin_X, int * a_pMin_Y, int * a_pMax_X, int * a_pMax_Y);
+
+		void GetScaledCornersOfSize2D(const Size_2D & a_size, FixedVector<S64Point> & a_outArr);
+
+		void ImgSizeRotation::GetVerticesPointsOfRectangle(
+			long long a_x1, long long a_y1, long long a_x2, long long a_y2, FixedVector<S64Point> & a_outArr);
+
+		void InitResPointInfoArr(const ActualArrayAccessor_2D<ResPointInfo> & a_resPointInfoAcc, const Size_2D & a_resSize);
 
 		void Prepare();
 
@@ -324,6 +360,8 @@ namespace Ncv
 		//S32ImageRef m_srcToResMapImg;
 		ArrayHolder_2D_Ref<int> m_srcToResMapImg;
 		
+		ArrayHolder_2D_Ref<S64Point> m_srcToResPointMapImg;
+
 
 		//FixedVector< LineLimit > m_lineLimit_X_Arr;
 		//FixedVector< LineLimit > m_lineLimit_V_Arr;
