@@ -33,9 +33,10 @@ namespace Ncv
 		
 		//typedef IntScale<long long, float, 100000> SRRotIntScale;
 		typedef IntScale<long long, double, 100000> SRRotIntScale;
-		typedef IntScale<int, float, 100> SRResIntScale;
 
 	public:
+
+		typedef IntScale<int, float, 100> SRResIntScale;
 
 		ImgSizeRotation(Size_2D a_srcSiz, float a_angDig);
 
@@ -325,8 +326,8 @@ namespace Ncv
 
 		void InitResPointInfoArr(const ActualArrayAccessor_2D<ResPointInfo> & a_resPointInfoAcc, const Size_2D & a_resSize);
 
-		void Prepare_SrcToResPointMapImg_And_ResPointInfoImg(
-			ArrayHolder_2D_Ref<S64Point> & a_srcToResPointMapImg, ArrayHolder_2D_Ref<ResPointInfo> & a_resPointInfoImg, const S64Point & a_addedToResMin);
+		void Prepare_SrcToResPointMapImg_And_ResToSrcPointMapImg(
+			ArrayHolder_2D_Ref<S64Point> & a_srcToResPointMapImg, ArrayHolder_2D_Ref<S64Point> & a_resToSrcPointMapImg, const S64Point & a_addedToResMin);
 
 
 		void Prepare();

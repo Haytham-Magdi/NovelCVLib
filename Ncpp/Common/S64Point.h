@@ -170,9 +170,19 @@ namespace Ncpp
 			Ncv::ElementOperations2::SetToUndefined(&a_pArg->x);
 		}
 
+		void SetToUndefined()
+		{
+			S64Point::SetToUndefined(this);
+		}
+
 		static bool IsUndefined(const S64Point & a_arg)
 		{
 			return Ncv::ElementOperations2::IsUndefined(a_arg.x);
+		}
+
+		bool IsUndefined()
+		{
+			return S64Point::IsUndefined(*this);
 		}
 
 		static double CalcDistance(const S64Point & a_inp1, const S64Point & a_inp2)

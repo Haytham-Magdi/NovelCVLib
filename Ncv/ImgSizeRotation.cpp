@@ -117,16 +117,18 @@ namespace Ncv
 
 
 
-	void ImgSizeRotation::Prepare_SrcToResPointMapImg_And_ResPointInfoImg(
-		ArrayHolder_2D_Ref<S64Point> & a_srcToResPointMapImg, ArrayHolder_2D_Ref<ResPointInfo> & a_resPointInfoImg, const S64Point & a_addedToResMin)
+	void ImgSizeRotation::Prepare_SrcToResPointMapImg_And_ResToSrcPointMapImg(
+		ArrayHolder_2D_Ref<S64Point> & a_srcToResPointMapImg, ArrayHolder_2D_Ref<S64Point> & a_resToSrcPointMapImg, const S64Point & a_addedToResMin)
 	{
 		Size_2D resSize_Scaled(
 			(int)(m_resSiz.GetX() * SRRotIntScale::GetScaleVal()),
 			(int)(m_resSiz.GetY() * SRRotIntScale::GetScaleVal())
 			);
 
-		a_resPointInfoImg = ArrayHolderUtil::CreateFrom<ResPointInfo>(m_resSiz);
-		ActualArrayAccessor_2D<ResPointInfo> resPointInfoAcc = a_resPointInfoImg->GetActualAccessor();
+		ArrayHolder_2D_Ref<ResPointInfo> resPointInfoImg;
+
+		resPointInfoImg = ArrayHolderUtil::CreateFrom<ResPointInfo>(m_resSiz);
+		ActualArrayAccessor_2D<ResPointInfo> resPointInfoAcc = resPointInfoImg->GetActualAccessor();
 
 		InitResPointInfoArr(resPointInfoAcc, m_resSiz);
 
@@ -175,12 +177,12 @@ namespace Ncv
 
 					ResPointInfo & rNbrVertInfo = resPointInfoAcc.GetAt(nbrInResVert.GetX(), nbrInResVert.GetY());
 
+					Ncpp_ASSERT(S64Point::AreEqual(rNbrInResVert_Scaled, rNbrVertInfo.PosInRes_Scaled));
+
 					if (!rNbrVertInfo.WasVisited)
 					{
 						rNbrVertInfo.WasVisited = true;
 					}
-
-					Ncpp_ASSERT(S64Point::AreEqual(rNbrInResVert_Scaled, rNbrVertInfo.PosInRes_Scaled));
 
 					double toNbrVertDistance = S64Point::CalcDistance(
 						rNbrVertInfo.PosInRes_Scaled, rResPnt_Scaled);
@@ -199,29 +201,56 @@ namespace Ncv
 
 					S64Point::Add(srcPnt_Scaled, reverseRotatedDiffPnt, &rNbrVertInfo.PosInSrc_Scaled);
 
+				} // nbrs for.
 
-					//if (
-					//	rNbrVertInfo.PosInSrc_Scaled.GetX() < 0 ||
-					//	rNbrVertInfo.PosInSrc_Scaled.GetY() < 0 ||
-
-					//	(rNbrVertInfo.PosInSrc_Scaled.GetX() > srcSize_Scaled.GetX() - SRRotIntScale::GetScaleVal()) ||
-					//	(rNbrVertInfo.PosInSrc_Scaled.GetY() > srcSize_Scaled.GetY() - SRRotIntScale::GetScaleVal())
-					//	)
-					//{
-					//	rNbrVertInfo.HasDefinedSrc = false;
-					//}
-					//else
-					//{
-					//	rNbrVertInfo.HasDefinedSrc = true;
-					//}
+			}	//	x for
+		}	// y for.
 
 
 
+		/////------------------------------------------
+
+
+
+		Size_2D srcSize_Scaled(m_srcSiz.GetX() * SRRotIntScale::GetScaleVal(), m_srcSiz.GetY() * SRRotIntScale::GetScaleVal());
+
+		a_resToSrcPointMapImg = ArrayHolderUtil::CreateFrom<S64Point>(m_resSiz);
+		ActualArrayAccessor_2D<S64Point> resToSrcPointMapAcc = a_resToSrcPointMapImg->GetActualAccessor();
+
+		for (int resY = 0; resY < m_resSiz.GetY(); resY++)
+		{
+			for (int resX = 0; resX < m_resSiz.GetX(); resX++)
+			{
+				S64Point resPnt(resX, resY);
+
+				S64Point & rDestSrcPnt_Scaled = resToSrcPointMapAcc.GetAt(resX, resY);
+
+				ResPointInfo & rResPntInfo = resPointInfoAcc.GetAt(resPnt.GetX(), resPnt.GetY());
+
+				Ncpp_ASSERT(S64Point::AreEqual(resPnt, rResPntInfo.PosInRes));
+
+				if (rResPntInfo.WasVisited)
+				{
+					rDestSrcPnt_Scaled.SetToUndefined();
+					continue;
 				}
 
-			}
-		}
+				if (
+					rResPntInfo.PosInSrc_Scaled.GetX() < 0 ||
+					rResPntInfo.PosInSrc_Scaled.GetY() < 0 ||
 
+					(rResPntInfo.PosInSrc_Scaled.GetX() > srcSize_Scaled.GetX() - SRRotIntScale::GetScaleVal()) ||
+					(rResPntInfo.PosInSrc_Scaled.GetY() > srcSize_Scaled.GetY() - SRRotIntScale::GetScaleVal())
+					)
+				{
+					rDestSrcPnt_Scaled.SetToUndefined();
+					continue;
+				}
+
+				rDestSrcPnt_Scaled = rResPntInfo.PosInSrc_Scaled;
+
+			}	//	x for.
+		}	//	y for.
 
 	}
 
@@ -284,13 +313,9 @@ namespace Ncv
 
 		/////-------------------------------------------------------------
 
-		Size_2D srcSize_Scaled(m_srcSiz.GetX() * SRRotIntScale::GetScaleVal(), m_srcSiz.GetY() * SRRotIntScale::GetScaleVal());
 
-		ArrayHolder_2D_Ref<ResPointInfo> resPointInfoImg;
-
-		ArrayHolder_2D_Ref<S64Point> srcToResPointMapImg;
-
-		Prepare_SrcToResPointMapImg_And_ResPointInfoImg(srcToResPointMapImg, resPointInfoImg, addedToResMin);
+		ArrayHolder_2D_Ref<S64Point> srcToResPointMapImg, resToSrcPointMapImg;
+		Prepare_SrcToResPointMapImg_And_ResToSrcPointMapImg(srcToResPointMapImg, resToSrcPointMapImg, addedToResMin);
 			
 
 
