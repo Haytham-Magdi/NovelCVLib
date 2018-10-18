@@ -301,7 +301,7 @@ namespace Ncv
 
 		public:
 			bool WasVisited;
-			bool HasDefinedSrc;
+			//bool HasDefinedSrc;
 			S64Point PosInRes;
 			S64Point PosInRes_Scaled;
 			S64Point NearstSrcPosInRes_Scaled;
@@ -324,6 +324,10 @@ namespace Ncv
 			long long a_x1, long long a_y1, long long a_x2, long long a_y2, FixedVector<S64Point> & a_outArr);
 
 		void InitResPointInfoArr(const ActualArrayAccessor_2D<ResPointInfo> & a_resPointInfoAcc, const Size_2D & a_resSize);
+
+		void Prepare_SrcToResPointMapImg_And_ResPointInfoImg(
+			ArrayHolder_2D_Ref<S64Point> & a_srcToResPointMapImg, ArrayHolder_2D_Ref<ResPointInfo> & a_resPointInfoImg, const S64Point & a_addedToResMin);
+
 
 		void Prepare();
 
@@ -360,7 +364,7 @@ namespace Ncv
 		//S32ImageRef m_srcToResMapImg;
 		ArrayHolder_2D_Ref<int> m_srcToResMapImg;
 		
-		ArrayHolder_2D_Ref<S64Point> m_srcToResPointMapImg;
+		//ArrayHolder_2D_Ref<S64Point> m_srcToResPointMapImg;
 
 
 		//FixedVector< LineLimit > m_lineLimit_X_Arr;

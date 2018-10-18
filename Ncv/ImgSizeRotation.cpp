@@ -111,6 +111,135 @@ namespace Ncv
 	}
 
 
+
+
+
+
+
+
+	void ImgSizeRotation::Prepare_SrcToResPointMapImg_And_ResPointInfoImg(
+		ArrayHolder_2D_Ref<S64Point> & a_srcToResPointMapImg, ArrayHolder_2D_Ref<ResPointInfo> & a_resPointInfoImg, const S64Point & a_addedToResMin)
+	{
+		Size_2D resSize_Scaled(
+			(int)(m_resSiz.GetX() * SRRotIntScale::GetScaleVal()),
+			(int)(m_resSiz.GetY() * SRRotIntScale::GetScaleVal())
+			);
+
+		a_resPointInfoImg = ArrayHolderUtil::CreateFrom<ResPointInfo>(m_resSiz);
+		ActualArrayAccessor_2D<ResPointInfo> resPointInfoAcc = a_resPointInfoImg->GetActualAccessor();
+
+		InitResPointInfoArr(resPointInfoAcc, m_resSiz);
+
+		/////-------------------------------------------------------------
+
+
+		a_srcToResPointMapImg = ArrayHolderUtil::CreateFrom<S64Point>(m_srcSiz);
+		ActualArrayAccessor_2D<S64Point> srcToResPointMapAcc = a_srcToResPointMapImg->GetActualAccessor();
+
+		for (int srcY = 0; srcY < m_srcSiz.GetY(); srcY++)
+		{
+			for (int srcX = 0; srcX < m_srcSiz.GetX(); srcX++)
+			{
+				S64Point srcPnt(srcX, srcY);
+				S64Point srcPnt_Scaled = srcPnt.MultiplyByIntNum(SRRotIntScale::GetScaleVal());
+
+				S64Point & rResPnt_Scaled = srcToResPointMapAcc.GetAt(srcX, srcY);
+				m_angleRot.RotateScaledPoint(srcPnt_Scaled, &rResPnt_Scaled);
+
+				rResPnt_Scaled.IncBy(a_addedToResMin);
+
+				Ncpp_ASSERT(rResPnt_Scaled.GetX() >= 0);
+				Ncpp_ASSERT(rResPnt_Scaled.GetY() >= 0);
+
+				long long resX_NbrBef_Scaled = SRRotIntScale::Floor(rResPnt_Scaled.GetX());
+				long long resY_NbrBef_Scaled = SRRotIntScale::Floor(rResPnt_Scaled.GetY());
+
+				Ncpp_ASSERT(resX_NbrBef_Scaled >= 0);
+				Ncpp_ASSERT(resY_NbrBef_Scaled >= 0);
+
+				long long resX_NbrAft_Scaled = SRRotIntScale::Ceil(rResPnt_Scaled.GetX());
+				long long resY_NbrAft_Scaled = SRRotIntScale::Ceil(rResPnt_Scaled.GetY());
+
+				Ncpp_ASSERT(resX_NbrAft_Scaled <= resSize_Scaled.GetX() - SRRotIntScale::GetScaleVal());
+				Ncpp_ASSERT(resY_NbrAft_Scaled <= resSize_Scaled.GetY() - SRRotIntScale::GetScaleVal());
+
+				FixedVector<S64Point> nbrVerticiesInResArr;
+
+				GetVerticesPointsOfRectangle(resX_NbrBef_Scaled, resY_NbrBef_Scaled,
+					resX_NbrAft_Scaled, resY_NbrAft_Scaled, nbrVerticiesInResArr);
+
+				for (int i = 0; i < nbrVerticiesInResArr.GetSize(); i++)
+				{
+					S64Point & rNbrInResVert_Scaled = nbrVerticiesInResArr[i];
+					S64Point nbrInResVert = rNbrInResVert_Scaled.DivideByIntNum(SRRotIntScale::GetScaleVal());
+
+					ResPointInfo & rNbrVertInfo = resPointInfoAcc.GetAt(nbrInResVert.GetX(), nbrInResVert.GetY());
+
+					if (!rNbrVertInfo.WasVisited)
+					{
+						rNbrVertInfo.WasVisited = true;
+					}
+
+					Ncpp_ASSERT(S64Point::AreEqual(rNbrInResVert_Scaled, rNbrVertInfo.PosInRes_Scaled));
+
+					double toNbrVertDistance = S64Point::CalcDistance(
+						rNbrVertInfo.PosInRes_Scaled, rResPnt_Scaled);
+
+					if (toNbrVertDistance >= rNbrVertInfo.NearestDistanceToSrcPosInRes)
+					{
+						continue;
+					}
+
+					rNbrVertInfo.NearestDistanceToSrcPosInRes = toNbrVertDistance;
+					rNbrVertInfo.NearstSrcPosInRes_Scaled = rResPnt_Scaled;
+
+					S64Point diffPnt = S64Point::Subtract(rNbrVertInfo.PosInRes_Scaled, rResPnt_Scaled);
+					S64Point reverseRotatedDiffPnt;
+					m_angleRot.ReverseRotateScaledPoint(diffPnt, &reverseRotatedDiffPnt);
+
+					S64Point::Add(srcPnt_Scaled, reverseRotatedDiffPnt, &rNbrVertInfo.PosInSrc_Scaled);
+
+
+					//if (
+					//	rNbrVertInfo.PosInSrc_Scaled.GetX() < 0 ||
+					//	rNbrVertInfo.PosInSrc_Scaled.GetY() < 0 ||
+
+					//	(rNbrVertInfo.PosInSrc_Scaled.GetX() > srcSize_Scaled.GetX() - SRRotIntScale::GetScaleVal()) ||
+					//	(rNbrVertInfo.PosInSrc_Scaled.GetY() > srcSize_Scaled.GetY() - SRRotIntScale::GetScaleVal())
+					//	)
+					//{
+					//	rNbrVertInfo.HasDefinedSrc = false;
+					//}
+					//else
+					//{
+					//	rNbrVertInfo.HasDefinedSrc = true;
+					//}
+
+
+
+				}
+
+			}
+		}
+
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	void ImgSizeRotation::Prepare()
 	{
 		const int nRotToResScaleRatio = SRRotIntScale::GetScaleVal() / SRResIntScale::GetScaleVal();
@@ -155,132 +284,14 @@ namespace Ncv
 
 		/////-------------------------------------------------------------
 
-
-		ArrayHolder_2D_Ref<ResPointInfo> resPointInfoImg = ArrayHolderUtil::CreateFrom<ResPointInfo>(m_resSiz);
-		ActualArrayAccessor_2D<ResPointInfo> resPointInfoAcc = resPointInfoImg->GetActualAccessor();
-
-		InitResPointInfoArr(resPointInfoAcc, m_resSiz);
-
-		/////-------------------------------------------------------------
-
-
 		Size_2D srcSize_Scaled(m_srcSiz.GetX() * SRRotIntScale::GetScaleVal(), m_srcSiz.GetY() * SRRotIntScale::GetScaleVal());
 
-		m_srcToResPointMapImg = ArrayHolderUtil::CreateFrom<S64Point>(m_srcSiz);
-		ActualArrayAccessor_2D<S64Point> srcToResPointMapAcc = m_srcToResPointMapImg->GetActualAccessor();
+		ArrayHolder_2D_Ref<ResPointInfo> resPointInfoImg;
 
-		for (int srcY = 0; srcY < m_srcSiz.GetY(); srcY++)
-		{
-			for (int srcX = 0; srcX < m_srcSiz.GetX(); srcX++)
-			{
-				S64Point srcPnt(srcX, srcY);
-				S64Point srcPnt_Scaled = srcPnt.MultiplyByIntNum(SRRotIntScale::GetScaleVal());
+		ArrayHolder_2D_Ref<S64Point> srcToResPointMapImg;
 
-				S64Point & rResPnt_Scaled = srcToResPointMapAcc.GetAt(srcX, srcY);
-				m_angleRot.RotateScaledPoint(srcPnt_Scaled, &rResPnt_Scaled);
-
-				rResPnt_Scaled.IncBy(addedToResMin);
-
-				Ncpp_ASSERT(rResPnt_Scaled.GetX() >= 0);
-				Ncpp_ASSERT(rResPnt_Scaled.GetY() >= 0);
-
-				long long resX_Bef_Scaled = SRRotIntScale::Floor(rResPnt_Scaled.GetX());
-				long long resY_Bef_Scaled = SRRotIntScale::Floor(rResPnt_Scaled.GetY());
-
-				Ncpp_ASSERT(resX_Bef_Scaled >= 0);
-				Ncpp_ASSERT(resY_Bef_Scaled >= 0);
-
-				long long resX_Aft_Scaled = SRRotIntScale::Ceil(rResPnt_Scaled.GetX());
-				long long resY_Aft_Scaled = SRRotIntScale::Ceil(rResPnt_Scaled.GetY());
-
-				Ncpp_ASSERT(resX_Aft_Scaled <= resSize_Scaled.GetX() - SRRotIntScale::GetScaleVal());
-				Ncpp_ASSERT(resY_Aft_Scaled <= resSize_Scaled.GetY() - SRRotIntScale::GetScaleVal());
-
-				FixedVector<S64Point> neighboursInResArr;
-
-				GetVerticesPointsOfRectangle(resX_Bef_Scaled, resY_Bef_Scaled,
-					resX_Aft_Scaled, resY_Aft_Scaled, neighboursInResArr);
-
-				for (int i = 0; i < neighboursInResArr.GetSize(); i++)
-				{
-					S64Point & rNbrInResPnt_Scaled = neighboursInResArr[i];
-					S64Point nbrInResPnt = rNbrInResPnt_Scaled.DivideByIntNum(SRRotIntScale::GetScaleVal());
-
-					ResPointInfo & rNbrPntInfo = resPointInfoAcc.GetAt(nbrInResPnt.GetX(), nbrInResPnt.GetY());
-
-					if (!rNbrPntInfo.WasVisited)
-					{
-						rNbrPntInfo.WasVisited = true;
-					}
-
-					Ncpp_ASSERT(S64Point::AreEqual(rNbrInResPnt_Scaled, rNbrPntInfo.PosInRes_Scaled));
-
-
-
-					double distance = S64Point::CalcDistance(
-						rNbrPntInfo.PosInRes_Scaled, rResPnt_Scaled);
-
-					if (distance < rNbrPntInfo.NearestDistanceToSrcPosInRes)
-					{
-						rNbrPntInfo.NearestDistanceToSrcPosInRes = distance;
-						rNbrPntInfo.NearstSrcPosInRes_Scaled = rResPnt_Scaled;
-
-						S64Point diffPnt = S64Point::Subtract(rNbrPntInfo.PosInRes_Scaled, rResPnt_Scaled);
-						S64Point revRotDiffPnt;
-						m_angleRot.ReverseRotateScaledPoint(diffPnt, &revRotDiffPnt);
-
-						S64Point::Add(srcPnt_Scaled, revRotDiffPnt, &rNbrPntInfo.PosInSrc_Scaled);
-					}
-					else
-					{
-						//S64Point diffPnt = S64Point::Subtract(rNbrPntInfo.PosInRes_Scaled, rResPnt_Scaled);
-						//S64Point revRotDiffPnt;
-						//m_angleRot.ReverseRotateScaledPoint(diffPnt, &revRotDiffPnt);
-
-						//S64Point nbrPosInSrc_Scaled;
-						//S64Point::Add(srcPnt_Scaled, revRotDiffPnt, &nbrPosInSrc_Scaled);
-
-						//if (!S64Point::AreEqual(nbrPosInSrc_Scaled, rNbrPntInfo.PosInSrc_Scaled))
-						//{
-						//	distance = distance;
-						//}
-
-						continue;
-					}
-
-
-					//Ncpp_ASSERT(rNbrPntInfo.PosInSrc_Scaled.GetX() >= 0);
-					//Ncpp_ASSERT(rNbrPntInfo.PosInSrc_Scaled.GetY() >= 0);
-
-					//Ncpp_ASSERT(rNbrPntInfo.PosInSrc_Scaled.GetX() <= srcSize_Scaled.GetX() - SRRotIntScale::GetScaleVal());
-					//Ncpp_ASSERT(rNbrPntInfo.PosInSrc_Scaled.GetY() <= srcSize_Scaled.GetY() - SRRotIntScale::GetScaleVal());
-
-					if (
-						rNbrPntInfo.PosInSrc_Scaled.GetX() < 0 ||
-						rNbrPntInfo.PosInSrc_Scaled.GetY() < 0 ||
-
-						(rNbrPntInfo.PosInSrc_Scaled.GetX() > srcSize_Scaled.GetX() - SRRotIntScale::GetScaleVal()) ||
-						(rNbrPntInfo.PosInSrc_Scaled.GetY() > srcSize_Scaled.GetY() - SRRotIntScale::GetScaleVal())
-						)
-					{
-						rNbrPntInfo.HasDefinedSrc = false;
-					}
-					else
-					{
-						rNbrPntInfo.HasDefinedSrc = true;
-					}
-
-
-
-				}
-
-			}
-		}
-
-
-
-
-
+		Prepare_SrcToResPointMapImg_And_ResPointInfoImg(srcToResPointMapImg, resPointInfoImg, addedToResMin);
+			
 
 
 
