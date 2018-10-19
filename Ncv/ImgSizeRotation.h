@@ -326,9 +326,10 @@ namespace Ncv
 
 		void InitResPointInfoArr(const ActualArrayAccessor_2D<ResPointInfo> & a_resPointInfoAcc, const Size_2D & a_resSize);
 
+		void ValidateRotPointMapImg(const ArrayHolder_2D_Ref<S64Point> & a_rotPointMapImg);
+
 		void Prepare_SrcToResPointMapImg_And_ResToSrcPointMapImg(
 			ArrayHolder_2D_Ref<S64Point> & a_srcToResPointMapImg, ArrayHolder_2D_Ref<S64Point> & a_resToSrcPointMapImg, const S64Point & a_addedToResMin);
-
 
 		void Prepare();
 

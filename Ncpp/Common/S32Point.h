@@ -8,6 +8,12 @@
 #include <NovelCVLib\Common\Debug.h>
 #include <NovelCVLib\Common\Object.h>
 
+#include <NovelCVLib\ElementOperations2\ElementOperations2.h>
+#include <NovelCVLib\ElementOperations2\ElementOperations2_Int.h>
+
+#include <NovelCVLib\Ncpp\Math\mathLib.h>
+
+
 
 namespace Ncpp
 {
@@ -89,6 +95,28 @@ namespace Ncpp
 			DivideByNum(a_inp, a_num, &ret);
 			return ret;
 		}
+
+		static void SetToUndefined(S32Point * a_pArg)
+		{
+			Ncv::ElementOperations2::SetToUndefined(&a_pArg->x);
+		}
+
+		void SetToUndefined()
+		{
+			S32Point::SetToUndefined(this);
+		}
+
+		static bool IsUndefined(const S32Point & a_arg)
+		{
+			return Ncv::ElementOperations2::IsUndefined(a_arg.x);
+		}
+
+		bool IsUndefined()
+		{
+			return S32Point::IsUndefined(*this);
+		}
+
+
 
 
 		//void SetX(const int a_sizeX)
