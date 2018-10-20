@@ -180,7 +180,7 @@ namespace Ncpp
 			return Ncv::ElementOperations2::IsUndefined(a_arg.x);
 		}
 
-		bool IsUndefined()
+		bool IsUndefined() const
 		{
 			return S64Point::IsUndefined(*this);
 		}

@@ -326,10 +326,18 @@ namespace Ncv
 
 		void InitResPointInfoArr(const ActualArrayAccessor_2D<ResPointInfo> & a_resPointInfoAcc, const Size_2D & a_resSize);
 
-		void ValidateRotPointMapImg(const ArrayHolder_2D_Ref<S64Point> & a_rotPointMapImg);
+		static void ValidateRotScaledPointMapImg_CoreCycle(
+			const S64Point & a_rPnt, const Size_2D & a_mappedSize_Scaled, const int a_scaleVal,
+			//const bool a_bLastPntDefined_Inp, const bool a_bTurnedToDefined_Inp, const bool a_bTurnedToUndefinedAgain_Inp,
+			//bool & a_bLastPntDefined_Out, bool & a_bTurnedToDefined_Out, bool & a_bTurnedToUndefinedAgain_Out
+			bool & a_bLastPntDefined, bool & a_bTurnedToDefined, bool & a_bTurnedToUndefinedAgain
+			);
+
+		static void ValidateRotScaledPointMapImg(ArrayHolder_2D_Ref<S64Point> a_rotPointMapImg, const Size_2D & a_mappeSize_Scaled, const int a_scaleVal);
 
 		void Prepare_SrcToResPointMapImg_And_ResToSrcPointMapImg(
-			ArrayHolder_2D_Ref<S64Point> & a_srcToResPointMapImg, ArrayHolder_2D_Ref<S64Point> & a_resToSrcPointMapImg, const S64Point & a_addedToResMin);
+			ArrayHolder_2D_Ref<S64Point> & a_srcToResPointMapImg, ArrayHolder_2D_Ref<S64Point> & a_resToSrcPointMapImg, 
+			const S64Point & a_addedToResMin);
 
 		void Prepare();
 

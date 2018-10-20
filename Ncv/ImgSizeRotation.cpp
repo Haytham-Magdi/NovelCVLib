@@ -111,13 +111,127 @@ namespace Ncv
 	}
 
 
-
-
-	void ImgSizeRotation::ValidateRotPointMapImg(const ArrayHolder_2D_Ref<S64Point> & a_rotPointMapImg)
+	void ImgSizeRotation::ValidateRotScaledPointMapImg_CoreCycle(
+		const S64Point & a_rPnt, const Size_2D & a_mappedSize_Scaled, const int a_scaleVal,
+		//const bool a_bLastPntDefined_Inp, const bool a_bTurnedToDefined_Inp, const bool a_bTurnedToUndefinedAgain_Inp,
+		//bool & a_bLastPntDefined_Out, bool & a_bTurnedToDefined_Out, bool & a_bTurnedToUndefinedAgain_Out
+		bool & a_bLastPntDefined, bool & a_bTurnedToDefined, bool & a_bTurnedToUndefinedAgain
+		)
 	{
-		//const ActualArrayAccessor_2D<S64Point> rotPontMapAcc = a_rotPointMapImg->GetActualAccessor();
+		bool bCurrentPntDefined = !a_rPnt.IsUndefined();
 
-		throw "implementation not complete!";
+		if (!bCurrentPntDefined)
+		{
+			if (a_bLastPntDefined)
+			{
+				if (a_bTurnedToUndefinedAgain)
+				{
+					ThrowNcvException();
+				}
+				else
+				{
+					a_bTurnedToUndefinedAgain = true;
+
+					a_bLastPntDefined = bCurrentPntDefined;
+					return;
+				}
+			}
+			else  //	!bLastPntDefined
+			{
+				a_bLastPntDefined = bCurrentPntDefined;
+				return;
+			}
+		}
+		else   //	bCurrentPntDefined
+		{
+			if (a_bTurnedToUndefinedAgain)
+			{
+				ThrowNcvException();
+			}
+
+			if (!a_bLastPntDefined)
+			{
+				if (a_bTurnedToDefined)
+				{
+					ThrowNcvException();
+				}
+				else
+				{
+					a_bTurnedToDefined = true;
+					a_bLastPntDefined = bCurrentPntDefined;
+				}
+			}
+			else   //	bLastPntDefined
+			{
+				a_bLastPntDefined = bCurrentPntDefined;
+			}
+		}
+
+		if (
+			a_rPnt.GetX() < 0 ||
+			a_rPnt.GetY() < 0 ||
+
+			(a_rPnt.GetX() > a_mappedSize_Scaled.GetX() - a_scaleVal) ||
+			(a_rPnt.GetY() > a_mappedSize_Scaled.GetY() - a_scaleVal)
+			)
+		{
+			//Ncpp_ASSERT(false);
+			ThrowNcvException();
+		}
+
+
+	}
+
+
+
+	void ImgSizeRotation::ValidateRotScaledPointMapImg(ArrayHolder_2D_Ref<S64Point> a_rotPointMapImg, 
+		const Size_2D & a_mappeSize_Scaled, const int a_scaleVal)
+	{
+		const ActualArrayAccessor_2D<S64Point> rotPntMapAcc = a_rotPointMapImg->GetActualAccessor();
+		//const VirtArrayAccessor_2D<S64Point> rotPntMapAcc = a_rotPointMapImg->GetVirtAccessor();
+
+		//const Size_2D mappedSize_Scaled(a_mappeSize_Scaled.GetX() * a_scaleVal, a_mappeSize_Scaled.GetY() * a_scaleVal);
+		const Size_2D mappedSize_Scaled(a_mappeSize_Scaled.GetX(), a_mappeSize_Scaled.GetY());
+
+		for (int y = 0; y < rotPntMapAcc.GetSize_Y(); y++)
+		{
+			bool bLastPntDefined = false;
+			bool bTurnedToDefined = false;
+			bool bTurnedToUndefinedAgain = false;
+			
+			for (int x = 0; x < rotPntMapAcc.GetSize_X(); x++)
+			{
+				S64Point & rPnt = rotPntMapAcc.GetAt(x, y);
+
+				ValidateRotScaledPointMapImg_CoreCycle(
+					rPnt, mappedSize_Scaled, a_scaleVal,
+					bLastPntDefined, bTurnedToDefined, bTurnedToUndefinedAgain
+					);
+
+
+			}	//	for x.
+		}	//	for y.
+
+
+		for (int x = 0; x < rotPntMapAcc.GetSize_X(); x++)
+		{
+			bool bLastPntDefined = false;
+			bool bTurnedToDefined = false;
+			bool bTurnedToUndefinedAgain = false;
+
+			for (int y = 0; y < rotPntMapAcc.GetSize_Y(); y++)
+			{
+				S64Point & rPnt = rotPntMapAcc.GetAt(x, y);
+
+				ValidateRotScaledPointMapImg_CoreCycle(
+					rPnt, mappedSize_Scaled, a_scaleVal,
+					bLastPntDefined, bTurnedToDefined, bTurnedToUndefinedAgain
+					);
+
+
+			}	//	for y.
+		}	//	for x.
+
 	}
 
 
@@ -213,6 +327,8 @@ namespace Ncv
 		}	// y for.
 
 
+		ImgSizeRotation::ValidateRotScaledPointMapImg(
+			a_srcToResPointMapImg, resSize_Scaled, SRRotIntScale::GetScaleVal());
 
 		/////------------------------------------------
 
@@ -257,6 +373,9 @@ namespace Ncv
 
 			}	//	x for.
 		}	//	y for.
+
+		ImgSizeRotation::ValidateRotScaledPointMapImg(
+			a_resToSrcPointMapImg, srcSize_Scaled, SRRotIntScale::GetScaleVal());
 
 	}
 
