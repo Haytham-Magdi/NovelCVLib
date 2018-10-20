@@ -51,7 +51,14 @@ namespace Ncv
 
 		// to be removed
 		//float angDig1 = i * angStep;
+		
+		//ImgSizeRotationRef rot1 = new ImgSizeRotation(m_srcSiz, 0);
 		ImgSizeRotationRef rot1 = new ImgSizeRotation(m_srcSiz, 22.5);
+		//ImgSizeRotationRef rot1 = new ImgSizeRotation(m_srcSiz, 45);
+		//ImgSizeRotationRef rot1 = new ImgSizeRotation(m_srcSiz, 90);
+
+		//ImgSizeRotationRef rot1 = new ImgSizeRotation(m_srcSiz, 180);
+		//ImgSizeRotationRef rot1 = new ImgSizeRotation(m_srcSiz, 225);
 
 
 		for (int i = 0; i < a_nofRots; i++)

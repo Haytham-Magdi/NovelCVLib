@@ -72,15 +72,15 @@ namespace Ncv
 
 	void ImgSizeRotation::GetScaledCornersOfSize2D(const Size_2D & a_size, FixedVector<S64Point> & a_outArr)
 	{
-		const int nScaled_Width = SRRotIntScale::ScaleToI(a_size.GetX());
-		const int nScaled_Height = SRRotIntScale::ScaleToI(a_size.GetY());
+		const int nScaled_WidthEnd = SRRotIntScale::ScaleToI(a_size.GetX() - 1);
+		const int nScaled_HeightEnd = SRRotIntScale::ScaleToI(a_size.GetY() - 1);
 
 		a_outArr.SetCapacity(4);
 
 		a_outArr.PushBack(S64Point(0, 0));
-		a_outArr.PushBack(S64Point(0, nScaled_Height));
-		a_outArr.PushBack(S64Point(nScaled_Width, 0));
-		a_outArr.PushBack(S64Point(nScaled_Width, nScaled_Height));
+		a_outArr.PushBack(S64Point(0, nScaled_HeightEnd));
+		a_outArr.PushBack(S64Point(nScaled_WidthEnd, 0));
+		a_outArr.PushBack(S64Point(nScaled_WidthEnd, nScaled_HeightEnd));
 	}
 
 
@@ -113,15 +113,18 @@ namespace Ncv
 
 	void ImgSizeRotation::ValidateRotScaledPointMapImg_CoreCycle(
 		const S64Point & a_rPnt, const Size_2D & a_mappedSize_Scaled, const int a_scaleVal,
-		//const bool a_bLastPntDefined_Inp, const bool a_bTurnedToDefined_Inp, const bool a_bTurnedToUndefinedAgain_Inp,
-		//bool & a_bLastPntDefined_Out, bool & a_bTurnedToDefined_Out, bool & a_bTurnedToUndefinedAgain_Out
-		bool & a_bLastPntDefined, bool & a_bTurnedToDefined, bool & a_bTurnedToUndefinedAgain
+		bool & a_bLastPntDefined, bool & a_bTurnedToDefined, bool & a_bTurnedToUndefinedAgain,
+		const bool a_canHaveUndefined
 		)
 	{
 		bool bCurrentPntDefined = !a_rPnt.IsUndefined();
 
 		if (!bCurrentPntDefined)
 		{
+			if (!a_canHaveUndefined) {
+				ThrowNcvException();
+			}
+
 			if (a_bLastPntDefined)
 			{
 				if (a_bTurnedToUndefinedAgain)
@@ -185,7 +188,7 @@ namespace Ncv
 
 
 	void ImgSizeRotation::ValidateRotScaledPointMapImg(ArrayHolder_2D_Ref<S64Point> a_rotPointMapImg, 
-		const Size_2D & a_mappeSize_Scaled, const int a_scaleVal)
+		const Size_2D & a_mappeSize_Scaled, const int a_scaleVal, const bool a_canHaveUndefined)
 	{
 		const ActualArrayAccessor_2D<S64Point> rotPntMapAcc = a_rotPointMapImg->GetActualAccessor();
 		//const VirtArrayAccessor_2D<S64Point> rotPntMapAcc = a_rotPointMapImg->GetVirtAccessor();
@@ -202,12 +205,11 @@ namespace Ncv
 			for (int x = 0; x < rotPntMapAcc.GetSize_X(); x++)
 			{
 				S64Point & rPnt = rotPntMapAcc.GetAt(x, y);
-
+				
 				ValidateRotScaledPointMapImg_CoreCycle(
 					rPnt, mappedSize_Scaled, a_scaleVal,
-					bLastPntDefined, bTurnedToDefined, bTurnedToUndefinedAgain
-					);
-
+					bLastPntDefined, bTurnedToDefined, bTurnedToUndefinedAgain,
+					a_canHaveUndefined);
 
 			}	//	for x.
 		}	//	for y.
@@ -225,9 +227,8 @@ namespace Ncv
 
 				ValidateRotScaledPointMapImg_CoreCycle(
 					rPnt, mappedSize_Scaled, a_scaleVal,
-					bLastPntDefined, bTurnedToDefined, bTurnedToUndefinedAgain
-					);
-
+					bLastPntDefined, bTurnedToDefined, bTurnedToUndefinedAgain,
+					a_canHaveUndefined);
 
 			}	//	for y.
 		}	//	for x.
@@ -238,7 +239,7 @@ namespace Ncv
 
 
 	void ImgSizeRotation::Prepare_SrcToResPointMapImg_And_ResToSrcPointMapImg(
-		ArrayHolder_2D_Ref<S64Point> & a_srcToResPointMapImg, ArrayHolder_2D_Ref<S64Point> & a_resToSrcPointMapImg, const S64Point & a_addedToResMin)
+		ArrayHolder_2D_Ref<S64Point> & a_srcToResPointMapImg, ArrayHolder_2D_Ref<S64Point> & a_resToSrcPointMapImg, const S64Point & a_srcToResShift_Scaled)
 	{
 		Size_2D resSize_Scaled(
 			(int)(m_resSiz.GetX() * SRRotIntScale::GetScaleVal()),
@@ -268,7 +269,7 @@ namespace Ncv
 				S64Point & rMappedResPnt_Scaled = srcToResPointMapAcc.GetAt(srcX, srcY);
 				m_angleRot.RotateScaledPoint(srcPnt_Scaled, &rMappedResPnt_Scaled);
 
-				rMappedResPnt_Scaled.IncBy(a_addedToResMin);
+				rMappedResPnt_Scaled.IncBy(a_srcToResShift_Scaled);
 
 				Ncpp_ASSERT(rMappedResPnt_Scaled.GetX() >= 0);
 				Ncpp_ASSERT(rMappedResPnt_Scaled.GetY() >= 0);
@@ -326,9 +327,8 @@ namespace Ncv
 			}	//	x for
 		}	// y for.
 
-
-		ImgSizeRotation::ValidateRotScaledPointMapImg(
-			a_srcToResPointMapImg, resSize_Scaled, SRRotIntScale::GetScaleVal());
+		ImgSizeRotation::ValidateRotScaledPointMapImg(a_srcToResPointMapImg, resSize_Scaled, 
+			SRRotIntScale::GetScaleVal(), false /* a_canHaveUndefined */ );
 
 		/////------------------------------------------
 
@@ -374,8 +374,8 @@ namespace Ncv
 			}	//	x for.
 		}	//	y for.
 
-		ImgSizeRotation::ValidateRotScaledPointMapImg(
-			a_resToSrcPointMapImg, srcSize_Scaled, SRRotIntScale::GetScaleVal());
+		ImgSizeRotation::ValidateRotScaledPointMapImg(a_resToSrcPointMapImg, srcSize_Scaled, 
+			SRRotIntScale::GetScaleVal(), true /* a_canHaveUndefined */ );
 
 	}
 
@@ -401,7 +401,7 @@ namespace Ncv
 		//const int nScaled_SrcWidth_Org = SRRotIntScale::ScaleToI(m_srcSiz.GetX());
 		//const int nScaled_SrcHeight_Org = SRRotIntScale::ScaleToI(m_srcSiz.GetY());
 
-		S64Point addedToResMin;
+		S64Point srcToResShift_Scaled;
 		Size_2D resSize_Scaled;
 		FixedVector<S64Point> resOfOrgSrcCornersArr(4);
 
@@ -417,17 +417,16 @@ namespace Ncv
 			int min_X, min_Y, max_X, max_Y;
 			FindMinMaxXYForPointArr(resOfOrgSrcCornersArr, &min_X, &min_Y, &max_X, &max_Y);
 
-			addedToResMin.SetValue(-min_X, -min_Y);
+			srcToResShift_Scaled.SetValue(-min_X, -min_Y);
 
 			for (int i = 0; i < resOfOrgSrcCornersArr.GetSize(); i++)
 			{
 				S64Point & rResPnt = resOfOrgSrcCornersArr[i];
-				//S64Point::Add(rResPnt, addedToResMin, &rResPnt);
-				rResPnt.IncBy(addedToResMin);
+				rResPnt.IncBy(srcToResShift_Scaled);
 			}
 
-			resSize_Scaled.SetX(SRRotIntScale::Ceil(max_X + addedToResMin.x) + SRRotIntScale::GetScaleVal());
-			resSize_Scaled.SetY(SRRotIntScale::Ceil(max_Y + addedToResMin.y) + SRRotIntScale::GetScaleVal());
+			resSize_Scaled.SetX(SRRotIntScale::Ceil(max_X + srcToResShift_Scaled.x) + SRRotIntScale::GetScaleVal());
+			resSize_Scaled.SetY(SRRotIntScale::Ceil(max_Y + srcToResShift_Scaled.y) + SRRotIntScale::GetScaleVal());
 		}
 
 
@@ -440,7 +439,7 @@ namespace Ncv
 
 
 		ArrayHolder_2D_Ref<S64Point> srcToResPointMapImg, resToSrcPointMapImg;
-		Prepare_SrcToResPointMapImg_And_ResToSrcPointMapImg(srcToResPointMapImg, resToSrcPointMapImg, addedToResMin);
+		Prepare_SrcToResPointMapImg_And_ResToSrcPointMapImg(srcToResPointMapImg, resToSrcPointMapImg, srcToResShift_Scaled);
 			
 
 
@@ -460,13 +459,13 @@ namespace Ncv
 			for (int i = 0; i < resOfOrgSrcCornersArr.GetSize(); i++)
 			{
 				S64Point resCornerPnt = resOfOrgSrcCornersArr[i];
-				S64Point pnt1 = S64Point::Subtract(resCornerPnt, addedToResMin);
+				S64Point pnt1 = S64Point::Subtract(resCornerPnt, srcToResShift_Scaled);
 				S64Point pnt11 = m_angleRot.ReverseRotateScaledPoint(pnt1);
 				//.DivideByNum((float)SRRotIntScale::GetScaleVal() / SRRotIntScale::GetScaleVal()).toS32Point();
 
 				revSrcCornersArr.PushBack(pnt11);
 				//revSrcCornersArr.PushBack(m_angleRot.ReverseRotateScaledPoint(
-				//	//S64Point::Subtract(cornerPnt, addedToResMin)));
+				//	//S64Point::Subtract(cornerPnt, srcToResShift_Scaled)));
 				//	pnt1));
 			}
 
@@ -480,7 +479,7 @@ namespace Ncv
 
 			//{
 			//	S64Point resCornerPnt = resOfOrgSrcCornersArr[i];
-			//	S64Point pnt1 = S64Point::Subtract(resCornerPnt, addedToResMin);
+			//	S64Point pnt1 = S64Point::Subtract(resCornerPnt, srcToResShift_Scaled);
 			//	S64Point pnt11 = m_angleRot.ReverseRotateScaledPoint(pnt1);
 
 			//	int a;
