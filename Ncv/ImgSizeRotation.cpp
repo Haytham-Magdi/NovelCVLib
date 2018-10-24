@@ -238,8 +238,8 @@ namespace Ncv
 
 
 
-	void ImgSizeRotation::Prepare_SrcToResPointMapImg_And_ResToSrcPointMapImg(
-		ArrayHolder_2D_Ref<S64Point> & a_srcToResPointMapImg, ArrayHolder_2D_Ref<S64Point> & a_resToSrcPointMapImg, const S64Point & a_srcToResShift_Scaled)
+	void ImgSizeRotation::PrepareFirst_SrcToScaledResPointMapImg_And_ResToScaledSrcPointMapImg(
+		ArrayHolder_2D_Ref<S64Point> & a_srcToScaledResPointMapImg, ArrayHolder_2D_Ref<S64Point> & a_resToScaledSrcPointMapImg, const S64Point & a_srcToResShift_Scaled)
 	{
 		Size_2D resSize_Scaled(
 			(int)(m_resSiz.GetX() * SRRotIntScale::GetScaleVal()),
@@ -256,8 +256,8 @@ namespace Ncv
 		/////-------------------------------------------------------------
 
 
-		a_srcToResPointMapImg = ArrayHolderUtil::CreateFrom<S64Point>(m_srcSiz);
-		ActualArrayAccessor_2D<S64Point> srcToResPointMapAcc = a_srcToResPointMapImg->GetActualAccessor();
+		a_srcToScaledResPointMapImg = ArrayHolderUtil::CreateFrom<S64Point>(m_srcSiz);
+		ActualArrayAccessor_2D<S64Point> srcToResPointMapAcc = a_srcToScaledResPointMapImg->GetActualAccessor();
 
 		for (int srcY = 0; srcY < m_srcSiz.GetY(); srcY++)
 		{
@@ -327,7 +327,7 @@ namespace Ncv
 			}	//	x for
 		}	// y for.
 
-		ImgSizeRotation::ValidateRotScaledPointMapImg(a_srcToResPointMapImg, resSize_Scaled, 
+		ImgSizeRotation::ValidateRotScaledPointMapImg(a_srcToScaledResPointMapImg, resSize_Scaled, 
 			SRRotIntScale::GetScaleVal(), false /* a_canHaveUndefined */ );
 
 		/////------------------------------------------
@@ -336,8 +336,8 @@ namespace Ncv
 
 		Size_2D srcSize_Scaled(m_srcSiz.GetX() * SRRotIntScale::GetScaleVal(), m_srcSiz.GetY() * SRRotIntScale::GetScaleVal());
 
-		a_resToSrcPointMapImg = ArrayHolderUtil::CreateFrom<S64Point>(m_resSiz);
-		ActualArrayAccessor_2D<S64Point> resToSrcPointMapAcc = a_resToSrcPointMapImg->GetActualAccessor();
+		a_resToScaledSrcPointMapImg = ArrayHolderUtil::CreateFrom<S64Point>(m_resSiz);
+		ActualArrayAccessor_2D<S64Point> resToSrcPointMapAcc = a_resToScaledSrcPointMapImg->GetActualAccessor();
 
 		for (int resY = 0; resY < m_resSiz.GetY(); resY++)
 		{
@@ -374,7 +374,7 @@ namespace Ncv
 			}	//	x for.
 		}	//	y for.
 
-		ImgSizeRotation::ValidateRotScaledPointMapImg(a_resToSrcPointMapImg, srcSize_Scaled, 
+		ImgSizeRotation::ValidateRotScaledPointMapImg(a_resToScaledSrcPointMapImg, srcSize_Scaled, 
 			SRRotIntScale::GetScaleVal(), true /* a_canHaveUndefined */ );
 
 	}
@@ -389,15 +389,44 @@ namespace Ncv
 
 
 
+	void ImgSizeRotation::PrepareAFinalScaledPointMapImgFromAFirstOne(
+		ArrayHolder_2D_Ref<S64Point> a_firstPointMapImg, ArrayHolder_2D_Ref<S32Point> & a_finalPointMapImg)
+	{
+		Ncpp_ASSERT(SRRotIntScale::GetScaleVal() >= SRResIntScale::GetScaleVal());
+		const int nRotToResScaleRatio = SRRotIntScale::GetScaleVal() / SRResIntScale::GetScaleVal();
 
+		ActualArrayAccessor_2D<S64Point> firstPointMapAcc = a_firstPointMapImg->GetActualAccessor();
+		S64Point * firstPointPtr = firstPointMapAcc.GetData();
+
+		const Size_2D imgSiz = firstPointMapAcc.GetSize();
+
+		a_finalPointMapImg = ArrayHolderUtil::CreateFrom<S32Point>(imgSiz);
+		ActualArrayAccessor_2D<S32Point> finalPointMapAcc = a_finalPointMapImg->GetActualAccessor();
+		S32Point * finalPointPtr = finalPointMapAcc.GetData();
+
+		const int imgSiz1D = imgSiz.CalcSize_1D();
+
+		for (int i = 0; i < imgSiz1D; i++)
+		{
+			S64Point & rFirstPnt = firstPointPtr[i];
+			S32Point & rFinalPnt = finalPointPtr[i];
+
+			if (rFirstPnt.IsUndefined())
+			{
+				rFinalPnt.SetToUndefined();
+			}
+			else
+			{
+				S64Point::toS32Point(rFirstPnt.DivideByIntNum(nRotToResScaleRatio), &rFinalPnt);
+			}
+		}
+	}
 
 
 
 
 	void ImgSizeRotation::Prepare()
 	{
-		const int nRotToResScaleRatio = SRRotIntScale::GetScaleVal() / SRResIntScale::GetScaleVal();
-
 		//const int nScaled_SrcWidth_Org = SRRotIntScale::ScaleToI(m_srcSiz.GetX());
 		//const int nScaled_SrcHeight_Org = SRRotIntScale::ScaleToI(m_srcSiz.GetY());
 
@@ -438,11 +467,22 @@ namespace Ncv
 		/////-------------------------------------------------------------
 
 
-		ArrayHolder_2D_Ref<S64Point> srcToResPointMapImg, resToSrcPointMapImg;
-		Prepare_SrcToResPointMapImg_And_ResToSrcPointMapImg(srcToResPointMapImg, resToSrcPointMapImg, srcToResShift_Scaled);
+		ArrayHolder_2D_Ref<S64Point> srcToScaledResPointMapImg, resToScaledSrcPointMapImg;
+		PrepareFirst_SrcToScaledResPointMapImg_And_ResToScaledSrcPointMapImg(srcToScaledResPointMapImg, resToScaledSrcPointMapImg, srcToResShift_Scaled);
 			
+		ImgSizeRotation::PrepareAFinalScaledPointMapImgFromAFirstOne(
+			srcToScaledResPointMapImg, m_srcToScaledResPointMapImg);
+
+		ImgSizeRotation::PrepareAFinalScaledPointMapImgFromAFirstOne(
+			resToScaledSrcPointMapImg, m_resToScaledSrcPointMapImg);
 
 
+
+			int b;
+
+		b = 0;
+
+		throw "Implemention not complete!";
 
 		///////////////////////////////////////////////
 
@@ -521,7 +561,7 @@ namespace Ncv
 		/////////////////////////////////////////////
 
 
-		m_resToScaledSrcMapImg = ArrayHolderUtil::CreateFrom<S32Point>(m_resSiz);
+		//m_resToScaledSrcMapImg = ArrayHolderUtil::CreateFrom<S32Point>(m_resSiz);
 
 
 

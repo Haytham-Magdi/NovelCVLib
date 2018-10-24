@@ -335,9 +335,12 @@ namespace Ncv
 		static void ValidateRotScaledPointMapImg(ArrayHolder_2D_Ref<S64Point> a_rotPointMapImg, 
 			const Size_2D & a_mappeSize_Scaled, const int a_scaleVal, const bool a_canHaveUndefined);
 
-		void Prepare_SrcToResPointMapImg_And_ResToSrcPointMapImg(
+		void PrepareFirst_SrcToScaledResPointMapImg_And_ResToScaledSrcPointMapImg(
 			ArrayHolder_2D_Ref<S64Point> & a_srcToResPointMapImg, ArrayHolder_2D_Ref<S64Point> & a_resToSrcPointMapImg, 
 			const S64Point & a_srcToResShift_Scaled);
+
+		void PrepareAFinalScaledPointMapImgFromAFirstOne(
+			ArrayHolder_2D_Ref<S64Point> a_firstPointMapImg, ArrayHolder_2D_Ref<S32Point> & a_finalPointMapImg);
 
 		void Prepare();
 
@@ -365,7 +368,8 @@ namespace Ncv
 		Size_2D m_resSiz;
 
 		//S32ImageRef m_resToSrcMapImg;
-		ArrayHolder_2D_Ref<S32Point> m_resToScaledSrcMapImg;
+		ArrayHolder_2D_Ref<S32Point> m_resToScaledSrcPointMapImg;
+		ArrayHolder_2D_Ref<S32Point> m_srcToScaledResPointMapImg;
 
 		ArrayHolder_2D_Ref<int> m_resToSrcMapImg;
 

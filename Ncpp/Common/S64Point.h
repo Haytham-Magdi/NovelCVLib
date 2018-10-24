@@ -155,13 +155,17 @@ namespace Ncpp
 
 
 
+		static void toS32Point(const S64Point & a_src, S32Point * a_pDest)
+		{
+			a_pDest->SetValue((int)a_src.x, (int)a_src.y);
+		}
 
 
 		S32Point toS32Point()
 		{
-			const S64Point & src = *this;
+			S32Point ret;
+			S64Point::toS32Point(*this, &ret);
 
-			S32Point ret((int)src.x, (int)src.y);
 			return ret;
 		}
 
