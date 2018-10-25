@@ -52,18 +52,10 @@ namespace Ncv
 
 		Size_2D GetResImgSiz() { return m_resSiz; }
 
-		//S32ImageRef Get_ResToSrcMapImage() { return m_resToSrcMapImg; }
-		ArrayHolder_2D_Ref<int> Get_ResToSrcMapImage() { return m_resToSrcMapImg; }
+		ArrayHolder_2D_Ref<int> Get_ResToNearestSrcIndexMapImage() { return m_resToNearestSrcIndexMapImg; }
 
-		//F32ImageRef GetResImg() { return m_resImg; }
-
-		//S32ImageRef Get_SrcToResMapImage() { return m_srcToResMapImg; }
-		ArrayHolder_2D_Ref<int> Get_SrcToResMapImage() { return m_srcToResMapImg; }
+		ArrayHolder_2D_Ref<int> Get_SrcToNearestResIndexMapImage() { return m_srcToNearestResIndexMapImg; }
 		
-		
-			//ImageItrMgrRef GetImageItrMgr() { return m_imageItrMgr; }
-
-		S32Point & GetBgnPnt() { return m_bgnPnt; }
 
 
 		template<class T>
@@ -339,16 +331,13 @@ namespace Ncv
 			ArrayHolder_2D_Ref<S64Point> & a_srcToResPointMapImg, ArrayHolder_2D_Ref<S64Point> & a_resToSrcPointMapImg, 
 			const S64Point & a_srcToResShift_Scaled);
 
-		void PrepareAFinalScaledPointMapImgFromAFirstOne(
+		static void PrepareAFinalScaledPointMapImgFromAFirstOne(
 			ArrayHolder_2D_Ref<S64Point> a_firstPointMapImg, ArrayHolder_2D_Ref<S32Point> & a_finalPointMapImg);
 
+		static void PrepareNearestIndexMapImgFromScaledPointMapImg(
+			ArrayHolder_2D_Ref<S32Point> a_scaledPointMapImg, ArrayHolder_2D_Ref<int> & a_nearestIndexMapImg);
+
 		void Prepare();
-
-
-		//void PrepareResImg();
-
-		//void PrepareImageItrMgr();
-
 
 
 	protected:
@@ -361,7 +350,7 @@ namespace Ncv
 
 		AngleRotation<SRRotIntScale> m_angleRot;
 
-		S32Point m_bgnPnt;
+		//S32Point m_bgnPnt;
 
 		Size_2D m_srcSiz;
 
@@ -371,14 +360,9 @@ namespace Ncv
 		ArrayHolder_2D_Ref<S32Point> m_resToScaledSrcPointMapImg;
 		ArrayHolder_2D_Ref<S32Point> m_srcToScaledResPointMapImg;
 
-		ArrayHolder_2D_Ref<int> m_resToSrcMapImg;
-
-		//F32ImageRef m_resImg;
-
-		//S32ImageRef m_srcToResMapImg;
-		ArrayHolder_2D_Ref<int> m_srcToResMapImg;
-		
-		//ArrayHolder_2D_Ref<S64Point> m_srcToResPointMapImg;
+		//ArrayHolder_2D_Ref<int> m_resToSrcMapImg;
+		ArrayHolder_2D_Ref<int> m_resToNearestSrcIndexMapImg;
+		ArrayHolder_2D_Ref<int> m_srcToNearestResIndexMapImg;
 
 
 		//FixedVector< LineLimit > m_lineLimit_X_Arr;

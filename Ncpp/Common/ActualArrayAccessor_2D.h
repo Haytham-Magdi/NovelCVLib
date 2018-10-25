@@ -37,6 +37,11 @@ namespace Ncpp
 			m_nSize_Y = a_nSize_Y;
 		}
 
+		int CalcIndex_1D(const int a_pos_X, const int a_pos_Y) const
+		{
+			return a_pos_X + a_pos_Y * m_nSize_X;
+		}
+
 		//const T & GetAt(const int a_pos_X, const int a_pos_Y) const
 		T & GetAt(const int a_pos_X, const int a_pos_Y) const
 		{
@@ -46,8 +51,7 @@ namespace Ncpp
 			Ncpp_ASSERT(a_pos_Y >= 0);
 			Ncpp_ASSERT(a_pos_Y < m_nSize_Y);
 
-			//return m_data[a_pos_X * m_nStepSize_X + a_pos_Y * m_nStepSize_Y];
-			return m_data[a_pos_X + a_pos_Y * m_nSize_X];
+			return m_data[CalcIndex_1D(a_pos_X, a_pos_Y)];
 		}
 
 		T * GetData() const

@@ -238,6 +238,7 @@ namespace Ncv
 
 
 
+
 	void ImgSizeRotation::PrepareFirst_SrcToScaledResPointMapImg_And_ResToScaledSrcPointMapImg(
 		ArrayHolder_2D_Ref<S64Point> & a_srcToScaledResPointMapImg, ArrayHolder_2D_Ref<S64Point> & a_resToScaledSrcPointMapImg, const S64Point & a_srcToResShift_Scaled)
 	{
@@ -380,15 +381,6 @@ namespace Ncv
 	}
 
 
-
-
-
-
-
-
-
-
-
 	void ImgSizeRotation::PrepareAFinalScaledPointMapImgFromAFirstOne(
 		ArrayHolder_2D_Ref<S64Point> a_firstPointMapImg, ArrayHolder_2D_Ref<S32Point> & a_finalPointMapImg)
 	{
@@ -422,6 +414,40 @@ namespace Ncv
 		}
 	}
 
+
+	void ImgSizeRotation::PrepareNearestIndexMapImgFromScaledPointMapImg(
+		ArrayHolder_2D_Ref<S32Point> a_scaledPointMapImg, ArrayHolder_2D_Ref<int> & a_nearestIndexMapImg)
+	{
+		ActualArrayAccessor_2D<S32Point> scaledPointMapAcc = a_scaledPointMapImg->GetActualAccessor();
+		S32Point * scaledPointPtr = scaledPointMapAcc.GetData();
+
+		const Size_2D imgSiz = scaledPointMapAcc.GetSize();
+
+		a_nearestIndexMapImg = ArrayHolderUtil::CreateFrom<int>(imgSiz);
+		ActualArrayAccessor_2D<int> nearestIndexMapAcc = a_nearestIndexMapImg->GetActualAccessor();
+		int * nearestIndexPtr = nearestIndexMapAcc.GetData();
+
+		const int imgSiz1D = imgSiz.CalcSize_1D();
+
+		for (int i = 0; i < imgSiz1D; i++)
+		{
+			S32Point & rScaledPnt = scaledPointPtr[i];
+			int & rNearestIndex = nearestIndexPtr[i];
+
+			if (rScaledPnt.IsUndefined())
+			{
+				SetToUndefined(&rNearestIndex);
+			}
+			else
+			{
+				const int x = SRResIntScale::IntDividByScale(SRResIntScale::Round(rScaledPnt.GetX()));
+				const int y = SRResIntScale::IntDividByScale(SRResIntScale::Round(rScaledPnt.GetY()));
+
+				rNearestIndex = nearestIndexMapAcc.CalcIndex_1D(x, y);
+			}
+		}
+
+	}
 
 
 
@@ -477,249 +503,13 @@ namespace Ncv
 			resToScaledSrcPointMapImg, m_resToScaledSrcPointMapImg);
 
 
+		PrepareNearestIndexMapImgFromScaledPointMapImg(m_srcToScaledResPointMapImg, m_srcToNearestResIndexMapImg);
+		PrepareNearestIndexMapImgFromScaledPointMapImg(m_resToScaledSrcPointMapImg, m_resToNearestSrcIndexMapImg);
 
-			int b;
+
+		int b;
 
 		b = 0;
-
-		throw "Implemention not complete!";
-
-		///////////////////////////////////////////////
-
-
-
-		Size_2D revSrcSize_Scaled;
-
-		//int orgToRevRatio_X_Scaled, orgToRevRatio_Y_Scaled;
-		long long orgToRevRatio_X_Scaled, orgToRevRatio_Y_Scaled;
-
-		{
-			FixedVector<S64Point> revSrcCornersArr(4);
-
-			for (int i = 0; i < resOfOrgSrcCornersArr.GetSize(); i++)
-			{
-				S64Point resCornerPnt = resOfOrgSrcCornersArr[i];
-				S64Point pnt1 = S64Point::Subtract(resCornerPnt, srcToResShift_Scaled);
-				S64Point pnt11 = m_angleRot.ReverseRotateScaledPoint(pnt1);
-				//.DivideByNum((float)SRRotIntScale::GetScaleVal() / SRRotIntScale::GetScaleVal()).toS32Point();
-
-				revSrcCornersArr.PushBack(pnt11);
-				//revSrcCornersArr.PushBack(m_angleRot.ReverseRotateScaledPoint(
-				//	//S64Point::Subtract(cornerPnt, srcToResShift_Scaled)));
-				//	pnt1));
-			}
-
-
-			int min_X, min_Y, max_X, max_Y;
-			FindMinMaxXYForPointArr(revSrcCornersArr, &min_X, &min_Y, &max_X, &max_Y);
-
-			Ncpp_ASSERT(0 == min_X);
-			Ncpp_ASSERT(0 == min_Y);
-
-
-			//{
-			//	S64Point resCornerPnt = resOfOrgSrcCornersArr[i];
-			//	S64Point pnt1 = S64Point::Subtract(resCornerPnt, srcToResShift_Scaled);
-			//	S64Point pnt11 = m_angleRot.ReverseRotateScaledPoint(pnt1);
-
-			//	int a;
-			//}
-
-
-			revSrcSize_Scaled.SetX(max_X);
-			revSrcSize_Scaled.SetY(max_Y);
-
-			Size_2D orgSrcSize_Scaled;
-			orgSrcSize_Scaled.SetX(SRRotIntScale::ScaleToI(this->m_srcSiz.GetX()));
-			orgSrcSize_Scaled.SetY(SRRotIntScale::ScaleToI(this->m_srcSiz.GetY()));
-
-
-			while (revSrcSize_Scaled.GetX() > orgSrcSize_Scaled.GetX())
-			{
-				orgToRevRatio_X_Scaled =
-					(orgSrcSize_Scaled.GetX() * SRRotIntScale::GetScaleVal()) / revSrcSize_Scaled.GetX();
-
-				revSrcSize_Scaled.SetX((revSrcSize_Scaled.GetX() * orgToRevRatio_X_Scaled) / SRRotIntScale::GetScaleVal());
-			}
-
-			while (revSrcSize_Scaled.GetY() > orgSrcSize_Scaled.GetY())
-			{
-				orgToRevRatio_Y_Scaled =
-					(orgSrcSize_Scaled.GetY() * SRRotIntScale::GetScaleVal()) / revSrcSize_Scaled.GetY();
-
-				revSrcSize_Scaled.SetY((revSrcSize_Scaled.GetY() * orgToRevRatio_Y_Scaled) / SRRotIntScale::GetScaleVal());
-			}
-
-
-			int a = 0;
-		}
-
-
-
-
-
-		/////////////////////////////////////////////
-
-
-		//m_resToScaledSrcMapImg = ArrayHolderUtil::CreateFrom<S32Point>(m_resSiz);
-
-
-
-
-
-
-		//-----------------------------
-
-		//m_resToSrcMapImg = ArrayHolderUtil::CreateFrom<int>(m_resSiz);
-		//int * resToSrcBuf = (int *)m_resToSrcMapImg->GetActualAccessor().GetData();
-
-		//m_srcToResMapImg = ArrayHolderUtil::CreateFrom<int>(m_srcSiz);
-		//int * srcToResBuf = (int *)m_srcToResMapImg->GetActualAccessor().GetData();
-
-
-		//ArrayHolder_2D_Ref<int> srcMinDistImg = ArrayHolderUtil::CreateFrom<int>(m_srcSiz);
-		//int *  srcMinDistBuf = (int *)srcMinDistImg->GetActualAccessor().GetData();
-
-		//const int nGreatDist = 10000000;
-		//FillImage(srcMinDistImg->GetVirtAccessor(), nGreatDist);
-
-		//int nMappedSrcCnt = 0;
-
-
-
-
-
-		//IndexCalc2D idxCalc_Src(m_srcSiz.GetX(), m_srcSiz.GetY());
-
-		//IndexCalc2D idxCalc_Res(m_resSiz.GetX(), m_resSiz.GetY());
-
-		////S32Point curPnt = m_bgnPnt;
-
-		//FixedVector< S32Point > srcPntArr(100);
-
-		//for (int y = 0; y < m_resSiz.GetY(); y++)
-		//{
-		//	S32Point curSrcPnt_Y;
-
-		//	curSrcPnt_Y.x = m_bgnPnt.x - y * m_nSin;
-		//	curSrcPnt_Y.y = m_bgnPnt.y + y * m_nCos;
-
-		//	for (int x = 0; x < m_resSiz.GetX(); x++)
-		//	{
-		//		int nIdx_Res = idxCalc_Res.Calc(x, y);
-
-		//		S32Point curSrcPnt_YX;
-		//		//S32Point curSrcPnt_YX = m_srcPntOfRes_Arr[nIdx_Res];
-
-
-
-		//		curSrcPnt_YX.x = curSrcPnt_Y.x + x * m_nCos;
-		//		curSrcPnt_YX.y = curSrcPnt_Y.y + x * m_nSin;
-
-		//		//resToSrcBuf_X_Scaled[idxCalc_Res.Calc(x, y)] =
-
-		//		//{
-		//		int nX1, nX2, nY1, nY2;
-
-		//		nY1 = SRResIntScale::Floor(curSrcPnt_YX.y);
-
-		//		nX1 = SRResIntScale::Floor(curSrcPnt_YX.x);
-
-		//		if (!(nY1 >= 0 && nY1 < nScaled_SrcHeight_Org))
-		//			//goto SrcToResEnd;
-		//			goto SetResIdxToNegative;
-
-		//		if (!(nX1 >= 0 && nX1 < nScaled_SrcWidth_Org))
-		//			//goto SrcToResEnd;
-		//			goto SetResIdxToNegative;
-
-		//		srcPntArr.ResetSize();
-
-		//		srcPntArr.PushBack(S32Point(nX1, nY1));
-
-		//		nY2 = SRResIntScale::Ceil(curSrcPnt_YX.y);
-
-		//		nX2 = SRResIntScale::Ceil(curSrcPnt_YX.x);
-
-		//		if (nY2 < 0 || nY2 >= nScaled_SrcHeight_Org)
-		//			//nY2 = nY1;
-		//			goto SetResIdxToNegative;
-
-		//		if (nX2 < 0 || nX2 >= nScaled_SrcWidth_Org)
-		//			//nX2 = nX1;
-		//			goto SetResIdxToNegative;
-
-		//		srcPntArr.PushBack(S32Point(nX2, nY1));
-		//		srcPntArr.PushBack(S32Point(nX2, nY2));
-		//		srcPntArr.PushBack(S32Point(nX1, nY2));
-
-
-		//		goto SrcToResEnd;
-
-
-		//	SetResIdxToNegative:
-		//		resToSrcBuf[nIdx_Res] = -1;
-		//		continue;
-
-
-		//	SrcToResEnd:
-
-		//		for (int i = 0; i < srcPntArr.GetSize(); i++)
-		//		{
-		//			S32Point & rSrcPnt = srcPntArr[i];
-
-		//			int nIdx_Src = idxCalc_Src.Calc(
-		//				//rSrcPnt.x / SRResIntScale::GetScaleVal(), rSrcPnt.y / SRResIntScale::GetScaleVal());
-		//				SRResIntScale::IntDividByScale(rSrcPnt.x), SRResIntScale::IntDividByScale(rSrcPnt.y));
-
-		//			int nOldDist = srcMinDistBuf[nIdx_Src];
-
-		//			if (nGreatDist == nOldDist)
-		//				nMappedSrcCnt++;
-
-		//			int nNewDist = abs(curSrcPnt_YX.x - rSrcPnt.x) +
-		//				abs(curSrcPnt_YX.y - rSrcPnt.y);
-
-		//			if (nNewDist < nOldDist)
-		//			{
-		//				srcMinDistBuf[nIdx_Src] = nNewDist;
-		//				srcToResBuf[nIdx_Src] = nIdx_Res;
-		//			}
-
-		//		}
-		//		//}
-
-
-		//		bool bInImg = true;
-
-		//		int nX_Src = SRResIntScale::Round(curSrcPnt_YX.x);
-		//		nX_Src /= SRResIntScale::GetScaleVal();
-
-		//		if (!(nX_Src >= 0 && nX_Src < m_srcSiz.GetX()))
-		//			bInImg = false;
-
-		//		int nY_Src = SRResIntScale::Round(curSrcPnt_YX.y);
-		//		nY_Src /= SRResIntScale::GetScaleVal();
-
-		//		if (!(nY_Src >= 0 && nY_Src < m_srcSiz.GetY()))
-		//			bInImg = false;
-
-		//		int nIdx_Src = -1;
-
-		//		if (bInImg)
-		//		{
-		//			nIdx_Src = idxCalc_Src.Calc(nX_Src, nY_Src);
-		//		}
-
-		//		resToSrcBuf[nIdx_Res] = nIdx_Src;
-
-		//	}
-		//}
-
-		//int nSrcSiz1D = m_srcSiz.GetX() * m_srcSiz.GetY();
-
-		//Ncpp_ASSERT(nMappedSrcCnt == nSrcSiz1D);
-
 	}
 
 

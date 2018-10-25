@@ -147,11 +147,11 @@ namespace Ncv
 				ImgAngleDirMgr_Context_Ref dirContext_H = new ImgAngleDirMgr::Context(i, rotMgr,
 					rot_Img_H, magSqr_Img_H, 'H');
 
-				//dirContext_H->m_rotToOrgMap_Img = new S32ImageArrayHolder1C(rotMgr->Get_ResToSrcMapImage());
-				//dirContext_H->m_orgToRotMap_Img = new S32ImageArrayHolder1C(rotMgr->Get_SrcToResMapImage());
+				//dirContext_H->m_rotToOrgMap_Img = new S32ImageArrayHolder1C(rotMgr->Get_ResToNearestSrcIndexMapImage());
+				//dirContext_H->m_orgToRotMap_Img = new S32ImageArrayHolder1C(rotMgr->Get_SrcToNearestResIndexMapImage());
 
-				dirContext_H->m_rotToOrgMap_Img = rotMgr->Get_ResToSrcMapImage();
-				dirContext_H->m_orgToRotMap_Img = rotMgr->Get_SrcToResMapImage();
+				dirContext_H->m_rotToOrgMap_Img = rotMgr->Get_ResToNearestSrcIndexMapImage();
+				dirContext_H->m_orgToRotMap_Img = rotMgr->Get_SrcToNearestResIndexMapImage();
 
 				dirContext_H->m_angle = rotMgr->GetAngleByRad();
 

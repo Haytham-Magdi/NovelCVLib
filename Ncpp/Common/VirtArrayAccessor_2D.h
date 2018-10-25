@@ -21,9 +21,9 @@ namespace Ncpp
 		{
 		}
 
-		void Init(T * a_data, int a_nofSteps_X, int a_nStepSize_X, int a_nofSteps_Y, int a_nStepSize_Y)
+		void Init(const T * a_data, const int a_nofSteps_X, const int a_nStepSize_X, const int a_nofSteps_Y, const int a_nStepSize_Y)
 		{
-			m_data = a_data;
+			m_data = (T *)a_data;
 
 			m_nofSteps_X = a_nofSteps_X;
 			m_nStepSize_X = a_nStepSize_X;
@@ -32,7 +32,7 @@ namespace Ncpp
 			m_nStepSize_Y = a_nStepSize_Y;
 		}
 
-		T & GetAt(int a_pos_X, int a_pos_Y) const
+		T & GetAt(const int a_pos_X, const int a_pos_Y) const
 		{
 			Ncpp_ASSERT(a_pos_X >= 0);
 			Ncpp_ASSERT(a_pos_X < m_nofSteps_X);
@@ -83,22 +83,22 @@ namespace Ncpp
 			m_data = a_data;
 		}
 
-		void SetSize_X(int a_nofSteps_X)
+		void SetSize_X(const int a_nofSteps_X)
 		{
 			m_nofSteps_X = a_nofSteps_X;
 		}
 
-		void SetStepSize_X(int a_nStepSize_X)
+		void SetStepSize_X(const int a_nStepSize_X)
 		{
 			m_nStepSize_X = a_nStepSize_X;
 		}
 
-		void SetSize_Y(int a_nofSteps_Y)
+		void SetSize_Y(const int a_nofSteps_Y)
 		{
 			m_nofSteps_Y = a_nofSteps_Y;
 		}
 
-		void SetStepSize_Y(int a_nStepSize_Y)
+		void SetStepSize_Y(const int a_nStepSize_Y)
 		{
 			m_nStepSize_Y = a_nStepSize_Y;
 		}
