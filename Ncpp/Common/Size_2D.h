@@ -56,6 +56,13 @@ namespace Ncpp
 			return sizeX * sizeY;
 		}
 
+		static bool AreEqual(const Size_2D & a_size1, const Size_2D & a_size2)
+		{
+			return a_size1.GetX() == a_size2.GetX() &&
+				a_size1.GetY() == a_size2.GetY();
+		}
+
+
 	protected:
 
 		int sizeX;

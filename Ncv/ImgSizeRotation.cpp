@@ -335,7 +335,7 @@ namespace Ncv
 
 
 
-		Size_2D srcSize_Scaled(m_srcSiz.GetX() * SRRotIntScale::GetScaleVal(), m_srcSiz.GetY() * SRRotIntScale::GetScaleVal());
+		const Size_2D srcSize_Scaled(m_srcSiz.GetX() * SRRotIntScale::GetScaleVal(), m_srcSiz.GetY() * SRRotIntScale::GetScaleVal());
 
 		a_resToScaledSrcPointMapImg = ArrayHolderUtil::CreateFrom<S64Point>(m_resSiz);
 		ActualArrayAccessor_2D<S64Point> resToSrcPointMapAcc = a_resToScaledSrcPointMapImg->GetActualAccessor();
