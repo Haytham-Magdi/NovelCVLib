@@ -116,6 +116,21 @@ namespace Ncpp
 			return S32Point::IsUndefined(*this);
 		}
 
+		bool IsInSize(const Size_2D a_siz)
+		{
+			return 
+				this->GetX() >= 0 &&
+				this->GetX() < a_siz.GetX() &&
+				this->GetY() >= 0 &&
+				this->GetY() < a_siz.GetY();
+		}
+
+		static bool AreEqual(const S32Point & a_pnt1, const S32Point & a_pnt2)
+		{
+			return a_pnt1.GetX() == a_pnt2.GetX() &&
+				a_pnt1.GetY() == a_pnt2.GetY();
+		}
+
 
 
 
