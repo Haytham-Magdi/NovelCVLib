@@ -54,6 +54,7 @@ namespace Ncv
 			//Ncpp_ASSERT(a_arg.Dir >= 0);
 		
 			//Ncpp_ASSERT(a_arg.Dir > -10000);
+			Ncpp_ASSERT(!IsUndefined(a_arg));
 			Ncpp_ASSERT(a_arg.Dir >= 0 && a_arg.Dir < 500);
 		}
 

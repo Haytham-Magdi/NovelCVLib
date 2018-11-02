@@ -196,6 +196,8 @@ namespace Ncv
 		//const Size_2D mappedSize_Scaled(a_mappeSize_Scaled.GetX() * a_scaleVal, a_mappeSize_Scaled.GetY() * a_scaleVal);
 		const Size_2D mappedSize_Scaled(a_mappeSize_Scaled.GetX(), a_mappeSize_Scaled.GetY());
 
+		bool hasDefinedValues = false;
+
 		for (int y = 0; y < rotPntMapAcc.GetSize_Y(); y++)
 		{
 			bool bLastPntDefined = false;
@@ -211,10 +213,17 @@ namespace Ncv
 					bLastPntDefined, bTurnedToDefined, bTurnedToUndefinedAgain,
 					a_canHaveUndefined);
 
+				if (bTurnedToDefined) 
+				{
+					hasDefinedValues = true;
+				}
+
 			}	//	for x.
 		}	//	for y.
 
-
+		Ncpp_ASSERT(hasDefinedValues);
+		
+		hasDefinedValues = false;
 		for (int x = 0; x < rotPntMapAcc.GetSize_X(); x++)
 		{
 			bool bLastPntDefined = false;
@@ -230,8 +239,15 @@ namespace Ncv
 					bLastPntDefined, bTurnedToDefined, bTurnedToUndefinedAgain,
 					a_canHaveUndefined);
 
+				if (bTurnedToDefined)
+				{
+					hasDefinedValues = true;
+				}
+
 			}	//	for y.
 		}	//	for x.
+
+		Ncpp_ASSERT(hasDefinedValues);
 
 	}
 
@@ -352,7 +368,7 @@ namespace Ncv
 
 				Ncpp_ASSERT(S64Point::AreEqual(resPnt, rResPntInfo.PosInRes));
 
-				if (rResPntInfo.WasVisited)
+				if (!rResPntInfo.WasVisited)
 				{
 					rMappedSrcPnt_Scaled.SetToUndefined();
 					continue;

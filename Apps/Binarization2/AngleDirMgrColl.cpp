@@ -84,17 +84,17 @@ namespace Ncv
 				ConflictInfo2_Ex ci_Init;
 				//ci_Init.Dir = -1;
 				ci_Init.Dir = 0;
-				ci_Init.Offset_Side_1 = -5;
-				ci_Init.Offset_Side_2 = 5;
+				ci_Init.Offset_Side_1 = -567890;
+				ci_Init.Offset_Side_2 = 567890;
 				ci_Init.Exists = false;
 				FillImage(m_context_H->m_conflictInfoImg->GetVirtAccessor(), ci_Init);
-				//SetImageToBadValue(m_context_H->m_conflictInfoImg->GetVirtAccessor());
 			}
 
 			m_context_H->m_wideConflictDiff_Img = new F32ImageArrayHolder1C(
 				org_Img_H->GetActualSize());
 			{
-				float initVal = -10000000;
+				//float initVal = -10000000;
+				float initVal = 0;
 				FillImage(m_context_H->m_wideConflictDiff_Img->GetVirtAccessor(), initVal);
 			}
 
@@ -130,6 +130,8 @@ namespace Ncv
 				//F32ImageArrayHolder3C_Ref rot_Img_H = new F32ImageArrayHolder3C(rotMgr->GetResImgSiz());
 				F32ImageArrayHolder3C_Ref rot_Img_H = new F32ImageArrayHolder3C(
 					F32Image::Create(toCvSize(rotMgr->GetResImgSiz()), m_srcImg->GetNofChannels()));
+
+				// AssertImageUndefinedOrValid(org_Img_H->GetVirtAccessor());
 
 				rotMgr->RotateImage(rot_Img_H->GetActualAccessor(), org_Img_H->GetActualAccessor());
 
@@ -523,8 +525,13 @@ namespace Ncv
 					rPixInfo.pConflictInfo = pConflictInfo;
 
 					rPixInfo.Val_WideOutStandev = sac_WideOutStandev.GetAt(x, y);
+					Ncpp_ASSERT(rPixInfo.Val_WideOutStandev >= 0);
 					if (rPixInfo.pConflictInfo->Exists)
 					{
+						//Ncpp_ASSERT(!IsUndefined(rPixInfo));
+						
+						Ncpp_ASSERT(!IsUndefined(*rPixInfo.pConflictInfo));
+						//Ncpp_ASSERT(!IsUndefined(rPixInfo.pConflictInfo->Offset_Side_1));
 						rgnGrowQues.PushPtr(rPixInfo.Val_WideOutStandev * nQueScale, &rPixInfo);
 						rPixInfo.IsPushed = true;
 					}
@@ -532,8 +539,8 @@ namespace Ncv
 					{
 						rPixInfo.IsPushed = false;
 					}
-				}
-			}
+				}	//	end for x
+			}	//	end for y
 
 			////F32ImageArrayHolder3C_Ref disp1_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetVirtAccessor().GetSize());
 			//F32ImageArrayHolder3C_Ref disp1_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
@@ -541,7 +548,7 @@ namespace Ncv
 			//MemSimpleAccessor_2D<F32ColorVal> sac_Disp1 = disp1_Img->GetVirtAccessor()->GenSimpleAccessor();
 
 			PixelInfo_1 * pPI = nullptr;
-			int cnt_1 = 0;
+			int nPushedCnt = 0;
 
 			do
 			{
@@ -551,14 +558,18 @@ namespace Ncv
 					continue;
 				}
 
-				cnt_1++;
+				nPushedCnt++;
+
+				//Ncpp_ASSERT(!IsUndefined(*pPI->pConflictInfo));
+				AssertValue(*pPI->pConflictInfo);
+				Ncpp_ASSERT(pPI->pConflictInfo->Exists);
 
 				Ncpp_ASSERT(pPI->IsPushed);
 
 				//F32ColorVal * pVal_Disp1 = &sac_Disp1.GetAt(pPI->X, pPI->Y);
 				//pVal_Disp1->val0 = 0;
 				////pVal_Disp1->val1 = pPI->Val_WideOutStandev;
-				//pVal_Disp1->val1 = cnt_1 * 255.0f / 480000;
+				//pVal_Disp1->val1 = nPushedCnt * 255.0f / 480000;
 				//pVal_Disp1->val2 = 0;
 
 
@@ -586,15 +597,16 @@ namespace Ncv
 						}
 
 						Ncpp_ASSERT(!pPI_Dest->pConflictInfo->Exists);
-						Ncpp_ASSERT(pPI->pConflictInfo->Exists);
-
-						AssertValue(*pPI->pConflictInfo);
+						//Ncpp_ASSERT(!IsUndefined(pPI_Dest->Val_WideOutStandev));
+						Ncpp_ASSERT(pPI_Dest->Val_WideOutStandev >= 0);
+						
 						pPI_Dest->pConflictInfo = pPI->pConflictInfo;
 
 						rgnGrowQues.PushPtr(pPI_Dest->Val_WideOutStandev * nQueScale, pPI_Dest);
 						pPI_Dest->IsPushed = true;
-					}
-				}
+				
+					}	//	end for xd
+				}	//	end for yd
 
 
 			} while (nullptr != pPI);
@@ -611,6 +623,7 @@ namespace Ncv
 
 
 			const int nSize_1D = cx.m_conflictInfoImg->GetActualAccessor().CalcSize_1D();
+			Ncpp_ASSERT(nSize_1D == nPushedCnt);
 
 			//F32ImageArrayHolder3C_Ref threshold_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetVirtAccessor().GetSize());
 			F32ImageArrayHolder3C_Ref threshold_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
@@ -634,8 +647,9 @@ namespace Ncv
 					F32ColorVal & rVal_Side_2 = orgImg_Ptr[rPI.pConflictInfo->Offset_Side_2];
 
 					rThreshold = F32ColorVal::Add(rVal_Side_1, rVal_Side_2).DividBy(2);
-				}
-			}
+				
+				}	//	end for i
+			}	//	end block
 
 			//GlobalStuff::SetLinePathImg(GenTriChGrayImg(threshold_Mag_Img->GetSrcImg())); GlobalStuff::ShowLinePathImg();
 			//ShowImage(threshold_Img->GetSrcImg(), "threshold_Img->GetSrcImg()");

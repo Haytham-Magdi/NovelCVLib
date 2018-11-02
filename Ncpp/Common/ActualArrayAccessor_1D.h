@@ -29,7 +29,7 @@ namespace Ncpp
 			m_nSize = a_nSize;
 		}
 
-		const T & operator[](int a_pos) const
+		T & operator[](int a_pos) const
 		{
 			Ncpp_ASSERT(a_pos >= 0);
 			Ncpp_ASSERT(a_pos < m_nSize);
@@ -64,9 +64,9 @@ namespace Ncpp
 
 		ActualArrayAccessor_1D<T> Clone() const
 		{
-			ActualArrayAccessor_1D<T> arr;
-			CopyTo(&arr);
-			return arr;
+			ActualArrayAccessor_1D<T> acc;
+			CopyTo(&acc);
+			return acc;
 		}
 
 		void AssignVirtAccessorTo(VirtArrayAccessor_1D<T> * a_pAcc) const
@@ -76,9 +76,9 @@ namespace Ncpp
 
 		VirtArrayAccessor_1D<T> GenVirtAccessor() const
 		{
-			VirtArrayAccessor_1D<T> arr;
-			AssignVirtAccessorTo(&arr);
-			return arr;
+			VirtArrayAccessor_1D<T> acc;
+			AssignVirtAccessorTo(&acc);
+			return acc;
 		}
 
 		void AssignPtrIteratorTo(PtrIterator2<T> * a_pItr) const

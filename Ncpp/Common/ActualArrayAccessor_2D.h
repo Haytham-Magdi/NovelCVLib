@@ -106,9 +106,21 @@ namespace Ncpp
 
 		ActualArrayAccessor_2D<T> Clone() const
 		{
-			ActualArrayAccessor_2D<T> arr;
-			CopyTo(&arr);
-			return arr;
+			ActualArrayAccessor_2D<T> acc;
+			CopyTo(&acc);
+			return acc;
+		}
+
+		void CopyTo_1D(ActualArrayAccessor_1D<T> * a_pAcc_1D) const
+		{
+			a_pAcc_1D->Init(m_data, this->CalcSize_1D());
+		}
+
+		ActualArrayAccessor_1D<T> GenAcc_1D() const
+		{
+			ActualArrayAccessor_1D<T> acc;
+			CopyTo_1D(&acc);
+			return acc;
 		}
 
 		void AssignVirtAccessorTo(VirtArrayAccessor_2D<T> * a_pAcc) const
@@ -118,9 +130,9 @@ namespace Ncpp
 
 		VirtArrayAccessor_2D<T> GenVirtAccessor() const
 		{
-			VirtArrayAccessor_2D<T> arr;
-			AssignVirtAccessorTo(&arr);
-			return arr;
+			VirtArrayAccessor_2D<T> acc;
+			AssignVirtAccessorTo(&acc);
+			return acc;
 		}
 
 	protected:

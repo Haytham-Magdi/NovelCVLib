@@ -85,28 +85,32 @@ namespace Ncv
 						SRResIntScale::IntDividByScale(nSrc_Y1_Scaled)
 						);
 					Ncpp_ASSERT(srcPntX1Y1.IsInSize(m_srcSiz));
-					T & rSrcValX1Y1 = a_destAcc.GetAt(srcPntX1Y1.GetX(), srcPntX1Y1.GetY());
+					T & rSrcValX1Y1 = a_srcAcc.GetAt(srcPntX1Y1.GetX(), srcPntX1Y1.GetY());
+					AssertUndefinedOrValid(rSrcValX1Y1);
 
 					S32Point srcPntX1Y2(
 						SRResIntScale::IntDividByScale(nSrc_X1_Scaled),
 						SRResIntScale::IntDividByScale(nSrc_Y2_Scaled)
 						);
 					Ncpp_ASSERT(srcPntX1Y2.IsInSize(m_srcSiz));
-					T & rSrcValX1Y2 = a_destAcc.GetAt(srcPntX1Y2.GetX(), srcPntX1Y2.GetY());
+					T & rSrcValX1Y2 = a_srcAcc.GetAt(srcPntX1Y2.GetX(), srcPntX1Y2.GetY());
+					AssertUndefinedOrValid(rSrcValX1Y2);
 
 					S32Point srcPntX2Y1(
 						SRResIntScale::IntDividByScale(nSrc_X2_Scaled),
 						SRResIntScale::IntDividByScale(nSrc_Y1_Scaled)
 						);
 					Ncpp_ASSERT(srcPntX2Y1.IsInSize(m_srcSiz));
-					T & rSrcValX2Y1 = a_destAcc.GetAt(srcPntX2Y1.GetX(), srcPntX2Y1.GetY());
+					T & rSrcValX2Y1 = a_srcAcc.GetAt(srcPntX2Y1.GetX(), srcPntX2Y1.GetY());
+					AssertUndefinedOrValid(rSrcValX2Y1);
 
 					S32Point srcPntX2Y2(
 						SRResIntScale::IntDividByScale(nSrc_X2_Scaled),
 						SRResIntScale::IntDividByScale(nSrc_Y2_Scaled)
 						);
 					Ncpp_ASSERT(srcPntX2Y2.IsInSize(m_srcSiz));
-					T & rSrcValX2Y2 = a_destAcc.GetAt(srcPntX2Y2.GetX(), srcPntX2Y2.GetY());
+					T & rSrcValX2Y2 = a_srcAcc.GetAt(srcPntX2Y2.GetX(), srcPntX2Y2.GetY());
+					AssertUndefinedOrValid(rSrcValX2Y2);
 
 
 					if (
