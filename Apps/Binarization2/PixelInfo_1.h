@@ -17,7 +17,7 @@
 
 #include <NovelCVLib\OpenCV\OpenCV_Util.h>
 #include <NovelCVLib\OpenCV\ImageArrayHolder.h>
-#include <NovelCVLib\Apps\Binarization2\ImageArrayHolderTypeDefs.h>
+#include <NovelCVLib\OpenCV\ImageArrayHolderTypeDefs.h>
 
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
 #include <NovelCVLib\Ncv\ConflictInfo2.h>

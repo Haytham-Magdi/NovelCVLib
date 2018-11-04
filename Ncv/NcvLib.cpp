@@ -90,12 +90,12 @@
 #include <NovelCVLib\Apps\Binarization2\BinarizationProcess1.cpp>
 #include <NovelCVLib\Apps\Binarization2\PixelInfo_1.cpp>
 
-
-
-
-
-
-
+#include <NovelCVLib\Apps\BloodCells\ImgAngleDirMgr.cpp>
+#include <NovelCVLib\Apps\BloodCells\AngleDirMgrColl.cpp>
+#include <NovelCVLib\Apps\BloodCells\AngleDirMgrColl_Context.cpp>
+//#include <NovelCVLib\Apps\BloodCells\RotationMgrColl.cpp>
+#include <NovelCVLib\Apps\BloodCells\BloodCellsProcess1.cpp>
+#include <NovelCVLib\Apps\BloodCells\PixelInfo_1.cpp>
 
 
 

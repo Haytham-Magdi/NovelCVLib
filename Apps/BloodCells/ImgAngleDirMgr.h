@@ -21,13 +21,13 @@
 //#include <NovelCVLib\Ncv\ImageItrMgr.h>
 
 #include <NovelCVLib\Ncv\ImgSizeRotation.h>
-#include <NovelCVLib\Apps\Binarization2\ImgAngleDirMgr.h>
-#include <NovelCVLib\Apps\Binarization2\AngleDirMgrColl_Context.h>
+#include <NovelCVLib\Apps\BloodCells\ImgAngleDirMgr.h>
+#include <NovelCVLib\Apps\BloodCells\AngleDirMgrColl_Context.h>
 
 
 namespace Ncv
 {
-	namespace Ns_Binarization
+	namespace Ns_BloodCells
 	{
 
 		//class ImgAngleDirMgr;

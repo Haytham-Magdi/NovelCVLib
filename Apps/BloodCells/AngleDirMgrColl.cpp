@@ -20,8 +20,8 @@
 
 
 
-#include <NovelCVLib\Apps\Binarization2\AngleDirMgrColl.h>
-#include <NovelCVLib\Apps\Binarization2\PixelInfo_1.h>
+#include <NovelCVLib\Apps\BloodCells\AngleDirMgrColl.h>
+#include <NovelCVLib\Apps\BloodCells\PixelInfo_1.h>
 
 
 //#define M_PI 3.14159265358979323846
@@ -40,7 +40,7 @@ namespace Ncv
 
 	//using namespace Ncv::ImageArrayHolderOperations;
 
-	namespace Ns_Binarization
+	namespace Ns_BloodCells
 	{
 		AngleDirMgrColl::AngleDirMgrColl(F32ImageRef a_srcImg, ImgSizeRotationCollRef a_rotColl)
 		{

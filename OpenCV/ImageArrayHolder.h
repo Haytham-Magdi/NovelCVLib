@@ -2,10 +2,6 @@
 
 #include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
 #include <NovelCVLib\OpenCV\CvIncludes.h>
-//#include <NovelCVLib\OpenCV\Types.h>
-//#include <NovelCVLib\OpenCV\error.h>
-//#include <NovelCVLib\OpenCV\funcs1.h>
-//#include <vector>
 #include <NovelCVLib\OpenCV\Image.h>
 #include <NovelCVLib\OpenCV\OpenCV_Util.h>
 
@@ -77,13 +73,6 @@ namespace Ncv
 		}
 
 
-
-
-
-		//ArrayHolder_2D<T_AccElm> * AsHolder()
-		//{
-		//	return this;
-		//}
 
 		ImageRef<T_ImgElm> GetSrcImg()
 		{

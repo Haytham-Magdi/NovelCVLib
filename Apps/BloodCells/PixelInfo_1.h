@@ -22,29 +22,31 @@
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
 #include <NovelCVLib\Ncv\ConflictInfo2.h>
 
-
-#include <NovelCVLib\Apps\Binarization2\ImgAngleDirMgr.h>
-//#include <NovelCVLib\Apps\Binarization2\RotationMgrColl.h>
+#include <NovelCVLib\Apps\BloodCells\ImgAngleDirMgr.h>
+//#include <NovelCVLib\Apps\BloodCells\RotationMgrColl.h>
 
 
 namespace Ncv
 {
-	namespace Ns_Binarization
+	namespace Ns_BloodCells
 	{
 
-		class AngleDirMgrColl_Context : public Ncpp::Object
+		class PixelInfo_1 : public MultiListQueMember< PixelInfo_1 >
 		{
 		public:
 
-			ArrayHolder_2D_Ref<PixelStandevInfo> m_standevInfoImg;
-			ArrayHolder_2D_Ref<ConflictInfo2_Ex> m_conflictInfoImg;
-			F32ImageArrayHolder1C_Ref m_wideConflictDiff_Img;
-			F32VectorValImageArrayHolder_4C_Ref m_avgPStandev_InrWide_Img;
+			int X;
+			int Y;
 
-			F32ImageArrayHolder3C_Ref m_org_Img;
+			ConflictInfo2_Ex * pConflictInfo;
+
+			float Val_WideOutStandev;
+
+			bool IsPushed;
+
 		};
 
-		typedef Ncpp::ObjRef< AngleDirMgrColl_Context > AngleDirMgrColl_Context_Ref;
-	}
+		//typedef Ncpp::ObjRef< PixelInfo_1 > PixelInfo_1_Ref;
+	};
 
 }

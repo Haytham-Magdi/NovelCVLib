@@ -7,6 +7,8 @@
 #include <NovelCVLib\OpenCV\Image.h>
 #include <NovelCVLib\OpenCV\funcs1.h>
 
+#include <NovelCVLib\Apps\BloodCells\BloodCellsProcess1.h>
+
 
 //#define M_PI 3.14159265358979323846
 #define M_PI 3.14159265358979323846f
@@ -17,11 +19,23 @@ namespace Ncv
 	using namespace Ncpp;
 	//using namespace Ncpp::Math;
 
-	using namespace Ncv;
-	using namespace Ncv::ImageOperations2;
+	namespace Ns_BloodCells
+	{
+
+		BloodCellsProcess1::BloodCellsProcess1(F32ImageRef a_srcImg)
+		{
+			m_srcImg = a_srcImg;
+
+			Prepare();
+		}
+
+		void BloodCellsProcess1::Prepare()
+		{
+		
+		}
 
 
 
-
+	}
 }
 

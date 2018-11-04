@@ -32,7 +32,7 @@
 
 #include <NovelCVLib\OpenCV\OpenCV_Util.h>
 #include <NovelCVLib\OpenCV\ImageArrayHolder.h>
-#include <NovelCVLib\Apps\Binarization2\ImageArrayHolderTypeDefs.h>
+#include <NovelCVLib\OpenCV\ImageArrayHolderTypeDefs.h>
 
 #include <NovelCVLib\ElementOperations2\ElementOperations2_VectorVal.h>
 #include <NovelCVLib\ElementOperations2\ElementOperations2_Float.h>
@@ -54,6 +54,13 @@
 #include <NovelCVLib\Apps\Binarization2\BinarizationProcess1.h>
 #include <NovelCVLib\Apps\Binarization2\PixelInfo_1.h>
 
+
+#include <NovelCVLib\Apps\BloodCells\ImgAngleDirMgr.h>
+#include <NovelCVLib\Apps\BloodCells\AngleDirMgrColl.h>
+#include <NovelCVLib\Apps\BloodCells\AngleDirMgrColl_Context.h>
+//#include <NovelCVLib\Apps\BloodCells\RotationMgrColl.h>
+#include <NovelCVLib\Apps\BloodCells\BloodCellsProcess1.h>
+#include <NovelCVLib\Apps\BloodCells\PixelInfo_1.h>
 
 
 

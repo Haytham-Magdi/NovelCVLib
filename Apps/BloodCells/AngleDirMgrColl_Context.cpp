@@ -7,6 +7,8 @@
 #include <NovelCVLib\OpenCV\Image.h>
 #include <NovelCVLib\OpenCV\funcs1.h>
 
+#include <NovelCVLib\Apps\BloodCells\AngleDirMgrColl_Context.h>
+
 
 //#define M_PI 3.14159265358979323846
 #define M_PI 3.14159265358979323846f
@@ -20,8 +22,9 @@ namespace Ncv
 	using namespace Ncv;
 	using namespace Ncv::ImageOperations2;
 
+	namespace Ns_BloodCells
+	{
 
-
-
+	}
 }
 
