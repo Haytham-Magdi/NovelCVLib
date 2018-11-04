@@ -95,14 +95,14 @@ namespace Ncv
 				return m_normalContext;
 			}
 
-			void Proceed_1();
-			void Proceed_2();
-			void Proceed_3();
-			void Proceed_4();
-			void Proceed_5_1();
-			void Proceed_5_2();
-			void Proceed_5_3();
-			void Proceed_6();
+			void Proceed_1_1();
+			void Proceed_1_2();
+			void Proceed_2_1();
+			void Proceed_2_2();
+			void Proceed_3_1();
+			void Proceed_3_2();
+			void Proceed_4_1();
+			void Proceed_4_2();
 
 		protected:
 

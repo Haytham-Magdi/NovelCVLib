@@ -176,27 +176,27 @@ namespace Ncv
 			}
 
 			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_1();
+				m_angleDirMgrArr[i]->Proceed_1_1();
 			}
 
 			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_2();
+				m_angleDirMgrArr[i]->Proceed_1_2();
 			}
 
 			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_3();
+				m_angleDirMgrArr[i]->Proceed_2_1();
 			}
 
 			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_4();
+				m_angleDirMgrArr[i]->Proceed_2_2();
 			}
 
 			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_5_1();
+				m_angleDirMgrArr[i]->Proceed_3_1();
 			}
 
 			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_5_2();
+				m_angleDirMgrArr[i]->Proceed_3_2();
 			}
 
 			DivideImageByNum(m_context_H->m_avgPStandev_InrWide_Img->GetVirtAccessor(),
@@ -222,11 +222,11 @@ namespace Ncv
 			}
 
 			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_5_3();
+				m_angleDirMgrArr[i]->Proceed_4_1();
 			}
 
 			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_6();
+				m_angleDirMgrArr[i]->Proceed_4_2();
 			}
 
 			DisplayStandiv_Dir_Img();

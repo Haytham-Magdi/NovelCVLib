@@ -52,50 +52,27 @@ namespace Ncv
 
 		}
 
-		void ImgAngleDirMgr::Proceed_1()
+		void ImgAngleDirMgr::Proceed_1_1()
 		{
-			//return;
-
 			Context & cx = *m_context;
-			Context & ncx = *m_normalContext;
-			AngleDirMgrColl_Context & pcx = *m_parentContext;
-
 
 			//ShowImage(cx.m_org_Img->GetSrcImg(), cx.MakeStrWithId("org_Img->GetSrcImg()").c_str());
 
-			//cx.m_avgStandev_X_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetVirtAccessor().GetSize());
 			cx.m_avgStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
 				cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
 
-			float * localPtr = (float *)cx.m_avgStandev_X_Img->GetActualAccessor().GetData();
-
-			IndexCalc2D calc1(cx.m_avgStandev_X_Img->GetActualAccessor().GetSize_X(),
-				cx.m_avgStandev_X_Img->GetActualAccessor().GetSize_Y());
-
-			int x1 = calc1.Calc_X(51216);
-			int y1 = calc1.Calc_Y(51216);
-
-			//nOffsetInRot_1D = 51216
-
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-1, 1));
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-5, 5), Range<int>::New(-5, 5));
-
-			//ShowImage(cx.m_avgStandev_X_Img->GetSrcImg(), cx.MakeStrWithId("m_avgStandev_X_Img->GetSrcImg()").c_str());
-
-			//AffectCommonAvgStandev();
-
+			////ShowImage(cx.m_avgStandev_X_Img->GetSrcImg(), cx.MakeStrWithId("m_avgStandev_X_Img->GetSrcImg()").c_str());
 		}
 
-		void ImgAngleDirMgr::Proceed_2()
+		void ImgAngleDirMgr::Proceed_1_2()
 		{
 			//return;
 
 			AffectCommonAvgStandev();
-
 		}
 
-		void ImgAngleDirMgr::Proceed_3()
+		void ImgAngleDirMgr::Proceed_2_1()
 		{
 			Context & cx = *m_context;
 			Context & ncx = *m_normalContext;
@@ -133,7 +110,7 @@ namespace Ncv
 
 		}
 
-		void ImgAngleDirMgr::Proceed_4()
+		void ImgAngleDirMgr::Proceed_2_2()
 		{
 			//Context & cx = *m_context;
 			//Context & ncx = *m_normalContext;
@@ -142,7 +119,7 @@ namespace Ncv
 			AffectCommonConflict();
 		}
 
-		void ImgAngleDirMgr::Proceed_5_1()
+		void ImgAngleDirMgr::Proceed_3_1()
 		{
 			Context & cx = *m_context;
 			Context & ncx = *m_normalContext;
@@ -196,7 +173,7 @@ namespace Ncv
 
 		}
 
-		void ImgAngleDirMgr::Proceed_5_2()
+		void ImgAngleDirMgr::Proceed_3_2()
 		{
 			//Context & cx = *m_context;
 			//Context & ncx = *m_normalContext;
@@ -205,7 +182,7 @@ namespace Ncv
 			AffectCommonAvgPStandev_InrWide();
 		}
 
-		void ImgAngleDirMgr::Proceed_5_3()
+		void ImgAngleDirMgr::Proceed_4_1()
 		{
 			Context & cx = *m_context;
 			Context & ncx = *m_normalContext;
@@ -271,7 +248,7 @@ namespace Ncv
 
 		}
 
-		void ImgAngleDirMgr::Proceed_6()
+		void ImgAngleDirMgr::Proceed_4_2()
 		{
 			AffectCommonWideConflictDiff();
 		}
