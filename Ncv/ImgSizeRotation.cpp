@@ -432,23 +432,27 @@ namespace Ncv
 
 
 	void ImgSizeRotation::PrepareNearestIndexMapImgFromScaledPointMapImg(
-		ArrayHolder_2D_Ref<S32Point> a_scaledPointMapImg, ArrayHolder_2D_Ref<int> & a_nearestIndexMapImg)
+		ArrayHolder_2D_Ref<S32Point> a_scaledPointMapImg, ArrayHolder_2D_Ref<int> & a_nearestIndexMapImg, Size_2D & a_mappingTargetSize)
 	{
 		ActualArrayAccessor_2D<S32Point> scaledPointMapAcc = a_scaledPointMapImg->GetActualAccessor();
-		S32Point * scaledPointPtr = scaledPointMapAcc.GetData();
+		ActualArrayAccessor_1D<S32Point> scaledPointAcc_1D = scaledPointMapAcc.GenAcc_1D();
 
 		const Size_2D imgSiz = scaledPointMapAcc.GetSize();
 
 		a_nearestIndexMapImg = ArrayHolderUtil::CreateFrom<int>(imgSiz);
 		ActualArrayAccessor_2D<int> nearestIndexMapAcc = a_nearestIndexMapImg->GetActualAccessor();
-		int * nearestIndexPtr = nearestIndexMapAcc.GetData();
+		
+		Ncpp_ASSERT(Size_2D::AreEqual(scaledPointMapAcc.GetSize(), nearestIndexMapAcc.GetSize()));
+
+		
+		ActualArrayAccessor_1D<int> nearestIndexAcc_1D = nearestIndexMapAcc.GenAcc_1D();
 
 		const int imgSiz1D = imgSiz.CalcSize_1D();
 
 		for (int i = 0; i < imgSiz1D; i++)
 		{
-			S32Point & rScaledPnt = scaledPointPtr[i];
-			int & rNearestIndex = nearestIndexPtr[i];
+			S32Point & rScaledPnt = scaledPointAcc_1D[i];
+			int & rNearestIndex = nearestIndexAcc_1D[i];
 
 			if (rScaledPnt.IsUndefined())
 			{
@@ -456,10 +460,14 @@ namespace Ncv
 			}
 			else
 			{
-				const int x = SRResIntScale::IntDividByScale(SRResIntScale::Round(rScaledPnt.GetX()));
-				const int y = SRResIntScale::IntDividByScale(SRResIntScale::Round(rScaledPnt.GetY()));
+				const S32Point pnt(
+					SRResIntScale::IntDividByScale(SRResIntScale::Round(rScaledPnt.GetX())),
+					SRResIntScale::IntDividByScale(SRResIntScale::Round(rScaledPnt.GetY()))
+					);
 
-				rNearestIndex = nearestIndexMapAcc.CalcIndex_1D(x, y);
+				Ncpp_ASSERT(pnt.IsInSize(a_mappingTargetSize));
+
+				rNearestIndex = nearestIndexMapAcc.CalcIndex_1D(pnt.GetX(), pnt.GetY());
 			}
 		}
 
@@ -519,8 +527,8 @@ namespace Ncv
 			resToScaledSrcPointMapImg, m_resToScaledSrcPointMapImg);
 
 
-		PrepareNearestIndexMapImgFromScaledPointMapImg(m_srcToScaledResPointMapImg, m_srcToNearestResIndexMapImg);
-		PrepareNearestIndexMapImgFromScaledPointMapImg(m_resToScaledSrcPointMapImg, m_resToNearestSrcIndexMapImg);
+		PrepareNearestIndexMapImgFromScaledPointMapImg(m_srcToScaledResPointMapImg, m_srcToNearestResIndexMapImg, m_resSiz);
+		PrepareNearestIndexMapImgFromScaledPointMapImg(m_resToScaledSrcPointMapImg, m_resToNearestSrcIndexMapImg, m_srcSiz);
 
 
 		int b;

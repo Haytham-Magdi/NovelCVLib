@@ -62,13 +62,16 @@ namespace Ncv
 			Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
 				cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
 
-			////ShowImage(cx.m_avgStandev_X_Img->GetSrcImg(), cx.MakeStrWithId("m_avgStandev_X_Img->GetSrcImg()").c_str());
+			if (1 == cx.m_nIndex)
+			{
+				//ShowImage(cx.m_avgStandev_X_Img->GetSrcImg(), cx.MakeStrWithId("m_avgStandev_X_Img->GetSrcImg()").c_str());
+				ShowImage(GenTriChGrayImg(cx.m_avgStandev_X_Img->GetSrcImg()), cx.MakeStrWithId("m_avgStandev_X_Img->GetSrcImg()").c_str());
+			}
+			
 		}
 
 		void ImgAngleDirMgr::Proceed_1_2()
 		{
-			//return;
-
 			AffectCommonAvgStandev();
 		}
 
@@ -259,12 +262,19 @@ namespace Ncv
 			Context & ncx = *m_normalContext;
 
 			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
-			const int * orgToRotMap_Buf = orgToRotMap_Acc.GetData();
+			ActualArrayAccessor_1D<int> orgToRotMapAcc_1D = orgToRotMap_Acc.GenAcc_1D();
 			
-			PixelStandevInfo * commonImgBuf = (PixelStandevInfo *)m_parentContext->m_standevInfoImg->GetActualAccessor().GetData();
 
-			float * localPtr = (float *)cx.m_avgStandev_X_Img->GetActualAccessor().GetData();
-			float * localPtr_Norm = (float *)ncx.m_avgStandev_X_Img->GetActualAccessor().GetData();
+			ActualArrayAccessor_2D<PixelStandevInfo> commonAcc = m_parentContext->m_standevInfoImg->GetActualAccessor();
+			Ncpp_ASSERT(Size_2D::AreEqual(orgToRotMap_Acc.GetSize(), commonAcc.GetSize()));
+
+			ActualArrayAccessor_1D<PixelStandevInfo> commonAcc_1D = commonAcc.GenAcc_1D();
+
+
+
+			//float * localAcc_1D = (float *)cx.m_avgStandev_X_Img->GetActualAccessor().GetData();
+			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> localAcc_1D_Norm = ncx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
 
 			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			{
@@ -274,37 +284,44 @@ namespace Ncv
 				{
 					const int nOffsetInOrg_1D = nOffset_Y + x;
 
-					PixelStandevInfo & rCommonPsi = commonImgBuf[nOffsetInOrg_1D];
+					PixelStandevInfo & rCommonPsi = commonAcc_1D[nOffsetInOrg_1D];
 
-					if (IsUndefined(rCommonPsi))
-					{
-						continue;
-					}
+					//if (IsUndefined(rCommonPsi))
+					//{
+					//	continue;
+					//}
 					AssertValue(rCommonPsi);
 
-					int nOffsetInRot_1D = orgToRotMap_Buf[nOffsetInOrg_1D];
-					Ncpp_ASSERT(nOffsetInRot_1D >= 0);
+					int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
+					//Ncpp_ASSERT(nOffsetInRot_1D >= 0);
 
-					float standev_Local = localPtr[nOffsetInRot_1D];
-					
+					const float standev_Local = localAcc_1D[nOffsetInRot_1D];
+					const float standev_Norm = localAcc_1D_Norm[nOffsetInRot_1D];
+
 					if (IsUndefined(standev_Local))
 					{
-						SetToUndefined(&rCommonPsi);
+						//SetToUndefined(&rCommonPsi);
 						continue;
 					}
 					
 					//Ncpp_ASSERT(standev_Local >= 0.0f || standev_Local > -5000.0f);
 					AssertValue(standev_Local);
+					Ncpp_ASSERT(standev_Local >= 0);
 
-					if (standev_Local < rCommonPsi.Val)
+					//if (standev_Local < rCommonPsi.Val)
+					if (1 == cx.m_nIndex)
 					{
-						Assign(&rCommonPsi.Val, standev_Local);
-						Assign(&rCommonPsi.NormVal, localPtr_Norm[nOffsetInRot_1D]);
-						Assign(&rCommonPsi.Dir, cx.m_nIndex);
+						////Ncpp_ASSERT(standev_Norm >= rCommonPsi.NormVal);
+						//Ncpp_ASSERT(standev_Norm + 50 >= rCommonPsi.NormVal);
 
-						//rCommonPsi.Val = standev_Local;
-						//rCommonPsi.NormVal = localPtr_Norm[nOffsetInRot_1D];
-						//rCommonPsi.Dir = cx.m_nIndex;
+						//Assign(&rCommonPsi.Val, standev_Local);
+						////Assign(&rCommonPsi.NormVal, standev_Norm);
+						//Assign(&rCommonPsi.NormVal, standev_Local);
+						
+						Assign(&rCommonPsi.Val, 150);
+						Assign(&rCommonPsi.NormVal, 150);
+						
+						Assign(&rCommonPsi.Dir, cx.m_nIndex);
 					}
 
 				}
@@ -319,10 +336,10 @@ namespace Ncv
 			AngleDirMgrColl_Context & pcx = *m_parentContext;
 
 			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
-			const int * orgToRotMap_Buf = orgToRotMap_Acc.GetData();
+			ActualArrayAccessor_1D<int> orgToRotMapAcc_1D = orgToRotMap_Acc.GenAcc_1D();
 
-			VectorVal<Float, 4> * commonImgBuf = (VectorVal<Float, 4> *)pcx.m_avgPStandev_InrWide_Img->GetActualAccessor().GetData();
-			VectorVal<Float, 4> * localPtr = (VectorVal<Float, 4> *)cx.m_avgPStandev_InrWide_Img->GetActualAccessor().GetData();
+			ActualArrayAccessor_1D<VectorVal<Float, 4>> commonAcc_1D = pcx.m_avgPStandev_InrWide_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<VectorVal<Float, 4>> localAcc_1D = cx.m_avgPStandev_InrWide_Img->GetActualAccessor().GenAcc_1D();
 
 			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			{
@@ -332,16 +349,16 @@ namespace Ncv
 				{
 					const int nOffsetInOrg_1D = nOffset_Y + x;
 
-					VectorVal<Float, 4> * pCommonVal = &commonImgBuf[nOffsetInOrg_1D];
+					VectorVal<Float, 4> * pCommonVal = &commonAcc_1D[nOffsetInOrg_1D];
 					if (IsUndefined(*pCommonVal))
 						continue;
 
 					AssertValue(*pCommonVal);
 
-					int nOffsetInRot_1D = orgToRotMap_Buf[nOffsetInOrg_1D];
+					int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
 					Ncpp_ASSERT(nOffsetInRot_1D >= 0);
 
-					VectorVal<Float, 4> & val_Local = localPtr[nOffsetInRot_1D];
+					VectorVal<Float, 4> & val_Local = localAcc_1D[nOffsetInRot_1D];
 					AssertUndefinedOrValid(val_Local);
 					if (IsUndefined(val_Local))
 					{
@@ -417,12 +434,12 @@ namespace Ncv
 			AngleDirMgrColl_Context & pcx = *m_parentContext;
 
 			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
-			const int * orgToRotMap_Buf = orgToRotMap_Acc.GetData();
+			ActualArrayAccessor_1D<int> orgToRotMapAcc_1D = orgToRotMap_Acc.GenAcc_1D();
 
-			float * commonImgBuf = (float *)pcx.m_wideConflictDiff_Img->GetActualAccessor().GetData();
+			ActualArrayAccessor_1D<float> commonAcc_1D = pcx.m_wideConflictDiff_Img->GetActualAccessor().GenAcc_1D();
 
-			float * localPtr = (float *)cx.m_wideConflictDiff_Img->GetActualAccessor().GetData();
-			//float * localPtr_Norm = (float *)ncx.m_wideConflictDiff_Img->GetActualAccessor().GetData();
+			float * localAcc_1D = (float *)cx.m_wideConflictDiff_Img->GetActualAccessor().GetData();
+			//float * localAcc_1D_Norm = (float *)ncx.m_wideConflictDiff_Img->GetActualAccessor().GetData();
 
 			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			{
@@ -432,13 +449,13 @@ namespace Ncv
 				{
 					const int nOffsetInOrg_1D = nOffset_Y + x;
 
-					float & rCommonConf = commonImgBuf[nOffsetInOrg_1D];
+					float & rCommonConf = commonAcc_1D[nOffsetInOrg_1D];
 					AssertValue(rCommonConf);
 
-					int nOffsetInRot_1D = orgToRotMap_Buf[nOffsetInOrg_1D];
+					int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
 					Ncpp_ASSERT(nOffsetInRot_1D >= 0);
 
-					float & conf_Local = localPtr[nOffsetInRot_1D];
+					float & conf_Local = localAcc_1D[nOffsetInRot_1D];
 					if (IsUndefined(conf_Local))
 					{
 						continue;

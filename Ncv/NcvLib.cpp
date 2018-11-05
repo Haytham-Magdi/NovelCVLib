@@ -83,12 +83,12 @@
 //#include <NovelCVLib\Ncv\ImgData_Simple\ImgDataMgr_2_FactorySet_Simple.cpp>
 //#include <NovelCVLib\Ncv\ImgData_Simple\ImgDataMgr_2_Simple.cpp>
 
-#include <NovelCVLib\Apps\Binarization2\ImgAngleDirMgr.cpp>
-#include <NovelCVLib\Apps\Binarization2\AngleDirMgrColl.cpp>
-#include <NovelCVLib\Apps\Binarization2\AngleDirMgrColl_Context.cpp>
-//#include <NovelCVLib\Apps\Binarization2\RotationMgrColl.cpp>
-#include <NovelCVLib\Apps\Binarization2\BinarizationProcess1.cpp>
-#include <NovelCVLib\Apps\Binarization2\PixelInfo_1.cpp>
+//#include <NovelCVLib\Apps\Binarization2\ImgAngleDirMgr.cpp>
+//#include <NovelCVLib\Apps\Binarization2\AngleDirMgrColl.cpp>
+//#include <NovelCVLib\Apps\Binarization2\AngleDirMgrColl_Context.cpp>
+////#include <NovelCVLib\Apps\Binarization2\RotationMgrColl.cpp>
+//#include <NovelCVLib\Apps\Binarization2\BinarizationProcess1.cpp>
+//#include <NovelCVLib\Apps\Binarization2\PixelInfo_1.cpp>
 
 #include <NovelCVLib\Apps\BloodCells\ImgAngleDirMgr.cpp>
 #include <NovelCVLib\Apps\BloodCells\AngleDirMgrColl.cpp>

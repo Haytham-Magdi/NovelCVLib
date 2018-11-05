@@ -64,18 +64,18 @@ namespace Ncv
 
 			m_context_H->m_org_Img = org_Img_H;
 
-			//m_context_H->m_standevInfoImg = ArrayHolderUtil::CreateFrom<PixelStandevInfo>(org_Img_H->GetVirtAccessor().GetSize());
 			m_context_H->m_standevInfoImg = ArrayHolderUtil::CreateEmptyFrom<PixelStandevInfo>(org_Img_H->AsHolderRef());
 
 			{
 				PixelStandevInfo initPsi;
 				//initPsi.Dir = -1;
 				initPsi.Dir = 0;
-				initPsi.Val = 10000000;
+				//initPsi.Val = 10000000;
+				initPsi.Val = 100000;
 				//SetToUndefined(&initPsi.Val);
 				initPsi.NormVal = 0;
+				//initPsi.NormVal = 1000;
 				FillImage(m_context_H->m_standevInfoImg->GetVirtAccessor(), initPsi);
-				//SetImageToBadValue(m_context_H->m_standevInfoImg->GetVirtAccessor());
 			}
 
 			m_context_H->m_conflictInfoImg = ArrayHolderUtil::CreateFrom<ConflictInfo2_Ex>(
@@ -183,66 +183,66 @@ namespace Ncv
 				m_angleDirMgrArr[i]->Proceed_1_2();
 			}
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_2_1();
-			}
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_2_1();
+			//}
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_2_2();
-			}
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_2_2();
+			//}
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_3_1();
-			}
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_3_1();
+			//}
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_3_2();
-			}
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_3_2();
+			//}
 
-			DivideImageByNum(m_context_H->m_avgPStandev_InrWide_Img->GetVirtAccessor(),
-				this->m_angleDirMgrArr.GetSize());
+			//DivideImageByNum(m_context_H->m_avgPStandev_InrWide_Img->GetVirtAccessor(),
+			//	this->m_angleDirMgrArr.GetSize());
 
-			for (int i = 0; i < m_rotColl->GetNofRots(); i++) {
-				
-				ImgSizeRotationRef rot = m_rotColl->GetRotAt(i);
+			//for (int i = 0; i < m_rotColl->GetNofRots(); i++) {
+			//	
+			//	ImgSizeRotationRef rot = m_rotColl->GetRotAt(i);
 
-				ImgAngleDirMgrRef dirMgr_H = m_angleDirMgrArr[i];
-				ImgAngleDirMgrRef dirMgr_V = m_angleDirMgrArr[i + m_rotColl->GetNofRots()];
+			//	ImgAngleDirMgrRef dirMgr_H = m_angleDirMgrArr[i];
+			//	ImgAngleDirMgrRef dirMgr_V = m_angleDirMgrArr[i + m_rotColl->GetNofRots()];
 
-				F32VectorValImageArrayHolder_4C_Ref avgPStandev_InrWide_Img_H = new F32VectorValImageArrayHolder_4C(
-					dirMgr_H->GetContext()->m_org_Img->GetActualAccessor().GetSize());
+			//	F32VectorValImageArrayHolder_4C_Ref avgPStandev_InrWide_Img_H = new F32VectorValImageArrayHolder_4C(
+			//		dirMgr_H->GetContext()->m_org_Img->GetActualAccessor().GetSize());
 
-				rot->RotateImage(avgPStandev_InrWide_Img_H->GetActualAccessor(), m_context_H->m_avgPStandev_InrWide_Img->GetActualAccessor());
+			//	rot->RotateImage(avgPStandev_InrWide_Img_H->GetActualAccessor(), m_context_H->m_avgPStandev_InrWide_Img->GetActualAccessor());
 
-				dirMgr_H->GetContext()->m_avgPStandev_InrWide_Img = avgPStandev_InrWide_Img_H;
+			//	dirMgr_H->GetContext()->m_avgPStandev_InrWide_Img = avgPStandev_InrWide_Img_H;
 
-				F32VectorValImageArrayHolder_4C_Ref avgPStandev_InrWide_Img_V = avgPStandev_InrWide_Img_H->CreateTransposedProxy();
+			//	F32VectorValImageArrayHolder_4C_Ref avgPStandev_InrWide_Img_V = avgPStandev_InrWide_Img_H->CreateTransposedProxy();
 
-				dirMgr_V->GetContext()->m_avgPStandev_InrWide_Img = avgPStandev_InrWide_Img_V;
-			}
+			//	dirMgr_V->GetContext()->m_avgPStandev_InrWide_Img = avgPStandev_InrWide_Img_V;
+			//}
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_4_1();
-			}
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_4_1();
+			//}
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_4_2();
-			}
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_4_2();
+			//}
 
 			DisplayStandiv_Dir_Img();
 
-			DisplayConflictImg();
+			//DisplayConflictImg();
 
-			//ShowImage(standev_InrWide_Img->GetSrcImg(), "standev_InrWide_Img->GetSrcImg()");
+			////ShowImage(standev_InrWide_Img->GetSrcImg(), "standev_InrWide_Img->GetSrcImg()");
 
-			GlobalStuff::SetLinePathImg(GenTriChGrayImg(m_context_H->m_wideConflictDiff_Img->GetSrcImg())); GlobalStuff::ShowLinePathImg();
-			ShowImage(m_context_H->m_wideConflictDiff_Img->GetSrcImg(), "m_wideConflictDiff_Img->GetSrcImg()");
+			//GlobalStuff::SetLinePathImg(GenTriChGrayImg(m_context_H->m_wideConflictDiff_Img->GetSrcImg())); GlobalStuff::ShowLinePathImg();
+			//ShowImage(m_context_H->m_wideConflictDiff_Img->GetSrcImg(), "m_wideConflictDiff_Img->GetSrcImg()");
 
-			SaveImage(m_context_H->m_wideConflictDiff_Img->GetSrcImg(), "m_wideConflictDiff_Img.jpg");
+			//SaveImage(m_context_H->m_wideConflictDiff_Img->GetSrcImg(), "m_wideConflictDiff_Img.jpg");
 
 
 
-			ManageThresholding();
+			//ManageThresholding();
 
 		}
 
@@ -257,18 +257,18 @@ namespace Ncv
 
 			const int nSize_1D = psiAcc.CalcSize_1D();
 
-			PixelStandevInfo * srcPtr = (PixelStandevInfo *)psiAcc.GetData();
-			//float * destPtr_Values = (float *)dspImg_Values->GetDataPtr();
-			F32ColorVal * destPtr_Colored = (F32ColorVal *)dspImg_Colored->GetDataPtr();
+			ActualArrayAccessor_1D<PixelStandevInfo> srcAcc_1D = psiAcc.GenAcc_1D();
+			
+			//F32ColorVal * destAcc_1D_Colored = (F32ColorVal *)dspImg_Colored->GetDataPtr();
+			ActualArrayAccessor_1D<F32ColorVal> destAcc_1D_Colored((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
 
 			float angle_Old = -1;
 			for (int i = 0; i < nSize_1D; i++)
 			{
-				PixelStandevInfo & rSrc = srcPtr[i];
-				//float & rDest_Values = destPtr_Values[i];
-				F32ColorVal & rDest_Colored = destPtr_Colored[i];
+				PixelStandevInfo & rSrc = srcAcc_1D[i];
+				F32ColorVal & rDest_Colored = destAcc_1D_Colored[i];
 
-				Ncpp_ASSERT(-1 != rSrc.Dir);
+				//Ncpp_ASSERT(-1 != rSrc.Dir);
 				Ncpp_ASSERT(rSrc.Dir >= 0);
 
 				float angle = m_angleDirMgrArr[rSrc.Dir]->GetContext()->m_angle;
@@ -289,8 +289,12 @@ namespace Ncv
 				rDest_Colored.val0 = 0;
 				//rDest.val1 = (fabs(cos(angle)) * rSrc.NormVal * 2 / 3);
 				//rDest.val2 = (fabs(sin(angle)) * rSrc.NormVal * 2 / 3);
-				rDest_Colored.val1 = (fabs(cos(angle)) * rSrc.NormVal * 5 / 3);
-				rDest_Colored.val2 = (fabs(sin(angle)) * rSrc.NormVal * 5 / 3);
+
+				//rDest_Colored.val1 = (fabs(cos(angle)) * rSrc.NormVal * 5 / 3);
+				//rDest_Colored.val2 = (fabs(sin(angle)) * rSrc.NormVal * 5 / 3);
+				rDest_Colored.val1 = rSrc.NormVal;
+				rDest_Colored.val2 = rSrc.NormVal;
+
 				//rDest.val1 = (fabs(cos(angle)) * rSrc.NormVal);
 				//rDest.val2 = (fabs(sin(angle)) * rSrc.NormVal);
 
@@ -318,6 +322,8 @@ namespace Ncv
 			//GlobalStuff::ShowLinePathImg();
 
 			//ShowImage(dspImg_Values, "dspImg_Colored");
+			
+			ShowImage(dspImg_Colored, "dspImg_Colored");
 		}
 
 		void AngleDirMgrColl::DisplayConflictImg()
@@ -330,12 +336,12 @@ namespace Ncv
 			const int nSize_1D = confAcc.CalcSize_1D();
 
 			F32ColorVal * destPtr = (F32ColorVal *)confDsp_Img->GetDataPtr();
-			ConflictInfo2_Ex * srcPtr = (ConflictInfo2_Ex *)confAcc.GetData();
+			ActualArrayAccessor_1D<ConflictInfo2_Ex> srcAcc_1D = confAcc.GenAcc_1D();
 
 			float angle_Old = -1;
 			for (int i = 0; i < nSize_1D; i++)
 			{
-				ConflictInfo2_Ex & rSrc = srcPtr[i];
+				ConflictInfo2_Ex & rSrc = srcAcc_1D[i];
 				AssertValue(rSrc);
 				F32ColorVal & rDest = destPtr[i];
 

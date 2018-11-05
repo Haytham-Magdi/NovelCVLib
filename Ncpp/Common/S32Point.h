@@ -111,12 +111,12 @@ namespace Ncpp
 			return Ncv::ElementOperations2::IsUndefined(a_arg.x);
 		}
 
-		bool IsUndefined()
+		bool IsUndefined() const
 		{
 			return S32Point::IsUndefined(*this);
 		}
 
-		bool IsInSize(const Size_2D a_siz)
+		bool IsInSize(const Size_2D a_siz) const
 		{
 			return 
 				this->GetX() >= 0 &&

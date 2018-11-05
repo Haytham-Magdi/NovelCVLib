@@ -47,12 +47,12 @@
 #include <NovelCVLib\Ncv\ConflictInfo2.h>
 #include <NovelCVLib\Ncv\ElementOperations2_ConflictInfo2.h>
 
-#include <NovelCVLib\Apps\Binarization2\ImgAngleDirMgr.h>
-#include <NovelCVLib\Apps\Binarization2\AngleDirMgrColl.h>
-#include <NovelCVLib\Apps\Binarization2\AngleDirMgrColl_Context.h>
-//#include <NovelCVLib\Apps\Binarization2\RotationMgrColl.h>
-#include <NovelCVLib\Apps\Binarization2\BinarizationProcess1.h>
-#include <NovelCVLib\Apps\Binarization2\PixelInfo_1.h>
+//#include <NovelCVLib\Apps\Binarization2\ImgAngleDirMgr.h>
+//#include <NovelCVLib\Apps\Binarization2\AngleDirMgrColl.h>
+//#include <NovelCVLib\Apps\Binarization2\AngleDirMgrColl_Context.h>
+////#include <NovelCVLib\Apps\Binarization2\RotationMgrColl.h>
+//#include <NovelCVLib\Apps\Binarization2\BinarizationProcess1.h>
+//#include <NovelCVLib\Apps\Binarization2\PixelInfo_1.h>
 
 
 #include <NovelCVLib\Apps\BloodCells\ImgAngleDirMgr.h>

@@ -21,6 +21,11 @@ namespace Ncpp
 		{
 		}
 
+		ActualArrayAccessor_1D(T * a_data, int a_nSize)
+		{
+			Init(a_data, a_nSize);
+		}
+
 		void Init(T * a_data, int a_nSize)
 		{
 			Ncpp_ASSERT(a_nSize >= 0);
