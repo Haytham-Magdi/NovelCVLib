@@ -47,7 +47,7 @@ namespace Ncv
 
 		ArrayHolder_2D_Ref<T> AsHolderRef()
 		{
-			return this;
+			return AsHolderPtr();
 		}
 
 		void TransposeVirtAccessor()

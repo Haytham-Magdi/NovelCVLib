@@ -61,9 +61,15 @@ namespace Ncv
 			cx.m_avgStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
 				cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
+				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-6, 6));
 
-			if (1 == cx.m_nIndex)
+			//if (1 == cx.m_nIndex)
+			if (0 == cx.m_nIndex)
 			{
+				//float & elm1 = cx.m_avgStandev_X_Img->GetActualAccessor().GetAt(45, 77);
+				// float & elm1 = cx.m_avgStandev_X_Img->GetActualAccessor().GetAt(215, 40);
+				//elm1 = 255;
+
 				//ShowImage(cx.m_avgStandev_X_Img->GetSrcImg(), cx.MakeStrWithId("m_avgStandev_X_Img->GetSrcImg()").c_str());
 				ShowImage(GenTriChGrayImg(cx.m_avgStandev_X_Img->GetSrcImg()), cx.MakeStrWithId("m_avgStandev_X_Img->GetSrcImg()").c_str());
 			}
@@ -101,7 +107,7 @@ namespace Ncv
 			AvgImage(cx.m_magSqr_Img->GetVirtAccessor(), avg_MagSqr_Img->GetVirtAccessor(), avgWin);
 
 			Range<int> confRange = Range<int>::New(
-				-1 - avgWin.Get_X2(), 1 - avgWin.Get_X1());
+				-1 - avgWin.GetX2(), 1 - avgWin.GetX1());
 
 			CalcConflictImage_X(avg_Img->GetVirtAccessor(), avg_MagSqr_Img->GetVirtAccessor(),
 				cx.m_conflict_Img->GetVirtAccessor(), confRange);
@@ -235,8 +241,8 @@ namespace Ncv
 			//	AvgImage(magSqr_Img->GetVirtAccessor(), avg_MagSqr_Img->GetVirtAccessor(), avgWin);
 
 			//	Range<int> confRange = Range<int>::New(
-			//		//-10 - avgWin.Get_X2(), 10 - avgWin.Get_X1());
-			//		//-1 - avgWin.Get_X2(), 1 - avgWin.Get_X1());
+			//		//-10 - avgWin.GetX2(), 10 - avgWin.GetX1());
+			//		//-1 - avgWin.GetX2(), 1 - avgWin.GetX1());
 			//		-1 - nOutRad - nInrRad, 1 + nOutRad + nInrRad);
 
 			//	Calc_ConflictDiff_Image_X(avg_Img->GetVirtAccessor(), avg_MagSqr_Img->GetVirtAccessor(),
@@ -264,6 +270,7 @@ namespace Ncv
 			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
 			ActualArrayAccessor_1D<int> orgToRotMapAcc_1D = orgToRotMap_Acc.GenAcc_1D();
 			
+			// const ActualArrayAccessor_2D<int> & rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
 
 			ActualArrayAccessor_2D<PixelStandevInfo> commonAcc = m_parentContext->m_standevInfoImg->GetActualAccessor();
 			Ncpp_ASSERT(Size_2D::AreEqual(orgToRotMap_Acc.GetSize(), commonAcc.GetSize()));
@@ -295,8 +302,16 @@ namespace Ncv
 					int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
 					//Ncpp_ASSERT(nOffsetInRot_1D >= 0);
 
+					// S32Point pntInRot = rotToOrgMap_Acc.CalcPointFromIndex_1D(nOffsetInRot_1D);
+
 					const float standev_Local = localAcc_1D[nOffsetInRot_1D];
 					const float standev_Norm = localAcc_1D_Norm[nOffsetInRot_1D];
+
+					// if (73 == x && 70 == y)
+					// {
+					// 	x = x;
+					// }
+
 
 					if (IsUndefined(standev_Local))
 					{
@@ -306,20 +321,17 @@ namespace Ncv
 					
 					//Ncpp_ASSERT(standev_Local >= 0.0f || standev_Local > -5000.0f);
 					AssertValue(standev_Local);
-					Ncpp_ASSERT(standev_Local >= 0);
+					Ncpp_ASSERT(standev_Local >= -0.001);
 
-					//if (standev_Local < rCommonPsi.Val)
-					if (1 == cx.m_nIndex)
+					if (standev_Local < rCommonPsi.Val)
+					//if (1 == cx.m_nIndex)
 					{
 						////Ncpp_ASSERT(standev_Norm >= rCommonPsi.NormVal);
 						//Ncpp_ASSERT(standev_Norm + 50 >= rCommonPsi.NormVal);
 
-						//Assign(&rCommonPsi.Val, standev_Local);
-						////Assign(&rCommonPsi.NormVal, standev_Norm);
+						Assign(&rCommonPsi.Val, standev_Local);
+						Assign(&rCommonPsi.NormVal, standev_Norm);
 						//Assign(&rCommonPsi.NormVal, standev_Local);
-						
-						Assign(&rCommonPsi.Val, 150);
-						Assign(&rCommonPsi.NormVal, 150);
 						
 						Assign(&rCommonPsi.Dir, cx.m_nIndex);
 					}

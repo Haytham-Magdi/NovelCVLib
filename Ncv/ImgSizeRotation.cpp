@@ -432,12 +432,15 @@ namespace Ncv
 
 
 	void ImgSizeRotation::PrepareNearestIndexMapImgFromScaledPointMapImg(
-		ArrayHolder_2D_Ref<S32Point> a_scaledPointMapImg, ArrayHolder_2D_Ref<int> & a_nearestIndexMapImg, Size_2D & a_mappingTargetSize)
+		ArrayHolder_2D_Ref<S32Point> a_scaledPointMapImg, ArrayHolder_2D_Ref<int> & a_nearestIndexMapImg, 
+		const ActualIndexCalc_2D & a_mappingTargetIndexCalc, const bool a_canHaveUndefined)
 	{
 		ActualArrayAccessor_2D<S32Point> scaledPointMapAcc = a_scaledPointMapImg->GetActualAccessor();
 		ActualArrayAccessor_1D<S32Point> scaledPointAcc_1D = scaledPointMapAcc.GenAcc_1D();
 
 		const Size_2D imgSiz = scaledPointMapAcc.GetSize();
+
+		const Size_2D & mappingTargetSize = a_mappingTargetIndexCalc.GetSize();
 
 		a_nearestIndexMapImg = ArrayHolderUtil::CreateFrom<int>(imgSiz);
 		ActualArrayAccessor_2D<int> nearestIndexMapAcc = a_nearestIndexMapImg->GetActualAccessor();
@@ -454,20 +457,33 @@ namespace Ncv
 			S32Point & rScaledPnt = scaledPointAcc_1D[i];
 			int & rNearestIndex = nearestIndexAcc_1D[i];
 
+			// S32Point pntFromSrcIndex = nearestIndexMapAcc.CalcPointFromIndex_1D(i);
+			// if (S32Point::AreEqual(pntFromSrcIndex, S32Point(73, 70)))
+			// {
+			// 	i = i;
+			// }
+
 			if (rScaledPnt.IsUndefined())
 			{
+				if (!a_canHaveUndefined) {
+					ThrowNcvException();
+				}
 				SetToUndefined(&rNearestIndex);
+				continue;
 			}
-			else
+			// else
 			{
 				const S32Point pnt(
 					SRResIntScale::IntDividByScale(SRResIntScale::Round(rScaledPnt.GetX())),
 					SRResIntScale::IntDividByScale(SRResIntScale::Round(rScaledPnt.GetY()))
 					);
 
-				Ncpp_ASSERT(pnt.IsInSize(a_mappingTargetSize));
+				Ncpp_ASSERT(pnt.IsInSize(mappingTargetSize));
 
-				rNearestIndex = nearestIndexMapAcc.CalcIndex_1D(pnt.GetX(), pnt.GetY());
+				//rNearestIndex = nearestIndexMapAcc.CalcIndex_1D(pnt);
+				rNearestIndex = a_mappingTargetIndexCalc.CalcIndex_1D(pnt);
+				
+				// i = i;
 			}
 		}
 
@@ -527,9 +543,11 @@ namespace Ncv
 			resToScaledSrcPointMapImg, m_resToScaledSrcPointMapImg);
 
 
-		PrepareNearestIndexMapImgFromScaledPointMapImg(m_srcToScaledResPointMapImg, m_srcToNearestResIndexMapImg, m_resSiz);
-		PrepareNearestIndexMapImgFromScaledPointMapImg(m_resToScaledSrcPointMapImg, m_resToNearestSrcIndexMapImg, m_srcSiz);
-
+		PrepareNearestIndexMapImgFromScaledPointMapImg(m_srcToScaledResPointMapImg, m_srcToNearestResIndexMapImg, 
+			m_resToScaledSrcPointMapImg->GetActualAccessor().AsIndexCalc(), false /* a_canHaveUndefined */);
+		
+		PrepareNearestIndexMapImgFromScaledPointMapImg(m_resToScaledSrcPointMapImg, m_resToNearestSrcIndexMapImg, 
+			m_srcToScaledResPointMapImg->GetActualAccessor().AsIndexCalc(), true /* a_canHaveUndefined */);
 
 		int b;
 

@@ -20,6 +20,11 @@ namespace Ncpp
 		{
 		}
 
+		Window(T a_x1, T a_x2, T a_y1, T a_y2)
+		{
+			Init(a_x1, a_x2, a_y1, a_y2);
+		}
+
 		void Init(T a_x1, T a_x2, T a_y1, T a_y2)
 		{
 			m_x1 = a_x1;
@@ -37,22 +42,22 @@ namespace Ncpp
 			return ret;
 		}
 
-		T Get_X1() const
+		T GetX1() const
 		{
 			return m_x1;
 		}
 
-		T Get_X2() const
+		T GetX2() const
 		{
 			return m_x2;
 		}
 
-		T Get_Y1() const
+		T GetY1() const
 		{
 			return m_y1;
 		}
 
-		T Get_Y2() const
+		T GetY2() const
 		{
 			return m_y2;
 		}

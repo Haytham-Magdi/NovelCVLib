@@ -73,8 +73,10 @@ namespace Ncv
 				//initPsi.Val = 10000000;
 				initPsi.Val = 100000;
 				//SetToUndefined(&initPsi.Val);
-				initPsi.NormVal = 0;
-				//initPsi.NormVal = 1000;
+				//initPsi.NormVal = 0;
+				// initPsi.NormVal = 60;
+				//initPsi.NormVal = 150;
+				initPsi.NormVal = 1000;
 				FillImage(m_context_H->m_standevInfoImg->GetVirtAccessor(), initPsi);
 			}
 
@@ -252,11 +254,15 @@ namespace Ncv
 			const ActualArrayAccessor_2D<PixelStandevInfo> & psiAcc = m_context_H->m_standevInfoImg->GetActualAccessor();
 			const VirtArrayAccessor_2D<PixelStandevInfo> & psiVirtAcc = m_context_H->m_standevInfoImg->GetVirtAccessor();
 			//F32ImageRef dspImg_Values = F32Image::Create(cvSize(psiAcc.GetSize()), 1);
-			
+
+			//const int checkMargin = 70;
+			//Window<int> checkWin(checkMargin, psiAcc.GetSize_X() - checkMargin,
+			//	checkMargin, psiAcc.GetSize_Y() - checkMargin);
+
+
 			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(psiAcc.GetSize()), 3);
 
 			const int nSize_1D = psiAcc.CalcSize_1D();
-
 			ActualArrayAccessor_1D<PixelStandevInfo> srcAcc_1D = psiAcc.GenAcc_1D();
 			
 			//F32ColorVal * destAcc_1D_Colored = (F32ColorVal *)dspImg_Colored->GetDataPtr();
@@ -266,6 +272,11 @@ namespace Ncv
 			for (int i = 0; i < nSize_1D; i++)
 			{
 				PixelStandevInfo & rSrc = srcAcc_1D[i];
+				
+				// S32Point pnt = psiAcc.CalcPointFromIndex_1D(i);
+				//const bool isPntInCheckWindow = pnt.IsInWindow(checkWin);
+				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rSrc.NormVal));
+				
 				F32ColorVal & rDest_Colored = destAcc_1D_Colored[i];
 
 				//Ncpp_ASSERT(-1 != rSrc.Dir);
@@ -290,10 +301,11 @@ namespace Ncv
 				//rDest.val1 = (fabs(cos(angle)) * rSrc.NormVal * 2 / 3);
 				//rDest.val2 = (fabs(sin(angle)) * rSrc.NormVal * 2 / 3);
 
-				//rDest_Colored.val1 = (fabs(cos(angle)) * rSrc.NormVal * 5 / 3);
-				//rDest_Colored.val2 = (fabs(sin(angle)) * rSrc.NormVal * 5 / 3);
-				rDest_Colored.val1 = rSrc.NormVal;
-				rDest_Colored.val2 = rSrc.NormVal;
+				rDest_Colored.val1 = (fabs(cos(angle)) * rSrc.NormVal * 5 / 3);
+				rDest_Colored.val2 = (fabs(sin(angle)) * rSrc.NormVal * 5 / 3);
+
+				//rDest_Colored.val1 = rSrc.NormVal;
+				//rDest_Colored.val2 = rSrc.NormVal;
 
 				//rDest.val1 = (fabs(cos(angle)) * rSrc.NormVal);
 				//rDest.val2 = (fabs(sin(angle)) * rSrc.NormVal);

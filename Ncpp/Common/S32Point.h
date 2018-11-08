@@ -8,6 +8,8 @@
 #include <NovelCVLib\Common\Debug.h>
 #include <NovelCVLib\Common\Object.h>
 
+#include <NovelCVLib\Ncpp\Common\Window.h>
+
 #include <NovelCVLib\ElementOperations2\ElementOperations2.h>
 #include <NovelCVLib\ElementOperations2\ElementOperations2_Int.h>
 
@@ -123,6 +125,15 @@ namespace Ncpp
 				this->GetX() < a_siz.GetX() &&
 				this->GetY() >= 0 &&
 				this->GetY() < a_siz.GetY();
+		}
+
+		bool IsInWindow(const Window<int> & a_window) const
+		{
+			return
+				this->GetX() >= a_window.GetX1() &&
+				this->GetX() <= a_window.GetX2() &&
+				this->GetY() >= a_window.GetY1() &&
+				this->GetY() <= a_window.GetY2();
 		}
 
 		static bool AreEqual(const S32Point & a_pnt1, const S32Point & a_pnt2)

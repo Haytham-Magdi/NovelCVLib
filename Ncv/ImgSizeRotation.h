@@ -220,7 +220,8 @@ namespace Ncv
 			ArrayHolder_2D_Ref<S64Point> a_firstPointMapImg, ArrayHolder_2D_Ref<S32Point> & a_finalPointMapImg);
 
 		static void PrepareNearestIndexMapImgFromScaledPointMapImg(
-			ArrayHolder_2D_Ref<S32Point> a_scaledPointMapImg, ArrayHolder_2D_Ref<int> & a_nearestIndexMapImg, Size_2D & a_mappingTargetSize);
+			ArrayHolder_2D_Ref<S32Point> a_scaledPointMapImg, ArrayHolder_2D_Ref<int> & a_nearestIndexMapImg, 
+			const ActualIndexCalc_2D & a_mappingTargetIndexCalc, const bool a_canHaveUndefined);
 
 		void Prepare();
 
