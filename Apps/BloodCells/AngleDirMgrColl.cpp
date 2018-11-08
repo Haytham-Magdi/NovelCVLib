@@ -68,15 +68,25 @@ namespace Ncv
 
 			{
 				PixelStandevInfo initPsi;
-				//initPsi.Dir = -1;
-				initPsi.Dir = 0;
-				//initPsi.Val = 10000000;
-				initPsi.Val = 100000;
+				////initPsi.Dir = -1;
+				//initPsi.Dir = 0;
+				////initPsi.Val = 10000000;
+				//initPsi.Val = 100000;
 				//SetToUndefined(&initPsi.Val);
-				//initPsi.NormVal = 0;
-				// initPsi.NormVal = 60;
-				//initPsi.NormVal = 150;
-				initPsi.NormVal = 1000;
+				//initPsi.NormLeastVal = 0;
+				// initPsi.NormLeastVal = 60;
+				initPsi.NormLeastVal = 1000;
+
+				initPsi.LeastVal = 100000;
+				initPsi.LeastValDir = 0;
+
+				initPsi.SecondLeastVal = 100000;
+				initPsi.SecondLeastValDir = 1;
+
+				////initPsi.MaxVal = 1000;
+				//initPsi.MaxVal = 0;
+				//initPsi.MaxValDir = 2;
+
 				FillImage(m_context_H->m_standevInfoImg->GetVirtAccessor(), initPsi);
 			}
 
@@ -275,14 +285,16 @@ namespace Ncv
 				
 				// S32Point pnt = psiAcc.CalcPointFromIndex_1D(i);
 				//const bool isPntInCheckWindow = pnt.IsInWindow(checkWin);
-				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rSrc.NormVal));
+				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rSrc.NormLeastVal));
 				
 				F32ColorVal & rDest_Colored = destAcc_1D_Colored[i];
 
 				//Ncpp_ASSERT(-1 != rSrc.Dir);
-				Ncpp_ASSERT(rSrc.Dir >= 0);
+				//Ncpp_ASSERT(rSrc.Dir >= 0);
+				Ncpp_ASSERT(rSrc.LeastValDir >= 0);
 
-				float angle = m_angleDirMgrArr[rSrc.Dir]->GetContext()->m_angle;
+				//float angle = m_angleDirMgrArr[rSrc.Dir]->GetContext()->m_angle;
+				float angle = m_angleDirMgrArr[rSrc.LeastValDir]->GetContext()->m_angle;
 
 				if (fabs(angle - angle_Old) > 0.01)
 				{
@@ -290,33 +302,39 @@ namespace Ncv
 				}
 				angle_Old = angle;
 
-				////rDest.val0 = 127 + rSrc.NormVal / 2;
+				////rDest.val0 = 127 + rSrc.NormLeastVal / 2;
 				//rDest.val0 = 127;
-				//rDest.val1 = (127 + 127 * cos(angle) * rSrc.NormVal * 2 / 3);
-				//rDest.val2 = (127 + 127 * sin(angle) * rSrc.NormVal * 2 / 3);
+				//rDest.val1 = (127 + 127 * cos(angle) * rSrc.NormLeastVal * 2 / 3);
+				//rDest.val2 = (127 + 127 * sin(angle) * rSrc.NormLeastVal * 2 / 3);
 
-				//rDest_Values = rSrc.NormVal;
+				//rDest_Values = rSrc.NormLeastVal;
 
 				rDest_Colored.val0 = 0;
-				//rDest.val1 = (fabs(cos(angle)) * rSrc.NormVal * 2 / 3);
-				//rDest.val2 = (fabs(sin(angle)) * rSrc.NormVal * 2 / 3);
+				//rDest.val1 = (fabs(cos(angle)) * rSrc.NormLeastVal * 2 / 3);
+				//rDest.val2 = (fabs(sin(angle)) * rSrc.NormLeastVal * 2 / 3);
 
-				rDest_Colored.val1 = (fabs(cos(angle)) * rSrc.NormVal * 5 / 3);
-				rDest_Colored.val2 = (fabs(sin(angle)) * rSrc.NormVal * 5 / 3);
+				rDest_Colored.val1 = (fabs(cos(angle)) * rSrc.NormLeastVal * 5 / 3);
+				rDest_Colored.val2 = (fabs(sin(angle)) * rSrc.NormLeastVal * 5 / 3);
 
-				//rDest_Colored.val1 = rSrc.NormVal;
-				//rDest_Colored.val2 = rSrc.NormVal;
+				//rDest_Colored.val1 = (fabs(cos(angle)) * rSrc.MaxVal * 5 / 3);
+				//rDest_Colored.val2 = (fabs(sin(angle)) * rSrc.MaxVal * 5 / 3);
 
-				//rDest.val1 = (fabs(cos(angle)) * rSrc.NormVal);
-				//rDest.val2 = (fabs(sin(angle)) * rSrc.NormVal);
+				//rDest_Colored.val1 = rSrc.MaxVal;
+				//rDest_Colored.val2 = rSrc.MaxVal;
+
+				//rDest_Colored.val1 = rSrc.NormLeastVal;
+				//rDest_Colored.val2 = rSrc.NormLeastVal;
+
+				//rDest.val1 = (fabs(cos(angle)) * rSrc.NormLeastVal);
+				//rDest.val2 = (fabs(sin(angle)) * rSrc.NormLeastVal);
 
 				////if (0 == rSrc.Dir)
 				//if (5 == rSrc.Dir)
 				////if (false)
 				//{
-				//	rDest.val0 = rSrc.NormVal;
-				//	rDest.val1 = rSrc.NormVal;
-				//	rDest.val2 = rSrc.NormVal;
+				//	rDest.val0 = rSrc.NormLeastVal;
+				//	rDest.val1 = rSrc.NormLeastVal;
+				//	rDest.val2 = rSrc.NormLeastVal;
 				//}
 				//else
 				//{
@@ -325,7 +343,7 @@ namespace Ncv
 				//	rDest.val2 = 0;
 				//}
 
-				//rDest.val0 = 127 + rSrc.NormVal;
+				//rDest.val0 = 127 + rSrc.NormLeastVal;
 				//rDest.val1 = 127 + 127 * cos(angle);
 				//rDest.val2 = 127 + 127 * sin(angle);
 			}

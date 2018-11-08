@@ -60,8 +60,10 @@ namespace Ncv
 
 			cx.m_avgStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
-				cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
-				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-6, 6));
+				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
+			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-6, 6));
+			cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-2, 2));
+			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-36, 36), Range<int>::New(-36, 36));
 
 			//if (1 == cx.m_nIndex)
 			if (0 == cx.m_nIndex)
@@ -313,7 +315,7 @@ namespace Ncv
 					// }
 
 
-					if (IsUndefined(standev_Local))
+					if (IsUndefined(standev_Local) || IsUndefined(standev_Norm))
 					{
 						//SetToUndefined(&rCommonPsi);
 						continue;
@@ -323,18 +325,36 @@ namespace Ncv
 					AssertValue(standev_Local);
 					Ncpp_ASSERT(standev_Local >= -0.001);
 
-					if (standev_Local < rCommonPsi.Val)
-					//if (1 == cx.m_nIndex)
-					{
-						////Ncpp_ASSERT(standev_Norm >= rCommonPsi.NormVal);
-						//Ncpp_ASSERT(standev_Norm + 50 >= rCommonPsi.NormVal);
+					//if (standev_Local < rCommonPsi.Val)
+					////if (1 == cx.m_nIndex)
+					//{
+					//	Assign(&rCommonPsi.Val, standev_Local);
+					//	Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+					//	
+					//	Assign(&rCommonPsi.Dir, cx.m_nIndex);
+					//}
 
-						Assign(&rCommonPsi.Val, standev_Local);
-						Assign(&rCommonPsi.NormVal, standev_Norm);
-						//Assign(&rCommonPsi.NormVal, standev_Local);
-						
-						Assign(&rCommonPsi.Dir, cx.m_nIndex);
+					if (standev_Local < rCommonPsi.LeastVal)
+					{
+						Assign(&rCommonPsi.LeastVal, standev_Local);
+						Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+
+						Assign(&rCommonPsi.LeastValDir, cx.m_nIndex);
 					}
+					else if (standev_Local < rCommonPsi.SecondLeastVal)
+					{
+						Assign(&rCommonPsi.SecondLeastVal, standev_Local);
+						Assign(&rCommonPsi.NormSecondLeastVal, standev_Norm);
+
+						Assign(&rCommonPsi.SecondLeastValDir, cx.m_nIndex);
+					}
+
+					////else if (standev_Local > rCommonPsi.MaxVal)
+					//if (standev_Local > rCommonPsi.MaxVal)
+					//{
+					//	Assign(&rCommonPsi.MaxVal, standev_Local);
+					//	Assign(&rCommonPsi.MaxValDir, cx.m_nIndex);
+					//}
 
 				}
 			}

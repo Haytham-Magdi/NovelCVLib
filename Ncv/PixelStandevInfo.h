@@ -17,9 +17,21 @@ namespace Ncv
 	class PixelStandevInfo //: public Ncpp::Object
 	{
 	public:
-		int Dir;
-		float Val;
-		float NormVal;
+		//int Dir;
+		//float Val;
+		
+		float LeastVal;
+		int LeastValDir;
+
+		float SecondLeastVal;
+		int SecondLeastValDir;
+
+		float NormLeastVal;
+		float NormSecondLeastVal;
+
+		//float MaxVal;
+		//int MaxValDir;
+
 	};
 
 	//typedef Ncpp::ObjRef< PixelStandevInfo > PixelStandevInfoRef;

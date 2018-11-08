@@ -2,12 +2,6 @@
 
 #include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
 #include <NovelCVLib\Ncpp\Math\mathLib.h>
-//#include <NovelCVLib\OpenCV\CvIncludes.h>
-//#include <NovelCVLib\OpenCV\Types.h>
-//#include <NovelCVLib\OpenCV\error.h>
-//#include <vector>
-//#include <NovelCVLib\OpenCV\Channel.h>
-//#include <NovelCVLib\OpenCV\Image.h>
 
 
 
@@ -29,7 +23,6 @@ namespace Ncv
 	{
 	public:
 		int Dir;
-		//float NormVal;
 	};
 
 	//typedef Ncpp::ObjRef< ConflictInfo2 > ConflictInfo2Ref;
