@@ -471,20 +471,18 @@ namespace Ncv
 				SetToUndefined(&rNearestIndex);
 				continue;
 			}
-			// else
-			{
-				const S32Point pnt(
-					SRResIntScale::IntDividByScale(SRResIntScale::Round(rScaledPnt.GetX())),
-					SRResIntScale::IntDividByScale(SRResIntScale::Round(rScaledPnt.GetY()))
-					);
 
-				Ncpp_ASSERT(pnt.IsInSize(mappingTargetSize));
+			const S32Point pnt(
+				SRResIntScale::IntDividByScale(SRResIntScale::Round(rScaledPnt.GetX())),
+				SRResIntScale::IntDividByScale(SRResIntScale::Round(rScaledPnt.GetY()))
+				);
 
-				//rNearestIndex = nearestIndexMapAcc.CalcIndex_1D(pnt);
-				rNearestIndex = a_mappingTargetIndexCalc.CalcIndex_1D(pnt);
-				
-				// i = i;
-			}
+			Ncpp_ASSERT(pnt.IsInSize(mappingTargetSize));
+
+			//rNearestIndex = nearestIndexMapAcc.CalcIndex_1D(pnt);
+			rNearestIndex = a_mappingTargetIndexCalc.CalcIndex_1D(pnt);
+
+			// i = i;
 		}
 
 	}
