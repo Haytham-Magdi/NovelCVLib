@@ -75,7 +75,12 @@ namespace Ncv
 				//SetToUndefined(&initPsi.Val);
 				//initPsi.NormLeastVal = 0;
 				// initPsi.NormLeastVal = 60;
-				initPsi.NormLeastVal = 1000;
+				
+				//initPsi.NormLeastVal = 1000;
+				//initPsi.NormSecondLeastVal = 1000;
+
+				initPsi.NormLeastVal = 0;
+				initPsi.NormSecondLeastVal = 0;
 
 				initPsi.LeastVal = 100000;
 				initPsi.LeastValDir = 0;
@@ -160,7 +165,7 @@ namespace Ncv
 				dirContext_H->m_rotToOrgMap_Img = rotMgr->Get_ResToNearestSrcIndexMapImage();
 				dirContext_H->m_orgToRotMap_Img = rotMgr->Get_SrcToNearestResIndexMapImage();
 
-				dirContext_H->m_angle = rotMgr->GetAngleByRad();
+				dirContext_H->m_angleByRad = rotMgr->GetAngleByRad();
 
 				//dirContext_H->m_conflict_Img = ArrayHolderUtil::CreateFrom<ConflictInfo2>(
 				//	size_2D(rot_Img_H->GetSize()));
@@ -177,7 +182,7 @@ namespace Ncv
 				dirContext_V->m_rotToOrgMap_Img = ArrayHolderUtil::CreateTransposedProxyFrom(dirContext_H->m_rotToOrgMap_Img);
 				dirContext_V->m_orgToRotMap_Img = ArrayHolderUtil::CreateTransposedProxyFrom(dirContext_H->m_orgToRotMap_Img);
 
-				dirContext_V->m_angle = rotMgr->GetAngleByRad() + M_PI / 2;
+				dirContext_V->m_angleByRad = rotMgr->GetAngleByRad() + M_PI / 2;
 				//dirContext_V->m_conflict_Img = dirContext_H->m_conflict_Img->CloneAccessorOnly(); dirContext_V->m_conflict_Img->SwitchXY();
 
 				ImgAngleDirMgrRef angleDirMgr_H = new ImgAngleDirMgr(dirContext_H, dirContext_V, m_context_H);
@@ -273,68 +278,73 @@ namespace Ncv
 			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(psiAcc.GetSize()), 3);
 
 			const int nSize_1D = psiAcc.CalcSize_1D();
-			ActualArrayAccessor_1D<PixelStandevInfo> srcAcc_1D = psiAcc.GenAcc_1D();
+			ActualArrayAccessor_1D<PixelStandevInfo> psiAcc_1D = psiAcc.GenAcc_1D();
 			
-			//F32ColorVal * destAcc_1D_Colored = (F32ColorVal *)dspImg_Colored->GetDataPtr();
-			ActualArrayAccessor_1D<F32ColorVal> destAcc_1D_Colored((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
+			ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
 
-			float angle_Old = -1;
 			for (int i = 0; i < nSize_1D; i++)
 			{
-				PixelStandevInfo & rSrc = srcAcc_1D[i];
+				PixelStandevInfo & rPsi = psiAcc_1D[i];
 				
 				// S32Point pnt = psiAcc.CalcPointFromIndex_1D(i);
 				//const bool isPntInCheckWindow = pnt.IsInWindow(checkWin);
-				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rSrc.NormLeastVal));
+				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rPsi.NormLeastVal));
 				
-				F32ColorVal & rDest_Colored = destAcc_1D_Colored[i];
+				F32ColorVal & rColoredDispElm = coloredDispAcc_1D[i];
 
-				//Ncpp_ASSERT(-1 != rSrc.Dir);
-				//Ncpp_ASSERT(rSrc.Dir >= 0);
-				Ncpp_ASSERT(rSrc.LeastValDir >= 0);
+				//Ncpp_ASSERT(-1 != rPsi.Dir);
+				//Ncpp_ASSERT(rPsi.Dir >= 0);
+				
+				Ncpp_ASSERT(rPsi.LeastValDir >= 0);
+				Ncpp_ASSERT(rPsi.SecondLeastValDir >= 0);
 
-				//float angle = m_angleDirMgrArr[rSrc.Dir]->GetContext()->m_angle;
-				float angle = m_angleDirMgrArr[rSrc.LeastValDir]->GetContext()->m_angle;
+				//float angle = m_angleDirMgrArr[rPsi.Dir]->GetContext()->m_angleByRad;
+		
+				const float leastValAngle = m_angleDirMgrArr[rPsi.LeastValDir]->GetContext()->m_angleByRad;
+				const float secondLeastValAngle = m_angleDirMgrArr[rPsi.SecondLeastValDir]->GetContext()->m_angleByRad;
 
-				if (fabs(angle - angle_Old) > 0.01)
+				//float angle = m_angleDirMgrArr[rPsi.LeastValDir]->GetContext()->m_angleByRad;
+				const float angle = (rPsi.SecondLeastVal * leastValAngle + rPsi.LeastVal * secondLeastValAngle) /
+					(rPsi.LeastVal + rPsi.SecondLeastVal);
+
+				if (leastValAngle != secondLeastValAngle && rPsi.NormLeastVal > 50.0f)
 				{
-					angle = angle;
+					i = i;
 				}
-				angle_Old = angle;
 
-				////rDest.val0 = 127 + rSrc.NormLeastVal / 2;
+				////rDest.val0 = 127 + rPsi.NormLeastVal / 2;
 				//rDest.val0 = 127;
-				//rDest.val1 = (127 + 127 * cos(angle) * rSrc.NormLeastVal * 2 / 3);
-				//rDest.val2 = (127 + 127 * sin(angle) * rSrc.NormLeastVal * 2 / 3);
+				//rDest.val1 = (127 + 127 * cos(angle) * rPsi.NormLeastVal * 2 / 3);
+				//rDest.val2 = (127 + 127 * sin(angle) * rPsi.NormLeastVal * 2 / 3);
 
-				//rDest_Values = rSrc.NormLeastVal;
+				//rDest_Values = rPsi.NormLeastVal;
 
-				rDest_Colored.val0 = 0;
-				//rDest.val1 = (fabs(cos(angle)) * rSrc.NormLeastVal * 2 / 3);
-				//rDest.val2 = (fabs(sin(angle)) * rSrc.NormLeastVal * 2 / 3);
+				rColoredDispElm.val0 = 0;
+				//rDest.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal * 2 / 3);
+				//rDest.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 2 / 3);
 
-				rDest_Colored.val1 = (fabs(cos(angle)) * rSrc.NormLeastVal * 5 / 3);
-				rDest_Colored.val2 = (fabs(sin(angle)) * rSrc.NormLeastVal * 5 / 3);
+				rColoredDispElm.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal * 5 / 3);
+				rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 5 / 3);
 
-				//rDest_Colored.val1 = (fabs(cos(angle)) * rSrc.MaxVal * 5 / 3);
-				//rDest_Colored.val2 = (fabs(sin(angle)) * rSrc.MaxVal * 5 / 3);
+				//rColoredDispElm.val1 = (fabs(cos(angle)) * rPsi.MaxVal * 5 / 3);
+				//rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.MaxVal * 5 / 3);
 
-				//rDest_Colored.val1 = rSrc.MaxVal;
-				//rDest_Colored.val2 = rSrc.MaxVal;
+				//rColoredDispElm.val1 = rPsi.MaxVal;
+				//rColoredDispElm.val2 = rPsi.MaxVal;
 
-				//rDest_Colored.val1 = rSrc.NormLeastVal;
-				//rDest_Colored.val2 = rSrc.NormLeastVal;
+				//rColoredDispElm.val1 = rPsi.NormLeastVal;
+				//rColoredDispElm.val2 = rPsi.NormLeastVal;
 
-				//rDest.val1 = (fabs(cos(angle)) * rSrc.NormLeastVal);
-				//rDest.val2 = (fabs(sin(angle)) * rSrc.NormLeastVal);
+				//rDest.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal);
+				//rDest.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal);
 
-				////if (0 == rSrc.Dir)
-				//if (5 == rSrc.Dir)
+				////if (0 == rPsi.Dir)
+				//if (5 == rPsi.Dir)
 				////if (false)
 				//{
-				//	rDest.val0 = rSrc.NormLeastVal;
-				//	rDest.val1 = rSrc.NormLeastVal;
-				//	rDest.val2 = rSrc.NormLeastVal;
+				//	rDest.val0 = rPsi.NormLeastVal;
+				//	rDest.val1 = rPsi.NormLeastVal;
+				//	rDest.val2 = rPsi.NormLeastVal;
 				//}
 				//else
 				//{
@@ -343,7 +353,7 @@ namespace Ncv
 				//	rDest.val2 = 0;
 				//}
 
-				//rDest.val0 = 127 + rSrc.NormLeastVal;
+				//rDest.val0 = 127 + rPsi.NormLeastVal;
 				//rDest.val1 = 127 + 127 * cos(angle);
 				//rDest.val2 = 127 + 127 * sin(angle);
 			}
@@ -355,6 +365,7 @@ namespace Ncv
 			
 			ShowImage(dspImg_Colored, "dspImg_Colored");
 		}
+
 
 		void AngleDirMgrColl::DisplayConflictImg()
 		{
@@ -368,7 +379,6 @@ namespace Ncv
 			F32ColorVal * destPtr = (F32ColorVal *)confDsp_Img->GetDataPtr();
 			ActualArrayAccessor_1D<ConflictInfo2_Ex> srcAcc_1D = confAcc.GenAcc_1D();
 
-			float angle_Old = -1;
 			for (int i = 0; i < nSize_1D; i++)
 			{
 				ConflictInfo2_Ex & rSrc = srcAcc_1D[i];
