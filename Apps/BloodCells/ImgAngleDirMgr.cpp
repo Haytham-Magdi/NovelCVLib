@@ -60,9 +60,9 @@ namespace Ncv
 
 			cx.m_avgStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
-				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
+				cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-6, 6));
-			cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-2, 2));
+			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-2, 2));
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-36, 36), Range<int>::New(-36, 36));
 
 			//if (1 == cx.m_nIndex)
@@ -295,29 +295,16 @@ namespace Ncv
 
 					PixelStandevInfo & rCommonPsi = commonAcc_1D[nOffsetInOrg_1D];
 
-					//if (IsUndefined(rCommonPsi))
-					//{
-					//	continue;
-					//}
-					AssertValue(rCommonPsi);
-
 					int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
-					//Ncpp_ASSERT(nOffsetInRot_1D >= 0);
 
 					// S32Point pntInRot = rotToOrgMap_Acc.CalcPointFromIndex_1D(nOffsetInRot_1D);
 
 					const float standev_Local = localAcc_1D[nOffsetInRot_1D];
 					const float standev_Norm = localAcc_1D_Norm[nOffsetInRot_1D];
 
-					// if (73 == x && 70 == y)
-					// {
-					// 	x = x;
-					// }
-
 
 					if (IsUndefined(standev_Local) || IsUndefined(standev_Norm))
 					{
-						//SetToUndefined(&rCommonPsi);
 						continue;
 					}
 					
@@ -334,8 +321,31 @@ namespace Ncv
 					//	Assign(&rCommonPsi.Dir, cx.m_nIndex);
 					//}
 
+
+					if (IsUndefined(rCommonPsi))
+					{
+						Assign(&rCommonPsi.LeastVal, standev_Local);
+						Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+
+						Assign(&rCommonPsi.LeastValDir, cx.m_nIndex);
+
+						Assign(&rCommonPsi.SecondLeastVal, standev_Local);
+						Assign(&rCommonPsi.NormSecondLeastVal, standev_Norm);
+
+						Assign(&rCommonPsi.SecondLeastValDir, cx.m_nIndex);
+
+						continue;
+					}
+
+					AssertValue(rCommonPsi);
+
 					if (standev_Local < rCommonPsi.LeastVal)
 					{
+						Assign(&rCommonPsi.SecondLeastVal, rCommonPsi.LeastVal);
+						Assign(&rCommonPsi.NormSecondLeastVal, rCommonPsi.NormLeastVal);
+
+						Assign(&rCommonPsi.SecondLeastValDir, rCommonPsi.LeastValDir);
+
 						Assign(&rCommonPsi.LeastVal, standev_Local);
 						Assign(&rCommonPsi.NormLeastVal, standev_Norm);
 
@@ -348,6 +358,8 @@ namespace Ncv
 
 						Assign(&rCommonPsi.SecondLeastValDir, cx.m_nIndex);
 					}
+
+					AssertValue(rCommonPsi);
 
 					////else if (standev_Local > rCommonPsi.MaxVal)
 					//if (standev_Local > rCommonPsi.MaxVal)

@@ -92,7 +92,8 @@ namespace Ncv
 				//initPsi.MaxVal = 0;
 				//initPsi.MaxValDir = 2;
 
-				FillImage(m_context_H->m_standevInfoImg->GetVirtAccessor(), initPsi);
+				//FillImage(m_context_H->m_standevInfoImg->GetVirtAccessor(), initPsi);
+				SetImageToUndefined(m_context_H->m_standevInfoImg->GetVirtAccessor());
 			}
 
 			m_context_H->m_conflictInfoImg = ArrayHolderUtil::CreateFrom<ConflictInfo2_Ex>(
@@ -286,11 +287,33 @@ namespace Ncv
 			{
 				PixelStandevInfo & rPsi = psiAcc_1D[i];
 				
-				// S32Point pnt = psiAcc.CalcPointFromIndex_1D(i);
+				S32Point pnt = psiAcc.CalcPointFromIndex_1D(i);
+				//if (S32Point::AreEqual(pnt, S32Point(55, 270)))
+				
+				if (S32Point::AreEqual(pnt, S32Point(580, 304)))
+				{
+					i = i;
+				}
+
+				if (S32Point::AreEqual(pnt, S32Point(576, 312)))
+				{
+					i = i;
+				}
+
+
 				//const bool isPntInCheckWindow = pnt.IsInWindow(checkWin);
 				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rPsi.NormLeastVal));
 				
 				F32ColorVal & rColoredDispElm = coloredDispAcc_1D[i];
+
+				if (IsUndefined(rPsi))
+				{
+					rColoredDispElm.val0 = 0;
+					rColoredDispElm.val1 = 254;
+					rColoredDispElm.val2 = 254;
+					
+					continue;
+				}
 
 				//Ncpp_ASSERT(-1 != rPsi.Dir);
 				//Ncpp_ASSERT(rPsi.Dir >= 0);
@@ -300,17 +323,77 @@ namespace Ncv
 
 				//float angle = m_angleDirMgrArr[rPsi.Dir]->GetContext()->m_angleByRad;
 		
-				const float leastValAngle = m_angleDirMgrArr[rPsi.LeastValDir]->GetContext()->m_angleByRad;
-				const float secondLeastValAngle = m_angleDirMgrArr[rPsi.SecondLeastValDir]->GetContext()->m_angleByRad;
-
-				//float angle = m_angleDirMgrArr[rPsi.LeastValDir]->GetContext()->m_angleByRad;
-				const float angle = (rPsi.SecondLeastVal * leastValAngle + rPsi.LeastVal * secondLeastValAngle) /
-					(rPsi.LeastVal + rPsi.SecondLeastVal);
-
-				if (leastValAngle != secondLeastValAngle && rPsi.NormLeastVal > 50.0f)
+				float angle, normVal;
 				{
-					i = i;
+					const float leastValAngle = m_angleDirMgrArr[rPsi.LeastValDir]->GetContext()->m_angleByRad;
+					Ncpp_ASSERT(leastValAngle >= 0.0f && leastValAngle <= M_PI);
+
+					const float secondLeastValAngle = m_angleDirMgrArr[rPsi.SecondLeastValDir]->GetContext()->m_angleByRad;
+					Ncpp_ASSERT(secondLeastValAngle >= 0.0f && secondLeastValAngle <= M_PI);
+					
+					float angle1, angle2, weight1, weight2, normVal1, normVal2;
+
+					if (leastValAngle <= secondLeastValAngle)
+					{
+						angle1 = leastValAngle;
+						angle2 = secondLeastValAngle;
+
+						weight1 = rPsi.SecondLeastVal;
+						weight2 = rPsi.LeastVal;
+
+						normVal1 = rPsi.NormLeastVal;
+						normVal2 = rPsi.NormSecondLeastVal;
+					}
+					else
+					{
+						angle1 = secondLeastValAngle;
+						angle2 = leastValAngle;
+
+						weight1 = rPsi.LeastVal;
+						weight2 = rPsi.SecondLeastVal;
+
+						normVal1 = rPsi.NormSecondLeastVal;
+						normVal2 = rPsi.NormLeastVal;
+					}
+
+					if ((angle2 - angle1) <= (M_PI / 2))
+					{
+						//angle = ((weight1 + weight2) < 0.5) ? leastValAngle :
+						angle = ((weight1 + weight2) < 0.01) ? leastValAngle :
+							(weight1 * angle1 + weight2 * angle2) /
+							(weight1 + weight2);
+
+						Ncpp_ASSERT(angle >= 0.0f && angle <= M_PI);
+					}
+					else
+					{
+						//angle = ((weight1 + weight2) < 0.5) ? leastValAngle :
+						angle = ((weight1 + weight2) < 0.01) ? leastValAngle :
+							(weight1 * angle1 + weight2 * (angle2 - M_PI)) /
+							(weight1 + weight2);
+
+						//angle = (angle <= M_PI) ? angle : (angle + M_PI);
+						angle = (angle >= 0.0f) ? angle : (angle + M_PI);
+
+						Ncpp_ASSERT(angle >= 0.0f && angle <= M_PI);
+					}
+
+					normVal = ((weight1 + weight2) < 0.01) ? normVal1 :
+						(weight1 * normVal1 + weight2 * normVal2) / (weight1 + weight2);
+
+
+					////float angle = m_angleDirMgrArr[rPsi.LeastValDir]->GetContext()->m_angleByRad;
+					//angle = ((rPsi.LeastVal + rPsi.SecondLeastVal) < 0.5) ? leastValAngle :
+					//	(rPsi.SecondLeastVal * leastValAngle + rPsi.LeastVal * secondLeastValAngle) /
+					//	(rPsi.LeastVal + rPsi.SecondLeastVal);
+
+					if (leastValAngle != secondLeastValAngle && rPsi.NormLeastVal > 50.0f)
+					{
+						i = i;
+					}
+
 				}
+
 
 				////rDest.val0 = 127 + rPsi.NormLeastVal / 2;
 				//rDest.val0 = 127;
@@ -323,8 +406,12 @@ namespace Ncv
 				//rDest.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal * 2 / 3);
 				//rDest.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 2 / 3);
 
-				rColoredDispElm.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal * 5 / 3);
-				rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 5 / 3);
+				//rColoredDispElm.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal * 5 / 3);
+				//rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 5 / 3);
+
+				rColoredDispElm.val1 = (fabs(cos(angle)) * normVal * 5 / 3);
+				rColoredDispElm.val2 = (fabs(sin(angle)) * normVal * 5 / 3);
+
 
 				//rColoredDispElm.val1 = (fabs(cos(angle)) * rPsi.MaxVal * 5 / 3);
 				//rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.MaxVal * 5 / 3);
