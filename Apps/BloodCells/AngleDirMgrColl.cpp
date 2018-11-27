@@ -201,13 +201,13 @@ namespace Ncv
 				m_angleDirMgrArr[i]->Proceed_1_2();
 			}
 
-			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-			//	m_angleDirMgrArr[i]->Proceed_2_1();
-			//}
+			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+				m_angleDirMgrArr[i]->Proceed_2_1();
+			}
 
-			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-			//	m_angleDirMgrArr[i]->Proceed_2_2();
-			//}
+			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+				m_angleDirMgrArr[i]->Proceed_2_2();
+			}
 
 			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
 			//	m_angleDirMgrArr[i]->Proceed_3_1();
@@ -290,12 +290,15 @@ namespace Ncv
 				S32Point pnt = psiAcc.CalcPointFromIndex_1D(i);
 				//if (S32Point::AreEqual(pnt, S32Point(55, 270)))
 				
-				if (S32Point::AreEqual(pnt, S32Point(580, 304)))
+				//if (S32Point::AreEqual(pnt, S32Point(580, 304)))
+				if (S32Point::AreEqual(pnt, S32Point(132, 86)))
 				{
 					i = i;
 				}
 
-				if (S32Point::AreEqual(pnt, S32Point(576, 312)))
+				//if (S32Point::AreEqual(pnt, S32Point(576, 312)))
+				//if (S32Point::AreEqual(pnt, S32Point(356, 238)))
+				if (S32Point::AreEqual(pnt, S32Point(359, 232)))
 				{
 					i = i;
 				}
@@ -308,7 +311,8 @@ namespace Ncv
 
 				if (IsUndefined(rPsi))
 				{
-					rColoredDispElm.val0 = 0;
+					//rColoredDispElm.val0 = 0;
+					rColoredDispElm.val0 = 254;
 					rColoredDispElm.val1 = 254;
 					rColoredDispElm.val2 = 254;
 					
@@ -407,7 +411,8 @@ namespace Ncv
 				//rDest_Values = rPsi.NormLeastVal;
 
 				//rColoredDispElm.val0 = 0;
-				rColoredDispElm.val0 = (rPsi.NormLeastVal > 0.1) ? rPsi.LeastVal * 255 / rPsi.NormLeastVal : 0; 
+				//rColoredDispElm.val0 = (rPsi.NormLeastVal > 0.1) ? rPsi.LeastVal * 255 / rPsi.NormLeastVal : 0;
+				//rColoredDispElm.val1 = (rPsi.NormLeastVal > 0.1) ? rPsi.LeastVal * 255 / rPsi.NormLeastVal : 0;
 
 				//rDest.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal * 2 / 3);
 				//rDest.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 2 / 3);
@@ -415,8 +420,40 @@ namespace Ncv
 				//rColoredDispElm.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal * 5 / 3);
 				//rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 5 / 3);
 
-				rColoredDispElm.val1 = (fabs(cos(angle)) * normVal * 5 / 3);
-				rColoredDispElm.val2 = (fabs(sin(angle)) * normVal * 5 / 3);
+				if (rPsi.LeastVal > 0.5 * rPsi.NormLeastVal)
+				{
+					if (rPsi.NormLeastVal > 120)
+					{
+						i = i;
+					}
+					rColoredDispElm.val0 = rPsi.NormLeastVal;
+					rColoredDispElm.val1 = 0;
+					rColoredDispElm.val2 = 0;
+				}
+				//else if (0 == rPsi.LeastValDir)
+				//{
+				//	rColoredDispElm.val0 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val1 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val2 = rPsi.NormLeastVal;
+				//}
+				//else if (1 == rPsi.LeastValDir)
+				//{
+				//	rColoredDispElm.val0 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val1 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val2 = 0;
+				//}
+				//else if (3 == rPsi.LeastValDir)
+				//{
+				//	rColoredDispElm.val0 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val1 = 0;
+				//	rColoredDispElm.val2 = rPsi.NormLeastVal;
+				//}
+				else
+				{
+					rColoredDispElm.val0 = 0;
+					rColoredDispElm.val1 = (fabs(cos(angle)) * normVal * 5 / 3);
+					rColoredDispElm.val2 = (fabs(sin(angle)) * normVal * 5 / 3);
+				}
 
 
 				//rColoredDispElm.val1 = (fabs(cos(angle)) * rPsi.MaxVal * 5 / 3);

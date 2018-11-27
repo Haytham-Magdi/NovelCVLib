@@ -64,6 +64,8 @@ namespace Ncv
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-6, 6));
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-2, 2));
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-36, 36), Range<int>::New(-36, 36));
+			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-36, 36));
+			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-36, 36), Range<int>::New(-6, 6));
 
 			//if (1 == cx.m_nIndex)
 			if (0 == cx.m_nIndex)
@@ -100,23 +102,20 @@ namespace Ncv
 
 			cx.m_conflict_Img = ArrayHolderUtil::CreateEmptyFrom<ConflictInfo2>(cx.m_org_Img->AsHolderRef());
 
-			//F32ImageArrayHolder3C_Ref avg_Img = cx.m_org_Img->CloneEmpty();
 			F32ImageArrayHolder3C_Ref avg_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 			AvgImage(cx.m_org_Img->GetVirtAccessor(), avg_Img->GetVirtAccessor(), avgWin);
 
-			//F32ImageArrayHolder1C_Ref avg_MagSqr_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetVirtAccessor().GetSize());
 			F32ImageArrayHolder1C_Ref avg_MagSqr_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			AvgImage(cx.m_magSqr_Img->GetVirtAccessor(), avg_MagSqr_Img->GetVirtAccessor(), avgWin);
 
-			Range<int> confRange = Range<int>::New(
-				-1 - avgWin.GetX2(), 1 - avgWin.GetX1());
+			Range<int> confRange = Range<int>::New(-1 - avgWin.GetX2(), 1 - avgWin.GetX1());
 
 			CalcConflictImage_X(avg_Img->GetVirtAccessor(), avg_MagSqr_Img->GetVirtAccessor(),
 				cx.m_conflict_Img->GetVirtAccessor(), confRange);
 
-			//if (0 == cx.m_nIndex)
+			if (0 == cx.m_nIndex)
 			{
-				//DisplayConflictImg();
+				DisplayConflictImg();
 			}
 
 		}
@@ -302,6 +301,7 @@ namespace Ncv
 					const float standev_Local = localAcc_1D[nOffsetInRot_1D];
 					const float standev_Norm = localAcc_1D_Norm[nOffsetInRot_1D];
 
+					//rCommonPsi.allVals[cx.m_nIndex] = standev_Local;
 
 					if (IsUndefined(standev_Local) || IsUndefined(standev_Norm))
 					{
@@ -535,6 +535,11 @@ namespace Ncv
 			for (int i = 0; i < nSize_1D; i++)
 			{
 				ConflictInfo2 & rSrc = srcPtr[i];
+				if (IsUndefined(rSrc))
+				{
+					continue;
+				}
+
 				AssertValue(rSrc);
 
 				F32ColorVal & rDest = destPtr[i];

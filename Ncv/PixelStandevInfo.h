@@ -32,6 +32,7 @@ namespace Ncv
 		//float MaxVal;
 		//int MaxValDir;
 
+		//float allVals[8];
 	};
 
 	//typedef Ncpp::ObjRef< PixelStandevInfo > PixelStandevInfoRef;
