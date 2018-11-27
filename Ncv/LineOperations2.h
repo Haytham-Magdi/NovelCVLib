@@ -834,6 +834,12 @@ namespace Ncv
 				float avg_MagSqr_2 = a_avg_MagSqr_Acc[i + nAftDiff];
 
 				pOut->Exists = ElementOperations2::CalcConflict(avg_1, avg_MagSqr_1, avg_2, avg_MagSqr_2);
+
+				if (pOut->Exists)
+				{
+					i = i;
+				}
+
 				//if (pOut->Exists)
 				{
 					// to be revised.
@@ -841,6 +847,11 @@ namespace Ncv
 
 					pOut->Offset_Side_1 = &avg_1 - a_avg_Acc.GetData_FakeOrg();
 					Ncpp_ASSERT(pOut->Offset_Side_1 >= 0);
+
+					if (211 == pOut->Offset_Side_1)
+					{
+						i = i;
+					}
 
 					//pOut->pSide_2 = &avg_2;
 

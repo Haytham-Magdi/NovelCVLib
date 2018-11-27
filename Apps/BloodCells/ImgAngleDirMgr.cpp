@@ -126,7 +126,7 @@ namespace Ncv
 			//Context & ncx = *m_normalContext;
 			//AngleDirMgrColl_Context & pcx = *m_parentContext;
 
-			AffectCommonConflict();
+			//AffectCommonConflict();
 		}
 
 		void ImgAngleDirMgr::Proceed_3_1()
@@ -521,20 +521,19 @@ namespace Ncv
 			Context & cx = *m_context;
 
 			const ActualArrayAccessor_2D<ConflictInfo2> & confAcc = cx.m_conflict_Img->GetActualAccessor();
-			//F32ImageRef confDsp_Img = F32Image::Create(cvSize(confAcc->GetNofSteps_X_Org(), confAcc->GetNofSteps_Y_Org()), 3);
 			F32ImageRef confDsp_Img = F32Image::Create(toCvSize(confAcc.GetSize()), 3);
 
 			confDsp_Img->SetAll(0);
 
-			const int nSize_1D = confAcc.CalcSize_1D();
+			ActualArrayAccessor_1D<F32ColorVal> dispAcc_1D((F32ColorVal *)confDsp_Img->GetDataPtr(), confDsp_Img->GetSize1D());
 
-			F32ColorVal * destPtr = (F32ColorVal *)confDsp_Img->GetDataPtr();
-			ConflictInfo2 * srcPtr = (ConflictInfo2 *)confAcc.GetData();
+
+			const ActualArrayAccessor_1D<ConflictInfo2> & confAcc_1D = confAcc.GenAcc_1D();
 
 			float angle_Old = -1;
-			for (int i = 0; i < nSize_1D; i++)
+			for (int i = 0; i < confAcc_1D.GetSize(); i++)
 			{
-				ConflictInfo2 & rSrc = srcPtr[i];
+				ConflictInfo2 & rSrc = confAcc_1D[i];
 				if (IsUndefined(rSrc))
 				{
 					continue;
@@ -542,7 +541,7 @@ namespace Ncv
 
 				AssertValue(rSrc);
 
-				F32ColorVal & rDest = destPtr[i];
+				F32ColorVal & rDest = dispAcc_1D[i];
 
 				//rDest.val0 = 0;
 				//rDest.val1 = 255;
@@ -554,8 +553,8 @@ namespace Ncv
 
 				if (rSrc.Exists)
 				{
-					F32ColorVal & rDest_Side_1 = destPtr[rSrc.Offset_Side_1];
-					F32ColorVal & rDest_Side_2 = destPtr[rSrc.Offset_Side_2];
+					F32ColorVal & rDest_Side_1 = dispAcc_1D[rSrc.Offset_Side_1];
+					F32ColorVal & rDest_Side_2 = dispAcc_1D[rSrc.Offset_Side_2];
 
 					rDest.val0 = 0;
 					rDest.val1 = 0;
