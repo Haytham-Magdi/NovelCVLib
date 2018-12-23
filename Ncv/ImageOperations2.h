@@ -79,6 +79,29 @@ namespace Ncv
 			}
 		}
 
+		template<class T>
+		void SetUndefinedInImageToValue(const VirtArrayAccessor_2D<T> & a_acc, const T & a_value)
+		{
+			const VirtArrayAccessor_1D<T> acc_Y = a_acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_X = a_acc.GenAccessor_X();
+
+			PtrIterator2<T> ptrItr_Y = acc_Y.GenPtrIterator();
+
+			//for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
+			for (; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn())
+			{
+				T * ptr_Y = ptrItr_Y.GetBgn();
+
+				acc_X.SetData(ptr_Y);
+				SetUndefinedInLineToValue<T>(acc_X, a_value);
+			}
+		}
+
+		template<class T>
+		void SetUndefinedInImageToZero(const VirtArrayAccessor_2D<T> & a_acc)
+		{
+			SetUndefinedInImageToValue(a_acc, CreateZeroVal<T>());
+		}
 
 		template<class T>
 		void SetImageToBadValue(const VirtArrayAccessor_2D<T> & a_acc)
@@ -160,6 +183,39 @@ namespace Ncv
 				acc_Out_X.SetData(ptr_Out_Y);
 
 				DivideLineByNum<T>(acc_Inp_X, acc_Out_X, a_num);
+			}
+		}
+
+		template<class T>
+		void AddValueToImage(const VirtArrayAccessor_2D<T> & a_inpAcc, const T & a_value)
+		{
+			AddValueToImage(a_inpAcc, a_inpAcc, a_value);
+		}
+
+		template<class T>
+		void AddValueToImage(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const T & a_value)
+		{
+			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp_X = a_inpAcc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
+
+
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			{
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				AddValueToLine<T>(acc_Inp_X, acc_Out_X, a_value);
 			}
 		}
 
@@ -522,6 +578,66 @@ namespace Ncv
 				Calc_ConflictDiff_Line<T>(acc_Avg_X, acc_Avg_MagSqr_X, acc_Out_X, a_range_X);
 			}
 		}
+
+		template<class T>
+		void CalcDiffImageX(const VirtArrayAccessor_2D<T> & a_inp_Acc,
+			const VirtArrayAccessor_2D<T> & a_outAcc, const Range<int> & a_range_X)
+		{
+			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_inp_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp_X = a_inp_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
+
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			for (; ptrItr_Inp_Y.CanMove();
+				ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			{
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				CalcDiffLine<T>(acc_Inp_X, acc_Out_X, a_range_X);
+			}
+		}
+
+		template<class T>
+		//void CalcDiffImageX(const VirtArrayAccessor_2D<T> & a_inp_Acc,
+		//	const VirtArrayAccessor_2D<T> & a_outAcc, const Range<int> & a_range_X)
+		void SetBidiffMagImageFromDiffImage(const VirtArrayAccessor_2D<T> & a_diff_Acc,
+			const VirtArrayAccessor_2D<BidiffMag> & a_outAcc, const int a_posDiff)
+		{
+			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_diff_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp_X = a_diff_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<BidiffMag> acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<BidiffMag> acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
+
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
+			PtrIterator2<BidiffMag> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			for (; ptrItr_Inp_Y.CanMove();
+				ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			{
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				BidiffMag * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				SetBidiffMagLineFromDiffLine(acc_Inp_X, acc_Out_X, a_posDiff);
+				//CalcDiffLine<T>(acc_Inp_X, acc_Out_X, a_range_X);
+			}
+		}
+
 
 		template<class T>
 		void Calc_AvgStandevImage_X(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<float> & a_magSqrAcc,

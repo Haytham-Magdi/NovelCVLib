@@ -209,6 +209,14 @@ namespace Ncv
 				m_angleDirMgrArr[i]->Proceed_2_2();
 			}
 
+			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+				m_angleDirMgrArr[i]->Proceed_2b_1();
+			}
+
+			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+				m_angleDirMgrArr[i]->Proceed_2b_2();
+			}
+
 			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
 			//	m_angleDirMgrArr[i]->Proceed_3_1();
 			//}
@@ -249,7 +257,7 @@ namespace Ncv
 
 			DisplayStandiv_Dir_Img();
 
-			//DisplayConflictImg();
+			DisplayConflictImg();
 
 			////ShowImage(standev_InrWide_Img->GetSrcImg(), "standev_InrWide_Img->GetSrcImg()");
 
@@ -421,6 +429,7 @@ namespace Ncv
 				//rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 5 / 3);
 
 				if (rPsi.LeastVal > 0.5 * rPsi.NormLeastVal)
+				//if (rPsi.LeastVal > 0.8 * rPsi.NormLeastVal)
 				{
 					if (rPsi.NormLeastVal > 120)
 					{

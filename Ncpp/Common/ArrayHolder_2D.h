@@ -25,7 +25,11 @@ namespace Ncv
 		virtual ~ArrayHolder_2D() {}
 
 		const VirtArrayAccessor_2D<T> & GetVirtAccessor() const
-		//VirtArrayAccessor_2D<T> & GetVirtAccessor() const
+		{
+			return m_virtAccessor;
+		}
+
+		VirtArrayAccessor_2D<T> & GetVirtAccessorToModify()
 		{
 			return m_virtAccessor;
 		}

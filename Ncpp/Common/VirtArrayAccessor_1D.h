@@ -20,26 +20,26 @@ namespace Ncpp
 		{
 		}
 
-		void Init(T * a_data, int a_nofSteps, int a_nStepSize)
+		void Init(const T * a_data, const T * a_actualData, int a_nofSteps, int a_nStepSize)
 		{
-			m_data = a_data;
+			m_data = (T *)a_data;
+			m_actualData = (T *)a_actualData;
 			m_nofSteps = a_nofSteps;
 			m_nStepSize = a_nStepSize;
 		}
 
 
+		////const T & operator[](int a_pos) const
+		//T & operator[](int a_pos)
+		//{
+		//	Ncpp_ASSERT(a_pos >= 0);
+		//	Ncpp_ASSERT(a_pos < m_nofSteps);
+
+		//	return m_data[a_pos * m_nStepSize];
+		//}
 
 		//const T & operator[](int a_pos) const
-		T & operator[](int a_pos)
-		{
-			Ncpp_ASSERT(a_pos >= 0);
-			Ncpp_ASSERT(a_pos < m_nofSteps);
-
-			return m_data[a_pos * m_nStepSize];
-		}
-
-		const T & operator[](int a_pos) const
-		//T & operator[](int a_pos) const
+		T & operator[](int a_pos) const
 		{
 			Ncpp_ASSERT(a_pos >= 0);
 			Ncpp_ASSERT(a_pos < m_nofSteps);
@@ -63,7 +63,7 @@ namespace Ncpp
 
 		const T * GetData_FakeOrg() const
 		{
-			return m_data;
+			return m_actualData;
 		}
 
 		int GetStepSize() const
@@ -138,6 +138,7 @@ namespace Ncpp
 	protected:
 
 		T * m_data;
+		T * m_actualData;
 		int m_nStepSize;
 		int m_nofSteps;
 	};

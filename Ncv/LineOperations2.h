@@ -8,6 +8,8 @@
 #include <vector>
 //#include <NovelCVLib\OpenCV\Image.h>
 #include <NovelCVLib\Ncv\ConflictInfo2.h>
+#include <NovelCVLib\Ncv\Bidiff.h>
+#include <NovelCVLib\Ncv\BidiffMag.h>
 
 //#include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
 
@@ -43,6 +45,27 @@ namespace Ncv
 				T * ptr = ptrItr.GetBgn();
 				ElementOperations2::SetToUndefined<T>(ptr);
 			}
+		}
+
+		template<class T>
+		void SetUndefinedInLineToValue(const VirtArrayAccessor_1D<T> & a_acc, const T & a_value)
+		{
+			PtrIterator2<T> ptrItr = a_acc.GenPtrIterator();
+
+			for (; ptrItr.CanMove(); ptrItr.MoveBgn())
+			{
+				T * ptr = ptrItr.GetBgn();
+				if (IsUndefined(*ptr))
+				{
+					ElementOperations2::Assign<T>(ptr, a_value);
+				}
+			}
+		}
+
+		template<class T>
+		void SetUndefinedInLineToZero(const VirtArrayAccessor_2D<T> & a_acc)
+		{
+			SetUndefinedInLineToValue(a_acc, CreateZeroVal<T>());
 		}
 
 		template<class T>
@@ -88,7 +111,63 @@ namespace Ncv
 			}
 		}
 
+		template<class T>
+		void AddValueToLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const T & a_value)
+		{
+			AssertLineUndefinedOrValid(a_inpAcc);
+			AssertLineUndefinedOrValid(a_outAcc);
 
+			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
+
+
+			PtrIterator2<T> ptrItr_Inp = a_inpAcc.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out = a_outAcc.GenPtrIterator();
+
+
+			// manage undefined from bgn.
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetEnd();
+				T * ptr_Out = ptrItr_Out.GetEnd();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// do main job.
+			int cnt = 0;
+			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				ElementOperations2::Add<T>(*ptr_Inp, a_value, ptr_Out);
+			}
+		}
+		
 		template<class T>
 		void DivideLineByNum(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const float a_num)
 		{
@@ -819,7 +898,6 @@ namespace Ncv
 
 
 
-			//for (int i = start + nBefDiff + 1; i <= nCenterEnd; i++)
 			for (int i = start + nBefDiff; i <= nCenterEnd; i++)
 			{
 				//ConflictInfo2 * pOut = &a_outAcc[i];
@@ -964,7 +1042,6 @@ namespace Ncv
 
 
 
-			//for (int i = start + nBefDiff + 1; i <= nCenterEnd; i++)
 			for (int i = start + nBefDiff; i <= nCenterEnd; i++)
 			{
 				//float * pOut = &a_outAcc[i];
@@ -1003,6 +1080,272 @@ namespace Ncv
 			AssertLineUndefinedOrValid(a_outAcc);
 		}
 
+		template<class T>
+		void CalcDiffLine(const VirtArrayAccessor_1D<T> & a_inp_Acc,
+			const VirtArrayAccessor_1D<T> & a_outAcc, const Range<int> & a_range)
+		{
+			Ncpp_ASSERT(a_inp_Acc.GetSize() == a_outAcc.GetSize());
+
+			AssertLineUndefinedOrValid(a_inp_Acc);
+
+			const int nSize_1D = a_outAcc.GetSize();
+
+			const int nBefDiff = -a_range.GetBgn();
+			const int nAftDiff = a_range.GetEnd();
+
+			const int nRangeLen = nBefDiff + 1 + nAftDiff;
+
+
+			//--------------
+
+
+
+			int start = 0;
+			for (; start < nSize_1D; start++)
+			{
+				const T & inpVal = a_inp_Acc[start];
+
+				if (IsUndefined(inpVal))
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			int end = nSize_1D - 1;
+			for (; end >= start; end--)
+			{
+				const T & inpVal = a_inp_Acc[end];
+
+				if (IsUndefined(inpVal))
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			//------
+
+			if (end + 1 - start < nRangeLen)
+			{
+				SetLineToUndefined(a_outAcc);
+				return;
+			}
+
+			//const int nCenterEnd = nSize_1D - 1 - nAftDiff;
+			const int nCenterEnd = end - nAftDiff;
+
+
+			//--------------
+
+
+
+			for (int i = start + nBefDiff; i <= nCenterEnd; i++)
+			{
+				T * pOut = (T *)&a_outAcc[i];
+
+				const T & inp_1 = a_inp_Acc[i - nBefDiff];
+
+				const T & inp_2 = a_inp_Acc[i + nAftDiff];
+
+				ElementOperations2::Subtract(inp_2, inp_1, pOut);
+			}
+
+			///////////////////////////////
+
+			//	Fill bgn gap in output
+			{
+				for (int i = 0; i < start + nBefDiff; i++)
+				{
+					T * pDest = (T *)&a_outAcc[i];
+					SetToUndefined(pDest);
+				}
+			}
+
+			//	Fill end gap in output
+			{
+				for (int i = end - nAftDiff + 1; i < nSize_1D; i++)
+				{
+					T * pDest = (T *)&a_outAcc[i];
+					SetToUndefined(pDest);
+				}
+			}
+
+
+			AssertLineUndefinedOrValid(a_outAcc);
+		}
+
+
+		template<class T>
+		void SetBidiffMagLineFromDiffLine(const VirtArrayAccessor_1D<T> & a_diff_Acc,
+			const VirtArrayAccessor_1D<BidiffMag> & a_outAcc, const int a_posDiff)
+		{
+			Ncpp_ASSERT(a_diff_Acc.GetSize() == a_outAcc.GetSize());
+
+			AssertLineUndefinedOrValid(a_diff_Acc);
+
+			const int nSize_1D = a_outAcc.GetSize();
+
+
+			VirtArrayAccessor_1D<float> outBkwdAcc;
+			VirtArrayAccessor_1D<float> outFwdAcc;
+			{
+				const float * pOutData_Fwd = &a_outAcc.GetData()->FwdVal;
+				const float * pOutData_Bkwd = &a_outAcc.GetData()->BkwdVal;
+
+				const float * pOutActualData_Fwd = &a_outAcc.GetData_FakeOrg()->FwdVal;
+				const float * pOutActualData_Bkwd = &a_outAcc.GetData_FakeOrg()->BkwdVal;
+
+				outBkwdAcc.Init(pOutData_Bkwd, pOutActualData_Bkwd, a_outAcc.GetSize(), a_outAcc.GetStepSize() * 2);
+				outFwdAcc.Init(pOutData_Fwd, pOutActualData_Fwd, a_outAcc.GetSize(), a_outAcc.GetStepSize() * 2);
+			}
+
+
+			//const int nBefDiff = -a_range.GetBgn();
+			//const int nAftDiff = a_range.GetEnd();
+
+			//const int nBefDiff = -a_posDiff;
+			////const int nBefDiff = 0;
+			//const int nAftDiff = a_posDiff;
+
+			//const int nRangeLen = nBefDiff + 1 + nAftDiff;
+
+
+			//--------------
+
+
+
+			int start = 0;
+			for (; start < nSize_1D; start++)
+			{
+				const T & inpVal = a_diff_Acc[start];
+
+				if (IsUndefined(inpVal))
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+			//if (start < nSize_1D)
+			//{
+			//	start -= a_posDiff;
+			//}
+			//Ncpp_ASSERT(start >= 0);
+			Ncpp_ASSERT(start >= a_posDiff);
+
+
+			int end = nSize_1D - 1;
+			for (; end >= start; end--)
+			{
+				const T & inpVal = a_diff_Acc[end];
+
+				if (IsUndefined(inpVal))
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			//------
+
+			//if (end + 1 - start < nRangeLen)
+			if (end + 1 - start < 0)
+			{
+				//for (int i = 0; i < nSize_1D; i++)
+				//{
+				//	BidiffMag & rOut = a_outAcc[i];
+				//	SetLineToUndefined(&rOut.BkwdVal);
+				//	SetLineToUndefined(&rOut.FwdVal);
+				//}
+				//SetLineToUndefined(a_outAcc);
+
+				SetLineToUndefined(outFwdAcc);
+				SetLineToUndefined(outBkwdAcc);
+				
+				return;
+			}
+
+
+			//const int nCenterEnd = end - nAftDiff;
+
+
+			//--------------
+
+			for (int i = start - 1; i >= start - a_posDiff; i--)
+			{
+				BidiffMag & rOut = a_outAcc[i];
+				SetToUndefined(&rOut.BkwdVal);
+			}
+
+			for (int i = end; i > end - a_posDiff; i--)
+			{
+				BidiffMag & rOut = a_outAcc[i];
+				SetToUndefined(&rOut.FwdVal);
+			}
+
+
+			//for (int i = start + nBefDiff; i <= nCenterEnd; i++)
+			for (int i = start; i <= end; i++)
+			{
+				const T & diff = a_diff_Acc[i];
+				const float diffMag = CalcMag(diff);
+
+				BidiffMag & rOut_Fwd = a_outAcc[i];
+				BidiffMag & rOut_Bkwd = a_outAcc[i - a_posDiff];
+
+				rOut_Bkwd.FwdVal = rOut_Fwd.BkwdVal = diffMag;
+			}
+
+			///////////////////////////////
+
+			//	Fill bgn gap in output
+			{
+				//for (int i = 0; i < start + nBefDiff; i++)
+				for (int i = 0; i < start - a_posDiff; i++)
+				{
+					BidiffMag & rDest = a_outAcc[i];
+					SetToUndefined(&rDest.BkwdVal);
+					SetToUndefined(&rDest.FwdVal);
+
+					//T * pDest = (T *)&a_outAcc[i];
+					//SetToUndefined(pDest);
+				}
+			}
+
+			//	Fill end gap in output
+			{
+				//for (int i = end - nAftDiff + 1; i < nSize_1D; i++)
+				for (int i = end + 1; i < nSize_1D; i++)
+				{
+					BidiffMag & rDest = a_outAcc[i];
+					SetToUndefined(&rDest.BkwdVal);
+					SetToUndefined(&rDest.FwdVal);
+
+					//SetToUndefined(pDest);
+				}
+			}
+
+			//throw "func not complete";
+
+			AssertLineUndefinedOrValid(outBkwdAcc);
+			AssertLineUndefinedOrValid(outFwdAcc);
+	
+			//AssertLineUndefinedOrValid(a_outAcc);
+		}
 
 
 	};

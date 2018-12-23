@@ -74,6 +74,11 @@ namespace Ncv
 				float m_angleByRad;
 				ArrayHolder_2D_Ref<ConflictInfo2> m_conflict_Img;
 
+				F32ImageArrayHolder3C_Ref m_diff_Img;
+				F32ImageArrayHolder3C_Ref m_diff_2_Img;
+
+				ArrayHolder_2D_Ref<BidiffMag> m_bidiffMag_Img;
+
 				//F32ImageArrayHolder1C_Ref m_standev_InrWide_Img;
 
 				F32ImageArrayHolder1C_Ref m_wideConflictDiff_Img;
@@ -99,6 +104,8 @@ namespace Ncv
 			void Proceed_1_2();
 			void Proceed_2_1();
 			void Proceed_2_2();
+			void Proceed_2b_1();
+			void Proceed_2b_2();
 			void Proceed_3_1();
 			void Proceed_3_2();
 			void Proceed_4_1();
@@ -109,12 +116,13 @@ namespace Ncv
 			//void AffectCommonAvgStandev_0();
 			void AffectCommonAvgStandev();
 			void AffectCommonConflict();
+			void AffectCommonBidiffMag();
 			void AffectCommonWideConflictDiff();
 			void AffectCommonAvgPStandev_InrWide();
 
-
 			void DisplayConflictImg();
-
+			void DisplayDiffImages();
+			
 		protected:
 
 			//ImgAngleDirMgr_Context_Ref m_context;

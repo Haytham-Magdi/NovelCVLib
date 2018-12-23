@@ -48,11 +48,13 @@ namespace Ncv
 
 			ArrayHolder_2D_Ref<T> ret = new SimpleArrayHolder_2D<T>(srcActualAcc.GetSize());
 			//VirtArrayAccessor_2D<Y> * pRetVirtAcc = (VirtArrayAccessor_2D<Y> *)&ret->GetVirtAccessor();
-			VirtArrayAccessor_2D<T> * pRetVirtAcc = (VirtArrayAccessor_2D<T> *)&ret->GetVirtAccessor();
+			//VirtArrayAccessor_2D<T> * pRetVirtAcc = (VirtArrayAccessor_2D<T> *)&ret->GetVirtAccessor();
+			VirtArrayAccessor_2D<T> & rRetVirtAcc = ret->GetVirtAccessorToModify();
 			//VirtArrayAccessor_2D<Y> & pRetVirtAcc = ret->GetVirtAccessor();
 
-			pRetVirtAcc->Init(pRetVirtAcc->GetData() + headerDif,
-				//pRetVirtAcc.Init(pRetVirtAcc.GetData() + headerDif,
+			//pRetVirtAcc->Init(pRetVirtAcc->GetData() + headerDif,
+			rRetVirtAcc.Init(rRetVirtAcc.GetData() + headerDif,
+				ret->GetActualAccessor().GetData(),
 				srcVirtAcc.GetSize_X(), srcVirtAcc.GetStepSize_X(),
 				srcVirtAcc.GetSize_Y(), srcVirtAcc.GetStepSize_Y());
 

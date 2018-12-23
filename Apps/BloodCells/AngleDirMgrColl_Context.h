@@ -21,6 +21,8 @@
 
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
 #include <NovelCVLib\Ncv\ConflictInfo2.h>
+#include <NovelCVLib\Ncv\Bidiff.h>
+#include <NovelCVLib\Ncv\BidiffMag.h>
 
 
 #include <NovelCVLib\Apps\BloodCells\ImgAngleDirMgr.h>

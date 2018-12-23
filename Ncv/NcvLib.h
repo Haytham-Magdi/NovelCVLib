@@ -47,6 +47,9 @@
 #include <NovelCVLib\Ncv\ConflictInfo2.h>
 #include <NovelCVLib\Ncv\ElementOperations2_ConflictInfo2.h>
 
+#include <NovelCVLib\Ncv\Bidiff.h>
+#include <NovelCVLib\Ncv\BidiffMag.h>
+
 //#include <NovelCVLib\Apps\Binarization2\ImgAngleDirMgr.h>
 //#include <NovelCVLib\Apps\Binarization2\AngleDirMgrColl.h>
 //#include <NovelCVLib\Apps\Binarization2\AngleDirMgrColl_Context.h>

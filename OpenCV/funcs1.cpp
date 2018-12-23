@@ -16,7 +16,7 @@ namespace Ncv
 {
 	using namespace Ncpp;
 
-	F32ColorVal F32ColorVal::m_intesityFactors = { 0.51, 1.44, 1.048 };
+	F32ColorVal F32ColorVal::m_intesityFactors = { 0.51f, 1.44f, 1.048f };
 	//F32ColorVal F32ColorVal::m_intesityFactors( 0.51, 1.44, 1.048 );
 
 	void CvtRgbToHsl0(U8ImageRef a_src, U8ImageRef a_dst)

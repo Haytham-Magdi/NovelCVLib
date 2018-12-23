@@ -79,7 +79,7 @@ namespace Ncpp
 
 		void AssignVirtAccessorTo(VirtArrayAccessor_2D<T> * a_pAcc) const
 		{
-			a_pAcc->Init(m_data, m_nSize_X, 1, m_nSize_Y, m_nSize_X);
+			a_pAcc->Init(m_data, m_data, m_nSize_X, 1, m_nSize_Y, m_nSize_X);
 		}
 
 		VirtArrayAccessor_2D<T> GenVirtAccessor() const

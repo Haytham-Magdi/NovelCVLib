@@ -149,6 +149,14 @@ namespace Ncv
 			*a_pArg = 0;
 		}
 
+		template<class T>
+		T CreateZeroVal()
+		{
+			T val;
+			SetToZero(&val);
+			
+			return val;
+		}
 
 		template<class T>
 		bool IsUndefined(const T & a_arg)

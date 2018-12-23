@@ -21,9 +21,11 @@ namespace Ncpp
 		{
 		}
 
-		void Init(const T * a_data, const int a_nofSteps_X, const int a_nStepSize_X, const int a_nofSteps_Y, const int a_nStepSize_Y)
+		void Init(const T * a_data, const T * a_actualData, const int a_nofSteps_X, const int a_nStepSize_X, 
+			const int a_nofSteps_Y, const int a_nStepSize_Y)
 		{
 			m_data = (T *)a_data;
+			m_actualData = (T *)a_actualData;
 
 			m_nofSteps_X = a_nofSteps_X;
 			m_nStepSize_X = a_nStepSize_X;
@@ -47,6 +49,12 @@ namespace Ncpp
 		{
 			return m_data;
 		}
+
+		T * GetActualData() const
+		{
+			return m_actualData;
+		}
+
 
 		int GetSize_X() const
 		{
@@ -105,7 +113,7 @@ namespace Ncpp
 
 		void AssignAccessor_X_To(VirtArrayAccessor_1D<T> * a_pAcc) const
 		{
-			a_pAcc->Init(m_data, m_nofSteps_X, m_nStepSize_X);
+			a_pAcc->Init(m_data, m_actualData, m_nofSteps_X, m_nStepSize_X);
 		}
 
 		VirtArrayAccessor_1D<T> GenAccessor_X() const
@@ -117,7 +125,7 @@ namespace Ncpp
 
 		void AssignAccessor_Y_To(VirtArrayAccessor_1D<T> * a_pAcc) const
 		{
-			a_pAcc->Init(m_data, m_nofSteps_Y, m_nStepSize_Y);
+			a_pAcc->Init(m_data, m_actualData, m_nofSteps_Y, m_nStepSize_Y);
 		}
 
 		VirtArrayAccessor_1D<T> GenAccessor_Y() const
@@ -129,7 +137,7 @@ namespace Ncpp
 
 		void CopyTo(VirtArrayAccessor_2D<T> * a_pAcc) const
 		{
-			a_pAcc->Init(m_data, m_nofSteps_X, m_nStepSize_X, m_nofSteps_Y, m_nStepSize_Y);
+			a_pAcc->Init(m_data, m_actualData, m_nofSteps_X, m_nStepSize_X, m_nofSteps_Y, m_nStepSize_Y);
 		}
 
 		VirtArrayAccessor_2D<T> Clone() const
@@ -141,7 +149,7 @@ namespace Ncpp
 
 		void AssignTransposeTo(VirtArrayAccessor_2D<T> * a_pAcc) const
 		{
-			a_pAcc->Init(m_data, m_nofSteps_Y, m_nStepSize_Y, m_nofSteps_X, m_nStepSize_X);
+			a_pAcc->Init(m_data, m_actualData, m_nofSteps_Y, m_nStepSize_Y, m_nofSteps_X, m_nStepSize_X);
 		}
 
 		VirtArrayAccessor_2D<T> GenTranspose() const
@@ -161,6 +169,7 @@ namespace Ncpp
 	protected:
 
 		T * m_data;
+		T * m_actualData;
 
 		int m_nStepSize_X;
 		int m_nofSteps_X;

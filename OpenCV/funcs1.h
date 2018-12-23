@@ -101,6 +101,17 @@ namespace Ncv
 		float val1;
 		float val2;
 
+		F32ColorVal()
+		{
+		}
+
+		F32ColorVal(const float a_val0, const float a_val1, const float a_val2)
+		{
+			val0 = a_val0;
+			val1 = a_val1;
+			val2 = a_val2;
+		}
+
 		U8ColorVal ToU8()
 		{
 			U8ColorVal ret( val0, val1, val2 );
@@ -300,11 +311,7 @@ namespace Ncv
 
 		static F32ColorVal FromNum(const float a_num)
 		{
-			F32ColorVal ret;
-
-			ret.val0 = a_num;
-			ret.val1 = a_num;
-			ret.val2 = a_num;
+			F32ColorVal ret(a_num, a_num, a_num);
 
 			return ret;
 		}

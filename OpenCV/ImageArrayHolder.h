@@ -49,10 +49,6 @@ namespace Ncv
 
 		template<class Y_ImgElm, class Y_AccElm, int const YV_NofChannels>
 		static ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> CreateEmptyFrom(ImageArrayHolderRef<Y_ImgElm, Y_AccElm, YV_NofChannels> a_src)
-		
-		//static ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> CreateEmptyFrom()
-		//static Ncpp::ObjRef< ImageArrayHolder_2D_Ref<T_ImgElm, T_AccElm, V_NofChannels> > CreateEmptyFrom()
-		//static ObjRef< ImageArrayHolder<T_ImgElm, T_AccElm, V_NofChannels> > CreateEmptyFrom()
 		{
 			ImageArrayHolderRef<T_ImgElm, T_AccElm, V_NofChannels> ret = 
 				new ImageArrayHolder<T_ImgElm, T_AccElm, V_NofChannels>(a_src->GetActualAccessor().GetSize());
@@ -63,9 +59,10 @@ namespace Ncv
 			const int headerDif = srcVirtAcc.GetData() - srcActualAcc.GetData();
 
 			const ActualArrayAccessor_2D<T_AccElm> & retActualAcc = ret->GetActualAccessor();
-			VirtArrayAccessor_2D<T_AccElm> * pRetVirtAcc = (VirtArrayAccessor_2D<T_AccElm> *)&ret->GetVirtAccessor();
+			VirtArrayAccessor_2D<T_AccElm> & rRetVirtAcc = ret->GetVirtAccessorToModify();
 
-			pRetVirtAcc->Init(pRetVirtAcc->GetData() + headerDif,
+			rRetVirtAcc.Init(rRetVirtAcc.GetData() + headerDif,
+				ret->GetActualAccessor().GetData(),
 				srcVirtAcc.GetSize_X(), srcVirtAcc.GetStepSize_X(),
 				srcVirtAcc.GetSize_Y(), srcVirtAcc.GetStepSize_Y());
 
