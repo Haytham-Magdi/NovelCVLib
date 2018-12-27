@@ -42,7 +42,9 @@
 #include <NovelCVLib\ElementOperations2\ElementOperations2.h>
 
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
+#include <NovelCVLib\Ncv\BidiffMagCommon.h>
 #include <NovelCVLib\Ncv\ElementOperations2_PixelStandevInfo.h>
+#include <NovelCVLib\Ncv\ElementOperations2_BidiffMagCommon.h>
 
 #include <NovelCVLib\Ncv\ConflictInfo2.h>
 #include <NovelCVLib\Ncv\ElementOperations2_ConflictInfo2.h>

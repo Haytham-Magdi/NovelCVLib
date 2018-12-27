@@ -20,6 +20,7 @@
 #include <NovelCVLib\OpenCV\ImageArrayHolderTypeDefs.h>
 
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
+#include <NovelCVLib\Ncv\BidiffMagCommon.h>
 #include <NovelCVLib\Ncv\ConflictInfo2.h>
 #include <NovelCVLib\Ncv\Bidiff.h>
 #include <NovelCVLib\Ncv\BidiffMag.h>

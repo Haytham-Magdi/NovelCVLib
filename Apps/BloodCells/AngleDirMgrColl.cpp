@@ -67,34 +67,52 @@ namespace Ncv
 			m_context_H->m_standevInfoImg = ArrayHolderUtil::CreateEmptyFrom<PixelStandevInfo>(org_Img_H->AsHolderRef());
 
 			{
-				PixelStandevInfo initPsi;
-				////initPsi.Dir = -1;
-				//initPsi.Dir = 0;
-				////initPsi.Val = 10000000;
-				//initPsi.Val = 100000;
-				//SetToUndefined(&initPsi.Val);
+				//PixelStandevInfo initPsi;
+				//////initPsi.Dir = -1;
+				////initPsi.Dir = 0;
+				//////initPsi.Val = 10000000;
+				////initPsi.Val = 100000;
+				////SetToUndefined(&initPsi.Val);
+				////initPsi.NormLeastVal = 0;
+				//// initPsi.NormLeastVal = 60;
+				//
+				////initPsi.NormLeastVal = 1000;
+				////initPsi.NormSecondLeastVal = 1000;
+
 				//initPsi.NormLeastVal = 0;
-				// initPsi.NormLeastVal = 60;
-				
-				//initPsi.NormLeastVal = 1000;
-				//initPsi.NormSecondLeastVal = 1000;
+				//initPsi.NormSecondLeastVal = 0;
 
-				initPsi.NormLeastVal = 0;
-				initPsi.NormSecondLeastVal = 0;
+				//initPsi.LeastVal = 100000;
+				//initPsi.LeastValDir = 0;
 
-				initPsi.LeastVal = 100000;
-				initPsi.LeastValDir = 0;
+				//initPsi.SecondLeastVal = 100000;
+				//initPsi.SecondLeastValDir = 1;
 
-				initPsi.SecondLeastVal = 100000;
-				initPsi.SecondLeastValDir = 1;
-
-				////initPsi.MaxVal = 1000;
-				//initPsi.MaxVal = 0;
-				//initPsi.MaxValDir = 2;
+				//////initPsi.MaxVal = 1000;
+				////initPsi.MaxVal = 0;
+				////initPsi.MaxValDir = 2;
 
 				//FillImage(m_context_H->m_standevInfoImg->GetVirtAccessor(), initPsi);
 				SetImageToUndefined(m_context_H->m_standevInfoImg->GetVirtAccessor());
 			}
+
+
+			m_context_H->m_bidiffMagCommonImg = ArrayHolderUtil::CreateEmptyFrom<BidiffMagCommon>(org_Img_H->AsHolderRef());
+
+			{
+				//BidiffMagCommon initBdc;
+
+				//initBdc.MinVal = 100000;
+				//initBdc.MinValDir = 0;
+
+				//initBdc.MaxVal = 100000;
+				//initBdc.MaxValDir = 1;
+
+				//FillImage(m_context_H->m_standevInfoImg->GetVirtAccessor(), initPsi);
+				SetImageToUndefined(m_context_H->m_bidiffMagCommonImg->GetVirtAccessor());
+			}
+
+
 
 			m_context_H->m_conflictInfoImg = ArrayHolderUtil::CreateFrom<ConflictInfo2_Ex>(
 				org_Img_H->GetActualSize());
@@ -256,6 +274,8 @@ namespace Ncv
 			//}
 
 			DisplayStandiv_Dir_Img();
+
+			DisplayBidiffMag_Dir_Img();
 
 			DisplayConflictImg();
 
@@ -502,6 +522,239 @@ namespace Ncv
 
 			//ShowImage(dspImg_Values, "dspImg_Colored");
 			
+			ShowImage(dspImg_Colored, "dspImg_Colored");
+		}
+
+
+		void AngleDirMgrColl::DisplayBidiffMag_Dir_Img()
+		{
+			const ActualArrayAccessor_2D<BidiffMagCommon> & bdcAcc = m_context_H->m_bidiffMagCommonImg->GetActualAccessor();
+			const VirtArrayAccessor_2D<BidiffMagCommon> & psiVirtAcc = m_context_H->m_bidiffMagCommonImg->GetVirtAccessor();
+			//F32ImageRef dspImg_Values = F32Image::Create(cvSize(bdcAcc.GetSize()), 1);
+
+			//const int checkMargin = 70;
+			//Window<int> checkWin(checkMargin, bdcAcc.GetSize_X() - checkMargin,
+			//	checkMargin, bdcAcc.GetSize_Y() - checkMargin);
+
+
+			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(bdcAcc.GetSize()), 3);
+
+			const int nSize_1D = bdcAcc.CalcSize_1D();
+			ActualArrayAccessor_1D<BidiffMagCommon> bdcAcc_1D = bdcAcc.GenAcc_1D();
+
+			ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
+
+			for (int i = 0; i < nSize_1D; i++)
+			{
+				BidiffMagCommon & rBdc = bdcAcc_1D[i];
+
+				S32Point pnt = bdcAcc.CalcPointFromIndex_1D(i);
+				//if (S32Point::AreEqual(pnt, S32Point(55, 270)))
+
+				//if (S32Point::AreEqual(pnt, S32Point(580, 304)))
+				if (S32Point::AreEqual(pnt, S32Point(132, 86)))
+				{
+					i = i;
+				}
+
+				//if (S32Point::AreEqual(pnt, S32Point(576, 312)))
+				//if (S32Point::AreEqual(pnt, S32Point(356, 238)))
+				if (S32Point::AreEqual(pnt, S32Point(359, 232)))
+				{
+					i = i;
+				}
+
+
+				//const bool isPntInCheckWindow = pnt.IsInWindow(checkWin);
+				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rBdc.NormLeastVal));
+
+				F32ColorVal & rColoredDispElm = coloredDispAcc_1D[i];
+
+				if (IsUndefined(rBdc))
+				{
+					//rColoredDispElm.val0 = 0;
+					rColoredDispElm.val0 = 254;
+					rColoredDispElm.val1 = 254;
+					rColoredDispElm.val2 = 254;
+
+					continue;
+				}
+
+				//Ncpp_ASSERT(-1 != rBdc.Dir);
+				//Ncpp_ASSERT(rBdc.Dir >= 0);
+
+				Ncpp_ASSERT(rBdc.LeastValDir >= 0);
+				Ncpp_ASSERT(rBdc.SecondLeastValDir >= 0);
+
+				//float angle = m_angleDirMgrArr[rBdc.Dir]->GetContext()->m_angleByRad;
+
+				float angle, normVal;
+				{
+					//const float leastValAngle = m_angleDirMgrArr[rBdc.LeastValDir]->GetContext()->m_angleByRad;
+					//Ncpp_ASSERT(leastValAngle >= 0.0f && leastValAngle <= M_PI);
+
+					//const float secondLeastValAngle = m_angleDirMgrArr[rBdc.SecondLeastValDir]->GetContext()->m_angleByRad;
+					//Ncpp_ASSERT(secondLeastValAngle >= 0.0f && secondLeastValAngle <= M_PI);
+					//
+					//float angle1, angle2, weight1, weight2, normVal1, normVal2;
+
+					//if (leastValAngle <= secondLeastValAngle)
+					//{
+					//	angle1 = leastValAngle;
+					//	angle2 = secondLeastValAngle;
+
+					//	weight1 = rBdc.SecondLeastVal;
+					//	weight2 = rBdc.LeastVal;
+
+					//	normVal1 = rBdc.NormLeastVal;
+					//	normVal2 = rBdc.NormSecondLeastVal;
+					//}
+					//else
+					//{
+					//	angle1 = secondLeastValAngle;
+					//	angle2 = leastValAngle;
+
+					//	weight1 = rBdc.LeastVal;
+					//	weight2 = rBdc.SecondLeastVal;
+
+					//	normVal1 = rBdc.NormSecondLeastVal;
+					//	normVal2 = rBdc.NormLeastVal;
+					//}
+
+					//if ((angle2 - angle1) <= (M_PI / 2))
+					//{
+					//	//angle = ((weight1 + weight2) < 0.5) ? leastValAngle :
+					//	angle = ((weight1 + weight2) < 0.01) ? leastValAngle :
+					//		(weight1 * angle1 + weight2 * angle2) /
+					//		(weight1 + weight2);
+
+					//	Ncpp_ASSERT(angle >= 0.0f && angle <= M_PI);
+					//}
+					//else
+					//{
+					//	//angle = ((weight1 + weight2) < 0.5) ? leastValAngle :
+					//	angle = ((weight1 + weight2) < 0.01) ? leastValAngle :
+					//		(weight1 * angle1 + weight2 * (angle2 - M_PI)) /
+					//		(weight1 + weight2);
+
+					//	//angle = (angle <= M_PI) ? angle : (angle + M_PI);
+					//	angle = (angle >= 0.0f) ? angle : (angle + M_PI);
+
+					//	Ncpp_ASSERT(angle >= 0.0f && angle <= M_PI);
+					//}
+
+					//normVal = ((weight1 + weight2) < 0.01) ? normVal1 :
+					//	(weight1 * normVal1 + weight2 * normVal2) / (weight1 + weight2);
+
+					////float angle = m_angleDirMgrArr[rBdc.LeastValDir]->GetContext()->m_angleByRad;
+					//angle = ((rBdc.LeastVal + rBdc.SecondLeastVal) < 0.5) ? leastValAngle :
+					//	(rBdc.SecondLeastVal * leastValAngle + rBdc.LeastVal * secondLeastValAngle) /
+					//	(rBdc.LeastVal + rBdc.SecondLeastVal);
+
+					//if (leastValAngle != secondLeastValAngle && rBdc.NormLeastVal > 50.0f)
+					//{
+					//	i = i;
+					//}
+
+					// to be removed
+					angle = m_angleDirMgrArr[rBdc.LeastValDir]->GetContext()->m_angleByRad;
+					Ncpp_ASSERT(angle >= 0.0f && angle <= M_PI);
+
+					normVal = rBdc.NormLeastVal;
+				}
+
+
+				////rDest.val0 = 127 + rBdc.NormLeastVal / 2;
+				//rDest.val0 = 127;
+				//rDest.val1 = (127 + 127 * cos(angle) * rBdc.NormLeastVal * 2 / 3);
+				//rDest.val2 = (127 + 127 * sin(angle) * rBdc.NormLeastVal * 2 / 3);
+
+				//rDest_Values = rBdc.NormLeastVal;
+
+				//rColoredDispElm.val0 = 0;
+				//rColoredDispElm.val0 = (rBdc.NormLeastVal > 0.1) ? rBdc.LeastVal * 255 / rBdc.NormLeastVal : 0;
+				//rColoredDispElm.val1 = (rBdc.NormLeastVal > 0.1) ? rBdc.LeastVal * 255 / rBdc.NormLeastVal : 0;
+
+				//rDest.val1 = (fabs(cos(angle)) * rBdc.NormLeastVal * 2 / 3);
+				//rDest.val2 = (fabs(sin(angle)) * rBdc.NormLeastVal * 2 / 3);
+
+				//rColoredDispElm.val1 = (fabs(cos(angle)) * rBdc.NormLeastVal * 5 / 3);
+				//rColoredDispElm.val2 = (fabs(sin(angle)) * rBdc.NormLeastVal * 5 / 3);
+
+				if (rBdc.LeastVal > 0.5 * rBdc.NormLeastVal)
+					//if (rBdc.LeastVal > 0.8 * rBdc.NormLeastVal)
+				{
+					if (rBdc.NormLeastVal > 120)
+					{
+						i = i;
+					}
+					rColoredDispElm.val0 = rBdc.NormLeastVal;
+					rColoredDispElm.val1 = 0;
+					rColoredDispElm.val2 = 0;
+				}
+				//else if (0 == rBdc.LeastValDir)
+				//{
+				//	rColoredDispElm.val0 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val1 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val2 = rBdc.NormLeastVal;
+				//}
+				//else if (1 == rBdc.LeastValDir)
+				//{
+				//	rColoredDispElm.val0 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val1 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val2 = 0;
+				//}
+				//else if (3 == rBdc.LeastValDir)
+				//{
+				//	rColoredDispElm.val0 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val1 = 0;
+				//	rColoredDispElm.val2 = rBdc.NormLeastVal;
+				//}
+				else
+				{
+					rColoredDispElm.val0 = 0;
+					rColoredDispElm.val1 = (fabs(cos(angle)) * normVal * 5 / 3);
+					rColoredDispElm.val2 = (fabs(sin(angle)) * normVal * 5 / 3);
+				}
+
+
+				//rColoredDispElm.val1 = (fabs(cos(angle)) * rBdc.MaxVal * 5 / 3);
+				//rColoredDispElm.val2 = (fabs(sin(angle)) * rBdc.MaxVal * 5 / 3);
+
+				//rColoredDispElm.val1 = rBdc.MaxVal;
+				//rColoredDispElm.val2 = rBdc.MaxVal;
+
+				//rColoredDispElm.val1 = rBdc.NormLeastVal;
+				//rColoredDispElm.val2 = rBdc.NormLeastVal;
+
+				//rDest.val1 = (fabs(cos(angle)) * rBdc.NormLeastVal);
+				//rDest.val2 = (fabs(sin(angle)) * rBdc.NormLeastVal);
+
+				////if (0 == rBdc.Dir)
+				//if (5 == rBdc.Dir)
+				////if (false)
+				//{
+				//	rDest.val0 = rBdc.NormLeastVal;
+				//	rDest.val1 = rBdc.NormLeastVal;
+				//	rDest.val2 = rBdc.NormLeastVal;
+				//}
+				//else
+				//{
+				//	rDest.val0 = 0;
+				//	rDest.val1 = 0;
+				//	rDest.val2 = 0;
+				//}
+
+				//rDest.val0 = 127 + rBdc.NormLeastVal;
+				//rDest.val1 = 127 + 127 * cos(angle);
+				//rDest.val2 = 127 + 127 * sin(angle);
+			}
+
+			//GlobalStuff::SetLinePathImg(GenTriChGrayImg(dspImg_Values));
+			//GlobalStuff::ShowLinePathImg();
+
+			//ShowImage(dspImg_Values, "dspImg_Colored");
+
 			ShowImage(dspImg_Colored, "dspImg_Colored");
 		}
 

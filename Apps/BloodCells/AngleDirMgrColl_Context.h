@@ -20,6 +20,7 @@
 #include <NovelCVLib\OpenCV\ImageArrayHolderTypeDefs.h>
 
 #include <NovelCVLib\Ncv\PixelStandevInfo.h>
+#include <NovelCVLib\Ncv\BidiffMagCommon.h>
 #include <NovelCVLib\Ncv\ConflictInfo2.h>
 #include <NovelCVLib\Ncv\Bidiff.h>
 #include <NovelCVLib\Ncv\BidiffMag.h>
@@ -39,6 +40,7 @@ namespace Ncv
 		public:
 
 			ArrayHolder_2D_Ref<PixelStandevInfo> m_standevInfoImg;
+			ArrayHolder_2D_Ref<BidiffMagCommon> m_bidiffMagCommonImg;
 			ArrayHolder_2D_Ref<ConflictInfo2_Ex> m_conflictInfoImg;
 			F32ImageArrayHolder1C_Ref m_wideConflictDiff_Img;
 			F32VectorValImageArrayHolder_4C_Ref m_avgPStandev_InrWide_Img;
