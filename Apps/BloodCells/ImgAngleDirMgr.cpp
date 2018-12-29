@@ -544,16 +544,16 @@ namespace Ncv
 
 			// const ActualArrayAccessor_2D<int> & rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
 
-			ActualArrayAccessor_2D<BidiffMag> commonAcc = m_parentContext->m_bidiffMagCommonImg->GetActualAccessor();
+			ActualArrayAccessor_2D<BidiffMagCommon> commonAcc = m_parentContext->m_bidiffMagCommonImg->GetActualAccessor();
 			Ncpp_ASSERT(Size_2D::AreEqual(orgToRotMap_Acc.GetSize(), commonAcc.GetSize()));
 
-			ActualArrayAccessor_1D<BidiffMag> commonAcc_1D = commonAcc.GenAcc_1D();
+			ActualArrayAccessor_1D<BidiffMagCommon> commonAcc_1D = commonAcc.GenAcc_1D();
 
 
 
 			//float * localAcc_1D = (float *)cx.m_avgStandev_X_Img->GetActualAccessor().GetData();
-			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
-			ActualArrayAccessor_1D<float> localAcc_1D_Norm = ncx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<BidiffMag> localAcc_1D = cx.m_bidiffMag_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<BidiffMag> localAcc_1D_Norm = ncx.m_bidiffMag_Img->GetActualAccessor().GenAcc_1D();
 
 			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			{
@@ -563,80 +563,136 @@ namespace Ncv
 				{
 					const int nOffsetInOrg_1D = nOffset_Y + x;
 
-					BidiffMag & rCommonPsi = commonAcc_1D[nOffsetInOrg_1D];
+					BidiffMagCommon & rCommonBdc = commonAcc_1D[nOffsetInOrg_1D];
 
 					int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
 
 					// S32Point pntInRot = rotToOrgMap_Acc.CalcPointFromIndex_1D(nOffsetInRot_1D);
 
-					const float standev_Local = localAcc_1D[nOffsetInRot_1D];
-					const float standev_Norm = localAcc_1D_Norm[nOffsetInRot_1D];
+					const BidiffMag & rBidiffMag_Local = localAcc_1D[nOffsetInRot_1D];
+					const BidiffMag & rBidiffMag_Norm = localAcc_1D_Norm[nOffsetInRot_1D];
 
-					//rCommonPsi.allVals[cx.m_nIndex] = standev_Local;
+					//rCommonBdc.allVals[cx.m_nIndex] = bidiffMag_Local;
 
-					if (IsUndefined(standev_Local) || IsUndefined(standev_Norm))
+					if ((IsUndefined(rBidiffMag_Local.BkwdVal) && IsUndefined(rBidiffMag_Local.FwdVal)) ||
+						(IsUndefined(rBidiffMag_Norm.BkwdVal) && IsUndefined(rBidiffMag_Norm.FwdVal)) )
 					{
 						continue;
 					}
 
-					//Ncpp_ASSERT(standev_Local >= 0.0f || standev_Local > -5000.0f);
-					AssertValue(standev_Local);
-					Ncpp_ASSERT(standev_Local >= -0.001);
+					float bidiffMagMin_Local, bidiffMagMax_Local;
+					{
+						MaxFinder<float> maxFinder;
+						MinFinder<float> minFinder;
+						
+						if (!IsUndefined(rBidiffMag_Local.BkwdVal))
+						{
+							maxFinder.PushValue(rBidiffMag_Local.BkwdVal);
+							minFinder.PushValue(rBidiffMag_Local.BkwdVal);
+						}
 
-					//if (standev_Local < rCommonPsi.Val)
+						if (!IsUndefined(rBidiffMag_Local.FwdVal))
+						{
+							maxFinder.PushValue(rBidiffMag_Local.FwdVal);
+							minFinder.PushValue(rBidiffMag_Local.FwdVal);
+						}
+
+						bidiffMagMax_Local = maxFinder.FindMax();
+						AssertValue(bidiffMagMax_Local);
+						Ncpp_ASSERT(bidiffMagMax_Local >= -0.001);
+
+						bidiffMagMin_Local = minFinder.FindMin();
+						AssertValue(bidiffMagMin_Local);
+						Ncpp_ASSERT(bidiffMagMin_Local >= -0.001);
+					}
+
+					float bidiffMagMin_Norm, bidiffMagMax_Norm;
+					{
+						MaxFinder<float> maxFinder;
+						MinFinder<float> minFinder;
+
+						if (!IsUndefined(rBidiffMag_Norm.BkwdVal))
+						{
+							maxFinder.PushValue(rBidiffMag_Norm.BkwdVal);
+							minFinder.PushValue(rBidiffMag_Norm.BkwdVal);
+						}
+
+						if (!IsUndefined(rBidiffMag_Norm.FwdVal))
+						{
+							maxFinder.PushValue(rBidiffMag_Norm.FwdVal);
+							minFinder.PushValue(rBidiffMag_Norm.FwdVal);
+						}
+
+						bidiffMagMax_Norm = maxFinder.FindMax();
+						AssertValue(bidiffMagMax_Norm);
+						Ncpp_ASSERT(bidiffMagMax_Norm >= -0.001);
+
+						bidiffMagMin_Norm = minFinder.FindMin();
+						AssertValue(bidiffMagMin_Norm);
+						Ncpp_ASSERT(bidiffMagMin_Norm >= -0.001);
+					}
+
+
+
+					//if (standev_Local < rCommonBdc.Val)
 					////if (1 == cx.m_nIndex)
 					//{
-					//	Assign(&rCommonPsi.Val, standev_Local);
-					//	Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+					//	Assign(&rCommonBdc.Val, standev_Local);
+					//	Assign(&rCommonBdc.NormLeastVal, standev_Norm);
 					//	
-					//	Assign(&rCommonPsi.Dir, cx.m_nIndex);
+					//	Assign(&rCommonBdc.Dir, cx.m_nIndex);
 					//}
 
 
-					if (IsUndefined(rCommonPsi))
+					if (IsUndefined(rCommonBdc))
 					{
-						Assign(&rCommonPsi.LeastVal, standev_Local);
-						Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+						//Assign(&rCommonBdc.LeastVal, bidiffMagMax_Local);
+						Assign(&rCommonBdc.LeastVal, bidiffMagMin_Local);
+						Assign(&rCommonBdc.NormLeastVal, bidiffMagMax_Norm);
 
-						Assign(&rCommonPsi.LeastValDir, cx.m_nIndex);
+						Assign(&rCommonBdc.LeastValDir, cx.m_nIndex);
 
-						Assign(&rCommonPsi.SecondLeastVal, standev_Local);
-						Assign(&rCommonPsi.NormSecondLeastVal, standev_Norm);
+						//Assign(&rCommonBdc.SecondLeastVal, bidiffMagMax_Local);
+						Assign(&rCommonBdc.SecondLeastVal, bidiffMagMin_Local);
+						Assign(&rCommonBdc.NormSecondLeastVal, bidiffMagMax_Norm);
 
-						Assign(&rCommonPsi.SecondLeastValDir, cx.m_nIndex);
+						Assign(&rCommonBdc.SecondLeastValDir, cx.m_nIndex);
 
 						continue;
 					}
 
-					AssertValue(rCommonPsi);
+					AssertValue(rCommonBdc);
 
-					if (standev_Local < rCommonPsi.LeastVal)
+					//if (bidiffMagMax_Local < rCommonBdc.LeastVal)
+					if (bidiffMagMin_Local < rCommonBdc.LeastVal)
 					{
-						Assign(&rCommonPsi.SecondLeastVal, rCommonPsi.LeastVal);
-						Assign(&rCommonPsi.NormSecondLeastVal, rCommonPsi.NormLeastVal);
+						Assign(&rCommonBdc.SecondLeastVal, rCommonBdc.LeastVal);
+						Assign(&rCommonBdc.NormSecondLeastVal, rCommonBdc.NormLeastVal);
 
-						Assign(&rCommonPsi.SecondLeastValDir, rCommonPsi.LeastValDir);
+						Assign(&rCommonBdc.SecondLeastValDir, rCommonBdc.LeastValDir);
 
-						Assign(&rCommonPsi.LeastVal, standev_Local);
-						Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+						//Assign(&rCommonBdc.LeastVal, bidiffMagMax_Local);
+						Assign(&rCommonBdc.LeastVal, bidiffMagMin_Local);
+						Assign(&rCommonBdc.NormLeastVal, bidiffMagMax_Norm);
 
-						Assign(&rCommonPsi.LeastValDir, cx.m_nIndex);
+						Assign(&rCommonBdc.LeastValDir, cx.m_nIndex);
 					}
-					else if (standev_Local < rCommonPsi.SecondLeastVal)
+					else if (bidiffMagMax_Local < rCommonBdc.SecondLeastVal)
 					{
-						Assign(&rCommonPsi.SecondLeastVal, standev_Local);
-						Assign(&rCommonPsi.NormSecondLeastVal, standev_Norm);
+						//Assign(&rCommonBdc.SecondLeastVal, bidiffMagMax_Local);
+						Assign(&rCommonBdc.SecondLeastVal, bidiffMagMin_Local);
+						Assign(&rCommonBdc.NormSecondLeastVal, bidiffMagMax_Norm);
 
-						Assign(&rCommonPsi.SecondLeastValDir, cx.m_nIndex);
+						Assign(&rCommonBdc.SecondLeastValDir, cx.m_nIndex);
 					}
 
-					AssertValue(rCommonPsi);
+					AssertValue(rCommonBdc);
 
-					////else if (standev_Local > rCommonPsi.MaxVal)
-					//if (standev_Local > rCommonPsi.MaxVal)
+					////else if (bidiffMagMax_Local > rCommonBdc.MaxVal)
+					//if (bidiffMagMax_Local > rCommonBdc.MaxVal)
 					//{
-					//	Assign(&rCommonPsi.MaxVal, standev_Local);
-					//	Assign(&rCommonPsi.MaxValDir, cx.m_nIndex);
+					//	Assign(&rCommonBdc.MaxVal, bidiffMagMax_Local);
+					//	Assign(&rCommonBdc.MaxValDir, cx.m_nIndex);
 					//}
 
 				}	//	x for end.

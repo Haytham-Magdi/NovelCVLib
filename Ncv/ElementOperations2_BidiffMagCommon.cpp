@@ -23,28 +23,28 @@ namespace Ncv
 			//AssertValue(a_arg.Dir);
 
 			//Ncpp_ASSERT(a_arg.Dir >= 0 && a_arg.Dir < 500);
-			Ncpp_ASSERT(a_arg.MinValDir >= 0 && a_arg.MinValDir < 500);
+			Ncpp_ASSERT(a_arg.LeastValDir >= 0 && a_arg.LeastValDir < 500);
 
 			//AssertValue(a_arg.Val);
-			AssertValue(a_arg.MinVal);
+			AssertValue(a_arg.LeastVal);
 		}
 
 		bool IsUndefined(const BidiffMagCommon & a_arg)
 		{
 			//return IsUndefined(a_arg.Val);
-			return IsUndefined(a_arg.MinVal);
+			return IsUndefined(a_arg.LeastVal);
 		}
 
 		void SetToUndefined(BidiffMagCommon * a_pArg)
 		{
 			//SetToUndefined(&a_pArg->Val);
-			SetToUndefined(&a_pArg->MinVal);
+			SetToUndefined(&a_pArg->LeastVal);
 		}
 
 		void SetToBadValue(BidiffMagCommon * a_pArg)
 		{
 			//SetToBadValue(&a_pArg->Val);
-			SetToBadValue(&a_pArg->MinVal);
+			SetToBadValue(&a_pArg->LeastVal);
 		}
 	};
 }

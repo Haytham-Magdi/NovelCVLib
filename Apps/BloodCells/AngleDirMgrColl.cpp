@@ -108,7 +108,7 @@ namespace Ncv
 				//initBdc.MaxVal = 100000;
 				//initBdc.MaxValDir = 1;
 
-				//FillImage(m_context_H->m_standevInfoImg->GetVirtAccessor(), initPsi);
+				//FillImage(m_context_H->m_bidiffMagCommonImg->GetVirtAccessor(), initBdc);
 				SetImageToUndefined(m_context_H->m_bidiffMagCommonImg->GetVirtAccessor());
 			}
 
@@ -151,6 +151,7 @@ namespace Ncv
 
 			m_context_V->m_org_Img = m_context_H->m_org_Img->CreateTransposedProxy();
 			m_context_V->m_standevInfoImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_standevInfoImg);
+			m_context_V->m_bidiffMagCommonImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_bidiffMagCommonImg);
 			m_context_V->m_conflictInfoImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_conflictInfoImg);
 			m_context_V->m_wideConflictDiff_Img = m_context_H->m_wideConflictDiff_Img->CreateTransposedProxy();
 			m_context_V->m_avgPStandev_InrWide_Img = m_context_H->m_avgPStandev_InrWide_Img->CreateTransposedProxy();
@@ -520,9 +521,9 @@ namespace Ncv
 			//GlobalStuff::SetLinePathImg(GenTriChGrayImg(dspImg_Values));
 			//GlobalStuff::ShowLinePathImg();
 
-			//ShowImage(dspImg_Values, "dspImg_Colored");
+			//ShowImage(dspImg_Values, "standevDirImg_Colored");
 			
-			ShowImage(dspImg_Colored, "dspImg_Colored");
+			ShowImage(dspImg_Colored, "standevDirImg_Colored");
 		}
 
 
@@ -753,9 +754,9 @@ namespace Ncv
 			//GlobalStuff::SetLinePathImg(GenTriChGrayImg(dspImg_Values));
 			//GlobalStuff::ShowLinePathImg();
 
-			//ShowImage(dspImg_Values, "dspImg_Colored");
+			//ShowImage(dspImg_Values, "bidiffCommonImg_Colored");
 
-			ShowImage(dspImg_Colored, "dspImg_Colored");
+			ShowImage(dspImg_Colored, "bidiffCommonImg_Colored");
 		}
 
 

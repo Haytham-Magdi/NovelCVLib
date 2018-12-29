@@ -57,6 +57,7 @@
 
 #include <NovelCVLib\Ncv\PixelStandevInfo.cpp>
 #include <NovelCVLib\Ncv\ElementOperations2_PixelStandevInfo.cpp>
+#include <NovelCVLib\Ncv\ElementOperations2_BidiffMagCommon.cpp>
 
 #include <NovelCVLib\Ncv\ConflictInfo2.cpp>
 #include <NovelCVLib\Ncv\ElementOperations2_ConflictInfo2.cpp>
