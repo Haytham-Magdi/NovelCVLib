@@ -542,7 +542,7 @@ namespace Ncv
 			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
 			ActualArrayAccessor_1D<int> orgToRotMapAcc_1D = orgToRotMap_Acc.GenAcc_1D();
 
-			// const ActualArrayAccessor_2D<int> & rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
+			const ActualArrayAccessor_2D<int> & rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
 
 			ActualArrayAccessor_2D<BidiffMagCommon> commonAcc = m_parentContext->m_bidiffMagCommonImg->GetActualAccessor();
 			Ncpp_ASSERT(Size_2D::AreEqual(orgToRotMap_Acc.GetSize(), commonAcc.GetSize()));
@@ -567,7 +567,7 @@ namespace Ncv
 
 					int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
 
-					// S32Point pntInRot = rotToOrgMap_Acc.CalcPointFromIndex_1D(nOffsetInRot_1D);
+					 S32Point pntInRot = rotToOrgMap_Acc.CalcPointFromIndex_1D(nOffsetInRot_1D);
 
 					const BidiffMag & rBidiffMag_Local = localAcc_1D[nOffsetInRot_1D];
 					const BidiffMag & rBidiffMag_Norm = localAcc_1D_Norm[nOffsetInRot_1D];
@@ -644,16 +644,30 @@ namespace Ncv
 					//}
 
 
+
+					//if (4 == cx.m_nIndex)
+					//if (bidiffMagMax_Norm > 300 && 4 == cx.m_nIndex && 158 == y)
+					if ((0 == cx.m_nIndex || 4 == cx.m_nIndex ) && 129 == x && 158 == y)
+					{
+						x = x;
+					}
+
 					if (IsUndefined(rCommonBdc))
 					{
-						//Assign(&rCommonBdc.LeastVal, bidiffMagMax_Local);
-						Assign(&rCommonBdc.LeastVal, bidiffMagMin_Local);
+						//if (bidiffMagMax_Norm > 0)
+						if (bidiffMagMax_Norm > 300 && 4 == cx.m_nIndex && 158 == y)
+						{
+							x = x;
+						}
+
+						Assign(&rCommonBdc.LeastVal, bidiffMagMax_Local);
+						//Assign(&rCommonBdc.LeastVal, bidiffMagMin_Local);
 						Assign(&rCommonBdc.NormLeastVal, bidiffMagMax_Norm);
 
 						Assign(&rCommonBdc.LeastValDir, cx.m_nIndex);
 
-						//Assign(&rCommonBdc.SecondLeastVal, bidiffMagMax_Local);
-						Assign(&rCommonBdc.SecondLeastVal, bidiffMagMin_Local);
+						Assign(&rCommonBdc.SecondLeastVal, bidiffMagMax_Local);
+						//Assign(&rCommonBdc.SecondLeastVal, bidiffMagMin_Local);
 						Assign(&rCommonBdc.NormSecondLeastVal, bidiffMagMax_Norm);
 
 						Assign(&rCommonBdc.SecondLeastValDir, cx.m_nIndex);
@@ -663,24 +677,30 @@ namespace Ncv
 
 					AssertValue(rCommonBdc);
 
-					//if (bidiffMagMax_Local < rCommonBdc.LeastVal)
-					if (bidiffMagMin_Local < rCommonBdc.LeastVal)
+					if (bidiffMagMax_Local < rCommonBdc.LeastVal)
+					//if (bidiffMagMin_Local < rCommonBdc.LeastVal)
 					{
+						if (0 != cx.m_nIndex)
+						{
+							x = x;
+						}
+
 						Assign(&rCommonBdc.SecondLeastVal, rCommonBdc.LeastVal);
 						Assign(&rCommonBdc.NormSecondLeastVal, rCommonBdc.NormLeastVal);
 
 						Assign(&rCommonBdc.SecondLeastValDir, rCommonBdc.LeastValDir);
 
-						//Assign(&rCommonBdc.LeastVal, bidiffMagMax_Local);
-						Assign(&rCommonBdc.LeastVal, bidiffMagMin_Local);
+						Assign(&rCommonBdc.LeastVal, bidiffMagMax_Local);
+						//Assign(&rCommonBdc.LeastVal, bidiffMagMin_Local);
 						Assign(&rCommonBdc.NormLeastVal, bidiffMagMax_Norm);
 
 						Assign(&rCommonBdc.LeastValDir, cx.m_nIndex);
 					}
 					else if (bidiffMagMax_Local < rCommonBdc.SecondLeastVal)
+					//else if (bidiffMagMin_Local < rCommonBdc.SecondLeastVal)
 					{
-						//Assign(&rCommonBdc.SecondLeastVal, bidiffMagMax_Local);
-						Assign(&rCommonBdc.SecondLeastVal, bidiffMagMin_Local);
+						Assign(&rCommonBdc.SecondLeastVal, bidiffMagMax_Local);
+						//Assign(&rCommonBdc.SecondLeastVal, bidiffMagMin_Local);
 						Assign(&rCommonBdc.NormSecondLeastVal, bidiffMagMax_Norm);
 
 						Assign(&rCommonBdc.SecondLeastValDir, cx.m_nIndex);

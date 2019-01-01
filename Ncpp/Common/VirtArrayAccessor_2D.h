@@ -161,9 +161,52 @@ namespace Ncpp
 
 		void TransposeSelf()
 		{
-			VirtArrayAccessor_2D acc;
-			AssignTransposeTo(&acc);
-			acc.CopyTo(this);
+			//VirtArrayAccessor_2D acc;
+			//AssignTransposeTo(&acc);
+			//acc.CopyTo(this);
+			AssignTransposeTo(this);
+		}
+
+		void AssignFlippedX_To(VirtArrayAccessor_2D<T> * a_pAcc) const
+		{
+			a_pAcc->Init(&m_data[m_nStepSize_X * (m_nofSteps_X - 1)], 
+				m_actualData, m_nofSteps_Y, m_nStepSize_Y, m_nofSteps_X, -m_nStepSize_X);
+		}
+
+		VirtArrayAccessor_2D<T> GenFlippedX() const
+		{
+			VirtArrayAccessor_2D<T> acc;
+			AssignFlippedX_To(&acc);
+			return acc;
+		}
+
+		void FlipX_Self()
+		{
+			//VirtArrayAccessor_2D acc;
+			//AssignFlippedX_To(&acc);
+			//acc.CopyTo(this);
+			AssignFlippedX_To(this);
+		}
+
+		void AssignFlippedY_To(VirtArrayAccessor_2D<T> * a_pAcc) const
+		{
+			a_pAcc->Init(&m_data[m_nStepSize_Y * (m_nofSteps_Y - 1)],
+				m_actualData, m_nofSteps_Y, -m_nStepSize_Y, m_nofSteps_X, m_nStepSize_X);
+		}
+
+		VirtArrayAccessor_2D<T> GenFlippedY() const
+		{
+			VirtArrayAccessor_2D<T> acc;
+			AssignFlippedY_To(&acc);
+			return acc;
+		}
+
+		void FlipY_Self()
+		{
+			//VirtArrayAccessor_2D acc;
+			//AssignFlippedY_To(&acc);
+			//acc.CopyTo(this);
+			AssignFlippedY_To(this);
 		}
 
 	protected:

@@ -135,6 +135,28 @@ namespace Ncpp
 			return arr;
 		}
 
+		void AssignFlippedTo(VirtArrayAccessor_1D<T> * a_pAcc) const
+		{
+			a_pAcc->Init(&m_data[m_nStepSize * (m_nofSteps - 1)],
+				m_actualData, m_nofSteps, -m_nStepSize);
+		}
+
+		VirtArrayAccessor_1D<T> GenFlipped() const
+		{
+			VirtArrayAccessor_1D<T> acc;
+			AssignFlippedTo(&acc);
+			return acc;
+		}
+
+		void FlipSelf()
+		{
+			//VirtArrayAccessor_1D acc;
+			//AssignFlippedTo(&acc);
+			//acc.CopyTo(this);
+			AssignFlippedTo(this);
+		}
+
+
 	protected:
 
 		T * m_data;
