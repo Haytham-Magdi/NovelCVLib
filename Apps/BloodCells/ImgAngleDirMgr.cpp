@@ -836,6 +836,7 @@ namespace Ncv
 
 			F32ImageArrayHolder3C_Ref diff_Img_disp = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_diff_Img);
 			CopyImage(diff_Img_disp->GetVirtAccessor(), cx.m_diff_Img->GetVirtAccessor());
+			//CopyImageWithShift(diff_Img_disp->GetVirtAccessor(), cx.m_diff_Img->GetVirtAccessor(), S32Point(70, 70));
 			SetUndefinedInImageToZero(diff_Img_disp->GetVirtAccessor());
 			AddValueToImage(diff_Img_disp->GetVirtAccessor(), F32ColorVal::FromNum(130));
 

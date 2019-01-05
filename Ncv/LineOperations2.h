@@ -349,33 +349,24 @@ namespace Ncv
 
 			if (a_shift > 0)
 			{
-				//for (; ptrItr_Src.HasValidPos(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
-				for (; ptrItr_Dest.HasValidPos(); ptrItr_Dest.MoveBgn(), ptrItr_Dest.MoveBgn())
+				for (int i = 0; ptrItr_Dest.HasValidPos() && i < a_shift; 
+					ptrItr_Src.MoveEnd(), ptrItr_Dest.MoveBgn(), i++)
 				{
-					T * ptr_Src = ptrItr_Src.GetBgn();
 					T * ptr_Dest = ptrItr_Dest.GetBgn();
-
-					if (IsUndefined(*ptr_Src))
-					{
-						SetToUndefined(ptr_Dest);
-					}
-					else
-					{
-						break;
-					}
+					SetToUndefined(ptr_Dest);
 				}
-
 			}
 			else if (a_shift < 0)
 			{
-
+				for (int i = 0; ptrItr_Src.HasValidPos() && ptrItr_Dest.HasValidPos() && i > a_shift; 
+					ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveEnd(), i--)
+				{
+					T * ptr_Dest = ptrItr_Dest.GetEnd();
+					SetToUndefined(ptr_Dest);
+				}
 			}
 
-
-
-
 			/////////////////
-
 
 			// manage undefined from bgn.
 			for (; ptrItr_Src.HasValidPos(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())

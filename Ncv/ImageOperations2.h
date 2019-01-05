@@ -289,7 +289,7 @@ namespace Ncv
 		}
 
 		template<class T>
-		void CopyImageWithShift(const VirtArrayAccessor_2D<T> & a_destAcc, const VirtArrayAccessor_2D<T> & a_srcAcc, S32, const S32Point & a_shiftPnt)
+		void CopyImageWithShift(const VirtArrayAccessor_2D<T> & a_destAcc, const VirtArrayAccessor_2D<T> & a_srcAcc, const S32Point & a_shiftPnt)
 		{
 			const VirtArrayAccessor_1D<T> acc_Src_Y = a_srcAcc.GenAccessor_Y();
 			VirtArrayAccessor_1D<T> acc_Src_X = a_srcAcc.GenAccessor_X();
@@ -301,6 +301,33 @@ namespace Ncv
 
 			PtrIterator2<T> ptrItr_Src_Y = acc_Src_Y.GenPtrIterator();
 			PtrIterator2<T> ptrItr_Dest_Y = acc_Dest_Y.GenPtrIterator();
+
+
+			if (a_shiftPnt.GetY() > 0)
+			{
+				for (int i = 0; ptrItr_Dest_Y.HasValidPos() && i < a_shiftPnt.GetY();
+					ptrItr_Src_Y.MoveEnd(), ptrItr_Dest_Y.MoveBgn(), i++)
+				{
+					T * ptr_Dest_Y = ptrItr_Dest_Y.GetBgn();
+
+					acc_Dest_X.SetData(ptr_Dest_Y);
+					SetLineToUndefined(acc_Dest_X);
+				}
+			}
+			else if (a_shiftPnt.GetY() < 0)
+			{
+				for (int i = 0; ptrItr_Src_Y.HasValidPos() && ptrItr_Dest_Y.HasValidPos() && i > a_shiftPnt.GetY();
+					ptrItr_Src_Y.MoveBgn(), ptrItr_Dest_Y.MoveEnd(), i--)
+				{
+					T * ptr_Dest_Y = ptrItr_Dest_Y.GetEnd();
+					
+					acc_Dest_X.SetData(ptr_Dest_Y);
+					SetLineToUndefined(acc_Dest_X);
+				}
+			}
+
+			/////////////////
+
 
 			for (; ptrItr_Src_Y.HasValidPos(); ptrItr_Src_Y.MoveBgn(), ptrItr_Dest_Y.MoveBgn())
 			{
