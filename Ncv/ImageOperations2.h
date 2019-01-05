@@ -289,6 +289,32 @@ namespace Ncv
 		}
 
 		template<class T>
+		void CopyImageWithShift(const VirtArrayAccessor_2D<T> & a_destAcc, const VirtArrayAccessor_2D<T> & a_srcAcc, S32, const S32Point & a_shiftPnt)
+		{
+			const VirtArrayAccessor_1D<T> acc_Src_Y = a_srcAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Src_X = a_srcAcc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Dest_Y = a_destAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Dest_X = a_destAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Src_Y.GetSize() == acc_Dest_Y.GetSize());
+
+			PtrIterator2<T> ptrItr_Src_Y = acc_Src_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Dest_Y = acc_Dest_Y.GenPtrIterator();
+
+			for (; ptrItr_Src_Y.CanMove(); ptrItr_Src_Y.MoveBgn(), ptrItr_Dest_Y.MoveBgn())
+			{
+				T * ptr_Src_Y = ptrItr_Src_Y.GetBgn();
+				T * ptr_Dest_Y = ptrItr_Dest_Y.GetBgn();
+
+				acc_Src_X.SetData(ptr_Src_Y);
+				acc_Dest_X.SetData(ptr_Dest_Y);
+
+				CopyLineWithShift<T>(acc_Dest_X, acc_Src_X, a_shiftPnt.GetX());
+			}
+		}
+
+		template<class T>
 		void CalcMagImage(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<float> & a_outAcc)
 		{
 			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_inpAcc.GenAccessor_Y();

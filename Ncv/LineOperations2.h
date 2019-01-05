@@ -337,6 +337,62 @@ namespace Ncv
 		}
 
 		template<class T>
+		void CopyLineWithShift(const VirtArrayAccessor_1D<T> & a_destAcc, const VirtArrayAccessor_1D<T> & a_srcAcc, const int a_shift)
+		{
+			AssertLineUndefinedOrValid(a_srcAcc);
+
+			Ncpp_ASSERT(a_srcAcc.GetSize() == a_destAcc.GetSize());
+
+			PtrIterator2<T> ptrItr_Src = a_srcAcc.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Dest = a_destAcc.GenPtrIterator();
+
+
+
+
+			// manage undefined from bgn.
+			for (; ptrItr_Src.CanMove(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
+			{
+				T * ptr_Src = ptrItr_Src.GetBgn();
+				T * ptr_Dest = ptrItr_Dest.GetBgn();
+
+				if (IsUndefined(*ptr_Src))
+				{
+					SetToUndefined(ptr_Dest);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Src.CanMove(); ptrItr_Src.MoveEnd(), ptrItr_Dest.MoveEnd())
+			{
+				T * ptr_Src = ptrItr_Src.GetEnd();
+				T * ptr_Dest = ptrItr_Dest.GetEnd();
+
+				if (IsUndefined(*ptr_Src))
+				{
+					SetToUndefined(ptr_Dest);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// do main job.
+			for (; ptrItr_Src.CanMove(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
+			{
+				T * ptr_Src = ptrItr_Src.GetBgn();
+				T * ptr_Dest = ptrItr_Dest.GetBgn();
+
+				ElementOperations2::Assign<T>(ptr_Dest, *ptr_Src);
+			}
+		}
+
+		template<class T>
 		void CalcMagLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<float> & a_outAcc)
 		{
 			AssertLineUndefinedOrValid(a_inpAcc);
