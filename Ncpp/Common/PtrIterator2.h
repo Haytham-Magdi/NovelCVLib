@@ -30,7 +30,7 @@ namespace Ncpp
 			m_nStepSize = a_nStepSize;
 		}
 
-		bool CanMove() const
+		bool HasValidPos() const
 		{
 			//return m_bgn != m_end;
 			return m_bgn != (m_end + m_nStepSize);
@@ -38,13 +38,13 @@ namespace Ncpp
 
 		void MoveBgn()
 		{
-			Ncpp_ASSERT(CanMove());
+			Ncpp_ASSERT(HasValidPos());
 			m_bgn += m_nStepSize;
 		}
 
 		void MoveEnd()
 		{
-			Ncpp_ASSERT(CanMove());
+			Ncpp_ASSERT(HasValidPos());
 			m_end -= m_nStepSize;
 		}
 

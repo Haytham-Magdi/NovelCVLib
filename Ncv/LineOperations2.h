@@ -28,7 +28,7 @@ namespace Ncv
 
 			PtrIterator2<T> ptrItr = a_acc.GenPtrIterator();
 
-			for (; ptrItr.CanMove(); ptrItr.MoveBgn())
+			for (; ptrItr.HasValidPos(); ptrItr.MoveBgn())
 			{
 				T * ptr = ptrItr.GetBgn();
 				ElementOperations2::Assign<T>(ptr, a_val);
@@ -40,7 +40,7 @@ namespace Ncv
 		{
 			PtrIterator2<T> ptrItr = a_acc.GenPtrIterator();
 
-			for (; ptrItr.CanMove(); ptrItr.MoveBgn())
+			for (; ptrItr.HasValidPos(); ptrItr.MoveBgn())
 			{
 				T * ptr = ptrItr.GetBgn();
 				ElementOperations2::SetToUndefined<T>(ptr);
@@ -52,7 +52,7 @@ namespace Ncv
 		{
 			PtrIterator2<T> ptrItr = a_acc.GenPtrIterator();
 
-			for (; ptrItr.CanMove(); ptrItr.MoveBgn())
+			for (; ptrItr.HasValidPos(); ptrItr.MoveBgn())
 			{
 				T * ptr = ptrItr.GetBgn();
 				if (IsUndefined(*ptr))
@@ -73,7 +73,7 @@ namespace Ncv
 		{
 			PtrIterator2<T> ptrItr = a_acc.GenPtrIterator();
 
-			for (; ptrItr.CanMove(); ptrItr.MoveBgn())
+			for (; ptrItr.HasValidPos(); ptrItr.MoveBgn())
 			{
 				T * ptr = ptrItr.GetBgn();
 				ElementOperations2::SetToBadValue<T>(ptr);
@@ -88,8 +88,8 @@ namespace Ncv
 			T * ptr;
 			//int cnt = 0;
 
-			//for (; ptrItr.CanMove(); ptrItr.MoveBgn(), cnt++)
-			for (; ptrItr.CanMove(); ptrItr.MoveBgn())
+			//for (; ptrItr.HasValidPos(); ptrItr.MoveBgn(), cnt++)
+			for (; ptrItr.HasValidPos(); ptrItr.MoveBgn())
 			{
 				ptr = ptrItr.GetBgn();
 				ElementOperations2::AssertValue<T>(*ptr);
@@ -104,7 +104,7 @@ namespace Ncv
 			T * ptr;
 			int cnt = 0;
 
-			for (; ptrItr.CanMove(); ptrItr.MoveBgn(), cnt++)
+			for (; ptrItr.HasValidPos(); ptrItr.MoveBgn(), cnt++)
 			{
 				ptr = ptrItr.GetBgn();
 				ElementOperations2::AssertUndefinedOrValid<T>(*ptr);
@@ -125,7 +125,7 @@ namespace Ncv
 
 
 			// manage undefined from bgn.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
 				T * ptr_Out = ptrItr_Out.GetBgn();
@@ -141,7 +141,7 @@ namespace Ncv
 			}
 
 			// manage undefined from end.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetEnd();
 				T * ptr_Out = ptrItr_Out.GetEnd();
@@ -159,7 +159,7 @@ namespace Ncv
 
 			// do main job.
 			int cnt = 0;
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
 				T * ptr_Out = ptrItr_Out.GetBgn();
@@ -182,7 +182,7 @@ namespace Ncv
 
 
 			// manage undefined from bgn.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
 				T * ptr_Out = ptrItr_Out.GetBgn();
@@ -198,7 +198,7 @@ namespace Ncv
 			}
 
 			// manage undefined from end.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetEnd();
 				T * ptr_Out = ptrItr_Out.GetEnd();
@@ -216,7 +216,7 @@ namespace Ncv
 
 			// do main job.
 			int cnt = 0;
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
 				T * ptr_Out = ptrItr_Out.GetBgn();
@@ -239,7 +239,7 @@ namespace Ncv
 
 
 			// manage undefined from bgn.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
 				T * ptr_Out = ptrItr_Out.GetBgn();
@@ -255,7 +255,7 @@ namespace Ncv
 			}
 
 			// manage undefined from end.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetEnd();
 				T * ptr_Out = ptrItr_Out.GetEnd();
@@ -272,7 +272,7 @@ namespace Ncv
 
 
 			// do main job.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
 				T * ptr_Out = ptrItr_Out.GetBgn();
@@ -294,7 +294,7 @@ namespace Ncv
 
 
 			// manage undefined from bgn.
-			for (; ptrItr_Src.CanMove(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
+			for (; ptrItr_Src.HasValidPos(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
 			{
 				T * ptr_Src = ptrItr_Src.GetBgn();
 				T * ptr_Dest = ptrItr_Dest.GetBgn();
@@ -310,7 +310,7 @@ namespace Ncv
 			}
 
 			// manage undefined from end.
-			for (; ptrItr_Src.CanMove(); ptrItr_Src.MoveEnd(), ptrItr_Dest.MoveEnd())
+			for (; ptrItr_Src.HasValidPos(); ptrItr_Src.MoveEnd(), ptrItr_Dest.MoveEnd())
 			{
 				T * ptr_Src = ptrItr_Src.GetEnd();
 				T * ptr_Dest = ptrItr_Dest.GetEnd();
@@ -327,7 +327,7 @@ namespace Ncv
 
 
 			// do main job.
-			for (; ptrItr_Src.CanMove(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
+			for (; ptrItr_Src.HasValidPos(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
 			{
 				T * ptr_Src = ptrItr_Src.GetBgn();
 				T * ptr_Dest = ptrItr_Dest.GetBgn();
@@ -347,10 +347,38 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Dest = a_destAcc.GenPtrIterator();
 
 
+			if (a_shift > 0)
+			{
+				//for (; ptrItr_Src.HasValidPos(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
+				for (; ptrItr_Dest.HasValidPos(); ptrItr_Dest.MoveBgn(), ptrItr_Dest.MoveBgn())
+				{
+					T * ptr_Src = ptrItr_Src.GetBgn();
+					T * ptr_Dest = ptrItr_Dest.GetBgn();
+
+					if (IsUndefined(*ptr_Src))
+					{
+						SetToUndefined(ptr_Dest);
+					}
+					else
+					{
+						break;
+					}
+				}
+
+			}
+			else if (a_shift < 0)
+			{
+
+			}
+
+
+
+
+			/////////////////
 
 
 			// manage undefined from bgn.
-			for (; ptrItr_Src.CanMove(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
+			for (; ptrItr_Src.HasValidPos(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
 			{
 				T * ptr_Src = ptrItr_Src.GetBgn();
 				T * ptr_Dest = ptrItr_Dest.GetBgn();
@@ -366,7 +394,7 @@ namespace Ncv
 			}
 
 			// manage undefined from end.
-			for (; ptrItr_Src.CanMove(); ptrItr_Src.MoveEnd(), ptrItr_Dest.MoveEnd())
+			for (; ptrItr_Src.HasValidPos(); ptrItr_Src.MoveEnd(), ptrItr_Dest.MoveEnd())
 			{
 				T * ptr_Src = ptrItr_Src.GetEnd();
 				T * ptr_Dest = ptrItr_Dest.GetEnd();
@@ -383,7 +411,7 @@ namespace Ncv
 
 
 			// do main job.
-			for (; ptrItr_Src.CanMove(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
+			for (; ptrItr_Src.HasValidPos(); ptrItr_Src.MoveBgn(), ptrItr_Dest.MoveBgn())
 			{
 				T * ptr_Src = ptrItr_Src.GetBgn();
 				T * ptr_Dest = ptrItr_Dest.GetBgn();
@@ -404,7 +432,7 @@ namespace Ncv
 
 
 			// manage undefined from bgn.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
 				float * ptr_Out = ptrItr_Out.GetBgn();
@@ -420,7 +448,7 @@ namespace Ncv
 			}
 
 			// manage undefined from end.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetEnd();
 				float * ptr_Out = ptrItr_Out.GetEnd();
@@ -437,7 +465,7 @@ namespace Ncv
 
 
 			// do actual stuff.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
 				float * ptr_Out = ptrItr_Out.GetBgn();
@@ -457,7 +485,7 @@ namespace Ncv
 			PtrIterator2<float> ptrItr_Out = a_outAcc.GenPtrIterator();
 
 			// manage undefined from bgn.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
 				float * ptr_Out = ptrItr_Out.GetBgn();
@@ -473,7 +501,7 @@ namespace Ncv
 			}
 
 			// manage undefined from end.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetEnd();
 				float * ptr_Out = ptrItr_Out.GetEnd();
@@ -489,7 +517,7 @@ namespace Ncv
 			}
 
 			// do actual stuff.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
 				float * ptr_Out = ptrItr_Out.GetBgn();
@@ -769,7 +797,7 @@ namespace Ncv
 
 
 			// manage undefined from bgn.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
 				float * ptr_Out = ptrItr_Out.GetBgn();
@@ -785,7 +813,7 @@ namespace Ncv
 			}
 
 			// manage undefined from end.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetEnd();
 				float * ptr_Out = ptrItr_Out.GetEnd();
@@ -802,7 +830,7 @@ namespace Ncv
 
 
 			// do actual stuff.
-			for (; ptrItr_Inp.CanMove(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
 			{
 				T * ptr_Inp = ptrItr_Inp.GetBgn();
 				float * ptr_Out = ptrItr_Out.GetBgn();
@@ -830,7 +858,7 @@ namespace Ncv
 			int cnt_undefined_Bgn = 0;
 
 			// manage undefined from bgn.
-			for (; ptrItr_Avg.CanMove(); ptrItr_Avg.MoveBgn(), ptrItr_Avg_MagSqr.MoveBgn(), ptrItr_Out.MoveBgn(), cnt_undefined_Bgn++)
+			for (; ptrItr_Avg.HasValidPos(); ptrItr_Avg.MoveBgn(), ptrItr_Avg_MagSqr.MoveBgn(), ptrItr_Out.MoveBgn(), cnt_undefined_Bgn++)
 			{   
 				T * ptr_Avg = ptrItr_Avg.GetBgn();
 				float * ptr_Avg_MagSqr = ptrItr_Avg_MagSqr.GetBgn();
@@ -850,7 +878,7 @@ namespace Ncv
 			int cnt_undefined_End = 0;
 
 			// manage undefined from end.
-			for (; ptrItr_Avg.CanMove(); ptrItr_Avg.MoveEnd(), ptrItr_Avg_MagSqr.MoveEnd(), ptrItr_Out.MoveEnd(), cnt_undefined_End++)
+			for (; ptrItr_Avg.HasValidPos(); ptrItr_Avg.MoveEnd(), ptrItr_Avg_MagSqr.MoveEnd(), ptrItr_Out.MoveEnd(), cnt_undefined_End++)
 			{
 				T * ptr_Avg = ptrItr_Avg.GetEnd();
 				float * ptr_Avg_MagSqr = ptrItr_Avg_MagSqr.GetEnd();
@@ -868,7 +896,7 @@ namespace Ncv
 
 			int cnt = 0;
 			//	do actual stuff.
-			for (; ptrItr_Avg.CanMove();
+			for (; ptrItr_Avg.HasValidPos();
 				ptrItr_Avg.MoveBgn(), ptrItr_Avg_MagSqr.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
 			{
 				T * ptr_Avg = ptrItr_Avg.GetBgn();

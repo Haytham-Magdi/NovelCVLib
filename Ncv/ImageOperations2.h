@@ -29,7 +29,7 @@ namespace Ncv
 
 			PtrIterator2<T> ptrItr_Y = acc_Y.GenPtrIterator();
 
-			for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
+			for (int i = 0; ptrItr_Y.HasValidPos(); ptrItr_Y.MoveBgn(), i++)
 			{
 				T * ptr_Y = ptrItr_Y.GetBgn();
 
@@ -51,8 +51,8 @@ namespace Ncv
 
 			PtrIterator2<T> ptrItr_Y = acc_Y.GenPtrIterator();
 
-			//for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
-			for (; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn())
+			//for (int i = 0; ptrItr_Y.HasValidPos(); ptrItr_Y.MoveBgn(), i++)
+			for (; ptrItr_Y.HasValidPos(); ptrItr_Y.MoveBgn())
 			{
 				T * ptr_Y = ptrItr_Y.GetBgn();
 
@@ -69,8 +69,8 @@ namespace Ncv
 
 			PtrIterator2<T> ptrItr_Y = acc_Y.GenPtrIterator();
 
-			//for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
-			for (; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn())
+			//for (int i = 0; ptrItr_Y.HasValidPos(); ptrItr_Y.MoveBgn(), i++)
+			for (; ptrItr_Y.HasValidPos(); ptrItr_Y.MoveBgn())
 			{
 				T * ptr_Y = ptrItr_Y.GetBgn();
 
@@ -87,8 +87,8 @@ namespace Ncv
 
 			PtrIterator2<T> ptrItr_Y = acc_Y.GenPtrIterator();
 
-			//for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
-			for (; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn())
+			//for (int i = 0; ptrItr_Y.HasValidPos(); ptrItr_Y.MoveBgn(), i++)
+			for (; ptrItr_Y.HasValidPos(); ptrItr_Y.MoveBgn())
 			{
 				T * ptr_Y = ptrItr_Y.GetBgn();
 
@@ -111,8 +111,8 @@ namespace Ncv
 
 			PtrIterator2<T> ptrItr_Y = acc_Y.GenPtrIterator();
 
-			//for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
-			for (; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn())
+			//for (int i = 0; ptrItr_Y.HasValidPos(); ptrItr_Y.MoveBgn(), i++)
+			for (; ptrItr_Y.HasValidPos(); ptrItr_Y.MoveBgn())
 			{
 				T * ptr_Y = ptrItr_Y.GetBgn();
 
@@ -130,8 +130,8 @@ namespace Ncv
 
 			PtrIterator2<T> ptrItr_Y = acc_Y.GenPtrIterator();
 
-			//for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
-			for (; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn())
+			//for (int i = 0; ptrItr_Y.HasValidPos(); ptrItr_Y.MoveBgn(), i++)
+			for (; ptrItr_Y.HasValidPos(); ptrItr_Y.MoveBgn())
 			{
 				T * ptr_Y = ptrItr_Y.GetBgn();
 
@@ -148,8 +148,8 @@ namespace Ncv
 
 			PtrIterator2<T> ptrItr_Y = acc_Y.GenPtrIterator();
 
-			//for (int i = 0; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn(), i++)
-			for (; ptrItr_Y.CanMove(); ptrItr_Y.MoveBgn())
+			//for (int i = 0; ptrItr_Y.HasValidPos(); ptrItr_Y.MoveBgn(), i++)
+			for (; ptrItr_Y.HasValidPos(); ptrItr_Y.MoveBgn())
 			{
 				T * ptr_Y = ptrItr_Y.GetBgn();
 
@@ -174,7 +174,7 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
 			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
 
-			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			for (; ptrItr_Inp_Y.HasValidPos(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
 				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
 				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
@@ -207,7 +207,7 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
 			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
 
-			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			for (; ptrItr_Inp_Y.HasValidPos(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
 				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
 				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
@@ -242,7 +242,7 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
 			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
 
-			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			for (; ptrItr_Inp_Y.HasValidPos(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
 				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
 				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
@@ -276,7 +276,7 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Src_Y = acc_Src_Y.GenPtrIterator();
 			PtrIterator2<T> ptrItr_Dest_Y = acc_Dest_Y.GenPtrIterator();
 
-			for (; ptrItr_Src_Y.CanMove(); ptrItr_Src_Y.MoveBgn(), ptrItr_Dest_Y.MoveBgn())
+			for (; ptrItr_Src_Y.HasValidPos(); ptrItr_Src_Y.MoveBgn(), ptrItr_Dest_Y.MoveBgn())
 			{
 				T * ptr_Src_Y = ptrItr_Src_Y.GetBgn();
 				T * ptr_Dest_Y = ptrItr_Dest_Y.GetBgn();
@@ -302,7 +302,7 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Src_Y = acc_Src_Y.GenPtrIterator();
 			PtrIterator2<T> ptrItr_Dest_Y = acc_Dest_Y.GenPtrIterator();
 
-			for (; ptrItr_Src_Y.CanMove(); ptrItr_Src_Y.MoveBgn(), ptrItr_Dest_Y.MoveBgn())
+			for (; ptrItr_Src_Y.HasValidPos(); ptrItr_Src_Y.MoveBgn(), ptrItr_Dest_Y.MoveBgn())
 			{
 				T * ptr_Src_Y = ptrItr_Src_Y.GetBgn();
 				T * ptr_Dest_Y = ptrItr_Dest_Y.GetBgn();
@@ -328,7 +328,7 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
 			PtrIterator2<float> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
 
-			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			for (; ptrItr_Inp_Y.HasValidPos(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
 				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
 				float * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
@@ -354,7 +354,7 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
 			PtrIterator2<float> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
 
-			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			for (; ptrItr_Inp_Y.HasValidPos(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
 				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
 				float * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
@@ -381,7 +381,7 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
 			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
 
-			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			for (; ptrItr_Inp_Y.HasValidPos(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
 				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
 				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
@@ -429,7 +429,7 @@ namespace Ncv
 			PtrIterator2<float> ptrItr_Weight_Y = acc_Weight_Y.GenPtrIterator();
 			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
 
-			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Weight_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			for (; ptrItr_Inp_Y.HasValidPos(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Weight_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
 				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
 				float * ptr_Weight_Y = ptrItr_Weight_Y.GetBgn();
@@ -472,7 +472,7 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
 			PtrIterator2<float> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
 
-			for (; ptrItr_Inp_Y.CanMove(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			for (; ptrItr_Inp_Y.HasValidPos(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
 				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
 				float * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
@@ -520,7 +520,7 @@ namespace Ncv
 			PtrIterator2<float> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
 
 			int cnt = 0;
-			for (; ptrItr_Avg_Y.CanMove();
+			for (; ptrItr_Avg_Y.HasValidPos();
 				ptrItr_Avg_Y.MoveBgn(), ptrItr_Avg_MagSqr_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn(), cnt++)
 			{
 				T * ptr_Avg_Y = ptrItr_Avg_Y.GetBgn();
@@ -555,7 +555,7 @@ namespace Ncv
 			PtrIterator2<float> ptrItr_Avg_MagSqr_Y = acc_Avg_MagSqr_Y.GenPtrIterator();
 			PtrIterator2<ConflictInfo2> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
 
-			for (; ptrItr_Avg_Y.CanMove();
+			for (; ptrItr_Avg_Y.HasValidPos();
 				ptrItr_Avg_Y.MoveBgn(), ptrItr_Avg_MagSqr_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
 				T * ptr_Avg_Y = ptrItr_Avg_Y.GetBgn();
@@ -590,7 +590,7 @@ namespace Ncv
 			PtrIterator2<float> ptrItr_Avg_MagSqr_Y = acc_Avg_MagSqr_Y.GenPtrIterator();
 			PtrIterator2<float> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
 
-			for (; ptrItr_Avg_Y.CanMove();
+			for (; ptrItr_Avg_Y.HasValidPos();
 				ptrItr_Avg_Y.MoveBgn(), ptrItr_Avg_MagSqr_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
 				T * ptr_Avg_Y = ptrItr_Avg_Y.GetBgn();
@@ -620,7 +620,7 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
 			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
 
-			for (; ptrItr_Inp_Y.CanMove();
+			for (; ptrItr_Inp_Y.HasValidPos();
 				ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
 				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
@@ -650,7 +650,7 @@ namespace Ncv
 			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
 			PtrIterator2<BidiffMag> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
 
-			for (; ptrItr_Inp_Y.CanMove();
+			for (; ptrItr_Inp_Y.HasValidPos();
 				ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
 			{
 				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
