@@ -661,9 +661,7 @@ namespace Ncv
 		}
 
 		template<class T>
-		//void CalcDiffImageX(const VirtArrayAccessor_2D<T> & a_inp_Acc,
-		//	const VirtArrayAccessor_2D<T> & a_outAcc, const Range<int> & a_range_X)
-		void SetBidiffMagImageFromDiffImage(const VirtArrayAccessor_2D<T> & a_diff_Acc,
+		void SetBidiffMagImageFromDiffImage_0(const VirtArrayAccessor_2D<T> & a_diff_Acc,
 			const VirtArrayAccessor_2D<BidiffMag> & a_outAcc, const int a_posDiff)
 		{
 			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_diff_Acc.GenAccessor_Y();
@@ -689,6 +687,69 @@ namespace Ncv
 				SetBidiffMagLineFromDiffLine(acc_Inp_X, acc_Out_X, a_posDiff);
 				//CalcDiffLine<T>(acc_Inp_X, acc_Out_X, a_range_X);
 			}
+		}
+
+		template<class T>
+		void SetBidiffMagImageFromDiffImage(const VirtArrayAccessor_2D<T> & a_diff_Acc,
+			const VirtArrayAccessor_2D<BidiffMag> & a_outAcc, const int a_posDiff)
+		{
+
+
+			VirtArrayAccessor_2D<float> outBkwdAcc;
+			VirtArrayAccessor_2D<float> outFwdAcc;
+			{
+				const int nofMembersInBidiffMag = sizeof(BidiffMag) / sizeof(float);
+
+				const float * pOutData_Fwd = &a_outAcc.GetData()->FwdVal;
+				const float * pOutData_Bkwd = &a_outAcc.GetData()->BkwdVal;
+
+				const float * pOutActualData_Fwd = &a_outAcc.GetActualData()->FwdVal;
+				const float * pOutActualData_Bkwd = &a_outAcc.GetActualData()->BkwdVal;
+
+				//outBkwdAcc.Init(pOutData_Bkwd, pOutActualData_Bkwd, a_outAcc.GetSize(), a_outAcc.GetStepSize() * 2);
+				//outFwdAcc.Init(pOutData_Fwd, pOutActualData_Fwd, a_outAcc.GetSize(), a_outAcc.GetStepSize() * 2);
+
+				outBkwdAcc.Init(pOutData_Bkwd, pOutActualData_Bkwd, 
+					a_outAcc.GetSize_X(), a_outAcc.GetStepSize_X() * nofMembersInBidiffMag,
+					a_outAcc.GetSize_Y(), a_outAcc.GetStepSize_Y() * nofMembersInBidiffMag
+					);
+			
+				outFwdAcc.Init(pOutData_Fwd, pOutActualData_Fwd, 
+					a_outAcc.GetSize_X(), a_outAcc.GetStepSize_X() * nofMembersInBidiffMag,
+					a_outAcc.GetSize_Y(), a_outAcc.GetStepSize_Y() * nofMembersInBidiffMag
+					);
+			}
+
+			CalcMagImage(a_diff_Acc, outBkwdAcc);
+			
+			//const int shiftX = outFwdAcc.GetData() - outBkwdAcc.GetData();
+			//CopyImageWithShift(outFwdAcc, outBkwdAcc, S32Point(shiftX, 0));
+			
+			CopyImageWithShift(outFwdAcc, outBkwdAcc, S32Point(-1, 0));
+
+			//const VirtArrayAccessor_1D<T> acc_Inp_Y = a_diff_Acc.GenAccessor_Y();
+			//VirtArrayAccessor_1D<T> acc_Inp_X = a_diff_Acc.GenAccessor_X();
+
+			//const VirtArrayAccessor_1D<BidiffMag> acc_Out_Y = a_outAcc.GenAccessor_Y();
+			//VirtArrayAccessor_1D<BidiffMag> acc_Out_X = a_outAcc.GenAccessor_X();
+
+			//Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
+
+			//PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
+			//PtrIterator2<BidiffMag> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			//for (; ptrItr_Inp_Y.HasValidPos();
+			//	ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			//{
+			//	T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+			//	BidiffMag * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+			//	acc_Inp_X.SetData(ptr_Inp_Y);
+			//	acc_Out_X.SetData(ptr_Out_Y);
+
+			//	SetBidiffMagLineFromDiffLine(acc_Inp_X, acc_Out_X, a_posDiff);
+			//	//CalcDiffLine<T>(acc_Inp_X, acc_Out_X, a_range_X);
+			//}
 		}
 
 
