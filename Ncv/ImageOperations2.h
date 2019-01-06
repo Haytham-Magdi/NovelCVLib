@@ -661,29 +661,29 @@ namespace Ncv
 		}
 
 		template<class T>
-		void SetBidiffMagImageFromDiffImage(const VirtArrayAccessor_2D<T> & a_diff_Acc,
-			const VirtArrayAccessor_2D<BidiffMag> & a_outAcc, const int a_posDiff)
+		void PrepareBidiffInfoImageFromDiffImages(const VirtArrayAccessor_2D<T> & a_diff_Acc,
+			const VirtArrayAccessor_2D<BidiffInfo> & a_outAcc, const int a_posDiff)
 		{
 
 			VirtArrayAccessor_2D<float> outBkwdAcc;
 			VirtArrayAccessor_2D<float> outFwdAcc;
 			{
-				const int nofMembersInBidiffMag = sizeof(BidiffMag) / sizeof(float);
+				const int nofMembersInBidiffInfo = sizeof(BidiffInfo) / sizeof(float);
 
-				const float * pOutData_Fwd = &a_outAcc.GetData()->FwdVal;
-				const float * pOutData_Bkwd = &a_outAcc.GetData()->BkwdVal;
+				const float * pOutData_Fwd = &a_outAcc.GetData()->Diff1_FwdMag;
+				const float * pOutData_Bkwd = &a_outAcc.GetData()->Diff1_BkwdMag;
 
-				const float * pOutActualData_Fwd = &a_outAcc.GetActualData()->FwdVal;
-				const float * pOutActualData_Bkwd = &a_outAcc.GetActualData()->BkwdVal;
+				const float * pOutActualData_Fwd = &a_outAcc.GetActualData()->Diff1_FwdMag;
+				const float * pOutActualData_Bkwd = &a_outAcc.GetActualData()->Diff1_BkwdMag;
 
 				outBkwdAcc.Init(pOutData_Bkwd, pOutActualData_Bkwd, 
-					a_outAcc.GetSize_X(), a_outAcc.GetStepSize_X() * nofMembersInBidiffMag,
-					a_outAcc.GetSize_Y(), a_outAcc.GetStepSize_Y() * nofMembersInBidiffMag
+					a_outAcc.GetSize_X(), a_outAcc.GetStepSize_X() * nofMembersInBidiffInfo,
+					a_outAcc.GetSize_Y(), a_outAcc.GetStepSize_Y() * nofMembersInBidiffInfo
 					);
 			
 				outFwdAcc.Init(pOutData_Fwd, pOutActualData_Fwd, 
-					a_outAcc.GetSize_X(), a_outAcc.GetStepSize_X() * nofMembersInBidiffMag,
-					a_outAcc.GetSize_Y(), a_outAcc.GetStepSize_Y() * nofMembersInBidiffMag
+					a_outAcc.GetSize_X(), a_outAcc.GetStepSize_X() * nofMembersInBidiffInfo,
+					a_outAcc.GetSize_Y(), a_outAcc.GetStepSize_Y() * nofMembersInBidiffInfo
 					);
 			}
 

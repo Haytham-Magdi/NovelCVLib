@@ -71,7 +71,7 @@ namespace Ncv
 
 			void Prepare();
 			void DisplayStandiv_Dir_Img();
-			void DisplayBidiffMag_Dir_Img();
+			void DisplayBidiffInfo_Dir_Img();
 			void DisplayConflictImg();
 			void ManageThresholding_0();
 			void ManageThresholding();

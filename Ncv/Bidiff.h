@@ -13,8 +13,8 @@ namespace Ncv
 	{
 	public:
 
-		T BkwdVal;
-		T FwdVal;
+		T Diff1_BkwdVal;
+		T Diff1_FwdVal;
 
 	};
 

@@ -12,7 +12,7 @@
 //#include <NovelCVLib\OpenCV\Image.h>
 
 #include <NovelCVLib\ElementOperations2\ElementOperations2.h>
-#include <NovelCVLib\Ncv\BidiffMagCommon.h>
+#include <NovelCVLib\Ncv\BidiffInfoCommon.h>
 
 
 
@@ -22,10 +22,10 @@ namespace Ncv
 
 	namespace ElementOperations2
 	{
-		template<> void AssertValue(const BidiffMagCommon & a_arg);
-		template<> void SetToBadValue(BidiffMagCommon * a_pArg);
-		template<> bool IsUndefined(const BidiffMagCommon & a_arg);
-		template<> void SetToUndefined(BidiffMagCommon * a_pArg);
+		template<> void AssertValue(const BidiffInfoCommon & a_arg);
+		template<> void SetToBadValue(BidiffInfoCommon * a_pArg);
+		template<> bool IsUndefined(const BidiffInfoCommon & a_arg);
+		template<> void SetToUndefined(BidiffInfoCommon * a_pArg);
 	};
 }
 

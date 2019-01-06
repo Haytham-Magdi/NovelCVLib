@@ -8,12 +8,12 @@
 namespace Ncv
 {
 
-	class BidiffMag
+	class BidiffInfo
 	{
 	public:
 
-		float BkwdVal;
-		float FwdVal;
+		float Diff1_BkwdMag;
+		float Diff1_FwdMag;
 
 	};
 

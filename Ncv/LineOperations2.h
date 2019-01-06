@@ -9,7 +9,7 @@
 //#include <NovelCVLib\OpenCV\Image.h>
 #include <NovelCVLib\Ncv\ConflictInfo2.h>
 #include <NovelCVLib\Ncv\Bidiff.h>
-#include <NovelCVLib\Ncv\BidiffMag.h>
+#include <NovelCVLib\Ncv\BidiffInfo.h>
 
 //#include <NovelCVLib\Ncpp\Common\commonLib_Misc.h>
 

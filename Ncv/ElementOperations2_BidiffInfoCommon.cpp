@@ -8,7 +8,7 @@
 //#include <vector>
 //#include <NovelCVLib\OpenCV\Image.h>
 
-#include <NovelCVLib\Ncv\BidiffMagCommon.h>
+#include <NovelCVLib\Ncv\BidiffInfoCommon.h>
 
 
 namespace Ncv
@@ -17,7 +17,7 @@ namespace Ncv
 
 	namespace ElementOperations2
 	{
-		void AssertValue(const BidiffMagCommon & a_arg)
+		void AssertValue(const BidiffInfoCommon & a_arg)
 		{
 			////AssertValue(a_arg.Dir);
 			//AssertValue(a_arg.Dir);
@@ -29,19 +29,19 @@ namespace Ncv
 			AssertValue(a_arg.LeastVal);
 		}
 
-		bool IsUndefined(const BidiffMagCommon & a_arg)
+		bool IsUndefined(const BidiffInfoCommon & a_arg)
 		{
 			//return IsUndefined(a_arg.Val);
 			return IsUndefined(a_arg.LeastVal);
 		}
 
-		void SetToUndefined(BidiffMagCommon * a_pArg)
+		void SetToUndefined(BidiffInfoCommon * a_pArg)
 		{
 			//SetToUndefined(&a_pArg->Val);
 			SetToUndefined(&a_pArg->LeastVal);
 		}
 
-		void SetToBadValue(BidiffMagCommon * a_pArg)
+		void SetToBadValue(BidiffInfoCommon * a_pArg)
 		{
 			//SetToBadValue(&a_pArg->Val);
 			SetToBadValue(&a_pArg->LeastVal);

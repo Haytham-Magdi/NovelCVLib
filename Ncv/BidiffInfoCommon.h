@@ -8,7 +8,7 @@
 namespace Ncv
 {
 
-	class BidiffMagCommon
+	class BidiffInfoCommon
 	{
 	public:
 		

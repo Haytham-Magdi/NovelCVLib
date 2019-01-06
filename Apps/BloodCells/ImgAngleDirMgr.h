@@ -77,7 +77,7 @@ namespace Ncv
 				F32ImageArrayHolder3C_Ref m_diff_Img;
 				F32ImageArrayHolder3C_Ref m_diff_2_Img;
 
-				ArrayHolder_2D_Ref<BidiffMag> m_bidiffMag_Img;
+				ArrayHolder_2D_Ref<BidiffInfo> m_bidiffInfo_Img;
 
 				//F32ImageArrayHolder1C_Ref m_standev_InrWide_Img;
 
@@ -116,7 +116,7 @@ namespace Ncv
 			//void AffectCommonAvgStandev_0();
 			void AffectCommonAvgStandev();
 			void AffectCommonConflict();
-			void AffectCommonBidiffMag();
+			void AffectCommonBidiffInfo();
 			void AffectCommonWideConflictDiff();
 			void AffectCommonAvgPStandev_InrWide();
 

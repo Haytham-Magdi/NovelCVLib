@@ -97,10 +97,10 @@ namespace Ncv
 			}
 
 
-			m_context_H->m_bidiffMagCommonImg = ArrayHolderUtil::CreateEmptyFrom<BidiffMagCommon>(org_Img_H->AsHolderRef());
+			m_context_H->m_bidiffInfoCommonImg = ArrayHolderUtil::CreateEmptyFrom<BidiffInfoCommon>(org_Img_H->AsHolderRef());
 
 			{
-				//BidiffMagCommon initBdc;
+				//BidiffInfoCommon initBdc;
 
 				//initBdc.MinVal = 100000;
 				//initBdc.MinValDir = 0;
@@ -108,8 +108,8 @@ namespace Ncv
 				//initBdc.MaxVal = 100000;
 				//initBdc.MaxValDir = 1;
 
-				//FillImage(m_context_H->m_bidiffMagCommonImg->GetVirtAccessor(), initBdc);
-				SetImageToUndefined(m_context_H->m_bidiffMagCommonImg->GetVirtAccessor());
+				//FillImage(m_context_H->m_bidiffInfoCommonImg->GetVirtAccessor(), initBdc);
+				SetImageToUndefined(m_context_H->m_bidiffInfoCommonImg->GetVirtAccessor());
 			}
 
 
@@ -151,7 +151,7 @@ namespace Ncv
 
 			m_context_V->m_org_Img = m_context_H->m_org_Img->CreateTransposedProxy();
 			m_context_V->m_standevInfoImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_standevInfoImg);
-			m_context_V->m_bidiffMagCommonImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_bidiffMagCommonImg);
+			m_context_V->m_bidiffInfoCommonImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_bidiffInfoCommonImg);
 			m_context_V->m_conflictInfoImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_conflictInfoImg);
 			m_context_V->m_wideConflictDiff_Img = m_context_H->m_wideConflictDiff_Img->CreateTransposedProxy();
 			m_context_V->m_avgPStandev_InrWide_Img = m_context_H->m_avgPStandev_InrWide_Img->CreateTransposedProxy();
@@ -276,7 +276,7 @@ namespace Ncv
 
 			DisplayStandiv_Dir_Img();
 
-			DisplayBidiffMag_Dir_Img();
+			DisplayBidiffInfo_Dir_Img();
 
 			DisplayConflictImg();
 
@@ -527,10 +527,10 @@ namespace Ncv
 		}
 
 
-		void AngleDirMgrColl::DisplayBidiffMag_Dir_Img()
+		void AngleDirMgrColl::DisplayBidiffInfo_Dir_Img()
 		{
-			const ActualArrayAccessor_2D<BidiffMagCommon> & bdcAcc = m_context_H->m_bidiffMagCommonImg->GetActualAccessor();
-			const VirtArrayAccessor_2D<BidiffMagCommon> & psiVirtAcc = m_context_H->m_bidiffMagCommonImg->GetVirtAccessor();
+			const ActualArrayAccessor_2D<BidiffInfoCommon> & bdcAcc = m_context_H->m_bidiffInfoCommonImg->GetActualAccessor();
+			const VirtArrayAccessor_2D<BidiffInfoCommon> & psiVirtAcc = m_context_H->m_bidiffInfoCommonImg->GetVirtAccessor();
 			//F32ImageRef dspImg_Values = F32Image::Create(cvSize(bdcAcc.GetSize()), 1);
 
 			//const int checkMargin = 70;
@@ -541,13 +541,13 @@ namespace Ncv
 			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(bdcAcc.GetSize()), 3);
 
 			const int nSize_1D = bdcAcc.CalcSize_1D();
-			ActualArrayAccessor_1D<BidiffMagCommon> bdcAcc_1D = bdcAcc.GenAcc_1D();
+			ActualArrayAccessor_1D<BidiffInfoCommon> bdcAcc_1D = bdcAcc.GenAcc_1D();
 
 			ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
 
 			for (int i = 0; i < nSize_1D; i++)
 			{
-				BidiffMagCommon & rBdc = bdcAcc_1D[i];
+				BidiffInfoCommon & rBdc = bdcAcc_1D[i];
 
 				S32Point pnt = bdcAcc.CalcPointFromIndex_1D(i);
 				//if (S32Point::AreEqual(pnt, S32Point(55, 270)))

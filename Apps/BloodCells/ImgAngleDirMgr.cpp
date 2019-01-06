@@ -147,8 +147,8 @@ namespace Ncv
 			cx.m_diff_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 			cx.m_diff_2_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 
-			//cx.m_bidiffMag_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
-			cx.m_bidiffMag_Img = ArrayHolderUtil::CreateEmptyFrom<BidiffMag>(cx.m_org_Img->AsHolderRef());
+			//cx.m_bidiffInfo_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
+			cx.m_bidiffInfo_Img = ArrayHolderUtil::CreateEmptyFrom<BidiffInfo>(cx.m_org_Img->AsHolderRef());
 
 			
 			const int posDiff = 1;
@@ -169,7 +169,7 @@ namespace Ncv
 			CalcDiffImageX(cx.m_org_Img->GetVirtAccessor(), cx.m_diff_Img->GetVirtAccessor(), diffRange);
 			CalcDiffImageX(cx.m_diff_Img->GetVirtAccessor(), cx.m_diff_2_Img->GetVirtAccessor(), diffRange);
 
-			SetBidiffMagImageFromDiffImage(cx.m_diff_Img->GetVirtAccessor(), cx.m_bidiffMag_Img->GetVirtAccessor(), posDiff);
+			PrepareBidiffInfoImageFromDiffImages(cx.m_diff_Img->GetVirtAccessor(), cx.m_bidiffInfo_Img->GetVirtAccessor(), posDiff);
 
 			if (0 == cx.m_nIndex)
 			{
@@ -185,7 +185,7 @@ namespace Ncv
 				//Context & ncx = *m_normalContext;
 				//AngleDirMgrColl_Context & pcx = *m_parentContext;
 
-				AffectCommonBidiffMag();
+				AffectCommonBidiffInfo();
 		}
 
 
@@ -533,7 +533,7 @@ namespace Ncv
 
 
 		
-		void ImgAngleDirMgr::AffectCommonBidiffMag()
+		void ImgAngleDirMgr::AffectCommonBidiffInfo()
 		{
 
 			Context & cx = *m_context;
@@ -544,16 +544,16 @@ namespace Ncv
 
 			const ActualArrayAccessor_2D<int> & rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
 
-			ActualArrayAccessor_2D<BidiffMagCommon> commonAcc = m_parentContext->m_bidiffMagCommonImg->GetActualAccessor();
+			ActualArrayAccessor_2D<BidiffInfoCommon> commonAcc = m_parentContext->m_bidiffInfoCommonImg->GetActualAccessor();
 			Ncpp_ASSERT(Size_2D::AreEqual(orgToRotMap_Acc.GetSize(), commonAcc.GetSize()));
 
-			ActualArrayAccessor_1D<BidiffMagCommon> commonAcc_1D = commonAcc.GenAcc_1D();
+			ActualArrayAccessor_1D<BidiffInfoCommon> commonAcc_1D = commonAcc.GenAcc_1D();
 
 
 
 			//float * localAcc_1D = (float *)cx.m_avgStandev_X_Img->GetActualAccessor().GetData();
-			ActualArrayAccessor_1D<BidiffMag> localAcc_1D = cx.m_bidiffMag_Img->GetActualAccessor().GenAcc_1D();
-			ActualArrayAccessor_1D<BidiffMag> localAcc_1D_Norm = ncx.m_bidiffMag_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<BidiffInfo> localAcc_1D = cx.m_bidiffInfo_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<BidiffInfo> localAcc_1D_Norm = ncx.m_bidiffInfo_Img->GetActualAccessor().GenAcc_1D();
 
 			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			{
@@ -563,73 +563,73 @@ namespace Ncv
 				{
 					const int nOffsetInOrg_1D = nOffset_Y + x;
 
-					BidiffMagCommon & rCommonBdc = commonAcc_1D[nOffsetInOrg_1D];
+					BidiffInfoCommon & rCommonBdc = commonAcc_1D[nOffsetInOrg_1D];
 
 					int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
 
 					 S32Point pntInRot = rotToOrgMap_Acc.CalcPointFromIndex_1D(nOffsetInRot_1D);
 
-					const BidiffMag & rBidiffMag_Local = localAcc_1D[nOffsetInRot_1D];
-					const BidiffMag & rBidiffMag_Norm = localAcc_1D_Norm[nOffsetInRot_1D];
+					const BidiffInfo & rBidiffInfo_Local = localAcc_1D[nOffsetInRot_1D];
+					const BidiffInfo & rBidiffInfo_Norm = localAcc_1D_Norm[nOffsetInRot_1D];
 
-					//rCommonBdc.allVals[cx.m_nIndex] = bidiffMag_Local;
+					//rCommonBdc.allVals[cx.m_nIndex] = bidiffInfo_Local;
 
-					if ((IsUndefined(rBidiffMag_Local.BkwdVal) && IsUndefined(rBidiffMag_Local.FwdVal)) ||
-						(IsUndefined(rBidiffMag_Norm.BkwdVal) && IsUndefined(rBidiffMag_Norm.FwdVal)) )
+					if ((IsUndefined(rBidiffInfo_Local.Diff1_BkwdMag) && IsUndefined(rBidiffInfo_Local.Diff1_FwdMag)) ||
+						(IsUndefined(rBidiffInfo_Norm.Diff1_BkwdMag) && IsUndefined(rBidiffInfo_Norm.Diff1_FwdMag)) )
 					{
 						continue;
 					}
 
-					float bidiffMagMin_Local, bidiffMagMax_Local;
+					float bidiffInfoMin_Local, bidiffInfoMax_Local;
 					{
 						MaxFinder<float> maxFinder;
 						MinFinder<float> minFinder;
 						
-						if (!IsUndefined(rBidiffMag_Local.BkwdVal))
+						if (!IsUndefined(rBidiffInfo_Local.Diff1_BkwdMag))
 						{
-							maxFinder.PushValue(rBidiffMag_Local.BkwdVal);
-							minFinder.PushValue(rBidiffMag_Local.BkwdVal);
+							maxFinder.PushValue(rBidiffInfo_Local.Diff1_BkwdMag);
+							minFinder.PushValue(rBidiffInfo_Local.Diff1_BkwdMag);
 						}
 
-						if (!IsUndefined(rBidiffMag_Local.FwdVal))
+						if (!IsUndefined(rBidiffInfo_Local.Diff1_FwdMag))
 						{
-							maxFinder.PushValue(rBidiffMag_Local.FwdVal);
-							minFinder.PushValue(rBidiffMag_Local.FwdVal);
+							maxFinder.PushValue(rBidiffInfo_Local.Diff1_FwdMag);
+							minFinder.PushValue(rBidiffInfo_Local.Diff1_FwdMag);
 						}
 
-						bidiffMagMax_Local = maxFinder.FindMax();
-						AssertValue(bidiffMagMax_Local);
-						Ncpp_ASSERT(bidiffMagMax_Local >= -0.001);
+						bidiffInfoMax_Local = maxFinder.FindMax();
+						AssertValue(bidiffInfoMax_Local);
+						Ncpp_ASSERT(bidiffInfoMax_Local >= -0.001);
 
-						bidiffMagMin_Local = minFinder.FindMin();
-						AssertValue(bidiffMagMin_Local);
-						Ncpp_ASSERT(bidiffMagMin_Local >= -0.001);
+						bidiffInfoMin_Local = minFinder.FindMin();
+						AssertValue(bidiffInfoMin_Local);
+						Ncpp_ASSERT(bidiffInfoMin_Local >= -0.001);
 					}
 
-					float bidiffMagMin_Norm, bidiffMagMax_Norm;
+					float bidiffInfoMin_Norm, bidiffInfoMax_Norm;
 					{
 						MaxFinder<float> maxFinder;
 						MinFinder<float> minFinder;
 
-						if (!IsUndefined(rBidiffMag_Norm.BkwdVal))
+						if (!IsUndefined(rBidiffInfo_Norm.Diff1_BkwdMag))
 						{
-							maxFinder.PushValue(rBidiffMag_Norm.BkwdVal);
-							minFinder.PushValue(rBidiffMag_Norm.BkwdVal);
+							maxFinder.PushValue(rBidiffInfo_Norm.Diff1_BkwdMag);
+							minFinder.PushValue(rBidiffInfo_Norm.Diff1_BkwdMag);
 						}
 
-						if (!IsUndefined(rBidiffMag_Norm.FwdVal))
+						if (!IsUndefined(rBidiffInfo_Norm.Diff1_FwdMag))
 						{
-							maxFinder.PushValue(rBidiffMag_Norm.FwdVal);
-							minFinder.PushValue(rBidiffMag_Norm.FwdVal);
+							maxFinder.PushValue(rBidiffInfo_Norm.Diff1_FwdMag);
+							minFinder.PushValue(rBidiffInfo_Norm.Diff1_FwdMag);
 						}
 
-						bidiffMagMax_Norm = maxFinder.FindMax();
-						AssertValue(bidiffMagMax_Norm);
-						Ncpp_ASSERT(bidiffMagMax_Norm >= -0.001);
+						bidiffInfoMax_Norm = maxFinder.FindMax();
+						AssertValue(bidiffInfoMax_Norm);
+						Ncpp_ASSERT(bidiffInfoMax_Norm >= -0.001);
 
-						bidiffMagMin_Norm = minFinder.FindMin();
-						AssertValue(bidiffMagMin_Norm);
-						Ncpp_ASSERT(bidiffMagMin_Norm >= -0.001);
+						bidiffInfoMin_Norm = minFinder.FindMin();
+						AssertValue(bidiffInfoMin_Norm);
+						Ncpp_ASSERT(bidiffInfoMin_Norm >= -0.001);
 					}
 
 
@@ -646,7 +646,7 @@ namespace Ncv
 
 
 					//if (4 == cx.m_nIndex)
-					//if (bidiffMagMax_Norm > 300 && 4 == cx.m_nIndex && 158 == y)
+					//if (bidiffInfoMax_Norm > 300 && 4 == cx.m_nIndex && 158 == y)
 					if ((0 == cx.m_nIndex || 4 == cx.m_nIndex ) && 129 == x && 158 == y)
 					{
 						x = x;
@@ -654,21 +654,21 @@ namespace Ncv
 
 					if (IsUndefined(rCommonBdc))
 					{
-						//if (bidiffMagMax_Norm > 0)
-						if (bidiffMagMax_Norm > 300 && 4 == cx.m_nIndex && 158 == y)
+						//if (bidiffInfoMax_Norm > 0)
+						if (bidiffInfoMax_Norm > 300 && 4 == cx.m_nIndex && 158 == y)
 						{
 							x = x;
 						}
 
-						Assign(&rCommonBdc.LeastVal, bidiffMagMax_Local);
-						//Assign(&rCommonBdc.LeastVal, bidiffMagMin_Local);
-						Assign(&rCommonBdc.NormLeastVal, bidiffMagMax_Norm);
+						Assign(&rCommonBdc.LeastVal, bidiffInfoMax_Local);
+						//Assign(&rCommonBdc.LeastVal, bidiffInfoMin_Local);
+						Assign(&rCommonBdc.NormLeastVal, bidiffInfoMax_Norm);
 
 						Assign(&rCommonBdc.LeastValDir, cx.m_nIndex);
 
-						Assign(&rCommonBdc.SecondLeastVal, bidiffMagMax_Local);
-						//Assign(&rCommonBdc.SecondLeastVal, bidiffMagMin_Local);
-						Assign(&rCommonBdc.NormSecondLeastVal, bidiffMagMax_Norm);
+						Assign(&rCommonBdc.SecondLeastVal, bidiffInfoMax_Local);
+						//Assign(&rCommonBdc.SecondLeastVal, bidiffInfoMin_Local);
+						Assign(&rCommonBdc.NormSecondLeastVal, bidiffInfoMax_Norm);
 
 						Assign(&rCommonBdc.SecondLeastValDir, cx.m_nIndex);
 
@@ -677,8 +677,8 @@ namespace Ncv
 
 					AssertValue(rCommonBdc);
 
-					if (bidiffMagMax_Local < rCommonBdc.LeastVal)
-					//if (bidiffMagMin_Local < rCommonBdc.LeastVal)
+					if (bidiffInfoMax_Local < rCommonBdc.LeastVal)
+					//if (bidiffInfoMin_Local < rCommonBdc.LeastVal)
 					{
 						if (0 != cx.m_nIndex)
 						{
@@ -690,28 +690,28 @@ namespace Ncv
 
 						Assign(&rCommonBdc.SecondLeastValDir, rCommonBdc.LeastValDir);
 
-						Assign(&rCommonBdc.LeastVal, bidiffMagMax_Local);
-						//Assign(&rCommonBdc.LeastVal, bidiffMagMin_Local);
-						Assign(&rCommonBdc.NormLeastVal, bidiffMagMax_Norm);
+						Assign(&rCommonBdc.LeastVal, bidiffInfoMax_Local);
+						//Assign(&rCommonBdc.LeastVal, bidiffInfoMin_Local);
+						Assign(&rCommonBdc.NormLeastVal, bidiffInfoMax_Norm);
 
 						Assign(&rCommonBdc.LeastValDir, cx.m_nIndex);
 					}
-					else if (bidiffMagMax_Local < rCommonBdc.SecondLeastVal)
-					//else if (bidiffMagMin_Local < rCommonBdc.SecondLeastVal)
+					else if (bidiffInfoMax_Local < rCommonBdc.SecondLeastVal)
+					//else if (bidiffInfoMin_Local < rCommonBdc.SecondLeastVal)
 					{
-						Assign(&rCommonBdc.SecondLeastVal, bidiffMagMax_Local);
-						//Assign(&rCommonBdc.SecondLeastVal, bidiffMagMin_Local);
-						Assign(&rCommonBdc.NormSecondLeastVal, bidiffMagMax_Norm);
+						Assign(&rCommonBdc.SecondLeastVal, bidiffInfoMax_Local);
+						//Assign(&rCommonBdc.SecondLeastVal, bidiffInfoMin_Local);
+						Assign(&rCommonBdc.NormSecondLeastVal, bidiffInfoMax_Norm);
 
 						Assign(&rCommonBdc.SecondLeastValDir, cx.m_nIndex);
 					}
 
 					AssertValue(rCommonBdc);
 
-					////else if (bidiffMagMax_Local > rCommonBdc.MaxVal)
-					//if (bidiffMagMax_Local > rCommonBdc.MaxVal)
+					////else if (bidiffInfoMax_Local > rCommonBdc.MaxVal)
+					//if (bidiffInfoMax_Local > rCommonBdc.MaxVal)
 					//{
-					//	Assign(&rCommonBdc.MaxVal, bidiffMagMax_Local);
+					//	Assign(&rCommonBdc.MaxVal, bidiffInfoMax_Local);
 					//	Assign(&rCommonBdc.MaxValDir, cx.m_nIndex);
 					//}
 
@@ -847,50 +847,50 @@ namespace Ncv
 
 			////--
 
-			const ActualArrayAccessor_2D<BidiffMag> & bidiffMagAcc = cx.m_bidiffMag_Img->GetActualAccessor();
+			const ActualArrayAccessor_2D<BidiffInfo> & bidiffInfoAcc = cx.m_bidiffInfo_Img->GetActualAccessor();
 
-			F32ImageRef bidiffMagDsp_Img = F32Image::Create(toCvSize(bidiffMagAcc.GetSize()), 3);
+			F32ImageRef bidiffInfoDsp_Img = F32Image::Create(toCvSize(bidiffInfoAcc.GetSize()), 3);
 
 
-			bidiffMagDsp_Img->SetAll(0);
+			bidiffInfoDsp_Img->SetAll(0);
 
-			ActualArrayAccessor_1D<F32ColorVal> dispAcc_1D((F32ColorVal *)bidiffMagDsp_Img->GetDataPtr(), bidiffMagDsp_Img->GetSize1D());
+			ActualArrayAccessor_1D<F32ColorVal> dispAcc_1D((F32ColorVal *)bidiffInfoDsp_Img->GetDataPtr(), bidiffInfoDsp_Img->GetSize1D());
 
-			const ActualArrayAccessor_1D<BidiffMag> & bidiffMagAcc_1D = bidiffMagAcc.GenAcc_1D();
+			const ActualArrayAccessor_1D<BidiffInfo> & bidiffInfoAcc_1D = bidiffInfoAcc.GenAcc_1D();
 
-			for (int i = 0; i < bidiffMagAcc_1D.GetSize(); i++)
+			for (int i = 0; i < bidiffInfoAcc_1D.GetSize(); i++)
 			{
-				BidiffMag & rSrc = bidiffMagAcc_1D[i];
+				BidiffInfo & rSrc = bidiffInfoAcc_1D[i];
 
 				F32ColorVal & rDest = dispAcc_1D[i];
 
 				//rDest.val0 = 0;
 
-				if (!IsUndefined(rSrc.BkwdVal))
+				if (!IsUndefined(rSrc.Diff1_BkwdMag))
 				{
-					//if (rSrc.BkwdVal > 50)
+					//if (rSrc.Diff1_BkwdMag > 50)
 					//{
 					//	i = i;
 					//}
 
-					AssertValue(rSrc.BkwdVal);
-					rDest.val1 = rSrc.BkwdVal;
+					AssertValue(rSrc.Diff1_BkwdMag);
+					rDest.val1 = rSrc.Diff1_BkwdMag;
 				}
 
-				if (!IsUndefined(rSrc.FwdVal))
+				if (!IsUndefined(rSrc.Diff1_FwdMag))
 				{
-					//if (rSrc.FwdVal > 50)
+					//if (rSrc.Diff1_FwdMag > 50)
 					//{
 					//	i = i;
 					//}
 
-					AssertValue(rSrc.FwdVal);
-					rDest.val2 = rSrc.FwdVal;
+					AssertValue(rSrc.Diff1_FwdMag);
+					rDest.val2 = rSrc.Diff1_FwdMag;
 				}
 
 			}
 
-			ShowImage(bidiffMagDsp_Img, cx.MakeStrWithId("bidiffMagDsp_Img").c_str());
+			ShowImage(bidiffInfoDsp_Img, cx.MakeStrWithId("bidiffInfoDsp_Img").c_str());
 
 
 
@@ -901,7 +901,7 @@ namespace Ncv
 			
 			//GlobalStuff::SetLinePathImg(diff_Img_disp->GetSrcImg());
 			//GlobalStuff::SetLinePathImg(diff_2_Img_disp->GetSrcImg());
-			GlobalStuff::SetLinePathImg(bidiffMagDsp_Img);
+			GlobalStuff::SetLinePathImg(bidiffInfoDsp_Img);
 			GlobalStuff::ShowLinePathImg();
 
 		}
