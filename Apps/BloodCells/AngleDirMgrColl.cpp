@@ -682,10 +682,12 @@ namespace Ncv
 				//rColoredDispElm.val1 = (fabs(cos(angle)) * rBdc.NormLeastVal * 5 / 3);
 				//rColoredDispElm.val2 = (fabs(sin(angle)) * rBdc.NormLeastVal * 5 / 3);
 
-				if (rBdc.LeastVal > 0.5 * rBdc.NormLeastVal)
+				if (
+					//rBdc.LeastVal > 0.5 * rBdc.NormLeastVal ||
+					rBdc.NormDiff2LeastVal < 0.5 * rBdc.NormLeastVal)
 					//if (rBdc.LeastVal > 0.8 * rBdc.NormLeastVal)
 				{
-					if (rBdc.NormLeastVal > 120)
+					if (rBdc.NormLeastVal > 70)
 					{
 						i = i;
 					}

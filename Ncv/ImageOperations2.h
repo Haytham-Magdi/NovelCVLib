@@ -661,34 +661,47 @@ namespace Ncv
 		}
 
 		template<class T>
-		void PrepareBidiffInfoImageFromDiffImages(const VirtArrayAccessor_2D<T> & a_diff1_Acc,
+		void PrepareBidiffInfoImageFromDiffImages(const VirtArrayAccessor_2D<T> & a_diff1_Acc, const VirtArrayAccessor_2D<T> & a_diff2_Acc,
 			const VirtArrayAccessor_2D<BidiffInfo> & a_outAcc, const int a_posDiff)
 		{
 
-			VirtArrayAccessor_2D<float> outBkwdAcc;
-			VirtArrayAccessor_2D<float> outFwdAcc;
+			VirtArrayAccessor_2D<float> outDiff1_BkwdAcc;
+			VirtArrayAccessor_2D<float> outDiff1_FwdAcc;
+			VirtArrayAccessor_2D<float> outDiff2_Acc;
 			{
 				const int nofMembersInBidiffInfo = sizeof(BidiffInfo) / sizeof(float);
 
 				const float * pOutData_Diff1_Fwd = &a_outAcc.GetData()->Diff1_FwdMag;
 				const float * pOutData_Diff1_Bkwd = &a_outAcc.GetData()->Diff1_BkwdMag;
+				const float * pOutData_Diff2 = &a_outAcc.GetData()->Diff2_Mag;
 
 				const float * pOutActualData_Diff1_Fwd = &a_outAcc.GetActualData()->Diff1_FwdMag;
 				const float * pOutActualData_Diff1_Bkwd = &a_outAcc.GetActualData()->Diff1_BkwdMag;
+				const float * pOutActualData_Diff2 = &a_outAcc.GetActualData()->Diff2_Mag;
 
-				outBkwdAcc.Init(pOutData_Diff1_Bkwd, pOutActualData_Diff1_Bkwd, 
+				outDiff1_BkwdAcc.Init(pOutData_Diff1_Bkwd, pOutActualData_Diff1_Bkwd, 
 					a_outAcc.GetSize_X(), a_outAcc.GetStepSize_X() * nofMembersInBidiffInfo,
 					a_outAcc.GetSize_Y(), a_outAcc.GetStepSize_Y() * nofMembersInBidiffInfo
 					);
 			
-				outFwdAcc.Init(pOutData_Diff1_Fwd, pOutActualData_Diff1_Fwd, 
+				outDiff1_FwdAcc.Init(pOutData_Diff1_Fwd, pOutActualData_Diff1_Fwd, 
+					a_outAcc.GetSize_X(), a_outAcc.GetStepSize_X() * nofMembersInBidiffInfo,
+					a_outAcc.GetSize_Y(), a_outAcc.GetStepSize_Y() * nofMembersInBidiffInfo
+					);
+
+				outDiff2_Acc.Init(pOutData_Diff2, pOutActualData_Diff2,
 					a_outAcc.GetSize_X(), a_outAcc.GetStepSize_X() * nofMembersInBidiffInfo,
 					a_outAcc.GetSize_Y(), a_outAcc.GetStepSize_Y() * nofMembersInBidiffInfo
 					);
 			}
 
-			CalcMagImage(a_diff1_Acc, outBkwdAcc);
-			CopyImageWithShift(outFwdAcc, outBkwdAcc, S32Point(-a_posDiff, 0));
+			CalcMagImage(a_diff1_Acc, outDiff1_BkwdAcc);
+			CopyImageWithShift(outDiff1_FwdAcc, outDiff1_BkwdAcc, S32Point(-a_posDiff, 0));
+			
+			ArrayHolder_2D_Ref<float> tmpDiff2_Holder = ArrayHolderUtil::CreateFrom<float>(a_diff2_Acc.GetSize());
+			CalcMagImage(a_diff2_Acc, tmpDiff2_Holder->GetVirtAccessor());
+			CopyImageWithShift(outDiff2_Acc, tmpDiff2_Holder->GetVirtAccessor(), S32Point(-a_posDiff, 0));
+			//CalcMagImage(a_diff2_Acc, outDiff2_Acc);
 		}
 
 

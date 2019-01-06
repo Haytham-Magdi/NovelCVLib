@@ -14,6 +14,7 @@ namespace Ncv
 
 		float Diff1_BkwdMag;
 		float Diff1_FwdMag;
+		float Diff2_Mag;
 
 	};
 

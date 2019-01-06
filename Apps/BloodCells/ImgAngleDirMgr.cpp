@@ -169,7 +169,8 @@ namespace Ncv
 			CalcDiffImageX(cx.m_org_Img->GetVirtAccessor(), cx.m_diff_Img->GetVirtAccessor(), diffRange);
 			CalcDiffImageX(cx.m_diff_Img->GetVirtAccessor(), cx.m_diff_2_Img->GetVirtAccessor(), diffRange);
 
-			PrepareBidiffInfoImageFromDiffImages(cx.m_diff_Img->GetVirtAccessor(), cx.m_bidiffInfo_Img->GetVirtAccessor(), posDiff);
+			PrepareBidiffInfoImageFromDiffImages(cx.m_diff_Img->GetVirtAccessor(), cx.m_diff_2_Img->GetVirtAccessor(),
+				cx.m_bidiffInfo_Img->GetVirtAccessor(), posDiff);
 
 			if (0 == cx.m_nIndex)
 			{
@@ -575,7 +576,8 @@ namespace Ncv
 					//rCommonBdc.allVals[cx.m_nIndex] = bidiffInfo_Local;
 
 					if ((IsUndefined(rBidiffInfo_Local.Diff1_BkwdMag) && IsUndefined(rBidiffInfo_Local.Diff1_FwdMag)) ||
-						(IsUndefined(rBidiffInfo_Norm.Diff1_BkwdMag) && IsUndefined(rBidiffInfo_Norm.Diff1_FwdMag)) )
+						(IsUndefined(rBidiffInfo_Norm.Diff1_BkwdMag) && IsUndefined(rBidiffInfo_Norm.Diff1_FwdMag)) ||
+						(IsUndefined(rBidiffInfo_Norm.Diff2_Mag)) )
 					{
 						continue;
 					}
@@ -606,7 +608,7 @@ namespace Ncv
 						Ncpp_ASSERT(bidiffInfoMin_Local >= -0.001);
 					}
 
-					float bidiffInfoMin_Norm, bidiffInfoMax_Norm;
+					float bidiffInfoMin_Norm, bidiffInfoMax_Norm, bidiffInfoDiff2_Norm;
 					{
 						MaxFinder<float> maxFinder;
 						MinFinder<float> minFinder;
@@ -630,6 +632,8 @@ namespace Ncv
 						bidiffInfoMin_Norm = minFinder.FindMin();
 						AssertValue(bidiffInfoMin_Norm);
 						Ncpp_ASSERT(bidiffInfoMin_Norm >= -0.001);
+
+						bidiffInfoDiff2_Norm = rBidiffInfo_Norm.Diff2_Mag;
 					}
 
 
@@ -663,6 +667,7 @@ namespace Ncv
 						Assign(&rCommonBdc.LeastVal, bidiffInfoMax_Local);
 						//Assign(&rCommonBdc.LeastVal, bidiffInfoMin_Local);
 						Assign(&rCommonBdc.NormLeastVal, bidiffInfoMax_Norm);
+						Assign(&rCommonBdc.NormDiff2LeastVal, bidiffInfoDiff2_Norm);
 
 						Assign(&rCommonBdc.LeastValDir, cx.m_nIndex);
 
@@ -693,6 +698,7 @@ namespace Ncv
 						Assign(&rCommonBdc.LeastVal, bidiffInfoMax_Local);
 						//Assign(&rCommonBdc.LeastVal, bidiffInfoMin_Local);
 						Assign(&rCommonBdc.NormLeastVal, bidiffInfoMax_Norm);
+						Assign(&rCommonBdc.NormDiff2LeastVal, bidiffInfoDiff2_Norm);
 
 						Assign(&rCommonBdc.LeastValDir, cx.m_nIndex);
 					}

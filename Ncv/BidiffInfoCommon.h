@@ -19,6 +19,7 @@ namespace Ncv
 		int SecondLeastValDir;
 
 		float NormLeastVal;
+		float NormDiff2LeastVal;
 		float NormSecondLeastVal;
 
 		//float MinVal;
