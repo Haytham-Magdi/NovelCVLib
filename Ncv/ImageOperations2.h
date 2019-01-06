@@ -661,7 +661,7 @@ namespace Ncv
 		}
 
 		template<class T>
-		void PrepareBidiffInfoImageFromDiffImages(const VirtArrayAccessor_2D<T> & a_diff_Acc,
+		void PrepareBidiffInfoImageFromDiffImages(const VirtArrayAccessor_2D<T> & a_diff1_Acc,
 			const VirtArrayAccessor_2D<BidiffInfo> & a_outAcc, const int a_posDiff)
 		{
 
@@ -670,24 +670,24 @@ namespace Ncv
 			{
 				const int nofMembersInBidiffInfo = sizeof(BidiffInfo) / sizeof(float);
 
-				const float * pOutData_Fwd = &a_outAcc.GetData()->Diff1_FwdMag;
-				const float * pOutData_Bkwd = &a_outAcc.GetData()->Diff1_BkwdMag;
+				const float * pOutData_Diff1_Fwd = &a_outAcc.GetData()->Diff1_FwdMag;
+				const float * pOutData_Diff1_Bkwd = &a_outAcc.GetData()->Diff1_BkwdMag;
 
-				const float * pOutActualData_Fwd = &a_outAcc.GetActualData()->Diff1_FwdMag;
-				const float * pOutActualData_Bkwd = &a_outAcc.GetActualData()->Diff1_BkwdMag;
+				const float * pOutActualData_Diff1_Fwd = &a_outAcc.GetActualData()->Diff1_FwdMag;
+				const float * pOutActualData_Diff1_Bkwd = &a_outAcc.GetActualData()->Diff1_BkwdMag;
 
-				outBkwdAcc.Init(pOutData_Bkwd, pOutActualData_Bkwd, 
+				outBkwdAcc.Init(pOutData_Diff1_Bkwd, pOutActualData_Diff1_Bkwd, 
 					a_outAcc.GetSize_X(), a_outAcc.GetStepSize_X() * nofMembersInBidiffInfo,
 					a_outAcc.GetSize_Y(), a_outAcc.GetStepSize_Y() * nofMembersInBidiffInfo
 					);
 			
-				outFwdAcc.Init(pOutData_Fwd, pOutActualData_Fwd, 
+				outFwdAcc.Init(pOutData_Diff1_Fwd, pOutActualData_Diff1_Fwd, 
 					a_outAcc.GetSize_X(), a_outAcc.GetStepSize_X() * nofMembersInBidiffInfo,
 					a_outAcc.GetSize_Y(), a_outAcc.GetStepSize_Y() * nofMembersInBidiffInfo
 					);
 			}
 
-			CalcMagImage(a_diff_Acc, outBkwdAcc);
+			CalcMagImage(a_diff1_Acc, outBkwdAcc);
 			CopyImageWithShift(outFwdAcc, outBkwdAcc, S32Point(-a_posDiff, 0));
 		}
 
