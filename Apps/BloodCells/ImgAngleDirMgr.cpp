@@ -682,11 +682,7 @@ namespace Ncv
 						Assign(&rCommonBdc.NormLeastVal, bidiffInfoMax_Norm);
 						Assign(&rCommonBdc.NormDiff2LeastVal, bidiffInfoDiff2_Norm);
 
-						if (bidiffInfoDiff2_Norm > diff2CmpRatio * bidiffInfoMax_Norm && bidiffInfoMax_Norm > 20
-							&& bidiffInfoMin_Local < 0.4 * bidiffInfoMax_Norm
-							//&& bidiffInfoMax_Local < 0.4 * bidiffInfoMax_Norm
-							//&& 0 == cx.m_nIndex % 2
-							)
+						if (isEdge)
 						{
 							if (174251 == rCommonBdc.Index)
 							{
@@ -713,21 +709,17 @@ namespace Ncv
 
 					AssertValue(rCommonBdc);
 
-					if (bidiffInfoDiff2_Norm > diff2CmpRatio * bidiffInfoMax_Norm && bidiffInfoMax_Norm > 20 
-						&& bidiffInfoMin_Local < 0.4 * bidiffInfoMax_Norm
-						//&& bidiffInfoMax_Local < 0.4 * bidiffInfoMax_Norm
-						//&& 0 == cx.m_nIndex % 2
-						)
+					if (!isEdge)
 					{
-						if (174251 == rCommonBdc.Index)
-						{
-							x = x;
-						}
-
-						rCommonBdc.IsEdge = true;
+						continue;
+					}
+					
+					if (174251 == rCommonBdc.Index)
+					{
+						x = x;
 					}
 
-					if (bidiffInfoMax_Local < rCommonBdc.LeastValDirMaxVal)
+					if (!rCommonBdc.IsEdge || bidiffInfoMax_Local < rCommonBdc.LeastValDirMaxVal)
 					//if (bidiffInfoMin_Local < rCommonBdc.LeastVal)
 					{
 						if (0 != cx.m_nIndex)
@@ -757,6 +749,8 @@ namespace Ncv
 
 						Assign(&rCommonBdc.SecondLeastValDir, cx.m_nIndex);
 					}
+
+					rCommonBdc.IsEdge = true;
 
 					AssertValue(rCommonBdc);
 
