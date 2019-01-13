@@ -51,7 +51,7 @@ namespace Ncv
 
 
 		template<class T>
-		void RotateImage(const ActualArrayAccessor_2D<T> & a_destAcc, const ActualArrayAccessor_2D<T> & a_srcAcc)
+		void RotateImageWithInterpolation(const ActualArrayAccessor_2D<T> & a_destAcc, const ActualArrayAccessor_2D<T> & a_srcAcc)
 		{
 			Ncpp_ASSERT(Size_2D::AreEqual(a_srcAcc.GetSize(), m_srcSiz));
 			Ncpp_ASSERT(Size_2D::AreEqual(a_destAcc.GetSize(), m_resSiz));
@@ -68,7 +68,7 @@ namespace Ncv
 				{
 					T & rDestVal = a_destAcc.GetAt(x, y);
 
-					S32Point & rSrcPnt_Scaled = resToScaledSrcPointMapAcc.GetAt(x, y);
+					const S32Point & rSrcPnt_Scaled = resToScaledSrcPointMapAcc.GetAt(x, y);
 					if (rSrcPnt_Scaled.IsUndefined())
 					{
 						SetToUndefined(&rDestVal);
@@ -156,6 +156,136 @@ namespace Ncv
 								srcValXY2, 1 - SRResIntScale::UnscaleToF(nWt_SrcY1_Scaled), &rDestVal);
 						}
 					}
+
+
+				}	//	end for x
+			}	//	end for y
+
+		}
+
+
+		template<class T>
+		void RotateImageWithNearestValues(const ActualArrayAccessor_2D<T> & a_destAcc, const ActualArrayAccessor_2D<T> & a_srcAcc)
+		{
+			Ncpp_ASSERT(Size_2D::AreEqual(a_srcAcc.GetSize(), m_srcSiz));
+			Ncpp_ASSERT(Size_2D::AreEqual(a_destAcc.GetSize(), m_resSiz));
+
+			//const Size_2D srcSize_Scaled(m_srcSiz.GetX() * SRResIntScale::GetScaleVal(), m_srcSiz.GetY() * SRResIntScale::GetScaleVal());
+
+			//ActualArrayAccessor_2D<S32Point> resToScaledSrcPointMapAcc = m_resToScaledSrcPointMapImg->GetActualAccessor();
+			ActualArrayAccessor_2D<int> resToNearestSrcIndexMapAcc = m_resToNearestSrcIndexMapImg->GetActualAccessor();
+			
+			//Ncpp_ASSERT(Size_2D::AreEqual(resToScaledSrcPointMapAcc.GetSize(), m_resSiz));
+			Ncpp_ASSERT(Size_2D::AreEqual(resToNearestSrcIndexMapAcc.GetSize(), m_resSiz));
+
+			const ActualArrayAccessor_1D<T> srcAcc_1D = a_srcAcc.GenAcc_1D();
+
+			for (int y = 0; y < m_resSiz.GetY(); y++)
+			{
+				for (int x = 0; x < m_resSiz.GetX(); x++)
+				{
+					T & rDestVal = a_destAcc.GetAt(x, y);
+
+					const int nSrcIdx = resToNearestSrcIndexMapAcc.GetAt(x, y);
+
+					if (IsUndefined(nSrcIdx))
+					{
+						SetToUndefined(&rDestVal);
+						continue;
+					}
+
+					const T & rSrcVal = srcAcc_1D[nSrcIdx];
+
+					Assign(&rDestVal, rSrcVal);
+
+					//S32Point & rSrcPnt_Scaled = resToScaledSrcPointMapAcc.GetAt(x, y);
+					//if (rSrcPnt_Scaled.IsUndefined())
+					//{
+					//	SetToUndefined(&rDestVal);
+					//	continue;
+					//}
+
+					//const int nSrc_X1_Scaled = SRResIntScale::Floor(rSrcPnt_Scaled.GetX());
+					//const int nSrc_X2_Scaled = SRResIntScale::Ceil(rSrcPnt_Scaled.GetX());
+					//const int nSrc_Y1_Scaled = SRResIntScale::Floor(rSrcPnt_Scaled.GetY());
+					//const int nSrc_Y2_Scaled = SRResIntScale::Ceil(rSrcPnt_Scaled.GetY());
+
+					//S32Point srcPntX1Y1(
+					//	SRResIntScale::IntDividByScale(nSrc_X1_Scaled),
+					//	SRResIntScale::IntDividByScale(nSrc_Y1_Scaled)
+					//	);
+					//Ncpp_ASSERT(srcPntX1Y1.IsInSize(m_srcSiz));
+					//T & rSrcValX1Y1 = a_srcAcc.GetAt(srcPntX1Y1.GetX(), srcPntX1Y1.GetY());
+					//AssertUndefinedOrValid(rSrcValX1Y1);
+
+					//S32Point srcPntX1Y2(
+					//	SRResIntScale::IntDividByScale(nSrc_X1_Scaled),
+					//	SRResIntScale::IntDividByScale(nSrc_Y2_Scaled)
+					//	);
+					//Ncpp_ASSERT(srcPntX1Y2.IsInSize(m_srcSiz));
+					//T & rSrcValX1Y2 = a_srcAcc.GetAt(srcPntX1Y2.GetX(), srcPntX1Y2.GetY());
+					//AssertUndefinedOrValid(rSrcValX1Y2);
+
+					//S32Point srcPntX2Y1(
+					//	SRResIntScale::IntDividByScale(nSrc_X2_Scaled),
+					//	SRResIntScale::IntDividByScale(nSrc_Y1_Scaled)
+					//	);
+					//Ncpp_ASSERT(srcPntX2Y1.IsInSize(m_srcSiz));
+					//T & rSrcValX2Y1 = a_srcAcc.GetAt(srcPntX2Y1.GetX(), srcPntX2Y1.GetY());
+					//AssertUndefinedOrValid(rSrcValX2Y1);
+
+					//S32Point srcPntX2Y2(
+					//	SRResIntScale::IntDividByScale(nSrc_X2_Scaled),
+					//	SRResIntScale::IntDividByScale(nSrc_Y2_Scaled)
+					//	);
+					//Ncpp_ASSERT(srcPntX2Y2.IsInSize(m_srcSiz));
+					//T & rSrcValX2Y2 = a_srcAcc.GetAt(srcPntX2Y2.GetX(), srcPntX2Y2.GetY());
+					//AssertUndefinedOrValid(rSrcValX2Y2);
+
+
+					//if (
+					//	IsUndefined(rSrcValX1Y1) ||
+					//	IsUndefined(rSrcValX1Y2) ||
+					//	IsUndefined(rSrcValX2Y1) ||
+					//	IsUndefined(rSrcValX2Y2)
+					//	)
+					//{
+					//	SetToUndefined(&rDestVal);
+					//	continue;
+					//}
+
+
+
+					//{
+					//	T srcValXY1;
+					//	T srcValXY2;
+					//	{
+					//		int nWt_SrcX1_Scaled = nSrc_X2_Scaled - rSrcPnt_Scaled.GetX();
+					//		Ncpp_ASSERT(nWt_SrcX1_Scaled >= 0);
+					//		Ncpp_ASSERT(nWt_SrcX1_Scaled < SRResIntScale::GetScaleVal());
+
+					//		//int nWt_SrcX1_Scaled = (nSrc_X1_Scaled == nSrc_X2_Scaled) ? SRResIntScale::GetScaleVal() : abs(rSrcPnt_Scaled.GetX() - nSrc_X2_Scaled);
+					//		//Ncpp_ASSERT(nWt_SrcX1_Scaled <= SRResIntScale::GetScaleVal());
+
+					//		WaitedAdd(rSrcValX1Y1, SRResIntScale::UnscaleToF(nWt_SrcX1_Scaled),
+					//			rSrcValX2Y1, 1 - SRResIntScale::UnscaleToF(nWt_SrcX1_Scaled), &srcValXY1);
+
+					//		WaitedAdd(rSrcValX1Y2, SRResIntScale::UnscaleToF(nWt_SrcX1_Scaled),
+					//			rSrcValX2Y2, 1 - SRResIntScale::UnscaleToF(nWt_SrcX1_Scaled), &srcValXY2);
+					//	}
+
+					//	{
+					//		int nWt_SrcY1_Scaled = nSrc_Y2_Scaled - rSrcPnt_Scaled.GetY();
+					//		Ncpp_ASSERT(nWt_SrcY1_Scaled >= 0);
+					//		Ncpp_ASSERT(nWt_SrcY1_Scaled < SRResIntScale::GetScaleVal());
+
+					//		//int nWt_SrcY1_Scaled = (nSrc_Y1_Scaled == nSrc_Y2_Scaled) ? SRResIntScale::GetScaleVal() : abs(rSrcPnt_Scaled.y - nSrc_Y2_Scaled);
+					//		//Ncpp_ASSERT(nWt_SrcY1_Scaled <= SRResIntScale::GetScaleVal());
+
+					//		WaitedAdd(srcValXY1, SRResIntScale::UnscaleToF(nWt_SrcY1_Scaled),
+					//			srcValXY2, 1 - SRResIntScale::UnscaleToF(nWt_SrcY1_Scaled), &rDestVal);
+					//	}
+					//}
 
 
 				}	//	end for x

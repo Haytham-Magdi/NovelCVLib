@@ -110,6 +110,17 @@ namespace Ncv
 
 				//FillImage(m_context_H->m_bidiffInfoCommonImg->GetVirtAccessor(), initBdc);
 				SetImageToUndefined(m_context_H->m_bidiffInfoCommonImg->GetVirtAccessor());
+
+				//const ActualArrayAccessor_2D<BidiffInfoCommon> & bdcAcc = m_context_H->m_bidiffInfoCommonImg->GetActualAccessor();
+				ActualArrayAccessor_1D<BidiffInfoCommon> bdcAcc_1D = 
+					m_context_H->m_bidiffInfoCommonImg->GetActualAccessor().GenAcc_1D();
+
+				for (int i = 0; i < bdcAcc_1D.GetSize(); i++)
+				{
+					BidiffInfoCommon & rBdc = bdcAcc_1D[i];
+					rBdc.Index = i;
+				}
+
 			}
 
 
@@ -170,7 +181,9 @@ namespace Ncv
 
 				// AssertImageUndefinedOrValid(org_Img_H->GetVirtAccessor());
 
-				rotMgr->RotateImage(rot_Img_H->GetActualAccessor(), org_Img_H->GetActualAccessor());
+				//rotMgr->RotateImageWithInterpolation(rot_Img_H->GetActualAccessor(), org_Img_H->GetActualAccessor());
+				rotMgr->RotateImageWithNearestValues(rot_Img_H->GetActualAccessor(), org_Img_H->GetActualAccessor());
+				
 
 				//F32ImageArrayHolder1C_Ref magSqr_Img_H = new F32ImageArrayHolder1C(rot_Img_H->GetVirtAccessor().GetSize());
 				F32ImageArrayHolder1C_Ref magSqr_Img_H = F32ImageArrayHolder1C::CreateEmptyFrom(rot_Img_H);
@@ -277,6 +290,8 @@ namespace Ncv
 			DisplayStandiv_Dir_Img();
 
 			DisplayBidiffInfo_Dir_Img();
+
+			DisplayImgForEdges();
 
 			DisplayConflictImg();
 
@@ -530,7 +545,7 @@ namespace Ncv
 		void AngleDirMgrColl::DisplayBidiffInfo_Dir_Img()
 		{
 			const ActualArrayAccessor_2D<BidiffInfoCommon> & bdcAcc = m_context_H->m_bidiffInfoCommonImg->GetActualAccessor();
-			const VirtArrayAccessor_2D<BidiffInfoCommon> & psiVirtAcc = m_context_H->m_bidiffInfoCommonImg->GetVirtAccessor();
+			
 			//F32ImageRef dspImg_Values = F32Image::Create(cvSize(bdcAcc.GetSize()), 1);
 
 			//const int checkMargin = 70;
@@ -684,7 +699,10 @@ namespace Ncv
 
 				if (
 					//rBdc.LeastVal > 0.5 * rBdc.NormLeastVal ||
-					rBdc.NormDiff2LeastVal < 0.5 * rBdc.NormLeastVal)
+					//rBdc.NormDiff2LeastVal < 0.5 * rBdc.NormLeastVal)
+					//rBdc.NormDiff2LeastVal < 0.3 * rBdc.NormLeastVal)
+					
+					!rBdc.IsEdge)
 					//if (rBdc.LeastVal > 0.8 * rBdc.NormLeastVal)
 				{
 					if (rBdc.NormLeastVal > 70)
@@ -759,6 +777,144 @@ namespace Ncv
 			//ShowImage(dspImg_Values, "bidiffCommonImg_Colored");
 
 			ShowImage(dspImg_Colored, "bidiffCommonImg_Colored");
+		}
+
+
+		void AngleDirMgrColl::DisplayImgForEdges()
+		{
+			const ActualArrayAccessor_2D<BidiffInfoCommon> & bdcAcc = m_context_H->m_bidiffInfoCommonImg->GetActualAccessor();
+			const ActualArrayAccessor_2D<F32ColorVal> & orgAcc = m_context_H->m_org_Img->GetActualAccessor();
+
+			//F32ImageRef dspImg_Values = F32Image::Create(cvSize(bdcAcc.GetSize()), 1);
+
+			//const int checkMargin = 70;
+			//Window<int> checkWin(checkMargin, bdcAcc.GetSize_X() - checkMargin,
+			//	checkMargin, bdcAcc.GetSize_Y() - checkMargin);
+
+
+			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(bdcAcc.GetSize()), 3);
+
+			const int nSize_1D = bdcAcc.CalcSize_1D();
+			ActualArrayAccessor_1D<BidiffInfoCommon> bdcAcc_1D = bdcAcc.GenAcc_1D();
+			ActualArrayAccessor_1D<F32ColorVal> orgAcc_1D = orgAcc.GenAcc_1D();
+
+			ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
+
+			for (int i = 0; i < nSize_1D; i++)
+			{
+				BidiffInfoCommon & rBdc = bdcAcc_1D[i];
+				F32ColorVal & rOrg = orgAcc_1D[i];
+
+				S32Point pnt = bdcAcc.CalcPointFromIndex_1D(i);
+				//if (S32Point::AreEqual(pnt, S32Point(55, 270)))
+
+				//if (S32Point::AreEqual(pnt, S32Point(580, 304)))
+				//if (S32Point::AreEqual(pnt, S32Point(132, 86)))
+				if (S32Point::AreEqual(pnt, S32Point(538, 282)))
+				{
+					i = i;
+				}
+
+
+				//if (S32Point::AreEqual(pnt, S32Point(576, 312)))
+				if (S32Point::AreEqual(pnt, S32Point(539, 282)))
+				{
+					i = i;
+				}
+
+
+				//const bool isPntInCheckWindow = pnt.IsInWindow(checkWin);
+				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rBdc.NormLeastVal));
+
+				F32ColorVal & rColoredDispElm = coloredDispAcc_1D[i];
+
+				if (IsUndefined(rBdc))
+				{
+					//rColoredDispElm.val0 = 0;
+					rColoredDispElm.val0 = 254;
+					rColoredDispElm.val1 = 0;
+					rColoredDispElm.val2 = 254;
+
+					continue;
+				}
+
+				//if (S32Point::AreEqual(pnt, S32Point(539, 282)))
+				//{
+				//	rColoredDispElm.val0 = 0;
+				//	rColoredDispElm.val1 = 135;
+				//	rColoredDispElm.val2 = 255;
+
+				//	continue;
+				//}
+
+
+
+				//Ncpp_ASSERT(-1 != rBdc.Dir);
+				//Ncpp_ASSERT(rBdc.Dir >= 0);
+
+				Ncpp_ASSERT(rBdc.LeastValDir >= 0);
+				Ncpp_ASSERT(rBdc.SecondLeastValDir >= 0);
+
+				////float angle = m_angleDirMgrArr[rBdc.Dir]->GetContext()->m_angleByRad;
+
+				//float angle, normVal;
+				//{
+
+				//	// to be removed
+				//	angle = m_angleDirMgrArr[rBdc.LeastValDir]->GetContext()->m_angleByRad;
+				//	Ncpp_ASSERT(angle >= 0.0f && angle <= M_PI);
+
+				//	normVal = rBdc.NormLeastVal;
+				//}
+
+
+
+				if (rBdc.IsEdge)
+					//if (rBdc.LeastVal > 0.8 * rBdc.NormLeastVal)
+				{
+					rColoredDispElm = rOrg;
+
+					//if (rBdc.NormLeastVal > 70)
+					//{
+					//	i = i;
+					//}
+					//rColoredDispElm.val0 = rBdc.NormLeastVal;
+					//rColoredDispElm.val1 = 0;
+					//rColoredDispElm.val2 = 0;
+				}
+				//else if (0 == rBdc.LeastValDir)
+				//{
+				//	rColoredDispElm.val0 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val1 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val2 = rBdc.NormLeastVal;
+				//}
+				//else if (1 == rBdc.LeastValDir)
+				//{
+				//	rColoredDispElm.val0 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val1 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val2 = 0;
+				//}
+				//else if (3 == rBdc.LeastValDir)
+				//{
+				//	rColoredDispElm.val0 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val1 = 0;
+				//	rColoredDispElm.val2 = rBdc.NormLeastVal;
+				//}
+				else
+				{
+					rColoredDispElm.val0 = 128;
+					rColoredDispElm.val1 = 58;
+					rColoredDispElm.val2 = 128;
+				}
+
+			}
+
+			//GlobalStuff::SetLinePathImg(GenTriChGrayImg(dspImg_Values));
+			//GlobalStuff::ShowLinePathImg();
+
+			//ShowImage(dspImg_Values, "bidiffCommonImg_Colored");
+
+			ShowImage(dspImg_Colored, "imgForEdges");
 		}
 
 

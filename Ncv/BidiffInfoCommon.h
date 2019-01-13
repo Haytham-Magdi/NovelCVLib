@@ -12,7 +12,11 @@ namespace Ncv
 	{
 	public:
 		
-		float LeastVal;
+		int Index;
+
+		//float LeastVal;
+		float LeastValDirMaxVal;
+		float LeastValDirMinVal;
 		int LeastValDir;
 
 		float SecondLeastVal;
@@ -21,6 +25,8 @@ namespace Ncv
 		float NormLeastVal;
 		float NormDiff2LeastVal;
 		float NormSecondLeastVal;
+
+		bool IsEdge;
 
 		//float MinVal;
 		//int MinValDir;

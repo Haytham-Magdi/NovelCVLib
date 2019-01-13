@@ -556,6 +556,9 @@ namespace Ncv
 			ActualArrayAccessor_1D<BidiffInfo> localAcc_1D = cx.m_bidiffInfo_Img->GetActualAccessor().GenAcc_1D();
 			ActualArrayAccessor_1D<BidiffInfo> localAcc_1D_Norm = ncx.m_bidiffInfo_Img->GetActualAccessor().GenAcc_1D();
 
+			//const float diff2CmpRatio = 0.7;
+			const float diff2CmpRatio = 0.4;
+
 			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			{
 				const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
@@ -651,10 +654,19 @@ namespace Ncv
 
 					//if (4 == cx.m_nIndex)
 					//if (bidiffInfoMax_Norm > 300 && 4 == cx.m_nIndex && 158 == y)
-					if ((0 == cx.m_nIndex || 4 == cx.m_nIndex ) && 129 == x && 158 == y)
+					//if ((0 == cx.m_nIndex || 4 == cx.m_nIndex) && 129 == x && 158 == y)
+					//if ((0 == cx.m_nIndex || 4 == cx.m_nIndex) && 430 == x && 231 == y)
+					if ((0 == cx.m_nIndex || 4 == cx.m_nIndex) && 539 == x && 282 == y)
 					{
 						x = x;
 					}
+
+					const bool isEdge = bidiffInfoDiff2_Norm > diff2CmpRatio * bidiffInfoMax_Norm && bidiffInfoMax_Norm > 20
+						&& bidiffInfoMin_Local < 0.4 * bidiffInfoMax_Norm
+						//&& bidiffInfoMax_Local < 0.4 * bidiffInfoMax_Norm
+						//&& 0 == cx.m_nIndex % 2
+						;
+
 
 					if (IsUndefined(rCommonBdc))
 					{
@@ -664,10 +676,29 @@ namespace Ncv
 							x = x;
 						}
 
-						Assign(&rCommonBdc.LeastVal, bidiffInfoMax_Local);
+						Assign(&rCommonBdc.LeastValDirMaxVal, bidiffInfoMax_Local);
+						Assign(&rCommonBdc.LeastValDirMinVal, bidiffInfoMin_Local);
 						//Assign(&rCommonBdc.LeastVal, bidiffInfoMin_Local);
 						Assign(&rCommonBdc.NormLeastVal, bidiffInfoMax_Norm);
 						Assign(&rCommonBdc.NormDiff2LeastVal, bidiffInfoDiff2_Norm);
+
+						if (bidiffInfoDiff2_Norm > diff2CmpRatio * bidiffInfoMax_Norm && bidiffInfoMax_Norm > 20
+							&& bidiffInfoMin_Local < 0.4 * bidiffInfoMax_Norm
+							//&& bidiffInfoMax_Local < 0.4 * bidiffInfoMax_Norm
+							//&& 0 == cx.m_nIndex % 2
+							)
+						{
+							if (174251 == rCommonBdc.Index)
+							{
+								x = x;
+							}
+
+							rCommonBdc.IsEdge = true;
+						}
+						else
+						{
+							rCommonBdc.IsEdge = false;
+						}
 
 						Assign(&rCommonBdc.LeastValDir, cx.m_nIndex);
 
@@ -682,7 +713,21 @@ namespace Ncv
 
 					AssertValue(rCommonBdc);
 
-					if (bidiffInfoMax_Local < rCommonBdc.LeastVal)
+					if (bidiffInfoDiff2_Norm > diff2CmpRatio * bidiffInfoMax_Norm && bidiffInfoMax_Norm > 20 
+						&& bidiffInfoMin_Local < 0.4 * bidiffInfoMax_Norm
+						//&& bidiffInfoMax_Local < 0.4 * bidiffInfoMax_Norm
+						//&& 0 == cx.m_nIndex % 2
+						)
+					{
+						if (174251 == rCommonBdc.Index)
+						{
+							x = x;
+						}
+
+						rCommonBdc.IsEdge = true;
+					}
+
+					if (bidiffInfoMax_Local < rCommonBdc.LeastValDirMaxVal)
 					//if (bidiffInfoMin_Local < rCommonBdc.LeastVal)
 					{
 						if (0 != cx.m_nIndex)
@@ -690,12 +735,13 @@ namespace Ncv
 							x = x;
 						}
 
-						Assign(&rCommonBdc.SecondLeastVal, rCommonBdc.LeastVal);
+						Assign(&rCommonBdc.SecondLeastVal, rCommonBdc.LeastValDirMaxVal);
 						Assign(&rCommonBdc.NormSecondLeastVal, rCommonBdc.NormLeastVal);
 
 						Assign(&rCommonBdc.SecondLeastValDir, rCommonBdc.LeastValDir);
 
-						Assign(&rCommonBdc.LeastVal, bidiffInfoMax_Local);
+						Assign(&rCommonBdc.LeastValDirMaxVal, bidiffInfoMax_Local);
+						Assign(&rCommonBdc.LeastValDirMinVal, bidiffInfoMin_Local);
 						//Assign(&rCommonBdc.LeastVal, bidiffInfoMin_Local);
 						Assign(&rCommonBdc.NormLeastVal, bidiffInfoMax_Norm);
 						Assign(&rCommonBdc.NormDiff2LeastVal, bidiffInfoDiff2_Norm);

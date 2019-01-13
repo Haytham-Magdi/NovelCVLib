@@ -26,25 +26,25 @@ namespace Ncv
 			Ncpp_ASSERT(a_arg.LeastValDir >= 0 && a_arg.LeastValDir < 500);
 
 			//AssertValue(a_arg.Val);
-			AssertValue(a_arg.LeastVal);
+			AssertValue(a_arg.LeastValDirMaxVal);
 		}
 
 		bool IsUndefined(const BidiffInfoCommon & a_arg)
 		{
 			//return IsUndefined(a_arg.Val);
-			return IsUndefined(a_arg.LeastVal);
+			return IsUndefined(a_arg.LeastValDirMaxVal);
 		}
 
 		void SetToUndefined(BidiffInfoCommon * a_pArg)
 		{
 			//SetToUndefined(&a_pArg->Val);
-			SetToUndefined(&a_pArg->LeastVal);
+			SetToUndefined(&a_pArg->LeastValDirMaxVal);
 		}
 
 		void SetToBadValue(BidiffInfoCommon * a_pArg)
 		{
 			//SetToBadValue(&a_pArg->Val);
-			SetToBadValue(&a_pArg->LeastVal);
+			SetToBadValue(&a_pArg->LeastValDirMaxVal);
 		}
 	};
 }
