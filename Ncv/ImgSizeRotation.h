@@ -198,96 +198,6 @@ namespace Ncv
 
 					Assign(&rDestVal, rSrcVal);
 
-					//S32Point & rSrcPnt_Scaled = resToScaledSrcPointMapAcc.GetAt(x, y);
-					//if (rSrcPnt_Scaled.IsUndefined())
-					//{
-					//	SetToUndefined(&rDestVal);
-					//	continue;
-					//}
-
-					//const int nSrc_X1_Scaled = SRResIntScale::Floor(rSrcPnt_Scaled.GetX());
-					//const int nSrc_X2_Scaled = SRResIntScale::Ceil(rSrcPnt_Scaled.GetX());
-					//const int nSrc_Y1_Scaled = SRResIntScale::Floor(rSrcPnt_Scaled.GetY());
-					//const int nSrc_Y2_Scaled = SRResIntScale::Ceil(rSrcPnt_Scaled.GetY());
-
-					//S32Point srcPntX1Y1(
-					//	SRResIntScale::IntDividByScale(nSrc_X1_Scaled),
-					//	SRResIntScale::IntDividByScale(nSrc_Y1_Scaled)
-					//	);
-					//Ncpp_ASSERT(srcPntX1Y1.IsInSize(m_srcSiz));
-					//T & rSrcValX1Y1 = a_srcAcc.GetAt(srcPntX1Y1.GetX(), srcPntX1Y1.GetY());
-					//AssertUndefinedOrValid(rSrcValX1Y1);
-
-					//S32Point srcPntX1Y2(
-					//	SRResIntScale::IntDividByScale(nSrc_X1_Scaled),
-					//	SRResIntScale::IntDividByScale(nSrc_Y2_Scaled)
-					//	);
-					//Ncpp_ASSERT(srcPntX1Y2.IsInSize(m_srcSiz));
-					//T & rSrcValX1Y2 = a_srcAcc.GetAt(srcPntX1Y2.GetX(), srcPntX1Y2.GetY());
-					//AssertUndefinedOrValid(rSrcValX1Y2);
-
-					//S32Point srcPntX2Y1(
-					//	SRResIntScale::IntDividByScale(nSrc_X2_Scaled),
-					//	SRResIntScale::IntDividByScale(nSrc_Y1_Scaled)
-					//	);
-					//Ncpp_ASSERT(srcPntX2Y1.IsInSize(m_srcSiz));
-					//T & rSrcValX2Y1 = a_srcAcc.GetAt(srcPntX2Y1.GetX(), srcPntX2Y1.GetY());
-					//AssertUndefinedOrValid(rSrcValX2Y1);
-
-					//S32Point srcPntX2Y2(
-					//	SRResIntScale::IntDividByScale(nSrc_X2_Scaled),
-					//	SRResIntScale::IntDividByScale(nSrc_Y2_Scaled)
-					//	);
-					//Ncpp_ASSERT(srcPntX2Y2.IsInSize(m_srcSiz));
-					//T & rSrcValX2Y2 = a_srcAcc.GetAt(srcPntX2Y2.GetX(), srcPntX2Y2.GetY());
-					//AssertUndefinedOrValid(rSrcValX2Y2);
-
-
-					//if (
-					//	IsUndefined(rSrcValX1Y1) ||
-					//	IsUndefined(rSrcValX1Y2) ||
-					//	IsUndefined(rSrcValX2Y1) ||
-					//	IsUndefined(rSrcValX2Y2)
-					//	)
-					//{
-					//	SetToUndefined(&rDestVal);
-					//	continue;
-					//}
-
-
-
-					//{
-					//	T srcValXY1;
-					//	T srcValXY2;
-					//	{
-					//		int nWt_SrcX1_Scaled = nSrc_X2_Scaled - rSrcPnt_Scaled.GetX();
-					//		Ncpp_ASSERT(nWt_SrcX1_Scaled >= 0);
-					//		Ncpp_ASSERT(nWt_SrcX1_Scaled < SRResIntScale::GetScaleVal());
-
-					//		//int nWt_SrcX1_Scaled = (nSrc_X1_Scaled == nSrc_X2_Scaled) ? SRResIntScale::GetScaleVal() : abs(rSrcPnt_Scaled.GetX() - nSrc_X2_Scaled);
-					//		//Ncpp_ASSERT(nWt_SrcX1_Scaled <= SRResIntScale::GetScaleVal());
-
-					//		WaitedAdd(rSrcValX1Y1, SRResIntScale::UnscaleToF(nWt_SrcX1_Scaled),
-					//			rSrcValX2Y1, 1 - SRResIntScale::UnscaleToF(nWt_SrcX1_Scaled), &srcValXY1);
-
-					//		WaitedAdd(rSrcValX1Y2, SRResIntScale::UnscaleToF(nWt_SrcX1_Scaled),
-					//			rSrcValX2Y2, 1 - SRResIntScale::UnscaleToF(nWt_SrcX1_Scaled), &srcValXY2);
-					//	}
-
-					//	{
-					//		int nWt_SrcY1_Scaled = nSrc_Y2_Scaled - rSrcPnt_Scaled.GetY();
-					//		Ncpp_ASSERT(nWt_SrcY1_Scaled >= 0);
-					//		Ncpp_ASSERT(nWt_SrcY1_Scaled < SRResIntScale::GetScaleVal());
-
-					//		//int nWt_SrcY1_Scaled = (nSrc_Y1_Scaled == nSrc_Y2_Scaled) ? SRResIntScale::GetScaleVal() : abs(rSrcPnt_Scaled.y - nSrc_Y2_Scaled);
-					//		//Ncpp_ASSERT(nWt_SrcY1_Scaled <= SRResIntScale::GetScaleVal());
-
-					//		WaitedAdd(srcValXY1, SRResIntScale::UnscaleToF(nWt_SrcY1_Scaled),
-					//			srcValXY2, 1 - SRResIntScale::UnscaleToF(nWt_SrcY1_Scaled), &rDestVal);
-					//	}
-					//}
-
-
 				}	//	end for x
 			}	//	end for y
 
@@ -349,7 +259,8 @@ namespace Ncv
 		static void PrepareAFinalScaledPointMapImgFromAFirstOne(
 			ArrayHolder_2D_Ref<S64Point> a_firstPointMapImg, ArrayHolder_2D_Ref<S32Point> & a_finalPointMapImg);
 
-		static void PrepareNearestIndexMapImgFromScaledPointMapImg(
+		//static void PrepareNearestIndexMapImgFromScaledPointMapImg(
+		void PrepareNearestIndexMapImgFromScaledPointMapImg(
 			ArrayHolder_2D_Ref<S32Point> a_scaledPointMapImg, ArrayHolder_2D_Ref<int> & a_nearestIndexMapImg, 
 			const ActualIndexCalc_2D & a_mappingTargetIndexCalc, const bool a_canHaveUndefined);
 
@@ -357,6 +268,10 @@ namespace Ncv
 
 
 	protected:
+
+		int m_index;
+		static int s_nextIndex;
+
 
 		AngleRotation<SRRotIntScale> m_angleRot;
 

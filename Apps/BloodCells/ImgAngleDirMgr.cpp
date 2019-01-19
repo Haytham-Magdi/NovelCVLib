@@ -151,7 +151,7 @@ namespace Ncv
 			cx.m_bidiffInfo_Img = ArrayHolderUtil::CreateEmptyFrom<BidiffInfo>(cx.m_org_Img->AsHolderRef());
 
 			
-			const int posDiff = 1;
+			const int posDist = pcx.GetDiffPosDist();
 
 			//F32ImageArrayHolder3C_Ref avg_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 			//AvgImage(cx.m_org_Img->GetVirtAccessor(), avg_Img->GetVirtAccessor(), avgWin);
@@ -160,7 +160,7 @@ namespace Ncv
 			//Range<int> diffRange = Range<int>::New(-1 - avgWin.GetX2(), 1 - avgWin.GetX1());
 			
 			//Range<int> diffRange = Range<int>::New(-1 - avgWin.GetX2(), 0 - avgWin.GetX1());
-			Range<int> diffRange = Range<int>::New(-posDiff - avgWin.GetX2(), 0 - avgWin.GetX1());
+			Range<int> diffRange = Range<int>::New(-posDist - avgWin.GetX2(), 0 - avgWin.GetX1());
 			
 
 			//Range<int> diffRange = Range<int>::New(0 - avgWin.GetX2(), 1 - avgWin.GetX1());
@@ -170,7 +170,7 @@ namespace Ncv
 			CalcDiffImageX(cx.m_diff_Img->GetVirtAccessor(), cx.m_diff_2_Img->GetVirtAccessor(), diffRange);
 
 			PrepareBidiffInfoImageFromDiffImages(cx.m_diff_Img->GetVirtAccessor(), cx.m_diff_2_Img->GetVirtAccessor(),
-				cx.m_bidiffInfo_Img->GetVirtAccessor(), posDiff);
+				cx.m_bidiffInfo_Img->GetVirtAccessor(), posDist);
 
 			if (0 == cx.m_nIndex)
 			{
@@ -539,11 +539,13 @@ namespace Ncv
 
 			Context & cx = *m_context;
 			Context & ncx = *m_normalContext;
+			AngleDirMgrColl_Context & pcx = *m_parentContext;
 
 			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
 			ActualArrayAccessor_1D<int> orgToRotMapAcc_1D = orgToRotMap_Acc.GenAcc_1D();
 
 			const ActualArrayAccessor_2D<int> & rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
+			ActualArrayAccessor_1D<int> rotToOrgMapAcc_1D = rotToOrgMap_Acc.GenAcc_1D();
 
 			ActualArrayAccessor_2D<BidiffInfoCommon> commonAcc = m_parentContext->m_bidiffInfoCommonImg->GetActualAccessor();
 			Ncpp_ASSERT(Size_2D::AreEqual(orgToRotMap_Acc.GetSize(), commonAcc.GetSize()));
@@ -551,6 +553,11 @@ namespace Ncv
 			ActualArrayAccessor_1D<BidiffInfoCommon> commonAcc_1D = commonAcc.GenAcc_1D();
 
 
+			//ActualArrayAccessor_2D<BidiffInfo> localAcc = cx.m_bidiffInfo_Img->GetActualAccessor();
+			//ActualArrayAccessor_2D<BidiffInfo> localAcc_Norm = ncx.m_bidiffInfo_Img->GetActualAccessor();
+
+			VirtArrayAccessor_2D<BidiffInfo> localVirtAcc = cx.m_bidiffInfo_Img->GetVirtAccessor();
+			VirtArrayAccessor_2D<BidiffInfo> localVirtAcc_Norm = ncx.m_bidiffInfo_Img->GetVirtAccessor();
 
 			//float * localAcc_1D = (float *)cx.m_avgStandev_X_Img->GetActualAccessor().GetData();
 			ActualArrayAccessor_1D<BidiffInfo> localAcc_1D = cx.m_bidiffInfo_Img->GetActualAccessor().GenAcc_1D();
@@ -558,6 +565,9 @@ namespace Ncv
 
 			//const float diff2CmpRatio = 0.7;
 			const float diff2CmpRatio = 0.4;
+
+			const int posDist_Local = pcx.GetDiffPosDist() * localVirtAcc.GetStepSize_X();
+			const int posDist_Norm = pcx.GetDiffPosDist() * localVirtAcc_Norm.GetStepSize_X();
 
 			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			{
@@ -569,9 +579,13 @@ namespace Ncv
 
 					BidiffInfoCommon & rCommonBdc = commonAcc_1D[nOffsetInOrg_1D];
 
-					int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
+					const int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
+					const int nOffsetInOrg_1D_2 = rotToOrgMapAcc_1D[nOffsetInRot_1D];
 
-					 S32Point pntInRot = rotToOrgMap_Acc.CalcPointFromIndex_1D(nOffsetInRot_1D);
+					//Ncpp_ASSERT(nOffsetInOrg_1D == nOffsetInOrg_1D_2);
+					Ncpp_ASSERT(nOffsetInOrg_1D == nOffsetInOrg_1D_2 || IsUndefined(nOffsetInOrg_1D_2));
+					
+					S32Point pntInRot = rotToOrgMap_Acc.CalcPointFromIndex_1D(nOffsetInRot_1D);
 
 					const BidiffInfo & rBidiffInfo_Local = localAcc_1D[nOffsetInRot_1D];
 					const BidiffInfo & rBidiffInfo_Norm = localAcc_1D_Norm[nOffsetInRot_1D];

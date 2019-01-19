@@ -39,6 +39,8 @@ namespace Ncv
 		{
 		public:
 
+			int GetDiffPosDist() { return 1; }
+
 			ArrayHolder_2D_Ref<PixelStandevInfo> m_standevInfoImg;
 			ArrayHolder_2D_Ref<BidiffInfoCommon> m_bidiffInfoCommonImg;
 			ArrayHolder_2D_Ref<ConflictInfo2_Ex> m_conflictInfoImg;

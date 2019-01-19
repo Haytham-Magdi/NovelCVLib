@@ -22,10 +22,15 @@ namespace Ncv
 
 	using namespace Ncv::ImageOperations2;
 
+	int ImgSizeRotation::s_nextIndex = 0;
+
+
 	ImgSizeRotation::ImgSizeRotation(Size_2D a_srcSiz, float a_angDig) : m_angleRot(a_angDig)
 	{
 		//Ncpp_ASSERT(a_angDig >= 0);
 		//Ncpp_ASSERT(a_angDig <= 90);
+
+		m_index = s_nextIndex++;
 
 		m_srcSiz = a_srcSiz;
 
@@ -291,6 +296,14 @@ namespace Ncv
 				Ncpp_ASSERT(rMappedResPnt_Scaled.GetX() >= 0);
 				Ncpp_ASSERT(rMappedResPnt_Scaled.GetY() >= 0);
 
+
+				//	for debug.
+				if (1 == m_index && 4 == srcX && 0 == srcY)
+				{
+					srcX = srcX;
+				}
+
+
 				long long resX_NbrBef_Scaled = SRRotIntScale::Floor(rMappedResPnt_Scaled.GetX());
 				long long resY_NbrBef_Scaled = SRRotIntScale::Floor(rMappedResPnt_Scaled.GetY());
 
@@ -314,6 +327,12 @@ namespace Ncv
 					S64Point nbrInResVert = rNbrInResVert_Scaled.DivideByIntNum(SRRotIntScale::GetScaleVal());
 
 					ResPointInfo & rNbrVertInfo = resPointInfoAcc.GetAt(nbrInResVert.GetX(), nbrInResVert.GetY());
+
+					//	for debug.
+					if (1 == m_index && S64Point::AreEqual(rNbrVertInfo.PosInRes, S64Point(176, 0)))
+					{
+						i = i;
+					}
 
 					Ncpp_ASSERT(S64Point::AreEqual(rNbrInResVert_Scaled, rNbrVertInfo.PosInRes_Scaled));
 
@@ -339,6 +358,8 @@ namespace Ncv
 
 					S64Point::Add(srcPnt_Scaled, reverseRotatedDiffPnt, &rNbrVertInfo.PosInSrc_Scaled);
 
+					//	for debug.
+					srcX = srcX;
 				} // nbrs for.
 
 			}	//	x for
@@ -361,6 +382,15 @@ namespace Ncv
 			for (int resX = 0; resX < m_resSiz.GetX(); resX++)
 			{
 				const S64Point resPnt(resX, resY);
+
+				const int resIndex_1D = resToSrcPointMapAcc.CalcIndex_1D(resX, resY);
+
+				//	for debug.
+				//if (1 == m_index && 176 == resIndex_1D)
+				if (1 == m_index && 1672 == resIndex_1D)
+				{
+					resX = resX;
+				}
 
 				S64Point & rMappedSrcPnt_Scaled = resToSrcPointMapAcc.GetAt(resPnt.GetX(), resPnt.GetY());
 
@@ -422,11 +452,10 @@ namespace Ncv
 			if (rFirstPnt.IsUndefined())
 			{
 				rFinalPnt.SetToUndefined();
+				continue;
 			}
-			else
-			{
-				S64Point::toS32Point(rFirstPnt.DivideByIntNum(nRotToResScaleRatio), &rFinalPnt);
-			}
+		
+			S64Point::toS32Point(rFirstPnt.DivideByIntNum(nRotToResScaleRatio), &rFinalPnt);
 		}
 	}
 
@@ -462,6 +491,17 @@ namespace Ncv
 			// {
 			// 	i = i;
 			// }
+
+
+			//	for debug.
+			//if (1 == m_index && a_canHaveUndefined && 176 == i)
+			if (1 == m_index && a_canHaveUndefined && 1672 == i)
+			{
+				i = i;
+			}
+
+
+
 
 			if (rScaledPnt.IsUndefined())
 			{

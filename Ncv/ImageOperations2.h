@@ -662,7 +662,7 @@ namespace Ncv
 
 		template<class T>
 		void PrepareBidiffInfoImageFromDiffImages(const VirtArrayAccessor_2D<T> & a_diff1_Acc, const VirtArrayAccessor_2D<T> & a_diff2_Acc,
-			const VirtArrayAccessor_2D<BidiffInfo> & a_outAcc, const int a_posDiff)
+			const VirtArrayAccessor_2D<BidiffInfo> & a_outAcc, const int a_posDist)
 		{
 
 			VirtArrayAccessor_2D<float> outDiff1_BkwdAcc;
@@ -696,11 +696,11 @@ namespace Ncv
 			}
 
 			CalcMagImage(a_diff1_Acc, outDiff1_BkwdAcc);
-			CopyImageWithShift(outDiff1_FwdAcc, outDiff1_BkwdAcc, S32Point(-a_posDiff, 0));
+			CopyImageWithShift(outDiff1_FwdAcc, outDiff1_BkwdAcc, S32Point(-a_posDist, 0));
 			
 			ArrayHolder_2D_Ref<float> tmpDiff2_Holder = ArrayHolderUtil::CreateFrom<float>(a_diff2_Acc.GetSize());
 			CalcMagImage(a_diff2_Acc, tmpDiff2_Holder->GetVirtAccessor());
-			CopyImageWithShift(outDiff2_Acc, tmpDiff2_Holder->GetVirtAccessor(), S32Point(-a_posDiff, 0));
+			CopyImageWithShift(outDiff2_Acc, tmpDiff2_Holder->GetVirtAccessor(), S32Point(-a_posDist, 0));
 			//CalcMagImage(a_diff2_Acc, outDiff2_Acc);
 		}
 
