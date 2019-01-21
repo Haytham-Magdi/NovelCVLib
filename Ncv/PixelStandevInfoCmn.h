@@ -14,7 +14,7 @@
 namespace Ncv
 {
 
-	class PixelStandevInfo //: public Ncpp::Object
+	class PixelStandevInfoCmn //: public Ncpp::Object
 	{
 	public:
 		//int Dir;
@@ -35,5 +35,5 @@ namespace Ncv
 		//float allVals[8];
 	};
 
-	//typedef Ncpp::ObjRef< PixelStandevInfo > PixelStandevInfoRef;
+	//typedef Ncpp::ObjRef< PixelStandevInfoCmn > PixelStandevInfoCmnRef;
 }

@@ -64,10 +64,10 @@ namespace Ncv
 
 			m_context_H->m_org_Img = org_Img_H;
 
-			m_context_H->m_standevInfoImg = ArrayHolderUtil::CreateEmptyFrom<PixelStandevInfo>(org_Img_H->AsHolderRef());
+			m_context_H->m_standevInfoCmnImg = ArrayHolderUtil::CreateEmptyFrom<PixelStandevInfoCmn>(org_Img_H->AsHolderRef());
 
 			{
-				//PixelStandevInfo initPsi;
+				//PixelStandevInfoCmn initPsi;
 				//////initPsi.Dir = -1;
 				////initPsi.Dir = 0;
 				//////initPsi.Val = 10000000;
@@ -92,8 +92,8 @@ namespace Ncv
 				////initPsi.MaxVal = 0;
 				////initPsi.MaxValDir = 2;
 
-				//FillImage(m_context_H->m_standevInfoImg->GetVirtAccessor(), initPsi);
-				SetImageToUndefined(m_context_H->m_standevInfoImg->GetVirtAccessor());
+				//FillImage(m_context_H->m_standevInfoCmnImg->GetVirtAccessor(), initPsi);
+				SetImageToUndefined(m_context_H->m_standevInfoCmnImg->GetVirtAccessor());
 			}
 
 
@@ -161,7 +161,7 @@ namespace Ncv
 
 
 			m_context_V->m_org_Img = m_context_H->m_org_Img->CreateTransposedProxy();
-			m_context_V->m_standevInfoImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_standevInfoImg);
+			m_context_V->m_standevInfoCmnImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_standevInfoCmnImg);
 			m_context_V->m_bidiffInfoCommonImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_bidiffInfoCommonImg);
 			m_context_V->m_conflictInfoImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_conflictInfoImg);
 			m_context_V->m_wideConflictDiff_Img = m_context_H->m_wideConflictDiff_Img->CreateTransposedProxy();
@@ -311,8 +311,8 @@ namespace Ncv
 
 		void AngleDirMgrColl::DisplayStandiv_Dir_Img()
 		{
-			const ActualArrayAccessor_2D<PixelStandevInfo> & psiAcc = m_context_H->m_standevInfoImg->GetActualAccessor();
-			const VirtArrayAccessor_2D<PixelStandevInfo> & psiVirtAcc = m_context_H->m_standevInfoImg->GetVirtAccessor();
+			const ActualArrayAccessor_2D<PixelStandevInfoCmn> & psiAcc = m_context_H->m_standevInfoCmnImg->GetActualAccessor();
+			const VirtArrayAccessor_2D<PixelStandevInfoCmn> & psiVirtAcc = m_context_H->m_standevInfoCmnImg->GetVirtAccessor();
 			//F32ImageRef dspImg_Values = F32Image::Create(cvSize(psiAcc.GetSize()), 1);
 
 			//const int checkMargin = 70;
@@ -323,13 +323,13 @@ namespace Ncv
 			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(psiAcc.GetSize()), 3);
 
 			const int nSize_1D = psiAcc.CalcSize_1D();
-			ActualArrayAccessor_1D<PixelStandevInfo> psiAcc_1D = psiAcc.GenAcc_1D();
+			ActualArrayAccessor_1D<PixelStandevInfoCmn> psiAcc_1D = psiAcc.GenAcc_1D();
 			
 			ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
 
 			for (int i = 0; i < nSize_1D; i++)
 			{
-				PixelStandevInfo & rPsi = psiAcc_1D[i];
+				PixelStandevInfoCmn & rPsi = psiAcc_1D[i];
 				
 				S32Point pnt = psiAcc.CalcPointFromIndex_1D(i);
 				//if (S32Point::AreEqual(pnt, S32Point(55, 270)))

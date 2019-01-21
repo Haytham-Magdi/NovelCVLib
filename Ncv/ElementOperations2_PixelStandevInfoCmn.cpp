@@ -8,7 +8,7 @@
 #include <vector>
 #include <NovelCVLib\OpenCV\Image.h>
 
-#include <NovelCVLib\Ncv\PixelStandevInfo.h>
+#include <NovelCVLib\Ncv\PixelStandevInfoCmn.h>
 
 
 namespace Ncv
@@ -17,7 +17,7 @@ namespace Ncv
 
 	namespace ElementOperations2
 	{
-		void AssertValue(const PixelStandevInfo & a_arg)
+		void AssertValue(const PixelStandevInfoCmn & a_arg)
 		{
 			////AssertValue(a_arg.Dir);
 			//AssertValue(a_arg.Dir);
@@ -29,19 +29,19 @@ namespace Ncv
 			AssertValue(a_arg.LeastVal);
 		}
 
-		bool IsUndefined(const PixelStandevInfo & a_arg)
+		bool IsUndefined(const PixelStandevInfoCmn & a_arg)
 		{
 			//return IsUndefined(a_arg.Val);
 			return IsUndefined(a_arg.LeastVal);
 		}
 
-		void SetToUndefined(PixelStandevInfo * a_pArg)
+		void SetToUndefined(PixelStandevInfoCmn * a_pArg)
 		{
 			//SetToUndefined(&a_pArg->Val);
 			SetToUndefined(&a_pArg->LeastVal);
 		}
 
-		void SetToBadValue(PixelStandevInfo * a_pArg)
+		void SetToBadValue(PixelStandevInfoCmn * a_pArg)
 		{
 			//SetToBadValue(&a_pArg->Val);
 			SetToBadValue(&a_pArg->LeastVal);

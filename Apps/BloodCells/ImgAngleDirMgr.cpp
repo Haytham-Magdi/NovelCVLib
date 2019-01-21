@@ -335,10 +335,10 @@ namespace Ncv
 			
 			// const ActualArrayAccessor_2D<int> & rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
 
-			ActualArrayAccessor_2D<PixelStandevInfo> commonAcc = m_parentContext->m_standevInfoImg->GetActualAccessor();
+			ActualArrayAccessor_2D<PixelStandevInfoCmn> commonAcc = m_parentContext->m_standevInfoCmnImg->GetActualAccessor();
 			Ncpp_ASSERT(Size_2D::AreEqual(orgToRotMap_Acc.GetSize(), commonAcc.GetSize()));
 
-			ActualArrayAccessor_1D<PixelStandevInfo> commonAcc_1D = commonAcc.GenAcc_1D();
+			ActualArrayAccessor_1D<PixelStandevInfoCmn> commonAcc_1D = commonAcc.GenAcc_1D();
 
 
 
@@ -354,7 +354,7 @@ namespace Ncv
 				{
 					const int nOffsetInOrg_1D = nOffset_Y + x;
 
-					PixelStandevInfo & rCommonPsi = commonAcc_1D[nOffsetInOrg_1D];
+					PixelStandevInfoCmn & rCommonPsi = commonAcc_1D[nOffsetInOrg_1D];
 
 					int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
 

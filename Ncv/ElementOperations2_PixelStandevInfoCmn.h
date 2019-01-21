@@ -12,7 +12,7 @@
 //#include <NovelCVLib\OpenCV\Image.h>
 
 #include <NovelCVLib\ElementOperations2\ElementOperations2.h>
-#include <NovelCVLib\Ncv\PixelStandevInfo.h>
+#include <NovelCVLib\Ncv\PixelStandevInfoCmn.h>
 
 
 
@@ -22,10 +22,10 @@ namespace Ncv
 
 	namespace ElementOperations2
 	{
-		template<> void AssertValue(const PixelStandevInfo & a_arg);
-		template<> void SetToBadValue(PixelStandevInfo * a_pArg);
-		template<> bool IsUndefined(const PixelStandevInfo & a_arg);
-		template<> void SetToUndefined(PixelStandevInfo * a_pArg);
+		template<> void AssertValue(const PixelStandevInfoCmn & a_arg);
+		template<> void SetToBadValue(PixelStandevInfoCmn * a_pArg);
+		template<> bool IsUndefined(const PixelStandevInfoCmn & a_arg);
+		template<> void SetToUndefined(PixelStandevInfoCmn * a_pArg);
 	};
 }
 

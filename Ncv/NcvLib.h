@@ -41,9 +41,9 @@
 #include <NovelCVLib\OpenCV\ElementOperations2_F32ColorVal.h>
 #include <NovelCVLib\ElementOperations2\ElementOperations2.h>
 
-#include <NovelCVLib\Ncv\PixelStandevInfo.h>
+#include <NovelCVLib\Ncv\PixelStandevInfoCmn.h>
 #include <NovelCVLib\Ncv\BidiffInfoCommon.h>
-#include <NovelCVLib\Ncv\ElementOperations2_PixelStandevInfo.h>
+#include <NovelCVLib\Ncv\ElementOperations2_PixelStandevInfoCmn.h>
 #include <NovelCVLib\Ncv\ElementOperations2_BidiffInfoCommon.h>
 
 #include <NovelCVLib\Ncv\ConflictInfo2.h>

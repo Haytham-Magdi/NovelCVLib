@@ -19,7 +19,7 @@
 #include <NovelCVLib\OpenCV\ImageArrayHolder.h>
 #include <NovelCVLib\OpenCV\ImageArrayHolderTypeDefs.h>
 
-#include <NovelCVLib\Ncv\PixelStandevInfo.h>
+#include <NovelCVLib\Ncv\PixelStandevInfoCmn.h>
 #include <NovelCVLib\Ncv\BidiffInfoCommon.h>
 #include <NovelCVLib\Ncv\ConflictInfo2.h>
 #include <NovelCVLib\Ncv\Bidiff.h>
@@ -41,7 +41,7 @@ namespace Ncv
 
 			int GetDiffPosDist() { return 1; }
 
-			ArrayHolder_2D_Ref<PixelStandevInfo> m_standevInfoImg;
+			ArrayHolder_2D_Ref<PixelStandevInfoCmn> m_standevInfoCmnImg;
 			ArrayHolder_2D_Ref<BidiffInfoCommon> m_bidiffInfoCommonImg;
 			ArrayHolder_2D_Ref<ConflictInfo2_Ex> m_conflictInfoImg;
 			F32ImageArrayHolder1C_Ref m_wideConflictDiff_Img;
