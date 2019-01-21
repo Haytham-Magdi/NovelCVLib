@@ -832,8 +832,8 @@ namespace Ncv
 				{
 					//rColoredDispElm.val0 = 0;
 					rColoredDispElm.val0 = 254;
-					rColoredDispElm.val1 = 0;
-					rColoredDispElm.val2 = 254;
+					rColoredDispElm.val1 = 254;
+					rColoredDispElm.val2 = 0;
 
 					continue;
 				}
