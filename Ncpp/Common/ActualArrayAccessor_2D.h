@@ -22,7 +22,7 @@ namespace Ncpp
 		{
 		}
 
-		ActualArrayAccessor_2D(T * a_data, const Size_2D & a_size) : (a_size)
+		ActualArrayAccessor_2D(T * a_data, const Size_2D & a_size)
 		{
 			Init(a_data, a_size);
 		}

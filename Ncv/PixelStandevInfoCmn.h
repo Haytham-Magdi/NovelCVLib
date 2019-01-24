@@ -17,6 +17,9 @@ namespace Ncv
 	class PixelStandevInfoCmn //: public Ncpp::Object
 	{
 	public:
+
+		int Index;
+
 		//int Dir;
 		//float Val;
 		
@@ -33,6 +36,11 @@ namespace Ncv
 		//int MaxValDir;
 
 		//float allVals[8];
+
+		bool IsDirClear() const
+		{
+			return this->LeastVal < 0.5 * this->NormLeastVal;
+		}
 	};
 
 	//typedef Ncpp::ObjRef< PixelStandevInfoCmn > PixelStandevInfoCmnRef;

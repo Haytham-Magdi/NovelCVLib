@@ -94,6 +94,17 @@ namespace Ncv
 
 				//FillImage(m_context_H->m_standevInfoCmnImg->GetVirtAccessor(), initPsi);
 				SetImageToUndefined(m_context_H->m_standevInfoCmnImg->GetVirtAccessor());
+
+				//const ActualArrayAccessor_2D<BidiffInfoCommon> & bdcAcc = m_context_H->m_standevInfoCmnImg->GetActualAccessor();
+				ActualArrayAccessor_1D<PixelStandevInfoCmn> psiAcc_1D =
+					m_context_H->m_standevInfoCmnImg->GetActualAccessor().GenAcc_1D();
+
+				for (int i = 0; i < psiAcc_1D.GetSize(); i++)
+				{
+					PixelStandevInfoCmn & rBdc = psiAcc_1D[i];
+					rBdc.Index = i;
+				}
+
 			}
 
 
@@ -181,8 +192,8 @@ namespace Ncv
 
 				// AssertImageUndefinedOrValid(org_Img_H->GetVirtAccessor());
 
-				//rotMgr->RotateImageWithInterpolation(rot_Img_H->GetActualAccessor(), org_Img_H->GetActualAccessor());
-				rotMgr->RotateImageWithNearestValues(rot_Img_H->GetActualAccessor(), org_Img_H->GetActualAccessor());
+				rotMgr->RotateImageWithInterpolation(rot_Img_H->GetActualAccessor(), org_Img_H->GetActualAccessor());
+				//rotMgr->RotateImageWithNearestValues(rot_Img_H->GetActualAccessor(), org_Img_H->GetActualAccessor());
 				
 
 				//F32ImageArrayHolder1C_Ref magSqr_Img_H = new F32ImageArrayHolder1C(rot_Img_H->GetVirtAccessor().GetSize());
@@ -464,15 +475,17 @@ namespace Ncv
 				//rColoredDispElm.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal * 5 / 3);
 				//rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 5 / 3);
 
-				if (rPsi.LeastVal > 0.5 * rPsi.NormLeastVal)
+				//if (rPsi.LeastVal > 0.5 * rPsi.NormLeastVal)
+				if (!rPsi.IsDirClear())
 				//if (rPsi.LeastVal > 0.8 * rPsi.NormLeastVal)
 				{
+					//	for debug.
 					if (rPsi.NormLeastVal > 120)
 					{
 						i = i;
 					}
 					rColoredDispElm.val0 = rPsi.NormLeastVal;
-					rColoredDispElm.val1 = 0;
+					rColoredDispElm.val1 = 0.75 * rPsi.NormLeastVal;
 					rColoredDispElm.val2 = 0;
 				}
 				//else if (0 == rPsi.LeastValDir)
@@ -925,34 +938,60 @@ namespace Ncv
 
 			confDsp_Img->SetAll(0);
 
-			const int nSize_1D = confAcc.CalcSize_1D();
+			//ActualArrayAccessor_1D<ConflictInfo2_Ex> confAcc_1D = confAcc.GenAcc_1D();
+			
+			ActualArrayAccessor_2D<F32ColorVal> destAcc((F32ColorVal *)confDsp_Img->GetDataPtr(), size_2D(confDsp_Img->GetSize()));
+			ActualArrayAccessor_1D<F32ColorVal> destAcc_1D = destAcc.GenAcc_1D();
+			
+			//ActualArrayAccessor_1D<F32ColorVal> destAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
 
-			F32ColorVal * destPtr = (F32ColorVal *)confDsp_Img->GetDataPtr();
 			ActualArrayAccessor_1D<ConflictInfo2_Ex> srcAcc_1D = confAcc.GenAcc_1D();
 
-			for (int i = 0; i < nSize_1D; i++)
+			//	for debug.
+			S32Point dbgCenter_Pnt(0, 0), dbgSide1_Pnt(0, 0), dbgSide2_Pnt(0, 0);
+
+			for (int i = 0; i < srcAcc_1D.GetSize(); i++)
 			{
 				ConflictInfo2_Ex & rSrc = srcAcc_1D[i];
 				AssertValue(rSrc);
-				F32ColorVal & rDest = destPtr[i];
+				F32ColorVal & rDest = destAcc_1D[i];
+
 
 				//Ncpp_ASSERT(-1 != rSrc.Dir);
 
 				if (rSrc.Exists)
 				{
-					F32ColorVal & rDest_Side_1 = destPtr[rSrc.Offset_Side_1];
-					F32ColorVal & rDest_Side_2 = destPtr[rSrc.Offset_Side_2];
+
+					F32ColorVal & rDest_Side_1 = destAcc_1D[rSrc.Offset_Side_1];
+					F32ColorVal & rDest_Side_2 = destAcc_1D[rSrc.Offset_Side_2];
+
+					//	for debug.
+					S32Point side1_Pnt = confAcc.CalcPointFromIndex_1D(rSrc.Offset_Side_1);
+					S32Point side2_Pnt = confAcc.CalcPointFromIndex_1D(rSrc.Offset_Side_2);
+
+					//S32Point testPnt(470, 182);
+					//S32Point testPnt(415, 352);
+					//S32Point testPnt(415, 352);
+					S32Point testPnt(225, 333);
+					if (S32Point::AreEqual(side1_Pnt, testPnt) ||
+						S32Point::AreEqual(side2_Pnt, testPnt)
+						)
+					{
+						dbgCenter_Pnt = confAcc.CalcPointFromIndex_1D(i);
+						dbgSide1_Pnt = side1_Pnt;
+						dbgSide2_Pnt = side2_Pnt;
+					}
 
 					rDest.val0 = 0;
 					rDest.val1 = 0;
-					rDest.val2 = 255;
+					rDest.val2 = 155;
 
 					rDest_Side_1.val0 = 0;
-					rDest_Side_1.val1 = 255;
+					rDest_Side_1.val1 = 155;
 					rDest_Side_1.val2 = 0;
 
 					rDest_Side_2.val0 = 0;
-					rDest_Side_2.val1 = 255;
+					rDest_Side_2.val1 = 155;
 					rDest_Side_2.val2 = 0;
 				}
 				//else
@@ -961,7 +1000,32 @@ namespace Ncv
 				//	rDest.val1 = 0;
 				//	rDest.val2 = 0;
 				//}
+
+			}	//	end i for.
+
+
+
+			{
+				F32ColorVal & rDest = destAcc.GetAt(dbgCenter_Pnt.GetX(), dbgCenter_Pnt.GetY());
+				F32ColorVal & rDest_Side_1 = destAcc.GetAt(dbgSide1_Pnt.GetX(), dbgSide1_Pnt.GetY());
+				F32ColorVal & rDest_Side_2 = destAcc.GetAt(dbgSide2_Pnt.GetX(), dbgSide2_Pnt.GetY());
+
+				rDest.val0 = 0;
+				rDest.val1 = 255;
+				rDest.val2 = 255;
+
+				rDest_Side_1.val0 = 255;
+				rDest_Side_1.val1 = 255;
+				rDest_Side_1.val2 = 0;
+
+				rDest_Side_2.val0 = 255;
+				rDest_Side_2.val1 = 255;
+				rDest_Side_2.val2 = 0;
 			}
+
+
+			GlobalStuff::SetLinePathImg(confDsp_Img);
+			GlobalStuff::ShowLinePathImg();
 
 			ShowImage(confDsp_Img, "confDsp_Img->GetSrcImg()");
 		}

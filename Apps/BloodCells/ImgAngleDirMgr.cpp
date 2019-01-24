@@ -60,7 +60,9 @@ namespace Ncv
 
 			cx.m_avgStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
-				cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
+				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
+			cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-3, 3));
+			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-6, 6));
 				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(0, 1));
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(0, 0));
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-6, 6));
@@ -69,15 +71,15 @@ namespace Ncv
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-36, 36));
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-36, 36), Range<int>::New(-6, 6));
 
-			//if (1 == cx.m_nIndex)
-			if (0 == cx.m_nIndex)
+			if (1 == cx.m_nIndex)
+			//if (0 == cx.m_nIndex)
 			{
 				//float & elm1 = cx.m_avgStandev_X_Img->GetActualAccessor().GetAt(45, 77);
 				// float & elm1 = cx.m_avgStandev_X_Img->GetActualAccessor().GetAt(215, 40);
 				//elm1 = 255;
 
-				//ShowImage(cx.m_avgStandev_X_Img->GetSrcImg(), cx.MakeStrWithId("m_avgStandev_X_Img->GetSrcImg()").c_str());
-				ShowImage(GenTriChGrayImg(cx.m_avgStandev_X_Img->GetSrcImg()), cx.MakeStrWithId("m_avgStandev_X_Img->GetSrcImg()").c_str());
+				////ShowImage(cx.m_avgStandev_X_Img->GetSrcImg(), cx.MakeStrWithId("m_avgStandev_X_Img->GetSrcImg()").c_str());
+				//ShowImage(GenTriChGrayImg(cx.m_avgStandev_X_Img->GetSrcImg()), cx.MakeStrWithId("m_avgStandev_X_Img->GetSrcImg()").c_str());
 			}
 			
 		}
@@ -96,8 +98,9 @@ namespace Ncv
 			//Window<int> avgWin = Window<int>::New(-1, 1, -5, 5);
 			//Window<int> avgWin = Window<int>::New(-1, 1, -2, 2);
 
-			////Window<int> avgWin = Window<int>::New(-1, 0, -2, 2);
+			//Window<int> avgWin = Window<int>::New(-1, 0, -2, 2);
 			//////Window<int> avgWin = Window<int>::New(0, 0, -2, 2);
+			// Window<int> avgWin = Window<int>::New(-2, 0, 0, 0);
 			//Window<int> avgWin = Window<int>::New(-1, 0, -1, 1);
 			Window<int> avgWin = Window<int>::New(-1, 0, 0, 0);
 
@@ -216,11 +219,11 @@ namespace Ncv
 				//AssertValues_Image(avg_InrWide_Img->GetVirtAccessor());
 			}
 
-			if (0 == m_context->m_nIndex)
-			{
-				GlobalStuff::SetLinePathImg(GenTriChGrayImg(standev_InrWide_Img->GetSrcImg())); GlobalStuff::ShowLinePathImg();
-				ShowImage(standev_InrWide_Img->GetSrcImg(), "standev_InrWide_Img->GetSrcImg()");
-			}
+			//if (0 == m_context->m_nIndex)
+			//{
+			//	GlobalStuff::SetLinePathImg(GenTriChGrayImg(standev_InrWide_Img->GetSrcImg())); GlobalStuff::ShowLinePathImg();
+			//	ShowImage(standev_InrWide_Img->GetSrcImg(), "standev_InrWide_Img->GetSrcImg()");
+			//}
 
 			////F32VectorValImageArrayHolder_4C_Ref cx.m_avgPStandev_InrWide_Img = new F32VectorValImageArrayHolder_4C(cx.m_org_Img->GetVirtAccessor().GetSize());
 			//F32VectorValImageArrayHolder_4C_Ref cx.m_avgPStandev_InrWide_Img = F32VectorValImageArrayHolder_4C::CreateEmptyFrom(cx.m_org_Img);
@@ -333,6 +336,9 @@ namespace Ncv
 			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
 			ActualArrayAccessor_1D<int> orgToRotMapAcc_1D = orgToRotMap_Acc.GenAcc_1D();
 			
+			const ActualArrayAccessor_2D<int> & rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
+			ActualArrayAccessor_1D<int> rotToOrgMapAcc_1D = rotToOrgMap_Acc.GenAcc_1D();
+
 			// const ActualArrayAccessor_2D<int> & rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
 
 			ActualArrayAccessor_2D<PixelStandevInfoCmn> commonAcc = m_parentContext->m_standevInfoCmnImg->GetActualAccessor();
@@ -346,17 +352,30 @@ namespace Ncv
 			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
 			ActualArrayAccessor_1D<float> localAcc_1D_Norm = ncx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
 
-			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
-			{
-				const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
+			//for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
+			//{
+			//	const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
 
-				for (int x = 0; x < orgToRotMap_Acc.GetSize_X(); x++)
+			//	for (int x = 0; x < orgToRotMap_Acc.GetSize_X(); x++)
+			//	{
+			//		const int nOffsetInOrg_1D = nOffset_Y + x;
+
+			for (int y = 0; y < rotToOrgMap_Acc.GetSize_Y(); y++)
+			{
+				const int nOffset_Y = y * rotToOrgMap_Acc.GetSize_X();
+
+				for (int x = 0; x < rotToOrgMap_Acc.GetSize_X(); x++)
 				{
-					const int nOffsetInOrg_1D = nOffset_Y + x;
+					const int nOffsetInRot_1D = nOffset_Y + x;
+
+					int nOffsetInOrg_1D = rotToOrgMapAcc_1D[nOffsetInRot_1D];
+					if (IsUndefined(nOffsetInOrg_1D))
+					{
+						continue;
+					}
 
 					PixelStandevInfoCmn & rCommonPsi = commonAcc_1D[nOffsetInOrg_1D];
 
-					int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
 
 					// S32Point pntInRot = rotToOrgMap_Acc.CalcPointFromIndex_1D(nOffsetInRot_1D);
 
@@ -491,6 +510,11 @@ namespace Ncv
 			ActualArrayAccessor_1D<ConflictInfo2_Ex> commonImgAcc_1D = m_parentContext->m_conflictInfoImg->GetActualAccessor().GenAcc_1D();
 			ActualArrayAccessor_1D<ConflictInfo2> localAcc_1D = m_context->m_conflict_Img->GetActualAccessor().GenAcc_1D();
 			
+			ActualArrayAccessor_2D<PixelStandevInfoCmn> commonPsiAcc = m_parentContext->m_standevInfoCmnImg->GetActualAccessor();
+			ActualArrayAccessor_1D<PixelStandevInfoCmn> commonPsiAcc_1D = commonPsiAcc.GenAcc_1D();
+
+
+
 			//for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			//{
 			//	const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
@@ -520,15 +544,20 @@ namespace Ncv
 					}
 
 					ConflictInfo2_Ex & rCommonConf = commonImgAcc_1D[nOffsetInOrg_1D];
-
 					AssertValue(rCommonConf);
 
+					const PixelStandevInfoCmn & rCommonPsi = commonPsiAcc_1D[nOffsetInOrg_1D];
+
+					//	for debug.
+					const int dirIndex = m_context->m_nIndex;
+					if (2156 == rCommonPsi.Index)
+					{
+						x = x;
+					}
 
 					ConflictInfo2 & conf_Local = localAcc_1D[nOffsetInRot_1D];
-
 					if (IsUndefined(conf_Local))
 						continue;
-
 
 					if (conf_Local.Exists)
 					{
@@ -541,6 +570,27 @@ namespace Ncv
 						int nOffset_Side_2_Mapped = rotToOrgMapAcc_1D[conf_Local.Offset_Side_2];
 						if (nOffset_Side_2_Mapped < 0)
 							continue;
+
+						
+						if (IsUndefined(rCommonPsi))
+						{
+							continue;
+						}
+
+						//if (IsUndefined(rCommonPsi) || !rCommonPsi.IsDirClear() ||
+						//if (!rCommonPsi.IsDirClear() || rCommonPsi.LeastValDir != m_context->m_nIndex)
+						if (!rCommonPsi.IsDirClear())
+						{
+							//Ncpp_ASSERT(!IsUndefined(rCommonPsi));
+							continue;
+						}
+						
+						if (rCommonPsi.LeastValDir != m_context->m_nIndex)
+						{
+							//Ncpp_ASSERT(!IsUndefined(rCommonPsi));
+							continue;
+						}
+
 
 						rCommonConf.Exists = true;
 						rCommonConf.Offset_Side_1 = nOffset_Side_1_Mapped;
@@ -822,6 +872,12 @@ namespace Ncv
 			ActualArrayAccessor_1D<BidiffInfoCommon> commonAcc_1D = commonAcc.GenAcc_1D();
 
 
+			ActualArrayAccessor_2D<PixelStandevInfoCmn> commonPsiAcc = m_parentContext->m_standevInfoCmnImg->GetActualAccessor();
+			ActualArrayAccessor_1D<PixelStandevInfoCmn> commonPsiAcc_1D = commonPsiAcc.GenAcc_1D();
+
+
+
+
 			//ActualArrayAccessor_2D<BidiffInfo> localAcc = cx.m_bidiffInfo_Img->GetActualAccessor();
 			//ActualArrayAccessor_2D<BidiffInfo> localAcc_Norm = ncx.m_bidiffInfo_Img->GetActualAccessor();
 
@@ -852,7 +908,45 @@ namespace Ncv
 					{
 						continue;
 					}
+
+
+					const PixelStandevInfoCmn & rCommonPsi = commonPsiAcc_1D[nOffsetInOrg_1D];
+
+
+
+
 					
+					if (IsUndefined(rCommonPsi))
+					{
+						continue;
+					}
+
+					//if (IsUndefined(rCommonPsi) || !rCommonPsi.IsDirClear() ||
+					//if (!rCommonPsi.IsDirClear() || rCommonPsi.LeastValDir != m_context->m_nIndex)
+					if (!rCommonPsi.IsDirClear())
+					{
+						//Ncpp_ASSERT(!IsUndefined(rCommonPsi));
+						continue;
+					}
+
+
+					//	for debug.
+					const int dirIndex = m_context->m_nIndex;
+					if (2156 == rCommonPsi.Index)
+					{
+						x = x;
+					}
+
+
+					if (rCommonPsi.LeastValDir != m_context->m_nIndex)
+					{
+						//Ncpp_ASSERT(!IsUndefined(rCommonPsi));
+						continue;
+					}
+
+
+
+
 					BidiffInfoCommon & rCommonBdc = commonAcc_1D[nOffsetInOrg_1D];
 
 					//const int nOffsetInOrg_1D_2 = rotToOrgMapAcc_1D[nOffsetInRot_1D];
@@ -1234,10 +1328,10 @@ namespace Ncv
 			ShowImage(diff_Img_disp->GetSrcImg(), cx.MakeStrWithId("diffDsp_Img").c_str());
 			ShowImage(diff_2_Img_disp->GetSrcImg(), cx.MakeStrWithId("diff_2_Dsp_Img").c_str());
 			
-			//GlobalStuff::SetLinePathImg(diff_Img_disp->GetSrcImg());
-			//GlobalStuff::SetLinePathImg(diff_2_Img_disp->GetSrcImg());
-			GlobalStuff::SetLinePathImg(bidiffInfoDsp_Img);
-			GlobalStuff::ShowLinePathImg();
+			////GlobalStuff::SetLinePathImg(diff_Img_disp->GetSrcImg());
+			////GlobalStuff::SetLinePathImg(diff_2_Img_disp->GetSrcImg());
+			//GlobalStuff::SetLinePathImg(bidiffInfoDsp_Img);
+			//GlobalStuff::ShowLinePathImg();
 
 		}
 
