@@ -463,25 +463,42 @@ namespace Ncv
 			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
 			ActualArrayAccessor_1D<int> orgToRotMapAcc_1D = orgToRotMap_Acc.GenAcc_1D();
 
+			ActualArrayAccessor_2D<int> rotToOrgMap_Acc = m_context->m_rotToOrgMap_Img->GetActualAccessor();
+			ActualArrayAccessor_1D<int> rotToOrgMapAcc_1D = rotToOrgMap_Acc.GenAcc_1D();
+
 			ActualArrayAccessor_1D<VectorVal<Float, 4>> commonAcc_1D = pcx.m_avgPStandev_InrWide_Img->GetActualAccessor().GenAcc_1D();
 			ActualArrayAccessor_1D<VectorVal<Float, 4>> localAcc_1D = cx.m_avgPStandev_InrWide_Img->GetActualAccessor().GenAcc_1D();
 
-			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
-			{
-				const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
+			//for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
+			//{
+			//	const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
 
-				for (int x = 0; x < orgToRotMap_Acc.GetSize_X(); x++)
+			//	for (int x = 0; x < orgToRotMap_Acc.GetSize_X(); x++)
+			//	{
+			//		const int nOffsetInOrg_1D = nOffset_Y + x;
+
+			for (int y = 0; y < rotToOrgMap_Acc.GetSize_Y(); y++)
+			{
+				const int nOffset_Y = y * rotToOrgMap_Acc.GetSize_X();
+
+				for (int x = 0; x < rotToOrgMap_Acc.GetSize_X(); x++)
 				{
-					const int nOffsetInOrg_1D = nOffset_Y + x;
+					const int nOffsetInRot_1D = nOffset_Y + x;
+
+					Ncpp_ASSERT(nOffsetInRot_1D >= 0);
+
+					int nOffsetInOrg_1D = rotToOrgMapAcc_1D[nOffsetInRot_1D];
+					if (IsUndefined(nOffsetInOrg_1D))
+					{
+						continue;
+					}
+
 
 					VectorVal<Float, 4> * pCommonVal = &commonAcc_1D[nOffsetInOrg_1D];
 					if (IsUndefined(*pCommonVal))
 						continue;
 
 					AssertValue(*pCommonVal);
-
-					int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
-					Ncpp_ASSERT(nOffsetInRot_1D >= 0);
 
 					VectorVal<Float, 4> & val_Local = localAcc_1D[nOffsetInRot_1D];
 					AssertUndefinedOrValid(val_Local);
@@ -500,19 +517,33 @@ namespace Ncv
 
 		void ImgAngleDirMgr::AffectCommonConflict()
 		{
-			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = m_context->m_orgToRotMap_Img->GetActualAccessor();
+			Context & cx = *m_context;
+			Context & ncx = *m_normalContext;
+			AngleDirMgrColl_Context & pcx = *m_parentContext;
+
+
+			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
 
 			ActualArrayAccessor_1D<int> orgToRotMapAcc_1D = orgToRotMap_Acc.GenAcc_1D();
 			
-			ActualArrayAccessor_2D<int> rotToOrgMap_Acc = m_context->m_rotToOrgMap_Img->GetActualAccessor();
+			ActualArrayAccessor_2D<int> rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
 			ActualArrayAccessor_1D<int> rotToOrgMapAcc_1D = rotToOrgMap_Acc.GenAcc_1D();
 
 			ActualArrayAccessor_1D<ConflictInfo2_Ex> commonImgAcc_1D = m_parentContext->m_conflictInfoImg->GetActualAccessor().GenAcc_1D();
-			ActualArrayAccessor_1D<ConflictInfo2> localAcc_1D = m_context->m_conflict_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<ConflictInfo2> localAcc_1D = cx.m_conflict_Img->GetActualAccessor().GenAcc_1D();
 			
 			ActualArrayAccessor_2D<PixelStandevInfoCmn> commonPsiAcc = m_parentContext->m_standevInfoCmnImg->GetActualAccessor();
 			ActualArrayAccessor_1D<PixelStandevInfoCmn> commonPsiAcc_1D = commonPsiAcc.GenAcc_1D();
 
+			//--
+			
+			ActualArrayAccessor_1D<float> localStandevX_Acc_1D = cx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> localStandevX_Acc_1D_Norm = ncx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+
+
+			
+			
+			//--
 
 
 			//for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
@@ -546,10 +577,15 @@ namespace Ncv
 					ConflictInfo2_Ex & rCommonConf = commonImgAcc_1D[nOffsetInOrg_1D];
 					AssertValue(rCommonConf);
 
+
+					const float standev_Local = localStandevX_Acc_1D[nOffsetInRot_1D];
+					const float standev_Norm = localStandevX_Acc_1D_Norm[nOffsetInRot_1D];
+
+
 					const PixelStandevInfoCmn & rCommonPsi = commonPsiAcc_1D[nOffsetInOrg_1D];
 
 					//	for debug.
-					const int dirIndex = m_context->m_nIndex;
+					const int dirIndex = cx.m_nIndex;
 					if (2156 == rCommonPsi.Index)
 					{
 						x = x;
@@ -571,21 +607,30 @@ namespace Ncv
 						if (nOffset_Side_2_Mapped < 0)
 							continue;
 
-						
+						if (IsUndefined(standev_Local) || IsUndefined(standev_Norm))
+						{
+							continue;
+						}
+
+						if (standev_Local > 0.5 * standev_Norm)
+						{
+							continue;
+						}
+
 						if (IsUndefined(rCommonPsi))
 						{
 							continue;
 						}
 
 						//if (IsUndefined(rCommonPsi) || !rCommonPsi.IsDirClear() ||
-						//if (!rCommonPsi.IsDirClear() || rCommonPsi.LeastValDir != m_context->m_nIndex)
+						//if (!rCommonPsi.IsDirClear() || rCommonPsi.LeastValDir != cx.m_nIndex)
 						if (!rCommonPsi.IsDirClear())
 						{
 							//Ncpp_ASSERT(!IsUndefined(rCommonPsi));
 							continue;
 						}
 						
-						if (rCommonPsi.LeastValDir != m_context->m_nIndex)
+						if (rCommonPsi.LeastValDir != cx.m_nIndex)
 						{
 							//Ncpp_ASSERT(!IsUndefined(rCommonPsi));
 							continue;
@@ -596,7 +641,7 @@ namespace Ncv
 						rCommonConf.Offset_Side_1 = nOffset_Side_1_Mapped;
 						rCommonConf.Offset_Side_2 = nOffset_Side_2_Mapped;
 
-						rCommonConf.Dir = m_context->m_nIndex;
+						rCommonConf.Dir = cx.m_nIndex;
 					}
 
 				}
@@ -604,254 +649,7 @@ namespace Ncv
 
 		}
 
-
 		
-		void ImgAngleDirMgr::AffectCommonBidiffInfo_0()
-		{
-
-			Context & cx = *m_context;
-			Context & ncx = *m_normalContext;
-			AngleDirMgrColl_Context & pcx = *m_parentContext;
-
-			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
-			ActualArrayAccessor_1D<int> orgToRotMapAcc_1D = orgToRotMap_Acc.GenAcc_1D();
-
-			const ActualArrayAccessor_2D<int> & rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
-			ActualArrayAccessor_1D<int> rotToOrgMapAcc_1D = rotToOrgMap_Acc.GenAcc_1D();
-
-			ActualArrayAccessor_2D<BidiffInfoCommon> commonAcc = m_parentContext->m_bidiffInfoCommonImg->GetActualAccessor();
-			Ncpp_ASSERT(Size_2D::AreEqual(orgToRotMap_Acc.GetSize(), commonAcc.GetSize()));
-
-			ActualArrayAccessor_1D<BidiffInfoCommon> commonAcc_1D = commonAcc.GenAcc_1D();
-
-
-			//ActualArrayAccessor_2D<BidiffInfo> localAcc = cx.m_bidiffInfo_Img->GetActualAccessor();
-			//ActualArrayAccessor_2D<BidiffInfo> localAcc_Norm = ncx.m_bidiffInfo_Img->GetActualAccessor();
-
-			VirtArrayAccessor_2D<BidiffInfo> localVirtAcc = cx.m_bidiffInfo_Img->GetVirtAccessor();
-			VirtArrayAccessor_2D<BidiffInfo> localVirtAcc_Norm = ncx.m_bidiffInfo_Img->GetVirtAccessor();
-
-			//float * localAcc_1D = (float *)cx.m_avgStandev_X_Img->GetActualAccessor().GetData();
-			ActualArrayAccessor_1D<BidiffInfo> localAcc_1D = cx.m_bidiffInfo_Img->GetActualAccessor().GenAcc_1D();
-			ActualArrayAccessor_1D<BidiffInfo> localAcc_1D_Norm = ncx.m_bidiffInfo_Img->GetActualAccessor().GenAcc_1D();
-
-			//const float diff2CmpRatio = 0.7;
-			const float diff2CmpRatio = 0.4;
-
-			const int posDist_Local = pcx.GetDiffPosDist() * localVirtAcc.GetStepSize_X();
-			const int posDist_Norm = pcx.GetDiffPosDist() * localVirtAcc_Norm.GetStepSize_X();
-
-			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
-			{
-				const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
-
-				for (int x = 0; x < orgToRotMap_Acc.GetSize_X(); x++)
-				{
-					const int nOffsetInOrg_1D = nOffset_Y + x;
-
-					BidiffInfoCommon & rCommonBdc = commonAcc_1D[nOffsetInOrg_1D];
-
-					const int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
-					//const int nOffsetInOrg_1D_2 = rotToOrgMapAcc_1D[nOffsetInRot_1D];
-
-					////Ncpp_ASSERT(nOffsetInOrg_1D == nOffsetInOrg_1D_2);
-					//Ncpp_ASSERT(nOffsetInOrg_1D == nOffsetInOrg_1D_2 || IsUndefined(nOffsetInOrg_1D_2));
-					
-					S32Point pntInRot = rotToOrgMap_Acc.CalcPointFromIndex_1D(nOffsetInRot_1D);
-
-					const BidiffInfo & rBidiffInfo_Local = localAcc_1D[nOffsetInRot_1D];
-					const BidiffInfo & rBidiffInfo_Norm = localAcc_1D_Norm[nOffsetInRot_1D];
-
-					//rCommonBdc.allVals[cx.m_nIndex] = bidiffInfo_Local;
-
-					if ((IsUndefined(rBidiffInfo_Local.Diff1_BkwdMag) && IsUndefined(rBidiffInfo_Local.Diff1_FwdMag)) ||
-						(IsUndefined(rBidiffInfo_Norm.Diff1_BkwdMag) && IsUndefined(rBidiffInfo_Norm.Diff1_FwdMag)) ||
-						(IsUndefined(rBidiffInfo_Norm.Diff2_Mag)) )
-					{
-						continue;
-					}
-
-					float bidiffInfoMin_Local, bidiffInfoMax_Local;
-					{
-						MaxFinder<float> maxFinder;
-						MinFinder<float> minFinder;
-						
-						if (!IsUndefined(rBidiffInfo_Local.Diff1_BkwdMag))
-						{
-							maxFinder.PushValue(rBidiffInfo_Local.Diff1_BkwdMag);
-							minFinder.PushValue(rBidiffInfo_Local.Diff1_BkwdMag);
-						}
-
-						if (!IsUndefined(rBidiffInfo_Local.Diff1_FwdMag))
-						{
-							maxFinder.PushValue(rBidiffInfo_Local.Diff1_FwdMag);
-							minFinder.PushValue(rBidiffInfo_Local.Diff1_FwdMag);
-						}
-
-						bidiffInfoMax_Local = maxFinder.FindMax();
-						AssertValue(bidiffInfoMax_Local);
-						Ncpp_ASSERT(bidiffInfoMax_Local >= -0.001);
-
-						bidiffInfoMin_Local = minFinder.FindMin();
-						AssertValue(bidiffInfoMin_Local);
-						Ncpp_ASSERT(bidiffInfoMin_Local >= -0.001);
-					}
-
-					float bidiffInfoMin_Norm, bidiffInfoMax_Norm, bidiffInfoDiff2_Norm;
-					{
-						MaxFinder<float> maxFinder;
-						MinFinder<float> minFinder;
-
-						if (!IsUndefined(rBidiffInfo_Norm.Diff1_BkwdMag))
-						{
-							maxFinder.PushValue(rBidiffInfo_Norm.Diff1_BkwdMag);
-							minFinder.PushValue(rBidiffInfo_Norm.Diff1_BkwdMag);
-						}
-
-						if (!IsUndefined(rBidiffInfo_Norm.Diff1_FwdMag))
-						{
-							maxFinder.PushValue(rBidiffInfo_Norm.Diff1_FwdMag);
-							minFinder.PushValue(rBidiffInfo_Norm.Diff1_FwdMag);
-						}
-
-						bidiffInfoMax_Norm = maxFinder.FindMax();
-						AssertValue(bidiffInfoMax_Norm);
-						Ncpp_ASSERT(bidiffInfoMax_Norm >= -0.001);
-
-						bidiffInfoMin_Norm = minFinder.FindMin();
-						AssertValue(bidiffInfoMin_Norm);
-						Ncpp_ASSERT(bidiffInfoMin_Norm >= -0.001);
-
-						bidiffInfoDiff2_Norm = rBidiffInfo_Norm.Diff2_Mag;
-					}
-
-
-
-					//if (standev_Local < rCommonBdc.Val)
-					////if (1 == cx.m_nIndex)
-					//{
-					//	Assign(&rCommonBdc.Val, standev_Local);
-					//	Assign(&rCommonBdc.NormLeastVal, standev_Norm);
-					//	
-					//	Assign(&rCommonBdc.Dir, cx.m_nIndex);
-					//}
-
-
-
-					//if (4 == cx.m_nIndex)
-					//if (bidiffInfoMax_Norm > 300 && 4 == cx.m_nIndex && 158 == y)
-					//if ((0 == cx.m_nIndex || 4 == cx.m_nIndex) && 129 == x && 158 == y)
-					//if ((0 == cx.m_nIndex || 4 == cx.m_nIndex) && 430 == x && 231 == y)
-					if ((0 == cx.m_nIndex || 4 == cx.m_nIndex) && 539 == x && 282 == y)
-					{
-						x = x;
-					}
-
-					const bool isEdge = bidiffInfoDiff2_Norm > diff2CmpRatio * bidiffInfoMax_Norm && bidiffInfoMax_Norm > 20
-						&& bidiffInfoMin_Local < 0.4 * bidiffInfoMax_Norm
-						//&& bidiffInfoMax_Local < 0.4 * bidiffInfoMax_Norm
-						//&& 0 == cx.m_nIndex % 2
-						;
-
-
-					if (IsUndefined(rCommonBdc))
-					{
-						//if (bidiffInfoMax_Norm > 0)
-						if (bidiffInfoMax_Norm > 300 && 4 == cx.m_nIndex && 158 == y)
-						{
-							x = x;
-						}
-
-						Assign(&rCommonBdc.LeastValDirMaxVal, bidiffInfoMax_Local);
-						Assign(&rCommonBdc.LeastValDirMinVal, bidiffInfoMin_Local);
-						//Assign(&rCommonBdc.LeastVal, bidiffInfoMin_Local);
-						Assign(&rCommonBdc.NormLeastVal, bidiffInfoMax_Norm);
-						Assign(&rCommonBdc.NormDiff2LeastVal, bidiffInfoDiff2_Norm);
-
-						if (isEdge)
-						{
-							if (174251 == rCommonBdc.Index)
-							{
-								x = x;
-							}
-
-							rCommonBdc.IsEdge = true;
-						}
-						else
-						{
-							rCommonBdc.IsEdge = false;
-						}
-
-						Assign(&rCommonBdc.LeastValDir, cx.m_nIndex);
-
-						Assign(&rCommonBdc.SecondLeastVal, bidiffInfoMax_Local);
-						//Assign(&rCommonBdc.SecondLeastVal, bidiffInfoMin_Local);
-						Assign(&rCommonBdc.NormSecondLeastVal, bidiffInfoMax_Norm);
-
-						Assign(&rCommonBdc.SecondLeastValDir, cx.m_nIndex);
-
-						continue;
-					}
-
-					AssertValue(rCommonBdc);
-
-					if (!isEdge)
-					{
-						continue;
-					}
-					
-					if (174251 == rCommonBdc.Index)
-					{
-						x = x;
-					}
-
-					if (!rCommonBdc.IsEdge || bidiffInfoMax_Local < rCommonBdc.LeastValDirMaxVal)
-					//if (bidiffInfoMin_Local < rCommonBdc.LeastVal)
-					{
-						if (0 != cx.m_nIndex)
-						{
-							x = x;
-						}
-
-						Assign(&rCommonBdc.SecondLeastVal, rCommonBdc.LeastValDirMaxVal);
-						Assign(&rCommonBdc.NormSecondLeastVal, rCommonBdc.NormLeastVal);
-
-						Assign(&rCommonBdc.SecondLeastValDir, rCommonBdc.LeastValDir);
-
-						Assign(&rCommonBdc.LeastValDirMaxVal, bidiffInfoMax_Local);
-						Assign(&rCommonBdc.LeastValDirMinVal, bidiffInfoMin_Local);
-						//Assign(&rCommonBdc.LeastVal, bidiffInfoMin_Local);
-						Assign(&rCommonBdc.NormLeastVal, bidiffInfoMax_Norm);
-						Assign(&rCommonBdc.NormDiff2LeastVal, bidiffInfoDiff2_Norm);
-
-						Assign(&rCommonBdc.LeastValDir, cx.m_nIndex);
-					}
-					else if (bidiffInfoMax_Local < rCommonBdc.SecondLeastVal)
-					//else if (bidiffInfoMin_Local < rCommonBdc.SecondLeastVal)
-					{
-						Assign(&rCommonBdc.SecondLeastVal, bidiffInfoMax_Local);
-						//Assign(&rCommonBdc.SecondLeastVal, bidiffInfoMin_Local);
-						Assign(&rCommonBdc.NormSecondLeastVal, bidiffInfoMax_Norm);
-
-						Assign(&rCommonBdc.SecondLeastValDir, cx.m_nIndex);
-					}
-
-					rCommonBdc.IsEdge = true;
-
-					AssertValue(rCommonBdc);
-
-					////else if (bidiffInfoMax_Local > rCommonBdc.MaxVal)
-					//if (bidiffInfoMax_Local > rCommonBdc.MaxVal)
-					//{
-					//	Assign(&rCommonBdc.MaxVal, bidiffInfoMax_Local);
-					//	Assign(&rCommonBdc.MaxValDir, cx.m_nIndex);
-					//}
-
-				}	//	x for end.
-			}	//	y	for end.
-
-
-		}
 
 		void ImgAngleDirMgr::AffectCommonBidiffInfo()
 		{
@@ -1159,24 +957,42 @@ namespace Ncv
 			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
 			ActualArrayAccessor_1D<int> orgToRotMapAcc_1D = orgToRotMap_Acc.GenAcc_1D();
 
+			ActualArrayAccessor_2D<int> rotToOrgMap_Acc = m_context->m_rotToOrgMap_Img->GetActualAccessor();
+			ActualArrayAccessor_1D<int> rotToOrgMapAcc_1D = rotToOrgMap_Acc.GenAcc_1D();
+
 			ActualArrayAccessor_1D<float> commonAcc_1D = pcx.m_wideConflictDiff_Img->GetActualAccessor().GenAcc_1D();
 
 			float * localAcc_1D = (float *)cx.m_wideConflictDiff_Img->GetActualAccessor().GetData();
 			//float * localAcc_1D_Norm = (float *)ncx.m_wideConflictDiff_Img->GetActualAccessor().GetData();
 
-			for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
-			{
-				const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
+			//for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
+			//{
+			//	const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
 
-				for (int x = 0; x < orgToRotMap_Acc.GetSize_X(); x++)
+			//	for (int x = 0; x < orgToRotMap_Acc.GetSize_X(); x++)
+			//	{
+			//		const int nOffsetInOrg_1D = nOffset_Y + x;
+
+			for (int y = 0; y < rotToOrgMap_Acc.GetSize_Y(); y++)
+			{
+				const int nOffset_Y = y * rotToOrgMap_Acc.GetSize_X();
+
+				for (int x = 0; x < rotToOrgMap_Acc.GetSize_X(); x++)
 				{
-					const int nOffsetInOrg_1D = nOffset_Y + x;
+					const int nOffsetInRot_1D = nOffset_Y + x;
+
+					Ncpp_ASSERT(nOffsetInRot_1D >= 0);
+
+
+					int nOffsetInOrg_1D = rotToOrgMapAcc_1D[nOffsetInRot_1D];
+					if (IsUndefined(nOffsetInOrg_1D))
+					{
+						continue;
+					}
+
 
 					float & rCommonConf = commonAcc_1D[nOffsetInOrg_1D];
 					AssertValue(rCommonConf);
-
-					int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
-					Ncpp_ASSERT(nOffsetInRot_1D >= 0);
 
 					float & conf_Local = localAcc_1D[nOffsetInRot_1D];
 					if (IsUndefined(conf_Local))
