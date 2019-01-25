@@ -972,7 +972,9 @@ namespace Ncv
 					//S32Point testPnt(470, 182);
 					//S32Point testPnt(415, 352);
 					//S32Point testPnt(415, 352);
-					S32Point testPnt(225, 333);
+					//S32Point testPnt(225, 333);
+					//S32Point testPnt(528, 225);
+					S32Point testPnt(353, 84);
 					if (S32Point::AreEqual(side1_Pnt, testPnt) ||
 						S32Point::AreEqual(side2_Pnt, testPnt)
 						)

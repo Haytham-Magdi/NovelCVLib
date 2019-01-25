@@ -61,7 +61,10 @@ namespace Ncv
 			cx.m_avgStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
 				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
-			cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-3, 3));
+			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-2, 2));
+				cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-3, 3));
+				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-7, 7), Range<int>::New(-7, 7));
+				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-3, 3));
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-6, 6));
 				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(0, 1));
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(0, 0));
@@ -102,7 +105,10 @@ namespace Ncv
 			//////Window<int> avgWin = Window<int>::New(0, 0, -2, 2);
 			// Window<int> avgWin = Window<int>::New(-2, 0, 0, 0);
 			//Window<int> avgWin = Window<int>::New(-1, 0, -1, 1);
-			Window<int> avgWin = Window<int>::New(-1, 0, 0, 0);
+			//Window<int> avgWin = Window<int>::New(-1, 0, 0, 0);
+			//Window<int> avgWin = Window<int>::New(-1, 1, 0, 0);
+			//Window<int> avgWin = Window<int>::New(-3, 3, 0, 0);
+			Window<int> avgWin = Window<int>::New(-1, 1, 0, 0);
 
 			//Window<int> avgWin = Window<int>::New(-2, 2, -2, 2);
 			//Window<int> avgWin = Window<int>::New(-2, 1, -2, 2);
@@ -116,14 +122,15 @@ namespace Ncv
 			AvgImage(cx.m_magSqr_Img->GetVirtAccessor(), avg_MagSqr_Img->GetVirtAccessor(), avgWin);
 
 			Range<int> confRange = Range<int>::New(-1 - avgWin.GetX2(), 1 - avgWin.GetX1());
+			//Range<int> confRange = Range<int>::New(-7 - avgWin.GetX2(), 7 - avgWin.GetX1());
 
 			CalcConflictImage_X(avg_Img->GetVirtAccessor(), avg_MagSqr_Img->GetVirtAccessor(),
 				cx.m_conflict_Img->GetVirtAccessor(), confRange);
 
-			if (0 == cx.m_nIndex)
-			{
-				DisplayConflictImg();
-			}
+			//if (0 == cx.m_nIndex)
+			//{
+			//	DisplayConflictImg();
+			//}
 
 		}
 
@@ -382,7 +389,7 @@ namespace Ncv
 					const float standev_Local = localAcc_1D[nOffsetInRot_1D];
 					const float standev_Norm = localAcc_1D_Norm[nOffsetInRot_1D];
 
-					//rCommonPsi.allVals[cx.m_nIndex] = standev_Local;
+					rCommonPsi.allVals[cx.m_nIndex] = standev_Local;
 
 					if (IsUndefined(standev_Local) || IsUndefined(standev_Norm))
 					{
@@ -586,7 +593,10 @@ namespace Ncv
 
 					//	for debug.
 					const int dirIndex = cx.m_nIndex;
-					if (2156 == rCommonPsi.Index)
+					//if (2156 == rCommonPsi.Index)
+					//if (135426 == rCommonPsi.Index)
+					//if (142213 == rCommonPsi.Index)
+					if (52104 == rCommonPsi.Index)
 					{
 						x = x;
 					}
@@ -609,32 +619,43 @@ namespace Ncv
 
 						if (IsUndefined(standev_Local) || IsUndefined(standev_Norm))
 						{
+							conf_Local.Exists = false;
 							continue;
 						}
 
-						if (standev_Local > 0.5 * standev_Norm)
+						//if (standev_Local > 0.5 * standev_Norm)
+						//if (standev_Local > 2 * standev_Norm)
+						//if (standev_Local < 2 * standev_Norm)
+						if (standev_Local < 3 * standev_Norm)
 						{
+							conf_Local.Exists = false;
 							continue;
 						}
 
-						if (IsUndefined(rCommonPsi))
+						if (standev_Local < 20)
 						{
+							conf_Local.Exists = false;
 							continue;
 						}
 
-						//if (IsUndefined(rCommonPsi) || !rCommonPsi.IsDirClear() ||
-						//if (!rCommonPsi.IsDirClear() || rCommonPsi.LeastValDir != cx.m_nIndex)
-						if (!rCommonPsi.IsDirClear())
-						{
-							//Ncpp_ASSERT(!IsUndefined(rCommonPsi));
-							continue;
-						}
+						//if (IsUndefined(rCommonPsi))
+						//{
+						//	continue;
+						//}
+
+						////if (IsUndefined(rCommonPsi) || !rCommonPsi.IsDirClear() ||
+						////if (!rCommonPsi.IsDirClear() || rCommonPsi.LeastValDir != cx.m_nIndex)
+						//if (!rCommonPsi.IsDirClear())
+						//{
+						//	//Ncpp_ASSERT(!IsUndefined(rCommonPsi));
+						//	continue;
+						//}
 						
-						if (rCommonPsi.LeastValDir != cx.m_nIndex)
-						{
-							//Ncpp_ASSERT(!IsUndefined(rCommonPsi));
-							continue;
-						}
+						//if (rCommonPsi.LeastValDir != cx.m_nIndex)
+						//{
+						//	//Ncpp_ASSERT(!IsUndefined(rCommonPsi));
+						//	continue;
+						//}
 
 
 						rCommonConf.Exists = true;
@@ -644,7 +665,14 @@ namespace Ncv
 						rCommonConf.Dir = cx.m_nIndex;
 					}
 
-				}
+				}	//	end for x.
+			}	//	end for y.
+
+			if (0 == cx.m_nIndex ||
+				4 == cx.m_nIndex
+				)
+			{
+				DisplayConflictImg();
 			}
 
 		}

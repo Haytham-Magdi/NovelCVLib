@@ -35,7 +35,7 @@ namespace Ncv
 		//float MaxVal;
 		//int MaxValDir;
 
-		//float allVals[8];
+		float allVals[8];
 
 		bool IsDirClear() const
 		{
