@@ -706,6 +706,72 @@ namespace Ncv
 
 
 		template<class T>
+		void CalcConflictImage_X_FromDiffImages(const VirtArrayAccessor_2D<T> & a_diff1_1_Acc, const VirtArrayAccessor_2D<T> & a_diff1_2_Acc,
+			const VirtArrayAccessor_2D<T> & a_diff2_Acc, const VirtArrayAccessor_2D<ConflictInfo2> a_outAcc, const int a_posDist1_1)
+		{
+			F32ImageArrayHolder1C_Ref diffMag1_1_Img = new F32ImageArrayHolder1C(a_diff1_1_Acc.GetSize());
+			CalcMagImage(a_diff1_1_Acc, diffMag1_1_Img->GetVirtAccessor());
+
+			F32ImageArrayHolder1C_Ref diffMag1_2_Img = new F32ImageArrayHolder1C(a_diff1_2_Acc.GetSize());
+			CalcMagImage(a_diff1_1_Acc, diffMag1_2_Img->GetVirtAccessor());
+
+			F32ImageArrayHolder1C_Ref diffMag2_Img = new F32ImageArrayHolder1C(a_diff2_Acc.GetSize());
+			CalcMagImage(a_diff1_1_Acc, diffMag2_Img->GetVirtAccessor());
+
+			CalcConflictImage_X_FromDiffMagImages(diffMag1_1_Img->GetVirtAccessor(), diffMag1_2_Img->GetVirtAccessor(),
+				diffMag2_Img->GetVirtAccessor(), a_outAcc, a_posDist1_1);
+		}
+
+
+		template<class T>
+		void CalcConflictImage_X_FromDiffMagImages(const VirtArrayAccessor_2D<float> & a_diffMag1_1_Acc, const VirtArrayAccessor_2D<float> & a_diffMag1_2_Acc, 
+			const VirtArrayAccessor_2D<float> & a_diffMag2_Acc, const VirtArrayAccessor_2D<ConflictInfo2> a_outAcc, const int a_posDist1_1)
+		{
+			const VirtArrayAccessor_1D<float> acc_DiffMag1_1_Y = a_diffMag1_1_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> acc_DiffMag1_1_X = a_diffMag1_1_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<float> acc_DiffMag1_2_Y = a_diffMag1_2_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> acc_DiffMag1_2_X = a_diffMag1_2_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<float> acc_DiffMag2_Y = a_diffMag2_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> acc_DiffMag2_X = a_diffMag2_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<ConflictInfo2> & acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<ConflictInfo2> & acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_DiffMag1_1_Y.GetSize() == acc_DiffMag1_2_Y.GetSize());
+			Ncpp_ASSERT(acc_DiffMag1_1_Y.GetSize() == acc_DiffMag2_Y.GetSize());
+			Ncpp_ASSERT(acc_DiffMag1_1_Y.GetSize() == acc_Out_Y.GetSize());
+
+			PtrIterator2<T> ptrItr_DiffMag1_1_Y = acc_DiffMag1_1_Y.GenPtrIterator();
+			PtrIterator2<float> ptrItr_DiffMag1_2_Y = acc_DiffMag1_2_Y.GenPtrIterator();
+			PtrIterator2<float> ptrItr_DiffMag2_Y = acc_DiffMag2_Y.GenPtrIterator();
+			PtrIterator2<ConflictInfo2> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			for (; ptrItr_DiffMag1_1_Y.HasValidPos();
+				ptrItr_DiffMag1_1_Y.MoveBgn(), ptrItr_DiffMag1_2_Y.MoveBgn(), ptrItr_DiffMag2_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			{
+				float * ptr_DiffMag1_1_Y = ptrItr_DiffMag1_1_Y.GetBgn();
+				float * ptr_DiffMag1_2_Y = ptrItr_DiffMag1_2_Y.GetBgn();
+				float * ptr_DiffMag2_Y = ptrItr_DiffMag2_Y.GetBgn();
+				ConflictInfo2 * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+				acc_DiffMag1_1_X.SetData(ptr_DiffMag1_1_Y);
+				acc_DiffMag1_2_X.SetData(ptr_DiffMag1_2_Y);
+				acc_DiffMag2_X.SetData(ptr_DiffMag2_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				CalcConflictLine_FromDiffMagImages(acc_DiffMag1_1_X, acc_DiffMag1_2_X, acc_DiffMag2_X
+					acc_Out_X, a_posDist1_1);
+
+				//CalcConflictLine<T>(acc_Avg_X, acc_Avg_MagSqr_X, acc_Out_X, a_range_X);
+			}
+		}
+
+
+
+
+		template<class T>
 		void Calc_AvgStandevImage_X(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<float> & a_magSqrAcc,
 			const VirtArrayAccessor_2D<float> & a_outAcc, const Range<int> a_standevRange_X, const Range<int> a_avgRange_Y)
 		{
