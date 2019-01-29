@@ -60,11 +60,16 @@ namespace Ncv
 
 			cx.m_avgStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
-				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
-			cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-1, 1));
+				
+				cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
+			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-1, 1));
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-2, 2));
-				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-3, 3));
-				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-7, 7), Range<int>::New(-7, 7));
+			
+			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-3, 3));
+			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-1, 1));
+			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-3, 3));
+			
+			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-7, 7), Range<int>::New(-7, 7));
 				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-3, 3));
 			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-6, 6));
 				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(0, 1));
@@ -106,8 +111,10 @@ namespace Ncv
 			//////Window<int> avgWin = Window<int>::New(0, 0, -2, 2);
 			// Window<int> avgWin = Window<int>::New(-2, 0, 0, 0);
 			//Window<int> avgWin = Window<int>::New(-1, 0, -1, 1);
-			Window<int> avgWin = Window<int>::New(-1, 0, 0, 0);
-			//Window<int> avgWin = Window<int>::New(-1, 1, 0, 0);
+
+			//Window<int> avgWin = Window<int>::New(-1, 0, 0, 0);
+			Window<int> avgWin = Window<int>::New(-1, 1, 0, 0);
+
 			//Window<int> avgWin = Window<int>::New(-3, 3, 0, 0);
 			//Window<int> avgWin = Window<int>::New(-1, 1, 0, 0);
 

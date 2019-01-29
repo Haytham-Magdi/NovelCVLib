@@ -1001,23 +1001,9 @@ namespace Ncv
 					pOut->Offset_Side_1 = &avg_1 - a_avg_Acc.GetData_FakeOrg();
 					Ncpp_ASSERT(pOut->Offset_Side_1 >= 0);
 
-					if (211 == pOut->Offset_Side_1)
-					{
-						i = i;
-					}
-
-					//pOut->pSide_2 = &avg_2;
-
 					pOut->Offset_Side_2 = &avg_2 - a_avg_Acc.GetData_FakeOrg();
 					Ncpp_ASSERT(pOut->Offset_Side_2 >= 0);
 				}
-				//else
-				//{
-				//	pOut->Offset_Side_1 = -700;
-				//	
-				//	//pOut->Offset_Side_1 = -7;
-				//	//pOut->Offset_Side_2 = -7;
-				//}
 			}
 
 			///////////////////////////////
@@ -1276,12 +1262,6 @@ namespace Ncv
 
 				const int nSize_1D = a_outAcc.GetSize();
 
-				const int nBefDiff = -a_range.GetBgn();
-				const int nAftDiff = a_range.GetEnd();
-
-				const int nRangeLen = nBefDiff + 1 + nAftDiff;
-
-
 				//--------------
 
 
@@ -1289,10 +1269,11 @@ namespace Ncv
 				int start = 0;
 				for (; start < nSize_1D; start++)
 				{
-					const T & avgVal = a_avg_Acc[start];
-					const float & avgMagSqrVal = a_avg_MagSqr_Acc[start];
+					//const float & diffMag1_1_Val = a_diffMag1_1_Acc[start];
+					//const float & diffMag1_2_Val = a_diffMag1_2_Acc[start];
+					const float & diffMag2_Val = a_diffMag2_Acc[start];
 
-					if (IsUndefined(avgVal) || IsUndefined(avgMagSqrVal))
+					if (IsUndefined(diffMag2_Val))
 					{
 						continue;
 					}
@@ -1302,13 +1283,19 @@ namespace Ncv
 					}
 				}
 
-				int end = nSize_1D - 1;
+				//const int aftStart = start + 4 * a_posDist1_1 - 1;
+				//const int aftStart = start + a_posDist1_1;
+
+				//int end = nSize_1D - 1;
+				int end = nSize_1D - 1 - a_posDist1_1;
+				Ncpp_ASSERT(end > 0);
 				for (; end >= start; end--)
 				{
-					const T & avgVal = a_avg_Acc[end];
-					const float & avgMagSqrVal = a_avg_MagSqr_Acc[end];
+					//const float & diffMag1_1_Val = a_diffMag1_1_Acc[end];
+					//const float & diffMag1_2_Val = a_diffMag1_2_Acc[end];
+					const float & diffMag2_Val = a_diffMag2_Acc[end];
 
-					if (IsUndefined(avgVal) || IsUndefined(avgMagSqrVal))
+					if (IsUndefined(diffMag2_Val))
 					{
 						continue;
 					}
@@ -1319,37 +1306,31 @@ namespace Ncv
 				}
 
 
-				//------
 
-				if (end + 1 - start < nRangeLen)
+				//for (int i = start + nBefDiff; i <= nCenterEnd; i++)
+				for (int i = start; i <= end; i++)
 				{
-					SetLineToUndefined(a_outAcc);
-					return;
-				}
+					const float & rDiffMag1_1_c = a_diffMag1_1_Acc[i];
+					Ncpp_ASSERT(!IsUndefined(rDiffMag1_1_c));
+					
+					const float & rDiffMag1_2_d = a_diffMag1_2_Acc[i + a_posDist1_1];
+					Ncpp_ASSERT(!IsUndefined(rDiffMag1_2_d));
 
-				//const int nCenterEnd = nSize_1D - 1 - nAftDiff;
-				const int nCenterEnd = end - nAftDiff;
+					const float & rDiffMag2_c = a_diffMag2_Acc[i];
+					Ncpp_ASSERT(!IsUndefined(rDiffMag2_c));
+
+					const float & rDiffMag2_d = a_diffMag2_Acc[i + a_posDist1_1];
+					Ncpp_ASSERT(!IsUndefined(rDiffMag2_d));
 
 
-				//--------------
-
-
-
-
-				for (int i = start + nBefDiff; i <= nCenterEnd; i++)
-				{
-					//ConflictInfo2 * pOut = &a_outAcc[i];
 					ConflictInfo2 * pOut = (ConflictInfo2 *)&a_outAcc[i];
 
-					const T & avg_1 = a_avg_Acc[i - nBefDiff];
-					//float avg_MagSqr_1 = sac_Avg_MagSqr[i - nBefDiff];
-					float avg_MagSqr_1 = a_avg_MagSqr_Acc[i - nBefDiff];
-
-					const T & avg_2 = a_avg_Acc[i + nAftDiff];
-					//float avg_MagSqr_2 = sac_Avg_MagSqr[i + nAftDiff];
-					float avg_MagSqr_2 = a_avg_MagSqr_Acc[i + nAftDiff];
-
-					pOut->Exists = ElementOperations2::CalcConflict(avg_1, avg_MagSqr_1, avg_2, avg_MagSqr_2);
+					pOut->Exists = (
+						rDiffMag1_1_c > 20 &&
+						rDiffMag1_2_d > 0.75 * rDifMag1_1_c &&
+						rDiffMag2_c > 0.6 * rDifMag1_1_c &&
+						rDiffMag2_d > 0.6 * rDifMag1_1_c
+						);
 
 					if (pOut->Exists)
 					{
@@ -1358,29 +1339,13 @@ namespace Ncv
 
 					//if (pOut->Exists)
 					{
-						// to be revised.
-						//pOut->pSide_1 = &avg_1;
-
-						pOut->Offset_Side_1 = &avg_1 - a_avg_Acc.GetData_FakeOrg();
+						pOut->Offset_Side_1 = &a_diffMag1_1_Acc[i - 2 * a_posDist1_1] - a_diffMag1_1_Acc.GetData_FakeOrg();
 						Ncpp_ASSERT(pOut->Offset_Side_1 >= 0);
 
-						if (211 == pOut->Offset_Side_1)
-						{
-							i = i;
-						}
-
-						//pOut->pSide_2 = &avg_2;
-
-						pOut->Offset_Side_2 = &avg_2 - a_avg_Acc.GetData_FakeOrg();
+						pOut->Offset_Side_2 = &a_diffMag1_1_Acc[i + a_posDist1_1] - a_diffMag1_1_Acc.GetData_FakeOrg();
 						Ncpp_ASSERT(pOut->Offset_Side_2 >= 0);
 					}
-					//else
-					//{
-					//	pOut->Offset_Side_1 = -700;
-					//	
-					//	//pOut->Offset_Side_1 = -7;
-					//	//pOut->Offset_Side_2 = -7;
-					//}
+
 				}
 
 				///////////////////////////////
