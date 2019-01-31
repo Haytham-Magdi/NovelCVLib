@@ -74,8 +74,9 @@ namespace Ncv
 				float m_angleByRad;
 				ArrayHolder_2D_Ref<ConflictInfo2> m_conflict_Img;
 
-				F32ImageArrayHolder3C_Ref m_diff_Img;
+				F32ImageArrayHolder3C_Ref m_diff1_1_Img;
 				F32ImageArrayHolder3C_Ref m_diff_2_Img;
+				F32ImageArrayHolder3C_Ref m_diff1_2_Img;
 
 				ArrayHolder_2D_Ref<BidiffInfo> m_bidiffInfo_Img;
 
