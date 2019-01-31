@@ -116,6 +116,7 @@ namespace Ncv
 
 			//void AffectCommonAvgStandev_0();
 			void AffectCommonAvgStandev();
+			void ConfirmConflict();
 			void AffectCommonConflict();
 			void AffectCommonBidiffInfo();
 			void AffectCommonWideConflictDiff();

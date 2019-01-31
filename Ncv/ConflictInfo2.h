@@ -12,6 +12,7 @@ namespace Ncv
 	{
 	public:
 		bool Exists;
+		bool IsConfirmed;
 		//void * pSide_1;
 		//void * pSide_2;
 

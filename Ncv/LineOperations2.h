@@ -987,11 +987,13 @@ namespace Ncv
 				float avg_MagSqr_2 = a_avg_MagSqr_Acc[i + nAftDiff];
 
 				pOut->Exists = ElementOperations2::CalcConflict(avg_1, avg_MagSqr_1, avg_2, avg_MagSqr_2);
+				pOut->IsConfirmed = false;
 
-				if (pOut->Exists)
-				{
-					i = i;
-				}
+				////	for debug.
+				//if (pOut->Exists)
+				//{
+				//	i = i;
+				//}
 
 				//if (pOut->Exists)
 				{
@@ -1340,6 +1342,9 @@ namespace Ncv
 					rDiffMag2_c > 0.6 * rDiffMag1_1_c &&
 					rDiffMag2_d > 0.6 * rDiffMag1_1_c
 					);
+				
+				pOut->IsConfirmed = false;
+
 
 				// //	for debug.
 				// if (pOut->Exists)
