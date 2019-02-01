@@ -618,8 +618,13 @@ namespace Ncv
 			ActualArrayAccessor_1D<int> rotToOrgMapAcc_1D = rotToOrgMap_Acc.GenAcc_1D();
 
 			//ActualArrayAccessor_1D<ConflictInfo2_Ex> commonImgAcc_1D = m_parentContext->m_conflictInfoImg->GetActualAccessor().GenAcc_1D();
-			ActualArrayAccessor_1D<ConflictInfo2> localAcc_1D = cx.m_conflict_Img->GetActualAccessor().GenAcc_1D();
 			
+			ActualArrayAccessor_2D<ConflictInfo2> localAcc = cx.m_conflict_Img->GetActualAccessor();
+			ActualArrayAccessor_1D<ConflictInfo2> localAcc_1D = localAcc.GenAcc_1D();
+			
+			Ncpp_ASSERT(Size_2D::AreEqual(localAcc.GetSize(), rotToOrgMap_Acc.GetSize()));
+
+
 			//ActualArrayAccessor_2D<PixelStandevInfoCmn> commonPsiAcc = m_parentContext->m_standevInfoCmnImg->GetActualAccessor();
 			//ActualArrayAccessor_1D<PixelStandevInfoCmn> commonPsiAcc_1D = commonPsiAcc.GenAcc_1D();
 
@@ -655,12 +660,18 @@ namespace Ncv
 				for (int x = 0; x < rotToOrgMap_Acc.GetSize_X(); x++)
 				{
 					const int nOffsetInRot_1D = nOffset_Y + x;
-					
-					const int nOffsetInOrg_1D = rotToOrgMapAcc_1D[nOffsetInRot_1D];
-					if (IsUndefined(nOffsetInOrg_1D))
-					{
+
+					ConflictInfo2 & conf_Local = localAcc_1D[nOffsetInRot_1D];
+					if (IsUndefined(conf_Local))
 						continue;
-					}
+
+					const int nOffsetInOrg_1D = rotToOrgMapAcc_1D[nOffsetInRot_1D];
+					Ncpp_ASSERT(!IsUndefined(nOffsetInOrg_1D));
+					//if (IsUndefined(nOffsetInOrg_1D))
+					//{
+					//	continue;
+					//}
+
 
 					//ConflictInfo2_Ex & rCommonConf = commonImgAcc_1D[nOffsetInOrg_1D];
 					//AssertValue(rCommonConf);
@@ -681,10 +692,6 @@ namespace Ncv
 					//{
 					//	x = x;
 					//}
-
-					ConflictInfo2 & conf_Local = localAcc_1D[nOffsetInRot_1D];
-					if (IsUndefined(conf_Local))
-						continue;
 
 					if (!conf_Local.Exists)
 					{
