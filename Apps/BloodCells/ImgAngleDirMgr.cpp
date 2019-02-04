@@ -56,7 +56,10 @@ namespace Ncv
 		{
 			Context & cx = *m_context;
 
-			//ShowImage(cx.m_org_Img->GetSrcImg(), cx.MakeStrWithId("org_Img->GetSrcImg()").c_str());
+			if (1 == cx.m_nIndex)
+			{
+				ShowImage(cx.m_org_Img->GetSrcImg(), cx.MakeStrWithId("org_Img->GetSrcImg()").c_str());
+			}
 
 			cx.m_avgStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
@@ -619,10 +622,11 @@ namespace Ncv
 
 			//ActualArrayAccessor_1D<ConflictInfo2_Ex> commonImgAcc_1D = m_parentContext->m_conflictInfoImg->GetActualAccessor().GenAcc_1D();
 			
-			ActualArrayAccessor_2D<ConflictInfo2> localAcc = cx.m_conflict_Img->GetActualAccessor();
-			ActualArrayAccessor_1D<ConflictInfo2> localAcc_1D = localAcc.GenAcc_1D();
+			//ActualArrayAccessor_2D<ConflictInfo2> localAcc = cx.m_conflict_Img->GetActualAccessor();
+			VirtArrayAccessor_2D<ConflictInfo2> localVirtAcc = cx.m_conflict_Img->GetVirtAccessor();
+			//ActualArrayAccessor_1D<ConflictInfo2> localAcc_1D = localAcc.GenAcc_1D();
 			
-			Ncpp_ASSERT(Size_2D::AreEqual(localAcc.GetSize(), rotToOrgMap_Acc.GetSize()));
+			//Ncpp_ASSERT(Size_2D::AreEqual(localVirtAcc.GetSize(), rotToOrgMap_Acc.GetSize()));
 
 
 			//ActualArrayAccessor_2D<PixelStandevInfoCmn> commonPsiAcc = m_parentContext->m_standevInfoCmnImg->GetActualAccessor();
@@ -630,8 +634,8 @@ namespace Ncv
 
 			//--
 			
-			ActualArrayAccessor_1D<float> localStandevX_Acc_1D = cx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
-			ActualArrayAccessor_1D<float> localStandevX_Acc_1D_Norm = ncx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			//ActualArrayAccessor_1D<float> localStandevX_Acc_1D = cx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			//ActualArrayAccessor_1D<float> localStandevX_Acc_1D_Norm = ncx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
 
 
 			
@@ -653,32 +657,52 @@ namespace Ncv
 
 			//		const int nOffsetInRot_1D = orgToRotMapAcc_1D[nOffsetInOrg_1D];
 
-			for (int y = 0; y < rotToOrgMap_Acc.GetSize_Y(); y++)
+			const int crossMarg = 1;
+			//const int crossMarg = 3;
+			//const int crossMarg = 5;
+
+			//for (int y = crossMarg; y < rotToOrgMap_Acc.GetSize_Y() - crossMarg; y++)
+			//{
+			//	const int nOffset_Y = y * rotToOrgMap_Acc.GetSize_X();
+
+			//	for (int x = 0; x < rotToOrgMap_Acc.GetSize_X(); x++)
+			//	{
+			//		const int nOffsetInRot_1D = nOffset_Y + x;
+
+			//for (int y = crossMarg, nOffsetInRot_0_1D = 0; y < localVirtAcc.GetSize_Y() - crossMarg; y++)
+			for (int y = crossMarg; y < localVirtAcc.GetSize_Y() - crossMarg; y++)
 			{
-				const int nOffset_Y = y * rotToOrgMap_Acc.GetSize_X();
+				//const int nOffset_Y = y * rotToOrgMap_Acc.GetSize_X();
 
-				for (int x = 0; x < rotToOrgMap_Acc.GetSize_X(); x++)
+				//for (int x = 0; x < localVirtAcc.GetSize_X(); x++, nOffsetInRot_0_1D++)
+				for (int x = 0; x < localVirtAcc.GetSize_X(); x++)
 				{
-					const int nOffsetInRot_1D = nOffset_Y + x;
 
-					ConflictInfo2 & conf_Local = localAcc_1D[nOffsetInRot_1D];
+					//	for debug.
+					const int nOffsetInRot_1D = localVirtAcc.CalcActualIndex_1D(x, y);
+					//Ncpp_ASSERT(nOffsetInRot_1D == nOffsetInRot_0_1D);
+
+					if (144467 == nOffsetInRot_1D && 1 == cx.m_nIndex)
+					{
+						x = x;
+					}
+
+					//ConflictInfo2 & conf_Local = localAcc_1D[nOffsetInRot_1D];
+					ConflictInfo2 & conf_Local = localVirtAcc.GetAt(x, y);
 					if (IsUndefined(conf_Local))
 						continue;
 
+					//	for debug.
 					const int nOffsetInOrg_1D = rotToOrgMapAcc_1D[nOffsetInRot_1D];
 					Ncpp_ASSERT(!IsUndefined(nOffsetInOrg_1D));
-					//if (IsUndefined(nOffsetInOrg_1D))
-					//{
-					//	continue;
-					//}
 
 
 					//ConflictInfo2_Ex & rCommonConf = commonImgAcc_1D[nOffsetInOrg_1D];
 					//AssertValue(rCommonConf);
 
 
-					const float standev_Local = localStandevX_Acc_1D[nOffsetInRot_1D];
-					const float standev_Norm = localStandevX_Acc_1D_Norm[nOffsetInRot_1D];
+					//const float standev_Local = localStandevX_Acc_1D[nOffsetInRot_1D];
+					//const float standev_Norm = localStandevX_Acc_1D_Norm[nOffsetInRot_1D];
 
 
 					//const PixelStandevInfoCmn & rCommonPsi = commonPsiAcc_1D[nOffsetInOrg_1D];
@@ -717,23 +741,38 @@ namespace Ncv
 					//if (nOffset_Side_2_Mapped < 0)
 					//	continue;
 
-					if (IsUndefined(standev_Local) || IsUndefined(standev_Norm))
-					{
-						continue;
-					}
+					//if (IsUndefined(standev_Local) || IsUndefined(standev_Norm))
+					//{
+					//	continue;
+					//}
 
-					//if (standev_Local > 0.5 * standev_Norm)
-					//if (standev_Local > 2 * standev_Norm)
-					//if (standev_Local < 2 * standev_Norm)
-					if (standev_Local < 3 * standev_Norm)
-					{
-						continue;
-					}
+					////if (standev_Local > 0.5 * standev_Norm)
+					////if (standev_Local > 2 * standev_Norm)
+					////if (standev_Local < 2 * standev_Norm)
+					//if (standev_Local < 3 * standev_Norm)
+					//{
+					//	continue;
+					//}
 
-					if (standev_Local < 20)
-					{
+					//if (standev_Local < 20)
+					//{
+					//	continue;
+					//}
+
+					ConflictInfo2 & conf_Bef_Local = localVirtAcc.GetAt(x, y - crossMarg);
+					//if (IsUndefined(conf_Bef_Local) || !conf_Bef_Local.Exists)
+					if (IsUndefined(conf_Bef_Local))
 						continue;
-					}
+
+					ConflictInfo2 & conf_Aft_Local = localVirtAcc.GetAt(x, y + crossMarg);
+					//if (IsUndefined(conf_Aft_Local) || !conf_Aft_Local.Exists)
+					if (IsUndefined(conf_Aft_Local))
+						continue;
+
+					//if (conf_Bef_Local.Exists != conf_Aft_Local.Exists)
+					if (!conf_Bef_Local.Exists || !conf_Aft_Local.Exists)
+						continue;
+
 
 					conf_Local.IsConfirmed = true;
 
@@ -741,7 +780,8 @@ namespace Ncv
 			}	//	end for y.
 
 			if (0 == cx.m_nIndex ||
-				4 == cx.m_nIndex
+				4 == cx.m_nIndex ||
+				1 == cx.m_nIndex
 				)
 			{
 				DisplayConflictImg();
@@ -765,11 +805,23 @@ namespace Ncv
 			//	return;
 			//}
 
+			//ActualArrayAccessor_2D<F32ColorVal> orgImg_Acc = cx.m_org_Img->GetActualAccessor();
+			ActualArrayAccessor_2D<F32ColorVal> orgImg_Acc = pcx.m_org_Img->GetActualAccessor();
+			ActualArrayAccessor_1D<F32ColorVal> orgImg_Acc_1D = orgImg_Acc.GenAcc_1D();
+
 			ActualArrayAccessor_2D<int> rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
 			ActualArrayAccessor_1D<int> rotToOrgMapAcc_1D = rotToOrgMap_Acc.GenAcc_1D();
 
-			ActualArrayAccessor_1D<ConflictInfo2_Ex> commonImgAcc_1D = m_parentContext->m_conflictInfoImg->GetActualAccessor().GenAcc_1D();
-			ActualArrayAccessor_1D<ConflictInfo2> localAcc_1D = cx.m_conflict_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_2D<ConflictInfo2_Ex> commonImgAcc = pcx.m_conflictInfoImg->GetActualAccessor();
+			ActualArrayAccessor_1D<ConflictInfo2_Ex> commonImgAcc_1D = commonImgAcc.GenAcc_1D();
+			//Ncpp_ASSERT(Size_2D::AreEqual(orgImg_Acc.GetSize(), orgToRotMap_Acc.GetSize()));
+			Ncpp_ASSERT(Size_2D::AreEqual(orgImg_Acc.GetSize(), commonImgAcc.GetSize()));
+
+			//ActualArrayAccessor_1D<ConflictInfo2> localAcc_1D = cx.m_conflict_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_2D<ConflictInfo2> localAcc = cx.m_conflict_Img->GetActualAccessor();
+			ActualArrayAccessor_1D<ConflictInfo2> localAcc_1D = localAcc.GenAcc_1D();
+
+			Ncpp_ASSERT(Size_2D::AreEqual(localAcc.GetSize(), rotToOrgMap_Acc.GetSize()));
 
 
 			for (int y = 0; y < rotToOrgMap_Acc.GetSize_Y(); y++)
@@ -780,16 +832,6 @@ namespace Ncv
 				{
 					const int nOffsetInRot_1D = nOffset_Y + x;
 
-					const int nOffsetInOrg_1D = rotToOrgMapAcc_1D[nOffsetInRot_1D];
-					if (IsUndefined(nOffsetInOrg_1D))
-					{
-						continue;
-					}
-
-					ConflictInfo2_Ex & rCommonConf = commonImgAcc_1D[nOffsetInOrg_1D];
-					AssertValue(rCommonConf);
-
-
 					ConflictInfo2 & conf_Local = localAcc_1D[nOffsetInRot_1D];
 					if (IsUndefined(conf_Local))
 						continue;
@@ -798,6 +840,17 @@ namespace Ncv
 					{
 						continue;
 					}
+
+					const int nOffsetInOrg_1D = rotToOrgMapAcc_1D[nOffsetInRot_1D];
+					Ncpp_ASSERT(!IsUndefined(nOffsetInOrg_1D));
+					//if (IsUndefined(nOffsetInOrg_1D))
+					//{
+					//	continue;
+					//}
+
+					ConflictInfo2_Ex & rCommonConf = commonImgAcc_1D[nOffsetInOrg_1D];
+					AssertValue(rCommonConf);
+
 
 
 					Ncpp_ASSERT(conf_Local.Offset_Side_1 >= 0);
@@ -818,6 +871,31 @@ namespace Ncv
 					if (nOffset_Side_2_Mapped < 0)
 						continue;
 
+					S32Point pntSide1_Mapped = orgImg_Acc.CalcPointFromIndex_1D(nOffset_Side_1_Mapped);
+					S32Point pntSide2_Mapped = orgImg_Acc.CalcPointFromIndex_1D(nOffset_Side_2_Mapped);
+
+					F32ColorVal & rMappedToOrgVal_1 = orgImg_Acc_1D[nOffset_Side_1_Mapped];
+					F32ColorVal & rMappedToOrgVal_2 = orgImg_Acc_1D[nOffset_Side_2_Mapped];
+					F32ColorVal diffInOrg;
+					Subtract(rMappedToOrgVal_1, rMappedToOrgVal_2, &diffInOrg);
+					float diffMagInOrg = diffInOrg.CalcMag();
+
+					//	for debug.
+					S32Point testPnt(353, 63);
+					if (S32Point::AreEqual(pntSide1_Mapped, testPnt) ||
+						S32Point::AreEqual(pntSide2_Mapped, testPnt)
+						)
+					{
+						x = x;
+					}
+					//Ncpp_ASSERT(diffMagInOrg > 40);
+					//Ncpp_ASSERT(diffMagInOrg > 17);
+					//if (diffMagInOrg < 40)
+					if (diffMagInOrg < 20)
+						continue;
+
+					if (1 != cx.m_nIndex)
+						x = x;
 
 					rCommonConf.Exists = true;
 					rCommonConf.Offset_Side_1 = nOffset_Side_1_Mapped;
@@ -1213,6 +1291,10 @@ namespace Ncv
 
 			const ActualArrayAccessor_1D<ConflictInfo2> & confAcc_1D = confAcc.GenAcc_1D();
 
+			//	for debug,
+			//int dbgCenter_Pnt(0, 0), dbgSide1_Pnt(0, 0), dbgSide2_Pnt(0, 0);
+			int dbgCenter_Idx = -1;
+
 			//float angle_Old = -1;
 			for (int i = 0; i < confAcc_1D.GetSize(); i++)
 			{
@@ -1234,21 +1316,25 @@ namespace Ncv
 
 				//Ncpp_ASSERT(-1 != rSrc.Dir);
 
-				if (rSrc.Exists)
+				//if (rSrc.Exists)
+				if (rSrc.IsConfirmed)
 				{
+					//	for debug,
+					dbgCenter_Idx = i;
+
 					F32ColorVal & rDest_Side_1 = dispAcc_1D[rSrc.Offset_Side_1];
 					F32ColorVal & rDest_Side_2 = dispAcc_1D[rSrc.Offset_Side_2];
 
 					rDest.val0 = 0;
 					rDest.val1 = 0;
-					rDest.val2 = 255;
+					rDest.val2 = 100;
 
 					rDest_Side_1.val0 = 0;
-					rDest_Side_1.val1 = 255;
+					rDest_Side_1.val1 = 100;
 					rDest_Side_1.val2 = 0;
 
 					rDest_Side_2.val0 = 0;
-					rDest_Side_2.val1 = 255;
+					rDest_Side_2.val1 = 100;
 					rDest_Side_2.val2 = 0;
 				}
 				//else
@@ -1258,6 +1344,30 @@ namespace Ncv
 				//	rDest.val2 = 0;
 				//}
 			}
+
+			//	for debug,
+			{
+				//dbgCenter_Idx = 144467;
+				ConflictInfo2 & rSrc = confAcc_1D[dbgCenter_Idx];
+				Ncpp_ASSERT(!IsUndefined(rSrc));
+
+				F32ColorVal & rDest = dispAcc_1D[dbgCenter_Idx];
+				F32ColorVal & rDest_Side_1 = dispAcc_1D[rSrc.Offset_Side_1];
+				F32ColorVal & rDest_Side_2 = dispAcc_1D[rSrc.Offset_Side_2];
+
+				rDest.val0 = 0;
+				rDest.val1 = 100;
+				rDest.val2 = 255;
+
+				rDest_Side_1.val0 = 0;
+				rDest_Side_1.val1 = 255;
+				rDest_Side_1.val2 = 255;
+
+				rDest_Side_2.val0 = 0;
+				rDest_Side_2.val1 = 255;
+				rDest_Side_2.val2 = 255;
+			}
+
 
 			ShowImage(confDsp_Img, cx.MakeStrWithId("confDsp_Img").c_str());
 		}

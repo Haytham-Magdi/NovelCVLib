@@ -62,6 +62,9 @@ namespace Ncv
 
 			ShowImage(org_Img_H->GetSrcImg(), "org_Img_H->GetSrcImg()");
 
+			GlobalStuff::SetLinePathImg(org_Img_H->GetSrcImg());
+			GlobalStuff::ShowLinePathImg();
+
 			m_context_H->m_org_Img = org_Img_H;
 
 			m_context_H->m_standevInfoCmnImg = ArrayHolderUtil::CreateEmptyFrom<PixelStandevInfoCmn>(org_Img_H->AsHolderRef());
@@ -961,6 +964,11 @@ namespace Ncv
 
 				if (rSrc.Exists)
 				{
+					//	for debug.
+					if (1 != rSrc.Dir)
+					{
+						i = i;
+					}
 
 					F32ColorVal & rDest_Side_1 = destAcc_1D[rSrc.Offset_Side_1];
 					F32ColorVal & rDest_Side_2 = destAcc_1D[rSrc.Offset_Side_2];
@@ -969,12 +977,14 @@ namespace Ncv
 					S32Point side1_Pnt = confAcc.CalcPointFromIndex_1D(rSrc.Offset_Side_1);
 					S32Point side2_Pnt = confAcc.CalcPointFromIndex_1D(rSrc.Offset_Side_2);
 
+					//	for debug.
 					//S32Point testPnt(470, 182);
 					//S32Point testPnt(415, 352);
 					//S32Point testPnt(415, 352);
 					//S32Point testPnt(225, 333);
 					//S32Point testPnt(528, 225);
-					S32Point testPnt(353, 84);
+					//S32Point testPnt(353, 84);
+					S32Point testPnt(353, 63);
 					if (S32Point::AreEqual(side1_Pnt, testPnt) ||
 						S32Point::AreEqual(side2_Pnt, testPnt)
 						)
@@ -1026,133 +1036,12 @@ namespace Ncv
 			}
 
 
-			GlobalStuff::SetLinePathImg(confDsp_Img);
-			GlobalStuff::ShowLinePathImg();
+			//GlobalStuff::SetLinePathImg(confDsp_Img);
+			//GlobalStuff::ShowLinePathImg();
 
 			ShowImage(confDsp_Img, "confDsp_Img->GetSrcImg()");
 		}
 
-
-		void AngleDirMgrColl::ManageThresholding_0()
-		{
-			AngleDirMgrColl_Context & cx = *m_context_H;
-
-			F32ColorVal * orgImg_Ptr = (F32ColorVal *)cx.m_org_Img->GetActualAccessor().GetData();
-			ConflictInfo2_Ex * conf_Ptr = (ConflictInfo2_Ex *)cx.m_conflictInfoImg->GetActualAccessor().GetData();
-
-			const int nSize_1D = cx.m_conflictInfoImg->GetActualAccessor().CalcSize_1D();
-
-			//F32ImageArrayHolder3C_Ref threshold_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetVirtAccessor().GetSize());
-			F32ImageArrayHolder3C_Ref threshold_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
-			F32ColorVal * threshold_Ptr = (F32ColorVal *)threshold_Img->GetActualAccessor().GetData();
-
-			//F32ImageArrayHolder1C_Ref weight_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetVirtAccessor().GetSize());
-			F32ImageArrayHolder1C_Ref weight_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
-			float * weight_Ptr = (float *)weight_Img->GetActualAccessor().GetData();
-			{
-				{
-					float init_Val = 0.0f;
-					FillImage(weight_Img->GetVirtAccessor(), init_Val);
-				}
-
-				for (int i = 0; i < nSize_1D; i++)
-				{
-					ConflictInfo2_Ex & rConf = conf_Ptr[i];
-					float & rWeight = weight_Ptr[i];
-					F32ColorVal & rThreshold = threshold_Ptr[i];
-
-					if (!rConf.Exists)
-					{
-						rWeight = 0;
-						rThreshold.AssignVal(0, 0, 0);
-						continue;
-					}
-
-					rWeight = 1;
-
-					F32ColorVal & rVal_Side_1 = orgImg_Ptr[rConf.Offset_Side_1];
-					F32ColorVal & rVal_Side_2 = orgImg_Ptr[rConf.Offset_Side_2];
-
-					rThreshold = F32ColorVal::Add(rVal_Side_1, rVal_Side_2).DividBy(2);
-
-					//avg_Wide_Mag_Diff_Ptr[i] = fabs(mag_Ptr[i] - avg_Wide_Ptr[i]);
-				}
-			}
-
-			//GlobalStuff::SetLinePathImg(GenTriChGrayImg(threshold_Mag_Img->GetSrcImg())); GlobalStuff::ShowLinePathImg();
-			//ShowImage(threshold_Img->GetSrcImg(), "threshold_Img->GetSrcImg()");
-
-			F32ImageArrayHolder3C_Ref avg_Threshold_Img = threshold_Img;
-			////F32ImageArrayHolder3C_Ref avg_Threshold_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetVirtAccessor().GetSize());
-			//F32ImageArrayHolder3C_Ref avg_Threshold_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
-			//{
-			//	//const int nWinRadius = 5;
-			//	//const int nWinRadius = 8;
-			//	const int nWinRadius = 15;
-			//	AvgImage_Weighted(threshold_Img->GetVirtAccessor(), weight_Img->GetVirtAccessor(), avg_Threshold_Img->GetVirtAccessor(),
-			//		Window<int>::New(-nWinRadius, nWinRadius, -nWinRadius, nWinRadius));
-			//}
-			//ShowImage(avg_Threshold_Img->GetSrcImg(), "avg_Threshold_Img->GetSrcImg()");
-
-			//F32ImageArrayHolder1C_Ref mag_Avg_Threshold_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetVirtAccessor().GetSize());
-			F32ImageArrayHolder1C_Ref mag_Avg_Threshold_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
-			CalcMagImage(avg_Threshold_Img->GetVirtAccessor(), mag_Avg_Threshold_Img->GetVirtAccessor());
-			float * mag_Avg_Threshold_Ptr = (float *)mag_Avg_Threshold_Img->GetActualAccessor().GetData();
-
-			ShowImage(mag_Avg_Threshold_Img->GetSrcImg(), "mag_Avg_Threshold_Img->GetSrcImg()");
-
-			//F32ImageArrayHolder1C_Ref magImg = new F32ImageArrayHolder1C(cx.m_org_Img->GetVirtAccessor().GetSize());
-			F32ImageArrayHolder1C_Ref magImg = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
-			CalcMagImage(cx.m_org_Img->GetVirtAccessor(), magImg->GetVirtAccessor());
-			float * mag_Ptr = (float *)magImg->GetActualAccessor().GetData();
-
-			//F32ImageArrayHolder1C_Ref bin_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetVirtAccessor().GetSize());
-			F32ImageArrayHolder1C_Ref bin_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
-			{
-				//{
-				//	float init_Val = 0.0f;
-				//	FillImage(bin_Img->GetVirtAccessor(), init_Val);
-				//}
-				float * bin_Ptr = (float *)bin_Img->GetActualAccessor().GetData();
-
-				for (int i = 0; i < nSize_1D; i++)
-				{
-					float & rMag_Avg_Threshold = mag_Avg_Threshold_Ptr[i];
-					float & rMag = mag_Ptr[i];
-					float & rBin = bin_Ptr[i];
-
-					if (rMag_Avg_Threshold < 5.0)
-					{
-						rBin = 128;
-						continue;
-					}
-
-					if (rMag > rMag_Avg_Threshold)
-					{
-						rBin = 255;
-					}
-					else
-					{
-						rBin = 0;
-					}
-				}
-			}
-			ShowImage(bin_Img->GetSrcImg(), "bin_Img->GetSrcImg()");
-
-
-			//SaveImage(GenTriChGrayImg(bin_Img->GetSrcImg()), "E:\\bin_Img.jpg");
-			//SaveImage(GenTriChGrayImg(bin_Img->GetSrcImg()), "bin_Img.jpg");
-
-
-			//GlobalStuff::SetLinePathImg(GenTriChGrayImg(avg_Wide_Mag_Diff_Img->GetSrcImg())); GlobalStuff::ShowLinePathImg();
-			//ShowImage(standev_Thin_Img->GetSrcImg(), "avg_Wide_Mag_Diff_Img->GetSrcImg()");
-
-
-
-
-
-
-		}
 
 		void AngleDirMgrColl::ManageThresholding()
 		{

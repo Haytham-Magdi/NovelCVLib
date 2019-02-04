@@ -55,6 +55,21 @@ namespace Ncpp
 			return m_actualData;
 		}
 
+		int CalcActualIndex_1D(const S32Point & a_pnt) const
+		{
+			return CalcActualIndex_1D(a_pnt.GetX(), a_pnt.GetY());
+		}
+
+		int CalcActualIndex_1D(const int a_pos_X, const int a_pos_Y) const
+		{
+			Ncpp_ASSERT(a_pos_X >= 0);
+			Ncpp_ASSERT(a_pos_X < m_nofSteps_X);
+
+			Ncpp_ASSERT(a_pos_Y >= 0);
+			Ncpp_ASSERT(a_pos_Y < m_nofSteps_Y);
+
+			return (m_data + a_pos_X * m_nStepSize_X + a_pos_Y * m_nStepSize_Y) - m_actualData;
+		}
 
 		int GetSize_X() const
 		{

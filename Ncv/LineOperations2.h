@@ -1336,8 +1336,12 @@ namespace Ncv
 
 				ConflictInfo2 * pOut = (ConflictInfo2 *)&a_outAcc[i];
 
+				const int minDiff = 20;
+				//const int minDiff = 40;
+				//const int minDiff = 50;
 				pOut->Exists = (
-					rDiffMag1_1_c > 20 &&
+					rDiffMag1_1_c > minDiff &&
+					rDiffMag1_2_d > minDiff &&
 					rDiffMag1_2_d > 0.75 * rDiffMag1_1_c &&
 					rDiffMag2_c > 0.6 * rDiffMag1_1_c &&
 					rDiffMag2_d > 0.6 * rDiffMag1_1_c
