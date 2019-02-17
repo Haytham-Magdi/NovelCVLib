@@ -50,6 +50,15 @@ namespace Ncv
 			return sqrt((float)CalcMagSqr(a_arg));
 		}
 
+		template<class T>
+		void CalcSqrVector(const T & a_inp, T * a_pOut)
+		{
+			AssertValue(a_inp);
+
+			//*a_pOut = Sqr<float>((float)a_arg);
+			Assign(a_pOut, Sqr<T>(a_arg));
+		}
+
 
 		template<class T>
 		void Add(const T & a_inp1, const T & a_inp2, T * a_pOut)
@@ -238,8 +247,9 @@ namespace Ncv
 			float standev_MaxSide = (standev_1 > standev_2) ? standev_1 : standev_2;
 
 			//if (standev_12 > 20 && standev_12 > standev_MaxSide * 2)
+			if (standev_12 > 30 && standev_12 > standev_MaxSide * 2)
 			//if (standev_12 > 15 && standev_12 > standev_MaxSide * 2)
-			if (standev_12 > 15 && standev_12 > standev_MaxSide * 3)
+			//if (standev_12 > 15 && standev_12 > standev_MaxSide * 3)
 			{
 				return true;
 			}
@@ -247,6 +257,144 @@ namespace Ncv
 			{
 				return false;
 			}
+		}
+
+		template<class T>
+		bool CalcConflict2(const T & a_avg_1, const float a_avg_MagSqr_1, const float a_normStandev_1,
+			const T & a_avg_2, const float a_avg_MagSqr_2, const float a_normStandev_2, const float a_normStandev_c)
+		{
+			AssertValue(a_avg_1);
+			AssertValue(a_avg_MagSqr_1);
+			AssertValue(a_normStandev_1);
+			AssertValue(a_avg_2);
+			AssertValue(a_avg_MagSqr_2);
+			AssertValue(a_normStandev_2);
+			AssertValue(a_normStandev_c);
+
+			T avg_12;
+			Add(a_avg_1, a_avg_2, &avg_12);
+			DivideSelfByNum(avg_12, 2);
+
+			float avg_MagSqr_12 = (a_avg_MagSqr_1 + a_avg_MagSqr_2) / 2;
+
+			float magSqr_Avg_1 = CalcMagSqr(a_avg_1);
+			float magSqr_Avg_2 = CalcMagSqr(a_avg_2);
+			float magSqr_Avg_12 = CalcMagSqr(avg_12);
+
+			float standev_1 = CalcStandev(a_avg_1, a_avg_MagSqr_1);
+			float standev_2 = CalcStandev(a_avg_2, a_avg_MagSqr_2);
+			float standev_12 = CalcStandev(avg_12, avg_MagSqr_12);
+
+			float standev_MaxSide = (standev_1 > standev_2) ? standev_1 : standev_2;
+			//float standev_MaxSide = (standev_1 > standev_2) ? standev_1 : standev_2;
+
+			if (standev_12 > 20 && standev_12 > standev_MaxSide * 2
+			//if (standev_12 > 30 && standev_12 > standev_MaxSide * 2
+				//&& standev_12 > a_normStandev_1 * 3
+				//&& standev_12 > a_normStandev_2 * 3
+				//&& standev_12 > a_normStandev_c * 3
+				)
+				//if (standev_12 > 15 && standev_12 > standev_MaxSide * 2)
+				//if (standev_12 > 15 && standev_12 > standev_MaxSide * 3)
+			{
+				if (!(
+					standev_12 > a_normStandev_1 * 3
+					&& standev_12 > a_normStandev_2 * 3
+					//&& standev_12 > a_normStandev_c * 3
+					))
+				{
+					return false;
+				}
+
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+
+		template<class T>
+		bool CalcThinConflict(
+			const T & a_avg_1, const float a_avg_MagSqr_1, const float a_normStandev_1,
+			const T & a_avg_2, const float a_avg_MagSqr_2, const float a_normStandev_2,
+			const T & a_avg_c, const float a_avg_MagSqr_c, const float a_normStandev_c)
+		{
+			AssertValue(a_avg_1);
+			AssertValue(a_avg_MagSqr_1);
+			AssertValue(a_normStandev_1);
+			AssertValue(a_avg_2);
+			AssertValue(a_avg_MagSqr_2);
+			AssertValue(a_normStandev_2);
+			AssertValue(a_avg_c);
+			AssertValue(a_avg_MagSqr_c);
+			AssertValue(a_normStandev_c);
+
+			//T avg_12;
+			//Add(a_avg_1, a_avg_2, &avg_12);
+			//DivideSelfByNum(avg_12, 2);
+
+			T avg_1c;
+			Add(a_avg_1, a_avg_c, &avg_1c);
+			DivideSelfByNum(avg_1c, 2);
+
+			T avg_2c;
+			Add(a_avg_2, a_avg_c, &avg_2c);
+			DivideSelfByNum(avg_2c, 2);
+
+			float avg_MagSqr_1c = (a_avg_MagSqr_1 + a_avg_MagSqr_c) / 2;
+			float avg_MagSqr_2c = (a_avg_MagSqr_2 + a_avg_MagSqr_c) / 2;
+
+			float magSqr_Avg_1 = CalcMagSqr(a_avg_1);
+			float magSqr_Avg_2 = CalcMagSqr(a_avg_2);
+			
+			float magSqr_Avg_1c = CalcMagSqr(avg_1c);
+			float magSqr_Avg_2c = CalcMagSqr(avg_2c);
+
+			float standev_1 = CalcStandev(a_avg_1, a_avg_MagSqr_1);
+			float standev_2 = CalcStandev(a_avg_2, a_avg_MagSqr_2);
+			
+			float standev_1c = CalcStandev(avg_1c, avg_MagSqr_1c);
+			float standev_2c = CalcStandev(avg_2c, avg_MagSqr_2c);
+
+
+
+
+			if (standev_1c < 20 || standev_1c < standev_1 * 2)
+				return false;
+
+			if (standev_2c < 20 || standev_2c < standev_2 * 2)
+				return false;
+
+			if (
+				standev_1c < a_normStandev_1 * 3
+				&& a_normStandev_c < a_normStandev_1 * 3
+				//|| standev_1c < a_normStandev_c * 3
+				)
+			{
+				return false;
+			}
+			//else
+			//{
+			//	return true;
+			//}
+
+			if (
+				standev_2c < a_normStandev_2 * 3
+				&& a_normStandev_c < a_normStandev_2 * 3
+				//|| standev_2c < a_normStandev_c * 3
+				)
+			{
+				return false;
+			}
+			//else
+			//{
+			//	return true;
+			//}
+
+
+			return true;
 		}
 
 

@@ -61,7 +61,7 @@ namespace Ncpp
 			return m_data;
 		}
 
-		const T * GetData_FakeOrg() const
+		const T * GetActualData() const
 		{
 			return m_actualData;
 		}

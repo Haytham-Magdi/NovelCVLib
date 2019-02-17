@@ -107,6 +107,7 @@ namespace Ncv
 			void Proceed_2_2();
 			void Proceed_2b_1();
 			void Proceed_2b_2();
+			void Proceed_2c_1();
 			void Proceed_3_1();
 			void Proceed_3_2();
 			void Proceed_4_1();

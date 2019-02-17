@@ -42,6 +42,22 @@ namespace Ncpp
 			return ret;
 		}
 
+		static Window FromRangeX(const Range<T> & a_rangeX)
+		{
+			Window ret;
+			ret.Init(a_rangeX.GetBgn(), a_rangeX.GetEnd(), 0, 0);
+
+			return ret;
+		}
+
+		static Window FromRangeY(const Range<T> & a_rangeY)
+		{
+			Window ret;
+			ret.Init(0, 0, a_rangeY.GetBgn(), a_rangeY.GetEnd());
+
+			return ret;
+		}
+
 		T GetX1() const
 		{
 			return m_x1;

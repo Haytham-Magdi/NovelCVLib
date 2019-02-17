@@ -219,6 +219,99 @@ namespace Ncv
 			}
 		}
 
+		template<class T>
+		void CalcSqrVectorImage(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_outAcc)
+		{
+			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp_X = a_inpAcc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
+
+
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			for (; ptrItr_Inp_Y.HasValidPos(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			{
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				CalcSqrVectorLine<T>(acc_Inp_X, acc_Out_X);
+			}
+		}
+
+		template<class T>
+		void AddImages(const VirtArrayAccessor_2D<T> & a_inp1_Acc, const VirtArrayAccessor_2D<T> & a_inp2_Acc, const VirtArrayAccessor_2D<T> & a_outAcc)
+		{
+			const VirtArrayAccessor_1D<T> acc_Inp1_Y = a_inp1_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp1_X = a_inp1_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Inp2_Y = a_inp2_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp2_X = a_inp2_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Inp1_Y.GetSize() == acc_Out_Y.GetSize());
+			Ncpp_ASSERT(acc_Inp1_Y.GetSize() == acc_Inp2_Y.GetSize());
+
+			PtrIterator2<T> ptrItr_Inp1_Y = acc_Inp1_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Inp2_Y = acc_Inp2_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			for (; ptrItr_Inp1_Y.HasValidPos(); ptrItr_Inp1_Y.MoveBgn(), ptrItr_Inp2_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			{
+				T * ptr_Inp1_Y = ptrItr_Inp1_Y.GetBgn();
+				T * ptr_Inp2_Y = ptrItr_Inp2_Y.GetBgn();
+				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+				acc_Inp1_X.SetData(ptr_Inp1_Y);
+				acc_Inp2_X.SetData(ptr_Inp2_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				AddLines<T>(acc_Inp1_X, acc_Inp2_X, acc_Out_X);
+			}
+		}
+
+		template<class T>
+		void SubtractImages(const VirtArrayAccessor_2D<T> & a_inp1_Acc, const VirtArrayAccessor_2D<T> & a_inp2_Acc, const VirtArrayAccessor_2D<T> & a_outAcc)
+		{
+			const VirtArrayAccessor_1D<T> acc_Inp1_Y = a_inp1_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp1_X = a_inp1_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Inp2_Y = a_inp2_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp2_X = a_inp2_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Inp1_Y.GetSize() == acc_Out_Y.GetSize());
+			Ncpp_ASSERT(acc_Inp1_Y.GetSize() == acc_Inp2_Y.GetSize());
+
+			PtrIterator2<T> ptrItr_Inp1_Y = acc_Inp1_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Inp2_Y = acc_Inp2_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			for (; ptrItr_Inp1_Y.HasValidPos(); ptrItr_Inp1_Y.MoveBgn(), ptrItr_Inp2_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			{
+				T * ptr_Inp1_Y = ptrItr_Inp1_Y.GetBgn();
+				T * ptr_Inp2_Y = ptrItr_Inp2_Y.GetBgn();
+				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+				acc_Inp1_X.SetData(ptr_Inp1_Y);
+				acc_Inp2_X.SetData(ptr_Inp2_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				SubtractLines<T>(acc_Inp1_X, acc_Inp2_X, acc_Out_X);
+			}
+		}
+
 
 		template<class T>
 		void DivideImageByNum(const VirtArrayAccessor_2D<T> & a_inpAcc, const float a_num)
@@ -596,6 +689,119 @@ namespace Ncv
 				CalcConflictLine<T>(acc_Avg_X, acc_Avg_MagSqr_X, acc_Out_X, a_range_X);
 			}
 		}
+
+		template<class T>
+		void CalcConflictImage2_X(const VirtArrayAccessor_2D<T> & a_avg_Acc, const VirtArrayAccessor_2D<float> & a_avg_MagSqr_Acc,
+			const VirtArrayAccessor_2D<float> & a_normStandev_Acc,
+			const VirtArrayAccessor_2D<ConflictInfo2> & a_outAcc, const Range<int> & a_range_X)
+		{
+			const VirtArrayAccessor_1D<T> acc_Avg_Y = a_avg_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Avg_X = a_avg_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<float> acc_Avg_MagSqr_Y = a_avg_MagSqr_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> acc_Avg_MagSqr_X = a_avg_MagSqr_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<float> acc_NormStandev_Y = a_normStandev_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> acc_NormStandev_X = a_normStandev_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<ConflictInfo2> & acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<ConflictInfo2> & acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_Avg_MagSqr_Y.GetSize());
+			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_NormStandev_Y.GetSize());
+			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_Out_Y.GetSize());
+
+			
+			PtrIterator2<T> ptrItr_Avg_Y = acc_Avg_Y.GenPtrIterator();
+			PtrIterator2<float> ptrItr_Avg_MagSqr_Y = acc_Avg_MagSqr_Y.GenPtrIterator();
+			PtrIterator2<float> ptrItr_NormStandev_Y = acc_NormStandev_Y.GenPtrIterator();
+			PtrIterator2<ConflictInfo2> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			for (; ptrItr_Avg_Y.HasValidPos();
+				ptrItr_Avg_Y.MoveBgn(), ptrItr_Avg_MagSqr_Y.MoveBgn(), ptrItr_NormStandev_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			{
+				T * ptr_Avg_Y = ptrItr_Avg_Y.GetBgn();
+				float * ptr_Avg_MagSqr_Y = ptrItr_Avg_MagSqr_Y.GetBgn();
+				float * ptr_NormStandev_Y = ptrItr_NormStandev_Y.GetBgn();
+				ConflictInfo2 * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+				
+				acc_Avg_X.SetData(ptr_Avg_Y);
+				acc_Avg_MagSqr_X.SetData(ptr_Avg_MagSqr_Y);
+				acc_NormStandev_X.SetData(ptr_NormStandev_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				CalcConflictLine2<T>(acc_Avg_X, acc_Avg_MagSqr_X, acc_NormStandev_X, acc_Out_X, a_range_X);
+			}
+		}
+
+		template<class T>
+		void CalcThinConflictImage_X(
+			const VirtArrayAccessor_2D<T> & a_avg_Acc, const VirtArrayAccessor_2D<float> & a_avg_MagSqr_Acc,
+			const VirtArrayAccessor_2D<T> & a_avg_Center_Acc, const VirtArrayAccessor_2D<float> & a_avg_MagSqr_Center_Acc,
+			const VirtArrayAccessor_2D<float> & a_normStandev_Acc,
+			const VirtArrayAccessor_2D<ConflictInfo2> & a_outAcc, const Range<int> & a_range_X)
+		{
+			const VirtArrayAccessor_1D<T> acc_Avg_Y = a_avg_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Avg_X = a_avg_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<float> acc_Avg_MagSqr_Y = a_avg_MagSqr_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> acc_Avg_MagSqr_X = a_avg_MagSqr_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Avg_Center_Y = a_avg_Center_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Avg_Center_X = a_avg_Center_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<float> acc_Avg_MagSqr_Center_Y = a_avg_MagSqr_Center_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> acc_Avg_MagSqr_Center_X = a_avg_MagSqr_Center_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<float> acc_NormStandev_Y = a_normStandev_Acc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> acc_NormStandev_X = a_normStandev_Acc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<ConflictInfo2> & acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<ConflictInfo2> & acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_Avg_MagSqr_Y.GetSize());
+			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_Avg_Center_Y.GetSize());
+			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_Avg_MagSqr_Center_Y.GetSize());
+			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_NormStandev_Y.GetSize());
+			Ncpp_ASSERT(acc_Avg_Y.GetSize() == acc_Out_Y.GetSize());
+
+
+			PtrIterator2<T> ptrItr_Avg_Y = acc_Avg_Y.GenPtrIterator();
+			PtrIterator2<float> ptrItr_Avg_MagSqr_Y = acc_Avg_MagSqr_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Avg_Center_Y = acc_Avg_Center_Y.GenPtrIterator();
+			PtrIterator2<float> ptrItr_Avg_MagSqr_Center_Y = acc_Avg_MagSqr_Center_Y.GenPtrIterator();
+			PtrIterator2<float> ptrItr_NormStandev_Y = acc_NormStandev_Y.GenPtrIterator();
+			PtrIterator2<ConflictInfo2> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			for (; ptrItr_Avg_Y.HasValidPos();
+				ptrItr_Avg_Y.MoveBgn(), ptrItr_Avg_MagSqr_Y.MoveBgn(),
+				ptrItr_Avg_Center_Y.MoveBgn(), ptrItr_Avg_MagSqr_Center_Y.MoveBgn(),
+				ptrItr_NormStandev_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			{
+				T * ptr_Avg_Y = ptrItr_Avg_Y.GetBgn();
+				float * ptr_Avg_MagSqr_Y = ptrItr_Avg_MagSqr_Y.GetBgn();
+				T * ptr_Avg_Center_Y = ptrItr_Avg_Center_Y.GetBgn();
+				float * ptr_Avg_MagSqr_Center_Y = ptrItr_Avg_MagSqr_Center_Y.GetBgn();
+				float * ptr_NormStandev_Y = ptrItr_NormStandev_Y.GetBgn();
+				ConflictInfo2 * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+				acc_Avg_X.SetData(ptr_Avg_Y);
+				acc_Avg_MagSqr_X.SetData(ptr_Avg_MagSqr_Y);
+
+				acc_Avg_Center_X.SetData(ptr_Avg_Center_Y);
+				acc_Avg_MagSqr_Center_X.SetData(ptr_Avg_MagSqr_Center_Y);
+
+				acc_NormStandev_X.SetData(ptr_NormStandev_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				CalcThinConflictLine<T>(
+					acc_Avg_X, acc_Avg_MagSqr_X,
+					acc_Avg_Center_X, acc_Avg_MagSqr_Center_X,
+					acc_NormStandev_X, acc_Out_X, a_range_X);
+			}
+		}
+
+
 
 		template<class T>
 		void Calc_ConflictDiff_Image_X(const VirtArrayAccessor_2D<T> & a_avg_Acc, const VirtArrayAccessor_2D<float> & a_avg_MagSqr_Acc,

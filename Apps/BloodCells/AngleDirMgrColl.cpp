@@ -247,20 +247,24 @@ namespace Ncv
 				m_angleDirMgrArr[i]->Proceed_1_2();
 			}
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_2_1();
-			}
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_2_1();
+			//}
+
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_2_2();
+			//}
+
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_2b_1();
+			//}
+
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_2b_2();
+			//}
 
 			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_2_2();
-			}
-
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_2b_1();
-			}
-
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_2b_2();
+				m_angleDirMgrArr[i]->Proceed_2c_1();
 			}
 
 			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
@@ -303,9 +307,9 @@ namespace Ncv
 
 			DisplayStandiv_Dir_Img();
 
-			DisplayBidiffInfo_Dir_Img();
+			//DisplayBidiffInfo_Dir_Img();
 
-			DisplayImgForEdges();
+			//DisplayImgForEdges();
 
 			DisplayConflictImg();
 

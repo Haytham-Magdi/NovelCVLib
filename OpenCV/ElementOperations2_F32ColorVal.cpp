@@ -50,6 +50,15 @@ namespace Ncv
 			return sum;
 		}
 
+		void CalcSqrVector(const F32ColorVal & a_inp, F32ColorVal * a_pOut)
+		{
+			//AssertValue(a_inp);
+
+			Assign(&a_pOut->val0, Sqr(a_inp.val0));
+			Assign(&a_pOut->val1, Sqr(a_inp.val1));
+			Assign(&a_pOut->val2, Sqr(a_inp.val2));
+		}
+
 		void Add(const F32ColorVal & a_inp1, const F32ColorVal & a_inp2, F32ColorVal * a_pOut)
 		{
 			Add(a_inp1.val0, a_inp2.val0, &a_pOut->val0);

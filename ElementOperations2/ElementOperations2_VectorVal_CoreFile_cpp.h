@@ -38,6 +38,19 @@
 		}
 
 
+		void CalcSqrVector(const Ncv::VectorVal<T_Elm, N_Dims> & a_inp, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut)
+		{
+			//AssertValue(a_inp);
+
+			for (int i = 0; i < a_inp.GetNofDims(); i++)
+			{
+				Assign(&a_pOut->Vals[i], Sqr<T_Elm>(a_inp.Vals[i]));
+				//a_pOut->Vals[i] = Sqr<T_Elm>(a_inp.Vals[i]));
+			}
+		}
+
+		
+
 		void Add(const Ncv::VectorVal<T_Elm, N_Dims> & a_inp1, const Ncv::VectorVal<T_Elm, N_Dims> & a_inp2, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut)
 		{
 			for (int i = 0; i < a_pOut->GetNofDims(); i++)

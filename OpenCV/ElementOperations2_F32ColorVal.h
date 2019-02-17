@@ -25,6 +25,8 @@ namespace Ncv
 
 		template<> float CalcMagSqr(const F32ColorVal & a_arg);
 
+		template<> void CalcSqrVector(const F32ColorVal & a_inp, F32ColorVal * a_pOut);
+
 		template<> void Add(const F32ColorVal & a_inp1, const F32ColorVal & a_inp2, F32ColorVal * a_pOut);
 
 		template<> void Subtract(const F32ColorVal & a_inp1, const F32ColorVal & a_inp2, F32ColorVal * a_pOut);

@@ -115,7 +115,6 @@ namespace Ncv
 		void AddValueToLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const T & a_value)
 		{
 			AssertLineUndefinedOrValid(a_inpAcc);
-			AssertLineUndefinedOrValid(a_outAcc);
 
 			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
 
@@ -166,13 +165,205 @@ namespace Ncv
 
 				ElementOperations2::Add<T>(*ptr_Inp, a_value, ptr_Out);
 			}
+
+			AssertLineUndefinedOrValid(a_outAcc);
 		}
 		
+		template<class T>
+		void CalcSqrVectorLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc)
+		{
+			AssertLineUndefinedOrValid(a_inpAcc);
+
+			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
+
+
+			PtrIterator2<T> ptrItr_Inp = a_inpAcc.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out = a_outAcc.GenPtrIterator();
+
+
+			// manage undefined from bgn.
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetEnd();
+				T * ptr_Out = ptrItr_Out.GetEnd();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// do main job.
+			int cnt = 0;
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				ElementOperations2::CalcSqrVector<T>(*ptr_Inp, ptr_Out);
+			}
+
+			AssertLineUndefinedOrValid(a_outAcc);
+		}
+		
+
+		template<class T>
+		void AddLines(const VirtArrayAccessor_1D<T> & a_inp1_Acc, const VirtArrayAccessor_1D<T> & a_inp2_Acc, const VirtArrayAccessor_1D<T> & a_outAcc)
+		{
+			AssertLineUndefinedOrValid(a_inp1_Acc);
+			AssertLineUndefinedOrValid(a_inp2_Acc);
+
+
+			Ncpp_ASSERT(a_inp1_Acc.GetSize() == a_outAcc.GetSize());
+			Ncpp_ASSERT(a_inp1_Acc.GetSize() == a_inp2_Acc.GetSize());
+
+
+			PtrIterator2<T> ptrItr_Inp1 = a_inp1_Acc.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Inp2 = a_inp2_Acc.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out = a_outAcc.GenPtrIterator();
+
+
+			// manage undefined from bgn.
+			for (; ptrItr_Inp1.HasValidPos(); ptrItr_Inp1.MoveBgn(), ptrItr_Inp2.MoveBgn(), ptrItr_Out.MoveBgn())
+			{
+				T * ptr_Inp1 = ptrItr_Inp1.GetBgn();
+				T * ptr_Inp2 = ptrItr_Inp2.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				if (IsUndefined(*ptr_Inp1) || IsUndefined(*ptr_Inp2))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Inp1.HasValidPos(); ptrItr_Inp1.MoveEnd(), ptrItr_Inp2.MoveEnd(), ptrItr_Out.MoveEnd())
+			{
+				T * ptr_Inp1 = ptrItr_Inp1.GetEnd();
+				T * ptr_Inp2 = ptrItr_Inp2.GetEnd();
+				T * ptr_Out = ptrItr_Out.GetEnd();
+
+				if (IsUndefined(*ptr_Inp1) || IsUndefined(*ptr_Inp2))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// do main job.
+			int cnt = 0;
+			for (; ptrItr_Inp1.HasValidPos(); ptrItr_Inp1.MoveBgn(), ptrItr_Inp2.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
+			{
+				T * ptr_Inp1 = ptrItr_Inp1.GetBgn();
+				T * ptr_Inp2 = ptrItr_Inp2.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				ElementOperations2::Add<T>(*ptr_Inp1, *ptr_Inp2, ptr_Out);
+			}
+
+
+			AssertLineUndefinedOrValid(a_outAcc);
+		}
+
+		template<class T>
+		void SubtractLines(const VirtArrayAccessor_1D<T> & a_inp1_Acc, const VirtArrayAccessor_1D<T> & a_inp2_Acc, const VirtArrayAccessor_1D<T> & a_outAcc)
+		{
+			AssertLineUndefinedOrValid(a_inp1_Acc);
+			AssertLineUndefinedOrValid(a_inp2_Acc);
+
+
+			Ncpp_ASSERT(a_inp1_Acc.GetSize() == a_outAcc.GetSize());
+			Ncpp_ASSERT(a_inp1_Acc.GetSize() == a_inp2_Acc.GetSize());
+
+
+			PtrIterator2<T> ptrItr_Inp1 = a_inp1_Acc.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Inp2 = a_inp2_Acc.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out = a_outAcc.GenPtrIterator();
+
+
+			// manage undefined from bgn.
+			for (; ptrItr_Inp1.HasValidPos(); ptrItr_Inp1.MoveBgn(), ptrItr_Inp2.MoveBgn(), ptrItr_Out.MoveBgn())
+			{
+				T * ptr_Inp1 = ptrItr_Inp1.GetBgn();
+				T * ptr_Inp2 = ptrItr_Inp2.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				if (IsUndefined(*ptr_Inp1) || IsUndefined(*ptr_Inp2))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Inp1.HasValidPos(); ptrItr_Inp1.MoveEnd(), ptrItr_Inp2.MoveEnd(), ptrItr_Out.MoveEnd())
+			{
+				T * ptr_Inp1 = ptrItr_Inp1.GetEnd();
+				T * ptr_Inp2 = ptrItr_Inp2.GetEnd();
+				T * ptr_Out = ptrItr_Out.GetEnd();
+
+				if (IsUndefined(*ptr_Inp1) || IsUndefined(*ptr_Inp2))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// do main job.
+			int cnt = 0;
+			for (; ptrItr_Inp1.HasValidPos(); ptrItr_Inp1.MoveBgn(), ptrItr_Inp2.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
+			{
+				T * ptr_Inp1 = ptrItr_Inp1.GetBgn();
+				T * ptr_Inp2 = ptrItr_Inp2.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				ElementOperations2::Subtract<T>(*ptr_Inp1, *ptr_Inp2, ptr_Out);
+			}
+		
+			AssertLineUndefinedOrValid(a_outAcc);
+		}
+
 		template<class T>
 		void DivideLineByNum(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const float a_num)
 		{
 			AssertLineUndefinedOrValid(a_inpAcc);
-			AssertLineUndefinedOrValid(a_outAcc);
+
 
 			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
 
@@ -223,13 +414,14 @@ namespace Ncv
 
 				ElementOperations2::DivideByNum<T>(*ptr_Inp, a_num, ptr_Out);
 			}
+
+			AssertLineUndefinedOrValid(a_outAcc);
 		}
 
 		template<class T>
 		void MultiplyLineByNum(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const float a_num)
 		{
 			AssertLineUndefinedOrValid(a_inpAcc);
-			AssertLineUndefinedOrValid(a_outAcc);
 
 			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
 
@@ -279,6 +471,8 @@ namespace Ncv
 
 				ElementOperations2::MultiplyByNum<T>(*ptr_Inp, a_num, ptr_Out);
 			}
+		
+			AssertLineUndefinedOrValid(a_outAcc);
 		}
 
 
@@ -1000,10 +1194,10 @@ namespace Ncv
 					// to be revised.
 					//pOut->pSide_1 = &avg_1;
 
-					pOut->Offset_Side_1 = &avg_1 - a_avg_Acc.GetData_FakeOrg();
+					pOut->Offset_Side_1 = &avg_1 - a_avg_Acc.GetActualData();
 					Ncpp_ASSERT(pOut->Offset_Side_1 >= 0);
 
-					pOut->Offset_Side_2 = &avg_2 - a_avg_Acc.GetData_FakeOrg();
+					pOut->Offset_Side_2 = &avg_2 - a_avg_Acc.GetActualData();
 					Ncpp_ASSERT(pOut->Offset_Side_2 >= 0);
 				}
 			}
@@ -1032,6 +1226,310 @@ namespace Ncv
 			AssertLineUndefinedOrValid(a_outAcc);
 
 		}
+
+
+		template<class T>
+		void CalcConflictLine2(const VirtArrayAccessor_1D<T> & a_avg_Acc, const VirtArrayAccessor_1D<float> & a_avg_MagSqr_Acc,
+			const VirtArrayAccessor_1D<float> & a_normStandev_Acc, const VirtArrayAccessor_1D<ConflictInfo2> & a_outAcc, const Range<int> & a_range)
+		{
+			Ncpp_ASSERT(a_avg_Acc.GetSize() == a_avg_MagSqr_Acc.GetSize());
+			Ncpp_ASSERT(a_avg_Acc.GetSize() == a_normStandev_Acc.GetSize());
+			Ncpp_ASSERT(a_avg_Acc.GetSize() == a_outAcc.GetSize());
+
+			AssertLineUndefinedOrValid(a_avg_Acc);
+			AssertLineUndefinedOrValid(a_avg_MagSqr_Acc);
+			AssertLineUndefinedOrValid(a_normStandev_Acc);
+
+			const int nSize_1D = a_outAcc.GetSize();
+
+			const int nBefDiff = -a_range.GetBgn();
+			const int nAftDiff = a_range.GetEnd();
+
+			const int nRangeLen = nBefDiff + 1 + nAftDiff;
+
+
+			//--------------
+
+
+
+			int start = 0;
+			for (; start < nSize_1D; start++)
+			{
+				const T & avgVal = a_avg_Acc[start];
+				const float & avgMagSqrVal = a_avg_MagSqr_Acc[start];
+				const float & normStandevVal = a_normStandev_Acc[start];
+
+				if (IsUndefined(avgVal) || IsUndefined(avgMagSqrVal) || IsUndefined(normStandevVal))
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			int end = nSize_1D - 1;
+			for (; end >= start; end--)
+			{
+				const T & avgVal = a_avg_Acc[end];
+				const float & avgMagSqrVal = a_avg_MagSqr_Acc[end];
+				const float & normStandevVal = a_normStandev_Acc[end];
+
+				if (IsUndefined(avgVal) || IsUndefined(avgMagSqrVal) || IsUndefined(normStandevVal))
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			//------
+
+			if (end + 1 - start < nRangeLen)
+			{
+				SetLineToUndefined(a_outAcc);
+				return;
+			}
+
+			//const int nCenterEnd = nSize_1D - 1 - nAftDiff;
+			const int nCenterEnd = end - nAftDiff;
+
+
+			//--------------
+
+
+
+
+			for (int i = start + nBefDiff; i <= nCenterEnd; i++)
+			{
+				//ConflictInfo2 * pOut = &a_outAcc[i];
+				ConflictInfo2 * pOut = (ConflictInfo2 *)&a_outAcc[i];
+
+				const T & avg_1 = a_avg_Acc[i - nBefDiff];
+				//float avg_MagSqr_1 = sac_Avg_MagSqr[i - nBefDiff];
+				float avg_MagSqr_1 = a_avg_MagSqr_Acc[i - nBefDiff];
+				float normStandev_1 = a_normStandev_Acc[i - nBefDiff];
+
+				const T & avg_2 = a_avg_Acc[i + nAftDiff];
+				//float avg_MagSqr_2 = sac_Avg_MagSqr[i + nAftDiff];
+				float avg_MagSqr_2 = a_avg_MagSqr_Acc[i + nAftDiff];
+				float normStandev_2 = a_normStandev_Acc[i + nAftDiff];
+
+				float normStandev_c = a_normStandev_Acc[i];
+
+
+				pOut->Exists = ElementOperations2::CalcConflict2(avg_1, avg_MagSqr_1, normStandev_1,
+					avg_2, avg_MagSqr_2, normStandev_2, normStandev_c);
+				//pOut->IsConfirmed = false;
+				pOut->IsConfirmed = pOut->Exists;
+
+				////	for debug.
+				//if (pOut->Exists)
+				//{
+				//	i = i;
+				//}
+
+				//if (pOut->Exists)
+				{
+					// to be revised.
+					//pOut->pSide_1 = &avg_1;
+
+					pOut->Offset_Side_1 = &avg_1 - a_avg_Acc.GetActualData();
+					Ncpp_ASSERT(pOut->Offset_Side_1 >= 0);
+
+					pOut->Offset_Side_2 = &avg_2 - a_avg_Acc.GetActualData();
+					Ncpp_ASSERT(pOut->Offset_Side_2 >= 0);
+				}
+			}
+
+			///////////////////////////////
+
+			//	Fill bgn gap in output
+			{
+				for (int i = 0; i < start + nBefDiff; i++)
+				{
+					ConflictInfo2 * pDest = (ConflictInfo2 *)&a_outAcc[i];
+					SetToUndefined(pDest);
+				}
+			}
+
+			//	Fill end gap in output
+			{
+				for (int i = end - nAftDiff + 1; i < nSize_1D; i++)
+				{
+					ConflictInfo2 * pDest = (ConflictInfo2 *)&a_outAcc[i];
+					SetToUndefined(pDest);
+				}
+			}
+
+
+			AssertLineUndefinedOrValid(a_outAcc);
+		}
+
+
+		template<class T>
+		//void CalcThinConflictLine(const VirtArrayAccessor_1D<T> & a_avg_Acc, const VirtArrayAccessor_1D<float> & a_avg_MagSqr_Acc,
+		//	const VirtArrayAccessor_1D<float> & a_normStandev_Acc, const VirtArrayAccessor_1D<ConflictInfo2> & a_outAcc, const Range<int> & a_range)
+		void CalcThinConflictLine(const VirtArrayAccessor_1D<T> & a_avg_Acc, const VirtArrayAccessor_1D<float> & a_avg_MagSqr_Acc,
+			const VirtArrayAccessor_1D<T> & a_avg_Center_Acc, const VirtArrayAccessor_1D<float> & a_avg_MagSqr_Center_Acc,
+			const VirtArrayAccessor_1D<float> & a_normStandev_Acc, const VirtArrayAccessor_1D<ConflictInfo2> & a_outAcc, const Range<int> & a_range)
+		{
+			Ncpp_ASSERT(a_avg_Acc.GetSize() == a_avg_MagSqr_Acc.GetSize());
+			Ncpp_ASSERT(a_avg_Acc.GetSize() == a_normStandev_Acc.GetSize());
+			Ncpp_ASSERT(a_avg_Acc.GetSize() == a_outAcc.GetSize());
+			Ncpp_ASSERT(a_avg_Acc.GetSize() == a_avg_Center_Acc.GetSize());
+			Ncpp_ASSERT(a_avg_Acc.GetSize() == a_avg_MagSqr_Center_Acc.GetSize());
+
+
+			AssertLineUndefinedOrValid(a_avg_Acc);
+			AssertLineUndefinedOrValid(a_avg_MagSqr_Acc);
+			AssertLineUndefinedOrValid(a_avg_Center_Acc);
+			AssertLineUndefinedOrValid(a_avg_MagSqr_Center_Acc);
+			AssertLineUndefinedOrValid(a_normStandev_Acc);
+			
+			const int nSize_1D = a_outAcc.GetSize();
+
+			const int nBefDiff = -a_range.GetBgn();
+			const int nAftDiff = a_range.GetEnd();
+
+			const int nRangeLen = nBefDiff + 1 + nAftDiff;
+
+
+			//--------------
+
+
+
+			int start = 0;
+			for (; start < nSize_1D; start++)
+			{
+				const T & avgVal = a_avg_Acc[start];
+				const float & avgMagSqrVal = a_avg_MagSqr_Acc[start];
+				const T & avgCenterVal = a_avg_Center_Acc[start];
+				const float & avgMagSqrCenterVal = a_avg_MagSqr_Center_Acc[start];
+				const float & normStandevVal = a_normStandev_Acc[start];
+
+				if (IsUndefined(avgVal) || IsUndefined(avgMagSqrVal) || 
+					IsUndefined(avgCenterVal) || IsUndefined(avgMagSqrCenterVal) || IsUndefined(normStandevVal))
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			int end = nSize_1D - 1;
+			for (; end >= start; end--)
+			{
+				const T & avgVal = a_avg_Acc[end];
+				const float & avgMagSqrVal = a_avg_MagSqr_Acc[end];
+				const T & avgCenterVal = a_avg_Center_Acc[end];
+				const float & avgMagSqrCenterVal = a_avg_MagSqr_Center_Acc[end];
+				const float & normStandevVal = a_normStandev_Acc[end];
+				
+				if (IsUndefined(avgVal) || IsUndefined(avgMagSqrVal) || 
+					IsUndefined(avgCenterVal) || IsUndefined(avgMagSqrCenterVal) || IsUndefined(normStandevVal))
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			//------
+
+			if (end + 1 - start < nRangeLen)
+			{
+				SetLineToUndefined(a_outAcc);
+				return;
+			}
+
+			//const int nCenterEnd = nSize_1D - 1 - nAftDiff;
+			const int nCenterEnd = end - nAftDiff;
+
+
+			//--------------
+
+
+
+
+			for (int i = start + nBefDiff; i <= nCenterEnd; i++)
+			{
+				//ConflictInfo2 * pOut = &a_outAcc[i];
+				ConflictInfo2 * pOut = (ConflictInfo2 *)&a_outAcc[i];
+
+				const T & avg_1 = a_avg_Acc[i - nBefDiff];
+				float avg_MagSqr_1 = a_avg_MagSqr_Acc[i - nBefDiff];
+				float normStandev_1 = a_normStandev_Acc[i - nBefDiff];
+				
+				const T & avg_2 = a_avg_Acc[i + nAftDiff];
+				float avg_MagSqr_2 = a_avg_MagSqr_Acc[i + nAftDiff];
+				float normStandev_2 = a_normStandev_Acc[i + nAftDiff];
+			
+				const T & avg_c = a_avg_Center_Acc[i];
+				float avg_MagSqr_c = a_avg_MagSqr_Center_Acc[i];
+				float normStandev_c = a_normStandev_Acc[i];
+
+
+				pOut->Exists = ElementOperations2::CalcThinConflict(avg_1, avg_MagSqr_1, normStandev_1, 
+					avg_2, avg_MagSqr_2, normStandev_2,
+					avg_c, avg_MagSqr_c, normStandev_c
+					);
+				//pOut->IsConfirmed = false;
+				pOut->IsConfirmed = pOut->Exists;
+
+				////	for debug.
+				//if (pOut->Exists)
+				//{
+				//	i = i;
+				//}
+
+				//if (pOut->Exists)
+				{
+					// to be revised.
+					//pOut->pSide_1 = &avg_1;
+
+					pOut->Offset_Side_1 = &avg_1 - a_avg_Acc.GetActualData();
+					Ncpp_ASSERT(pOut->Offset_Side_1 >= 0);
+
+					pOut->Offset_Side_2 = &avg_2 - a_avg_Acc.GetActualData();
+					Ncpp_ASSERT(pOut->Offset_Side_2 >= 0);
+				}
+			}
+
+			///////////////////////////////
+
+			//	Fill bgn gap in output
+			{
+				for (int i = 0; i < start + nBefDiff; i++)
+				{
+					ConflictInfo2 * pDest = (ConflictInfo2 *)&a_outAcc[i];
+					SetToUndefined(pDest);
+				}
+			}
+
+			//	Fill end gap in output
+			{
+				for (int i = end - nAftDiff + 1; i < nSize_1D; i++)
+				{
+					ConflictInfo2 * pDest = (ConflictInfo2 *)&a_outAcc[i];
+					SetToUndefined(pDest);
+				}
+			}
+
+
+			AssertLineUndefinedOrValid(a_outAcc);
+
+		}
+
 
 		template<class T>
 		void Calc_ConflictDiff_Line(const VirtArrayAccessor_1D<T> & a_avg_Acc, const VirtArrayAccessor_1D<float> & a_avg_MagSqr_Acc,
@@ -1361,15 +1859,15 @@ namespace Ncv
 					// float & diffMag1_1_Val_Bef = a_diffMag1_1_Acc[i - 2 * a_posDist1_1];
 					//Ncpp_ASSERT(diffMag1_1_Val_Bef >= 0);
 
-					pOut->Offset_Side_1 = &a_outAcc[i - 2 * a_posDist1_1] - a_outAcc.GetData_FakeOrg();
-					//pOut->Offset_Side_1 = &diffMag1_1_Val_Bef - a_diffMag1_1_Acc.GetData_FakeOrg();
+					pOut->Offset_Side_1 = &a_outAcc[i - 2 * a_posDist1_1] - a_outAcc.GetActualData();
+					//pOut->Offset_Side_1 = &diffMag1_1_Val_Bef - a_diffMag1_1_Acc.GetActualData();
 					Ncpp_ASSERT(pOut->Offset_Side_1 >= 0);
 
 					// float & diffMag1_1_Val_Aft = a_diffMag1_1_Acc[i + a_posDist1_1];
 					// Ncpp_ASSERT(diffMag1_1_Val_Aft >= 0);
 
-					pOut->Offset_Side_2 = &a_outAcc[i + a_posDist1_1] - a_outAcc.GetData_FakeOrg();
-					//pOut->Offset_Side_2 = &diffMag1_1_Val_Aft - a_diffMag1_1_Acc.GetData_FakeOrg();
+					pOut->Offset_Side_2 = &a_outAcc[i + a_posDist1_1] - a_outAcc.GetActualData();
+					//pOut->Offset_Side_2 = &diffMag1_1_Val_Aft - a_diffMag1_1_Acc.GetActualData();
 					Ncpp_ASSERT(pOut->Offset_Side_2 >= 0);
 				}
 

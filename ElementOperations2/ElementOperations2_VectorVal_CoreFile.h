@@ -12,6 +12,8 @@
 
 		template<> float CalcMagSqr(const Ncv::VectorVal<T_Elm, N_Dims> & a_arg);
 
+		template<> void CalcSqrVector(const Ncv::VectorVal<T_Elm, N_Dims> & a_inp, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut);
+
 		template<> void Add(const Ncv::VectorVal<T_Elm, N_Dims> & a_inp1, const Ncv::VectorVal<T_Elm, N_Dims> & a_inp2, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut);
 
 		template<> void Subtract(const Ncv::VectorVal<T_Elm, N_Dims> & a_inp1, const Ncv::VectorVal<T_Elm, N_Dims> & a_inp2, Ncv::VectorVal<T_Elm, N_Dims> * a_pOut);
