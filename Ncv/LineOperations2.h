@@ -1530,6 +1530,96 @@ namespace Ncv
 
 		}
 
+		template<class T>
+		void CalcHighPassEdgeLine_Core(const VirtArrayAccessor_1D<T> & a_inpAcc,
+			const VirtArrayAccessor_1D<T> & a_withAvgDiffAcc,
+			const VirtArrayAccessor_1D<float> & a_standevBefAcc,
+			const VirtArrayAccessor_1D<T> & a_outAcc)
+		{
+			Ncpp_ASSERT(a_inpAcc.GetSize() == a_withAvgDiffAcc.GetSize());
+			Ncpp_ASSERT(a_inpAcc.GetSize() == a_standevBefAcc.GetSize());
+			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
+
+			AssertLineUndefinedOrValid(a_inpAcc);
+			AssertLineUndefinedOrValid(a_withAvgDiffAcc);
+			AssertLineUndefinedOrValid(a_standevBefAcc);
+
+
+			PtrIterator2<T> ptrItr_Inp = a_inpAcc.GenPtrIterator();
+			PtrIterator2<T> ptrItr_WithAvgDiff = a_withAvgDiffAcc.GenPtrIterator();
+			PtrIterator2<float> ptrItr_StandevBef = a_standevBefAcc.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out = a_outAcc.GenPtrIterator();
+
+
+			// manage undefined from bgn.
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_WithAvgDiff.MoveBgn(), ptrItr_StandevBef.MoveBgn(), ptrItr_Out.MoveBgn())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				T * ptr_WithAvgDiff = ptrItr_WithAvgDiff.GetBgn();
+				float * ptr_StandevBef = ptrItr_StandevBef.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				if (IsUndefined(*ptr_Inp) || IsUndefined(*ptr_WithAvgDiff) || IsUndefined(*ptr_StandevBef))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveEnd(), ptrItr_WithAvgDiff.MoveEnd(), ptrItr_StandevBef.MoveEnd(), ptrItr_Out.MoveEnd())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetEnd();
+				T * ptr_WithAvgDiff = ptrItr_WithAvgDiff.GetEnd();
+				float * ptr_StandevBef = ptrItr_StandevBef.GetEnd();
+				T * ptr_Out = ptrItr_Out.GetEnd();
+
+				if (IsUndefined(*ptr_Inp) || IsUndefined(*ptr_WithAvgDiff) || IsUndefined(*ptr_StandevBef))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// do main job.
+			int cnt = 0;
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_WithAvgDiff.MoveBgn(), ptrItr_StandevBef.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
+			//for (; ptrItr_Inp1.HasValidPos(); ptrItr_Inp1.MoveBgn(), ptrItr_Inp2.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
+			{
+				//T * ptr_Inp = ptrItr_Inp.GetBgn();
+				//T * ptr_WithAvgDiff = ptrItr_WithAvgDiff.GetBgn();
+				//float * ptr_StandevBef = ptrItr_StandevBef.GetBgn();
+				//T * ptr_Out = ptrItr_Out.GetBgn();
+
+				T & rInp = *ptrItr_Inp.GetBgn();
+				T & rWithAvgDiff = *ptrItr_WithAvgDiff.GetBgn();
+				float & rStandevBef = *ptrItr_StandevBef.GetBgn();
+				T & rOut = *ptrItr_Out.GetBgn();
+
+				float withAvgDiffMag = CalcMag(rWithAvgDiff);
+
+				if (withAvgDiffMag * 2 > 0.8 * rStandevBef && rStandevBef > 20)
+				{
+					Assign(&rOut, rInp);
+				}
+				else
+				{
+					SetToZero(&rOut);
+				}
+
+			}
+
+			AssertLineUndefinedOrValid(a_outAcc);
+		}
+
+
 
 		template<class T>
 		void Calc_ConflictDiff_Line(const VirtArrayAccessor_1D<T> & a_avg_Acc, const VirtArrayAccessor_1D<float> & a_avg_MagSqr_Acc,
@@ -1642,12 +1732,12 @@ namespace Ncv
 		}
 
 		template<class T>
-		void CalcDiffLine(const VirtArrayAccessor_1D<T> & a_inp_Acc,
+		void CalcDiffLine(const VirtArrayAccessor_1D<T> & a_inpAcc,
 			const VirtArrayAccessor_1D<T> & a_outAcc, const Range<int> & a_range)
 		{
-			Ncpp_ASSERT(a_inp_Acc.GetSize() == a_outAcc.GetSize());
+			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
 
-			AssertLineUndefinedOrValid(a_inp_Acc);
+			AssertLineUndefinedOrValid(a_inpAcc);
 
 			const int nSize_1D = a_outAcc.GetSize();
 
@@ -1664,7 +1754,7 @@ namespace Ncv
 			int start = 0;
 			for (; start < nSize_1D; start++)
 			{
-				const T & inpVal = a_inp_Acc[start];
+				const T & inpVal = a_inpAcc[start];
 
 				if (IsUndefined(inpVal))
 				{
@@ -1679,7 +1769,7 @@ namespace Ncv
 			int end = nSize_1D - 1;
 			for (; end >= start; end--)
 			{
-				const T & inpVal = a_inp_Acc[end];
+				const T & inpVal = a_inpAcc[end];
 
 				if (IsUndefined(inpVal))
 				{
@@ -1712,9 +1802,9 @@ namespace Ncv
 			{
 				T * pOut = (T *)&a_outAcc[i];
 
-				const T & inp_1 = a_inp_Acc[i - nBefDiff];
+				const T & inp_1 = a_inpAcc[i - nBefDiff];
 
-				const T & inp_2 = a_inp_Acc[i + nAftDiff];
+				const T & inp_2 = a_inpAcc[i + nAftDiff];
 
 				ElementOperations2::Subtract(inp_2, inp_1, pOut);
 			}

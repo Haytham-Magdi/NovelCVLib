@@ -402,6 +402,8 @@ namespace Ncv
 			AngleDirMgrColl_Context & pcx = *m_parentContext;
 
 			if (0 != cx.m_nIndex)
+				// if (2 != cx.m_nIndex)
+				//if (4 != cx.m_nIndex)
 				return;
 
 
@@ -420,6 +422,11 @@ namespace Ncv
 			//Range<int> avgRange = Range<int>::New(-5, 5);
 			//Range<int> avgRange = Range<int>::New(-3, 3);
 
+
+			F32ImageArrayHolder3C_Ref res_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
+			CalcHighPassEdgeImage_X(cx.m_org_Img->GetVirtAccessor(), res_Img->GetVirtAccessor(), avgRange.GetEnd());
+
+
 			F32ImageArrayHolder3C_Ref avg_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 			F32ImageArrayHolder1C_Ref standevBef_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			//AvgImage_X(cx.m_org_Img->GetVirtAccessor(), avg_Img->GetVirtAccessor(), avgRange);
@@ -430,10 +437,16 @@ namespace Ncv
 			F32ImageArrayHolder3C_Ref diffAvg_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 			SubtractImages(cx.m_org_Img->GetVirtAccessor(), avg_Img->GetVirtAccessor(), diffAvg_Img->GetVirtAccessor());
 
+
+
+
+
 			//Range<int> shiftDiffRange = Range<int>::New(-1, 0);
 			//Range<int> shiftDiffRange = Range<int>::New(-2, 0);
 			//Range<int> shiftDiffRange = Range<int>::New(-3, 0);
 			Range<int> shiftDiffRange = Range<int>::New(-avgRange.GetEnd(), 0);
+
+
 
 			F32ImageArrayHolder3C_Ref shiftDiff_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 			CalcDiffImageX(diffAvg_Img->GetVirtAccessor(), shiftDiff_Img->GetVirtAccessor(), shiftDiffRange);
@@ -449,8 +462,8 @@ namespace Ncv
 			//AddValueToImage(shiftDiff_Img->GetVirtAccessor(), disp_Img->GetVirtAccessor(), F32ColorVal::FromNum(130));
 			//DivideImageByNum(sqrVector_Img->GetVirtAccessor(), disp_Img->GetVirtAccessor(), 100);
 
-			F32ImageArrayHolder3C_Ref disp2_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
-			AddValueToImage(shiftDiff_Img->GetVirtAccessor(), disp2_Img->GetVirtAccessor(), F32ColorVal::FromNum(130));
+			//F32ImageArrayHolder3C_Ref disp2_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
+			//AddValueToImage(shiftDiff_Img->GetVirtAccessor(), disp2_Img->GetVirtAccessor(), F32ColorVal::FromNum(130));
 
 			//CopyImage(disp_Img->GetVirtAccessor(), standevBef_Img->GetVirtAccessor());
 
@@ -461,14 +474,17 @@ namespace Ncv
 				//ShowImage(sqrVector_Img->GetSrcImg(), "2c_1: sqrVector_Img");
 				//ShowImage(avgSqrVector_Img->GetSrcImg(), "2c_1: avgSqrVector_Img");
 				ShowImage(GenTriChGrayImg(standevBef_Img->GetSrcImg()), "2c_1: standevBef_Img");
-				ShowImage(disp2_Img->GetSrcImg(), "2c_1: disp2_Img");
+				//ShowImage(disp2_Img->GetSrcImg(), "2c_1: disp2_Img");
+				ShowImage(res_Img->GetSrcImg(), "2c_1: res_Img");
 
 
 				GlobalStuff::SetLinePathImg(disp_Img->GetSrcImg());
 				GlobalStuff::SetLinePathImg(avg_Img->GetSrcImg());
 				GlobalStuff::SetLinePathImg(GenTriChGrayImg(standevBef_Img->GetSrcImg()));
+			
+				//GlobalStuff::SetLinePathImg(disp2_Img->GetSrcImg());
 
-				GlobalStuff::SetLinePathImg(disp2_Img->GetSrcImg());
+				GlobalStuff::SetLinePathImg(res_Img->GetSrcImg());
 
 
 				GlobalStuff::ShowLinePathImg();

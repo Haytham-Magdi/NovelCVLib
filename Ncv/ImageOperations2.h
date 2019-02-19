@@ -605,15 +605,15 @@ namespace Ncv
 		}
 
 		template<class T>
-		void Calc_Avg_And_Standev_Image(const VirtArrayAccessor_2D<T> & a_inp_Acc, const VirtArrayAccessor_2D<T> & a_out_Avg_Acc,
+		void Calc_Avg_And_Standev_Image(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_out_Avg_Acc,
 			const VirtArrayAccessor_2D<float> & a_out_Standev_Acc, const Window<int> & a_Win)
 		{
-			AvgImage(a_inp_Acc, a_out_Avg_Acc, a_Win);
+			AvgImage(a_inpAcc, a_out_Avg_Acc, a_Win);
 
-			ArrayHolder_2D_Ref<float> magSqrHolder = ArrayHolderUtil::CreateFrom<float>(a_inp_Acc.GetSize());
-			CalcMagSqrImage(a_inp_Acc, magSqrHolder->GetVirtAccessor());
+			ArrayHolder_2D_Ref<float> magSqrHolder = ArrayHolderUtil::CreateFrom<float>(a_inpAcc.GetSize());
+			CalcMagSqrImage(a_inpAcc, magSqrHolder->GetVirtAccessor());
 
-			ArrayHolder_2D_Ref<float> avg_MagSqr_Holder = ArrayHolderUtil::CreateFrom<float>(a_inp_Acc.GetSize());
+			ArrayHolder_2D_Ref<float> avg_MagSqr_Holder = ArrayHolderUtil::CreateFrom<float>(a_inpAcc.GetSize());
 			AvgImage(magSqrHolder->GetVirtAccessor(), avg_MagSqr_Holder->GetVirtAccessor(), a_Win);
 
 			CalcStandevImage(a_out_Avg_Acc, avg_MagSqr_Holder->GetVirtAccessor(), a_out_Standev_Acc);
@@ -801,6 +801,81 @@ namespace Ncv
 			}
 		}
 
+		template<class T>
+		void CalcHighPassEdgeImage_X(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const int a_avgRadius)
+		{
+
+			//Range<int> avgRange = Range<int>::New(-2, 2);
+			Range<int> avgRange = Range<int>::New(-a_avgRadius, a_avgRadius);
+
+			//F32ImageArrayHolder3C_Ref avg_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
+			F32ImageArrayHolder3C_Ref avg_Img = new F32ImageArrayHolder3C(a_inpAcc.GetSize());
+			F32ImageArrayHolder1C_Ref standevBef_Img = new F32ImageArrayHolder1C(a_inpAcc.GetSize());
+
+			Calc_Avg_And_Standev_Image(a_inpAcc, avg_Img->GetVirtAccessor(),
+				standevBef_Img->GetVirtAccessor(), Window<int>::FromRangeX(avgRange));
+
+			//F32ImageArrayHolder3C_Ref diffAvg_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
+			F32ImageArrayHolder3C_Ref withAvgDiff_Img = new F32ImageArrayHolder3C(a_inpAcc.GetSize());
+			SubtractImages(a_inpAcc, avg_Img->GetVirtAccessor(), withAvgDiff_Img->GetVirtAccessor());
+
+
+			CalcHighPassEdgeImage_X_Core(a_inpAcc,
+				withAvgDiff_Img->GetVirtAccessor(),
+				standevBef_Img->GetVirtAccessor(),
+				a_outAcc);
+
+
+		}
+
+
+		template<class T>
+		//void CalcHighPassEdgeImage_X_Core(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const int a_avgRadius)
+		void CalcHighPassEdgeImage_X_Core(const VirtArrayAccessor_2D<T> & a_inpAcc,
+			const VirtArrayAccessor_2D<T> & a_withAvgDiffAcc,
+			const VirtArrayAccessor_2D<float> & a_standevBefAcc,
+			const VirtArrayAccessor_2D<T> & a_outAcc)
+		{
+
+			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp_X = a_inpAcc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_WithAvgDiff_Y = a_withAvgDiffAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_WithAvgDiff_X = a_withAvgDiffAcc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<float> acc_StandevBefAcc_Y = a_standevBefAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<float> acc_StandevBefAcc_X = a_standevBefAcc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_WithAvgDiff_Y.GetSize());
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_StandevBefAcc_Y.GetSize());
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
+
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_WithAvgDiff_Y = acc_WithAvgDiff_Y.GenPtrIterator();
+			PtrIterator2<float> ptrItr_StandevBef_Y = acc_StandevBefAcc_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			int cnt = 0;
+			for (; ptrItr_Inp_Y.HasValidPos();
+				ptrItr_Inp_Y.MoveBgn(), ptrItr_WithAvgDiff_Y.MoveBgn(), ptrItr_StandevBef_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn(), cnt++)
+			{
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				T * ptr_WithAvgDiff_Y = ptrItr_WithAvgDiff_Y.GetBgn();
+				float * ptr_StandevBef_Y = ptrItr_StandevBef_Y.GetBgn();
+				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_WithAvgDiff_X.SetData(ptr_WithAvgDiff_Y);
+				acc_StandevBefAcc_X.SetData(ptr_StandevBef_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				CalcHighPassEdgeLine_Core<T>(acc_Inp_X, acc_WithAvgDiff_X, acc_StandevBefAcc_X, acc_Out_X);
+			}
+
+		}
 
 
 		template<class T>
@@ -839,11 +914,11 @@ namespace Ncv
 		}
 
 		template<class T>
-		void CalcDiffImageX(const VirtArrayAccessor_2D<T> & a_inp_Acc,
+		void CalcDiffImageX(const VirtArrayAccessor_2D<T> & a_inpAcc,
 			const VirtArrayAccessor_2D<T> & a_outAcc, const Range<int> & a_range_X)
 		{
-			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_inp_Acc.GenAccessor_Y();
-			VirtArrayAccessor_1D<T> acc_Inp_X = a_inp_Acc.GenAccessor_X();
+			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp_X = a_inpAcc.GenAccessor_X();
 
 			const VirtArrayAccessor_1D<T> acc_Out_Y = a_outAcc.GenAccessor_Y();
 			VirtArrayAccessor_1D<T> acc_Out_X = a_outAcc.GenAccessor_X();
