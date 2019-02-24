@@ -117,8 +117,10 @@ namespace Ncv
 			//for(int j = 1; j < rData.size(); j++, x++)
 			for(int j = 1; j < rData.size(); j++, x++)
 			{
-				int y = 255 - (rData[j] * scale) + rSD.ShiftY + m_margY;
-				int y0 = 255 - (rData[j-1] * scale) + rSD.ShiftY + m_margY;
+				const int y = 255 - (rData[j] * scale) + rSD.ShiftY + m_margY;
+				const int y0 = 255 - (rData[j - 1] * scale) + rSD.ShiftY + m_margY;
+			
+				//const int y0 = 255 - (0 * scale) + rSD.ShiftY + m_margY;
 
 				//retCh0->SetAt( x, y, color.val0 );
 				//retCh1->SetAt( x, y, color.val1 );
@@ -128,8 +130,9 @@ namespace Ncv
 
 				cvLine (
 					ret->GetIplImagePtr(), 
-					cvPoint( ( x - 1 ) * nScaleX + m_margX , y0), 
-					cvPoint( x * nScaleX + m_margX , y), 
+					cvPoint((x - 1) * nScaleX + m_margX, y0),
+					//cvPoint(x * nScaleX + m_margX, y0),
+					cvPoint(x * nScaleX + m_margX , y), 
 					CV_RGB(color.val2, color.val1, color.val0),
 					1 );
 			}

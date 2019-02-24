@@ -361,10 +361,14 @@ namespace Ncv
 
 
 
-			if (standev_1c < 20 || standev_1c < standev_1 * 2)
+			//if (standev_1c < 20 || standev_1c < standev_1 * 2)
+			if (standev_1c < 15 || standev_1c < standev_1 * 2)
+			//if (standev_1c < 15 || standev_1c < standev_1 * 3)
 				return false;
 
-			if (standev_2c < 20 || standev_2c < standev_2 * 2)
+			//if (standev_2c < 20 || standev_2c < standev_2 * 2)
+			if (standev_2c < 15 || standev_2c < standev_2 * 2)
+			//if (standev_2c < 15 || standev_2c < standev_2 * 3)
 				return false;
 
 			if (

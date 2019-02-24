@@ -247,25 +247,25 @@ namespace Ncv
 				m_angleDirMgrArr[i]->Proceed_1_2();
 			}
 
-			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-			//	m_angleDirMgrArr[i]->Proceed_2_1();
-			//}
-
-			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-			//	m_angleDirMgrArr[i]->Proceed_2_2();
-			//}
-
-			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-			//	m_angleDirMgrArr[i]->Proceed_2b_1();
-			//}
-
-			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-			//	m_angleDirMgrArr[i]->Proceed_2b_2();
-			//}
+			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+				m_angleDirMgrArr[i]->Proceed_2_1();
+			}
 
 			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_2c_1();
+				m_angleDirMgrArr[i]->Proceed_2_2();
 			}
+
+			// for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			// 	m_angleDirMgrArr[i]->Proceed_2b_1();
+			// }
+
+			// for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			// 	m_angleDirMgrArr[i]->Proceed_2b_2();
+			// }
+
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_2c_1();
+			//}
 
 			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
 			//	m_angleDirMgrArr[i]->Proceed_3_1();
@@ -999,16 +999,16 @@ namespace Ncv
 					}
 
 					rDest.val0 = 0;
-					rDest.val1 = 0;
+					rDest.val1 = 70;
 					rDest.val2 = 155;
 
-					rDest_Side_1.val0 = 0;
-					rDest_Side_1.val1 = 155;
-					rDest_Side_1.val2 = 0;
+					//rDest_Side_1.val0 = 0;
+					//rDest_Side_1.val1 = 155;
+					//rDest_Side_1.val2 = 0;
 
-					rDest_Side_2.val0 = 0;
-					rDest_Side_2.val1 = 155;
-					rDest_Side_2.val2 = 0;
+					//rDest_Side_2.val0 = 0;
+					//rDest_Side_2.val1 = 155;
+					//rDest_Side_2.val2 = 0;
 				}
 				//else
 				//{
