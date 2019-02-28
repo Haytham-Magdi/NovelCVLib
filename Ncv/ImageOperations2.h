@@ -656,6 +656,41 @@ namespace Ncv
 		}
 
 		template<class T>
+		void CalcStandevImage_X(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<float> & a_magSqrAcc,
+			const VirtArrayAccessor_2D<T> & a_out_Avg_Acc, const VirtArrayAccessor_2D<float> & a_out_Standev_Acc,
+			const Range<int> & a_range)
+		{
+			Ncpp_ASSERT(a_inpAcc.GetSize_Y() == a_magSqrAcc.GetSize_Y());
+			Ncpp_ASSERT(a_inpAcc.GetSize_Y() == a_out_Avg_Acc.GetSize_Y());
+			Ncpp_ASSERT(a_inpAcc.GetSize_Y() == a_out_Standev_Acc.GetSize_Y());
+
+			Ncpp_ASSERT(a_inpAcc.GetSize_X() == a_magSqrAcc.GetSize_X());
+			Ncpp_ASSERT(a_inpAcc.GetSize_X() == a_out_Avg_Acc.GetSize_X());
+			Ncpp_ASSERT(a_inpAcc.GetSize_X() == a_out_Standev_Acc.GetSize_X());
+
+			AvgImage_X(a_inpAcc, a_out_Avg_Acc, a_range);
+
+			//AssertImageValues(a_magSqrAcc);
+			//AssertImageUndefinedOrValid(a_magSqrAcc);
+
+			ArrayHolder_2D_Ref<float> tmpAvg_MagSqr_X_Holder = ArrayHolderUtil::CreateFrom<float>(a_out_Standev_Acc.GetSize());
+			AvgImage_X(a_magSqrAcc, tmpAvg_MagSqr_X_Holder->GetVirtAccessor(), a_range);
+
+			CalcStandevImage(a_out_Avg_Acc, tmpAvg_MagSqr_X_Holder->GetVirtAccessor(), a_out_Standev_Acc);
+		}
+
+
+		template<class T>
+		void CalcStandevImage_X(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<float> & a_magSqrAcc,
+			const VirtArrayAccessor_2D<float> & a_outAcc, const Range<int> & a_range)
+		{
+			ArrayHolder_2D_Ref<T> tmpAvgHolder_X = ArrayHolderUtil::CreateFrom<T>(a_inpAcc.GetSize());
+			CalcStandevImage_X(a_inpAcc, a_magSqrAcc, tmpAvgHolder_X->GetVirtAccessor(), a_outAcc, a_range);
+		}
+
+
+
+		template<class T>
 		void CalcConflictImage_X(const VirtArrayAccessor_2D<T> & a_avg_Acc, const VirtArrayAccessor_2D<float> & a_avg_MagSqr_Acc,
 			const VirtArrayAccessor_2D<ConflictInfo2> & a_outAcc, const Range<int> & a_range_X)
 		{
@@ -1144,7 +1179,7 @@ namespace Ncv
 
 
 		template<class T>
-		void Calc_AvgStandevImage_X(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<float> & a_magSqrAcc,
+		void Calc_NormAvgStandevImage_X(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<float> & a_magSqrAcc,
 			const VirtArrayAccessor_2D<float> & a_outAcc, const Range<int> & a_standevRange_X, const Range<int> a_avgRange_Y)
 		{
 			Ncpp_ASSERT(a_inpAcc.GetSize_Y() == a_magSqrAcc.GetSize_Y());

@@ -11,6 +11,8 @@ namespace Ncv
 	class ConflictInfo2 //: public Ncpp::Object
 	{
 	public:
+		int Index;
+
 		bool Exists;
 		bool IsConfirmed;
 		//void * pSide_1;

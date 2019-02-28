@@ -2145,17 +2145,17 @@ namespace Ncv
 
 		template<class T>
 		void CalcConflictLine_FromDiffImages2(const VirtArrayAccessor_1D<T> & a_inp_Acc, 
-			const VirtArrayAccessor_1D<T> & a_diffMag1_Acc, const VirtArrayAccessor_1D<T> & a_diffMag2_Acc,
+			const VirtArrayAccessor_1D<T> & a_diff1_Acc, const VirtArrayAccessor_1D<T> & a_diff2_Acc,
 			const VirtArrayAccessor_1D<ConflictInfo2> & a_outAcc, const int a_posDist1)
 		{
 
-			Ncpp_ASSERT(a_inp_Acc.GetSize() == a_diffMag1_Acc.GetSize());
-			Ncpp_ASSERT(a_inp_Acc.GetSize() == a_diffMag2_Acc.GetSize());
+			Ncpp_ASSERT(a_inp_Acc.GetSize() == a_diff1_Acc.GetSize());
+			Ncpp_ASSERT(a_inp_Acc.GetSize() == a_diff2_Acc.GetSize());
 			Ncpp_ASSERT(a_inp_Acc.GetSize() == a_outAcc.GetSize());
 
 			AssertLineUndefinedOrValid(a_inp_Acc);
-			AssertLineUndefinedOrValid(a_diffMag1_Acc);
-			AssertLineUndefinedOrValid(a_diffMag2_Acc);
+			AssertLineUndefinedOrValid(a_diff1_Acc);
+			AssertLineUndefinedOrValid(a_diff2_Acc);
 
 
 			const int nSize_1D = a_outAcc.GetSize();
@@ -2168,9 +2168,9 @@ namespace Ncv
 			//for (; start < nSize_1D; start++)
 			for (; start < nSize_1D - a_posDist1; start++)
 			{
-				//const T & diffMag1_Val = a_diffMag1_Acc[start];
+				//const T & diffMag1_Val = a_diff1_Acc[start];
 				//const T & inp_Val = a_inp_Acc[start];
-				const T & diffMag2_Val = a_diffMag2_Acc[start];
+				const T & diffMag2_Val = a_diff2_Acc[start];
 
 				//const T & inp_Val = a_inp_Acc[start + a_posDist1];
 
@@ -2192,12 +2192,12 @@ namespace Ncv
 			Ncpp_ASSERT(end > 0);
 			for (; end >= start; end--)
 			{
-				//const T & diffMag1_Val = a_diffMag1_Acc[end];
+				//const T & diffMag1_Val = a_diff1_Acc[end];
 				//const T & inp_Val = a_inp_Acc[end];
-				//const T & diffMag2_Val = a_diffMag2_Acc[end];
+				//const T & diffMag2_Val = a_diff2_Acc[end];
 
 				//const T & inp_Val = a_inp_Acc[end + a_posDist1];
-				const T & diffMag2_Val = a_diffMag2_Acc[end + a_posDist1];
+				const T & diffMag2_Val = a_diff2_Acc[end + a_posDist1];
 
 				if (IsUndefined(diffMag2_Val))
 					//if (IsUndefined(inp_Val))
@@ -2216,36 +2216,98 @@ namespace Ncv
 			//for (int i = start; i <= end; i++)
 			for (int i = start; i <= end; i++)
 			{
-				const T & rDiffMag1_c = a_diffMag1_Acc[i];
-				Ncpp_ASSERT(!IsUndefined(rDiffMag1_c));
+				const T & rDiff1_c = a_diff1_Acc[i];
+				Ncpp_ASSERT(!IsUndefined(rDiff1_c));
+				const float diff1Mag_c = CalcMag(rDiff1_c);
 
-				const T & rDiffMag1_b = a_diffMag1_Acc[i - a_posDist1];
-				Ncpp_ASSERT(!IsUndefined(rDiffMag1_b));
+				T diff1Uv_c;
+				if (diff1Mag_c > 0.1)
+				{
+					DivideByNum(rDiff1_c, diff1Mag_c, &diff1Uv_c);
+				}
 
-				const T & rInp_d = a_inp_Acc[i + a_posDist1];
+				const T & rDiff1_b = a_diff1_Acc[i - a_posDist1];
+				Ncpp_ASSERT(!IsUndefined(rDiff1_b));
+				const float diff1Mag_b = CalcMag(rDiff1_b);
 
-				const T & rDiffMag2_c = a_diffMag2_Acc[i];
-				const T & rDiffMag2_d = a_diffMag2_Acc[i + a_posDist1];
+				const T & rDiff1_d = a_diff1_Acc[i + a_posDist1];
+				Ncpp_ASSERT(!IsUndefined(rDiff1_d));
+				const float diff1Mag_d = CalcMag(rDiff1_d);
 
-				Ncpp_ASSERT(!IsUndefined(rInp_d));
-				Ncpp_ASSERT(!IsUndefined(rDiffMag2_c));
-				Ncpp_ASSERT(!IsUndefined(rDiffMag2_d));
+				//--
 
+
+				T diff1Uv_b;
+				T uvDiff_bc;
+				float uvDiffMag_bc;
+				if (diff1Mag_b > 0.1 && diff1Mag_c > 0.1)
+				{
+					DivideByNum(rDiff1_b, diff1Mag_b, &diff1Uv_b);
+
+					Subtract(diff1Uv_c, diff1Uv_b, &uvDiff_bc);
+					uvDiffMag_bc = CalcMag(uvDiff_bc);
+				}
+
+				T diff1Uv_d;
+				T uvDiff_cd;
+				float uvDiffMag_cd;
+				if (diff1Mag_d > 0.1 && diff1Mag_c > 0.1)
+				{
+					DivideByNum(rDiff1_d, diff1Mag_d, &diff1Uv_d);
+
+					Subtract(diff1Uv_d, diff1Uv_c, &uvDiff_cd);
+					uvDiffMag_cd = CalcMag(uvDiff_cd);
+				}
+
+				//T diff1_Sum_cb;
+				//Add(rDiff1_c, rDiff1_b, &diff1_Sum_cb);
+				//const float diff1_SumMag_cb = CalcMag(diff1_Sum_cb);
+
+				//const T & rInp_d = a_inp_Acc[i + a_posDist1];
+
+				//const T & rDiff2_c = a_diff2_Acc[i];
+				//const T & rDiff2_d = a_diff2_Acc[i + a_posDist1];
+
+				////Ncpp_ASSERT(!IsUndefined(rInp_d));
+				//Ncpp_ASSERT(!IsUndefined(rDiff2_c));
+				//Ncpp_ASSERT(!IsUndefined(rDiff2_d));
+
+				//const float & diffMag2_c = CalcMag(rDiff2_c);
+				//const float & diffMag2_d = CalcMag(rDiff2_d);
 
 				ConflictInfo2 * pOut = (ConflictInfo2 *)&a_outAcc[i];
 
+				if (288212 == pOut->Index)
+				{
+					i = i;
+				}
+
 				const int minDiff = 20;
+				//const int minDiff = 30;
 				//const int minDiff = 40;
 				//const int minDiff = 50;
 				pOut->Exists = (
-					rDiffMag1_c > minDiff &&
-					rInp_d > minDiff &&
-					rInp_d > 0.75 * rDiffMag1_c &&
-					rDiffMag2_c > 0.6 * rDiffMag1_c &&
-					rDiffMag2_d > 0.6 * rDiffMag1_c
+					diff1Mag_c > minDiff &&
+					
+					(diff1Mag_b < diff1Mag_c * 0.3 ||
+					uvDiffMag_bc > 0.5)
+					//uvDiffMag_bc > 0.8)
+					
+					&&
+					
+					(diff1Mag_d < diff1Mag_c * 0.3 ||
+					uvDiffMag_cd > 0.5)
+					//uvDiffMag_cd > 0.8)
+					
+					//rInp_d > minDiff &&
+					//rInp_d > 0.75 * diff1Mag_c &&
+					
+					//diffMag2_c > 0.6 * diff1Mag_c &&
+					//diffMag2_d > 0.6 * diff1Mag_c
 					);
 
-				pOut->IsConfirmed = false;
+				//pOut->IsConfirmed = false;
+				pOut->IsConfirmed = pOut->Exists;
 
 
 				// //	for debug.
@@ -2256,18 +2318,18 @@ namespace Ncv
 
 				//if (pOut->Exists)
 				{
-					// T & diffMag1_Val_Bef = a_diffMag1_Acc[i - 2 * a_posDist1];
+					// T & diffMag1_Val_Bef = a_diff1_Acc[i - 2 * a_posDist1];
 					//Ncpp_ASSERT(diffMag1_Val_Bef >= 0);
 
 					pOut->Offset_Side_1 = &a_outAcc[i - 2 * a_posDist1] - a_outAcc.GetActualData();
-					//pOut->Offset_Side_1 = &diffMag1_Val_Bef - a_diffMag1_Acc.GetActualData();
+					//pOut->Offset_Side_1 = &diffMag1_Val_Bef - a_diff1_Acc.GetActualData();
 					Ncpp_ASSERT(pOut->Offset_Side_1 >= 0);
 
-					// T & diffMag1_Val_Aft = a_diffMag1_Acc[i + a_posDist1];
+					// T & diffMag1_Val_Aft = a_diff1_Acc[i + a_posDist1];
 					// Ncpp_ASSERT(diffMag1_Val_Aft >= 0);
 
 					pOut->Offset_Side_2 = &a_outAcc[i + a_posDist1] - a_outAcc.GetActualData();
-					//pOut->Offset_Side_2 = &diffMag1_Val_Aft - a_diffMag1_Acc.GetActualData();
+					//pOut->Offset_Side_2 = &diffMag1_Val_Aft - a_diff1_Acc.GetActualData();
 					Ncpp_ASSERT(pOut->Offset_Side_2 >= 0);
 				}
 

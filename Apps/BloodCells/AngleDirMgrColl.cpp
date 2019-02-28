@@ -247,13 +247,13 @@ namespace Ncv
 				m_angleDirMgrArr[i]->Proceed_1_2();
 			}
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_2_1();
-			}
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_2_1();
+			//}
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_2_2();
-			}
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_2_2();
+			//}
 
 			// for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
 			// 	m_angleDirMgrArr[i]->Proceed_2b_1();
@@ -988,7 +988,8 @@ namespace Ncv
 					//S32Point testPnt(225, 333);
 					//S32Point testPnt(528, 225);
 					//S32Point testPnt(353, 84);
-					S32Point testPnt(353, 63);
+					//S32Point testPnt(353, 63);
+					S32Point testPnt(500, 444);
 					if (S32Point::AreEqual(side1_Pnt, testPnt) ||
 						S32Point::AreEqual(side2_Pnt, testPnt)
 						)
@@ -1026,24 +1027,24 @@ namespace Ncv
 				F32ColorVal & rDest_Side_1 = destAcc.GetAt(dbgSide1_Pnt.GetX(), dbgSide1_Pnt.GetY());
 				F32ColorVal & rDest_Side_2 = destAcc.GetAt(dbgSide2_Pnt.GetX(), dbgSide2_Pnt.GetY());
 
-				rDest.val0 = 0;
+				rDest.val0 = 255;
 				rDest.val1 = 255;
-				rDest.val2 = 255;
+				rDest.val2 = 0;
 
-				rDest_Side_1.val0 = 255;
-				rDest_Side_1.val1 = 255;
-				rDest_Side_1.val2 = 0;
+				//rDest_Side_1.val0 = 0;
+				//rDest_Side_1.val1 = 128;
+				//rDest_Side_1.val2 = 255;
 
-				rDest_Side_2.val0 = 255;
-				rDest_Side_2.val1 = 255;
-				rDest_Side_2.val2 = 0;
+				//rDest_Side_2.val0 = 0;
+				//rDest_Side_2.val1 = 128;
+				//rDest_Side_2.val2 = 255;
 			}
 
 
 			//GlobalStuff::SetLinePathImg(confDsp_Img);
 			//GlobalStuff::ShowLinePathImg();
 
-			ShowImage(confDsp_Img, "confDsp_Img->GetSrcImg()");
+			//ShowImage(confDsp_Img, "confDsp_Img->GetSrcImg()");
 		}
 
 

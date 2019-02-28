@@ -56,42 +56,58 @@ namespace Ncv
 		{
 			Context & cx = *m_context;
 
-			if (1 == cx.m_nIndex)
+
+			//if (1 == cx.m_nIndex)
+			//{
+			//	ShowImage(cx.m_org_Img->GetSrcImg(), cx.MakeStrWithId("org_Img->GetSrcImg()").c_str());
+			//}
+
+
+			cx.m_standev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
+			CalcStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
+				cx.m_standev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1));
+			//cx.m_standev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2));
+			//cx.m_standev_X_Img->GetVirtAccessor(), Range<int>::New(-20, 20));
+
+			if (0 == cx.m_nIndex)
 			{
-				ShowImage(cx.m_org_Img->GetSrcImg(), cx.MakeStrWithId("org_Img->GetSrcImg()").c_str());
+				ShowImage(GenTriChGrayImg(cx.m_standev_X_Img->GetSrcImg()), cx.MakeStrWithId("m_standev_X_Img->GetSrcImg()").c_str());
+				GlobalStuff::SetLinePathImg(GenTriChGrayImg(cx.m_standev_X_Img->GetSrcImg()));
+				GlobalStuff::ShowLinePathImg();
 			}
 
-			cx.m_avgStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
-			Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
+
+			cx.m_normAvgStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
+			Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
 				
-				cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-1, 1));
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-2, 2));
+				//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
+			cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-1, 1));
+			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-2, 2));
 			
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-3, 3));
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-1, 1));
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-3, 3));
+			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-3, 3));
+			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-1, 1));
+			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-3, 3));
 			
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-7, 7), Range<int>::New(-7, 7));
-				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-3, 3));
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-6, 6));
-				//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(0, 1));
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(0, 0));
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-6, 6));
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-2, 2));
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-36, 36), Range<int>::New(-36, 36));
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-36, 36));
-			//cx.m_avgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-36, 36), Range<int>::New(-6, 6));
+			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-7, 7), Range<int>::New(-7, 7));
+				//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-3, 3));
+			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-6, 6));
+				//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(0, 1));
+			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(0, 0));
+			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-6, 6));
+			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-2, 2));
+			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-36, 36), Range<int>::New(-36, 36));
+			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-36, 36));
+			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-36, 36), Range<int>::New(-6, 6));
 
 			if (1 == cx.m_nIndex)
 			//if (0 == cx.m_nIndex)
 			{
-				//float & elm1 = cx.m_avgStandev_X_Img->GetActualAccessor().GetAt(45, 77);
-				// float & elm1 = cx.m_avgStandev_X_Img->GetActualAccessor().GetAt(215, 40);
+				//float & elm1 = cx.m_normAvgStandev_X_Img->GetActualAccessor().GetAt(45, 77);
+				// float & elm1 = cx.m_normAvgStandev_X_Img->GetActualAccessor().GetAt(215, 40);
 				//elm1 = 255;
 
-				////ShowImage(cx.m_avgStandev_X_Img->GetSrcImg(), cx.MakeStrWithId("m_avgStandev_X_Img->GetSrcImg()").c_str());
-				//ShowImage(GenTriChGrayImg(cx.m_avgStandev_X_Img->GetSrcImg()), cx.MakeStrWithId("m_avgStandev_X_Img->GetSrcImg()").c_str());
+				////ShowImage(cx.m_normAvgStandev_X_Img->GetSrcImg(), cx.MakeStrWithId("m_normAvgStandev_X_Img->GetSrcImg()").c_str());
+				//ShowImage(GenTriChGrayImg(cx.m_normAvgStandev_X_Img->GetSrcImg()), cx.MakeStrWithId("m_normAvgStandev_X_Img->GetSrcImg()").c_str());
 			}
 			
 		}
@@ -118,6 +134,30 @@ namespace Ncv
 			//}
 
 			cx.m_conflict_Img = ArrayHolderUtil::CreateEmptyFrom<ConflictInfo2>(cx.m_org_Img->AsHolderRef());
+
+			{
+				ActualArrayAccessor_2D<ConflictInfo2> cnfAcc =
+					cx.m_conflict_Img->GetActualAccessor();
+
+				ActualArrayAccessor_1D<ConflictInfo2> cnfAcc_1D =
+					cnfAcc.GenAcc_1D();
+
+				for (int i = 0; i < cnfAcc_1D.GetSize(); i++)
+				{
+					S32Point pnt = cnfAcc.CalcPointFromIndex_1D(i);
+
+					S32Point testPnt(500, 444);
+					if (0 == cx.m_nIndex &&
+						S32Point::AreEqual(pnt, testPnt))
+					{
+						i = i;
+					}
+
+					ConflictInfo2 & rConf = cnfAcc_1D[i];
+					rConf.Index = i;
+				}
+			}
+
 
 //-------------------------------
 
@@ -192,11 +232,11 @@ namespace Ncv
 			//	normStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			//	//normStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img)->CreateTransposedProxy();
 
-			//	//Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
+			//	//Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
 			//	//	//normStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
 			//	//normStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(0, 0));
 
-			//	Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor().GenTranspose(), cx.m_magSqr_Img->GetVirtAccessor().GenTranspose(),
+			//	Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor().GenTranspose(), cx.m_magSqr_Img->GetVirtAccessor().GenTranspose(),
 			//		//normStandev_X_Img->GetVirtAccessor().GenTranspose(), Range<int>::New(-2, 2), Range<int>::New(0, 0));
 			//		normStandev_X_Img->GetVirtAccessor().GenTranspose(), Range<int>::New(-1, 1), Range<int>::New(0, 0));
 
@@ -258,11 +298,11 @@ namespace Ncv
 			//	normStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			//	//normStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img)->CreateTransposedProxy();
 
-			//	//Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
+			//	//Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
 			//	//	//normStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
 			//	//normStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(0, 0));
 
-			//	Calc_AvgStandevImage_X(cx.m_org_Img->GetVirtAccessor().GenTranspose(), cx.m_magSqr_Img->GetVirtAccessor().GenTranspose(),
+			//	Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor().GenTranspose(), cx.m_magSqr_Img->GetVirtAccessor().GenTranspose(),
 			//		//normStandev_X_Img->GetVirtAccessor().GenTranspose(), Range<int>::New(-2, 2), Range<int>::New(0, 0));
 			//		//normStandev_X_Img->GetVirtAccessor().GenTranspose(), Range<int>::New(-1, 1), Range<int>::New(0, 0));
 			//	normStandev_X_Img->GetVirtAccessor().GenTranspose(), Range<int>::New(-1, 0), Range<int>::New(0, 0));
@@ -278,8 +318,8 @@ namespace Ncv
 //-------------------------------
 
 
-			//Window<int> avgWin = Window<int>::New(-1, 0, -1, 1);
-			Window<int> avgWin = Window<int>::New(0, 0, 0, 0);
+			////Window<int> avgWin = Window<int>::New(-1, 0, -1, 1);
+			//Window<int> avgWin = Window<int>::New(0, 0, 0, 0);
 
 			cx.m_diff1_1_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 			cx.m_diff_2_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
@@ -298,20 +338,34 @@ namespace Ncv
 			//Range<int> diffRange = Range<int>::New(-10 - avgWin.GetX2(), 10 - avgWin.GetX1());
 			//Range<int> diffRange = Range<int>::New(-1 - avgWin.GetX2(), 1 - avgWin.GetX1());
 
-			//Range<int> diffRange = Range<int>::New(-1 - avgWin.GetX2(), 0 - avgWin.GetX1());
-			Range<int> diffRange = Range<int>::New(-posDist - avgWin.GetX2(), 0 - avgWin.GetX1());
-			Range<int> diffRange1_2 = Range<int>::New(-(posDist * 3) - avgWin.GetX2(), 0 - avgWin.GetX1());
+			////Range<int> diffRange = Range<int>::New(-1 - avgWin.GetX2(), 0 - avgWin.GetX1());
+			//Range<int> diffRange = Range<int>::New(-posDist - avgWin.GetX2(), 0 - avgWin.GetX1());
+			//Range<int> diffRange1_2 = Range<int>::New(-(posDist * 3) - avgWin.GetX2(), 0 - avgWin.GetX1());
 
+			Range<int> diffRange = Range<int>::New(-posDist, 0);
+			Range<int> diffRange1_2 = Range<int>::New(-(posDist * 3), 0);
 
 			//Range<int> diffRange = Range<int>::New(0 - avgWin.GetX2(), 1 - avgWin.GetX1());
 			//Range<int> diffRange = Range<int>::New(0 - avgWin.GetX2(), -1 - avgWin.GetX1());
 
-			CalcDiffImageX(cx.m_org_Img->GetVirtAccessor(), cx.m_diff1_1_Img->GetVirtAccessor(), diffRange);
+			F32ImageArrayHolder3C_Ref avg_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
+			AvgImage_X(cx.m_org_Img->GetVirtAccessor(), avg_Img->GetVirtAccessor(),
+				Range<int>::New(1 - posDist, 0));
+
+
+			CalcDiffImageX(avg_Img->GetVirtAccessor(), cx.m_diff1_1_Img->GetVirtAccessor(), diffRange);
 			CalcDiffImageX(cx.m_diff1_1_Img->GetVirtAccessor(), cx.m_diff_2_Img->GetVirtAccessor(), diffRange);
-			CalcDiffImageX(cx.m_org_Img->GetVirtAccessor(), cx.m_diff1_2_Img->GetVirtAccessor(), diffRange1_2);
+			CalcDiffImageX(avg_Img->GetVirtAccessor(), cx.m_diff1_2_Img->GetVirtAccessor(), diffRange1_2);
+
+			//CalcDiffImageX(cx.m_org_Img->GetVirtAccessor(), cx.m_diff1_1_Img->GetVirtAccessor(), diffRange);
+			//CalcDiffImageX(cx.m_diff1_1_Img->GetVirtAccessor(), cx.m_diff_2_Img->GetVirtAccessor(), diffRange);
+			//CalcDiffImageX(cx.m_org_Img->GetVirtAccessor(), cx.m_diff1_2_Img->GetVirtAccessor(), diffRange1_2);
 
 
-			CalcConflictImage_X_FromDiffImages(cx.m_diff1_1_Img->GetVirtAccessor(), cx.m_diff1_2_Img->GetVirtAccessor(),
+			//CalcConflictImage_X_FromDiffImages(cx.m_diff1_1_Img->GetVirtAccessor(), cx.m_diff1_2_Img->GetVirtAccessor(),
+			//	cx.m_diff_2_Img->GetVirtAccessor(), cx.m_conflict_Img->GetVirtAccessor(), posDist);
+
+			CalcConflictImage_X_FromDiffImages2(cx.m_org_Img->GetVirtAccessor(), cx.m_diff1_1_Img->GetVirtAccessor(),
 				cx.m_diff_2_Img->GetVirtAccessor(), cx.m_conflict_Img->GetVirtAccessor(), posDist);
 
 
@@ -342,9 +396,6 @@ namespace Ncv
 			Context & ncx = *m_normalContext;
 			AngleDirMgrColl_Context & pcx = *m_parentContext;
 
-			//Window<int> avgWin = Window<int>::New(-1, 0, -1, 1);
-			Window<int> avgWin = Window<int>::New(0, 0, 0, 0);
-
 			//F32ImageArrayHolder3C_Ref diff_Img_1;
 			//diff_Img_1 = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 			
@@ -358,8 +409,14 @@ namespace Ncv
 			
 			const int posDist = pcx.GetDiffPosDist();
 
-			//F32ImageArrayHolder3C_Ref avg_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
+			//Window<int> avgWin = Window<int>::New(-1, 0, -1, 1);
+			//Window<int> avgWin = Window<int>::New(0, 0, 0, 0);
+			Window<int> avgWin = Window<int>::New(0, 0, 0, 0);
+
+			F32ImageArrayHolder3C_Ref avg_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 			//AvgImage(cx.m_org_Img->GetVirtAccessor(), avg_Img->GetVirtAccessor(), avgWin);
+			AvgImage_X(cx.m_org_Img->GetVirtAccessor(), avg_Img->GetVirtAccessor(), 
+				Range<int>::New(-posDist, 0));
 
 			//Range<int> diffRange = Range<int>::New(-10 - avgWin.GetX2(), 10 - avgWin.GetX1());
 			//Range<int> diffRange = Range<int>::New(-1 - avgWin.GetX2(), 1 - avgWin.GetX1());
@@ -372,9 +429,9 @@ namespace Ncv
 			//Range<int> diffRange = Range<int>::New(0 - avgWin.GetX2(), 1 - avgWin.GetX1());
 			//Range<int> diffRange = Range<int>::New(0 - avgWin.GetX2(), -1 - avgWin.GetX1());
 
-			CalcDiffImageX(cx.m_org_Img->GetVirtAccessor(), cx.m_diff1_1_Img->GetVirtAccessor(), diffRange);
+			CalcDiffImageX(avg_Img->GetVirtAccessor(), cx.m_diff1_1_Img->GetVirtAccessor(), diffRange);
 			CalcDiffImageX(cx.m_diff1_1_Img->GetVirtAccessor(), cx.m_diff_2_Img->GetVirtAccessor(), diffRange);
-			CalcDiffImageX(cx.m_org_Img->GetVirtAccessor(), cx.m_diff1_2_Img->GetVirtAccessor(), diffRange1_2);
+			CalcDiffImageX(avg_Img->GetVirtAccessor(), cx.m_diff1_2_Img->GetVirtAccessor(), diffRange1_2);
 
 			PrepareBidiffInfoImageFromDiffImages(cx.m_diff1_1_Img->GetVirtAccessor(), cx.m_diff_2_Img->GetVirtAccessor(),
 				cx.m_bidiffInfo_Img->GetVirtAccessor(), posDist);
@@ -692,9 +749,9 @@ namespace Ncv
 
 
 
-			//float * localAcc_1D = (float *)cx.m_avgStandev_X_Img->GetActualAccessor().GetData();
-			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
-			ActualArrayAccessor_1D<float> localAcc_1D_Norm = ncx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			//float * localAcc_1D = (float *)cx.m_normAvgStandev_X_Img->GetActualAccessor().GetData();
+			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> localAcc_1D_Norm = ncx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
 
 			//for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			//{
@@ -897,8 +954,8 @@ namespace Ncv
 
 			//--
 			
-			//ActualArrayAccessor_1D<float> localStandevX_Acc_1D = cx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
-			//ActualArrayAccessor_1D<float> localStandevX_Acc_1D_Norm = ncx.m_avgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			//ActualArrayAccessor_1D<float> localStandevX_Acc_1D = cx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			//ActualArrayAccessor_1D<float> localStandevX_Acc_1D_Norm = ncx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
 
 
 			
@@ -1059,14 +1116,14 @@ namespace Ncv
 			AngleDirMgrColl_Context & pcx = *m_parentContext;
 
 
-			////	for debug.
-			//if (//0 != cx.m_nIndex &&
-			//	//4 != cx.m_nIndex
-			//	1 != cx.m_nIndex
-			//	)
-			//{
-			//	return;
-			//}
+			//	for debug.
+			if (0 != cx.m_nIndex
+				//4 != cx.m_nIndex
+				//1 != cx.m_nIndex
+				)
+			{
+				return;
+			}
 
 			//ActualArrayAccessor_2D<F32ColorVal> orgImg_Acc = cx.m_org_Img->GetActualAccessor();
 			ActualArrayAccessor_2D<F32ColorVal> orgImg_Acc = pcx.m_org_Img->GetActualAccessor();
@@ -1213,7 +1270,7 @@ namespace Ncv
 			VirtArrayAccessor_2D<BidiffInfo> localVirtAcc = cx.m_bidiffInfo_Img->GetVirtAccessor();
 			VirtArrayAccessor_2D<BidiffInfo> localVirtAcc_Norm = ncx.m_bidiffInfo_Img->GetVirtAccessor();
 
-			//float * localAcc_1D = (float *)cx.m_avgStandev_X_Img->GetActualAccessor().GetData();
+			//float * localAcc_1D = (float *)cx.m_normAvgStandev_X_Img->GetActualAccessor().GetData();
 			ActualArrayAccessor_1D<BidiffInfo> localAcc_1D = cx.m_bidiffInfo_Img->GetActualAccessor().GenAcc_1D();
 			ActualArrayAccessor_1D<BidiffInfo> localAcc_1D_Norm = ncx.m_bidiffInfo_Img->GetActualAccessor().GenAcc_1D();
 
@@ -1594,13 +1651,13 @@ namespace Ncv
 					rDest.val1 = 0;
 					rDest.val2 = 100;
 
-					rDest_Side_1.val0 = 0;
-					rDest_Side_1.val1 = 100;
-					rDest_Side_1.val2 = 0;
+					//rDest_Side_1.val0 = 0;
+					//rDest_Side_1.val1 = 100;
+					//rDest_Side_1.val2 = 0;
 
-					rDest_Side_2.val0 = 0;
-					rDest_Side_2.val1 = 100;
-					rDest_Side_2.val2 = 0;
+					//rDest_Side_2.val0 = 0;
+					//rDest_Side_2.val1 = 100;
+					//rDest_Side_2.val2 = 0;
 				}
 				//else
 				//{
@@ -1608,11 +1665,12 @@ namespace Ncv
 				//	rDest.val1 = 0;
 				//	rDest.val2 = 0;
 				//}
-			}
+			}	//	end i for.
 
 			//	for debug,
 			{
 				//dbgCenter_Idx = 144467;
+				dbgCenter_Idx = 288212;
 				ConflictInfo2 & rSrc = confAcc_1D[dbgCenter_Idx];
 				Ncpp_ASSERT(!IsUndefined(rSrc));
 
@@ -1620,17 +1678,19 @@ namespace Ncv
 				F32ColorVal & rDest_Side_1 = dispAcc_1D[rSrc.Offset_Side_1];
 				F32ColorVal & rDest_Side_2 = dispAcc_1D[rSrc.Offset_Side_2];
 
-				rDest.val0 = 0;
-				rDest.val1 = 100;
-				rDest.val2 = 255;
+				rDest.val0 = 155;
+				//rDest.val1 = 100;
+				rDest.val1 = 255;
+				//rDest.val2 = 255;
+				rDest.val2 = 0;
 
-				rDest_Side_1.val0 = 0;
-				rDest_Side_1.val1 = 255;
-				rDest_Side_1.val2 = 255;
+				//rDest_Side_1.val0 = 0;
+				//rDest_Side_1.val1 = 255;
+				//rDest_Side_1.val2 = 255;
 
-				rDest_Side_2.val0 = 0;
-				rDest_Side_2.val1 = 255;
-				rDest_Side_2.val2 = 255;
+				//rDest_Side_2.val0 = 0;
+				//rDest_Side_2.val1 = 255;
+				//rDest_Side_2.val2 = 255;
 			}
 
 

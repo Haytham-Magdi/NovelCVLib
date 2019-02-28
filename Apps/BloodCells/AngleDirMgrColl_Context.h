@@ -40,6 +40,7 @@ namespace Ncv
 		public:
 
 			int GetDiffPosDist() { return 1; }
+			//int GetDiffPosDist() { return 2; }
 			//int GetDiffPosDist() { return 5; }
 
 			ArrayHolder_2D_Ref<PixelStandevInfoCmn> m_standevInfoCmnImg;
