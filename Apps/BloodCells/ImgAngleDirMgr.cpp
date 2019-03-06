@@ -77,8 +77,29 @@ namespace Ncv
 				////	cx.m_standev1_X_Img->GetVirtAccessor(),
 				////	range, Range<int>::New(-1, 1));
 
+				//----
 
+				//Range<int> range = Range<int>::New(-1, 1);
+				//Range<int> range = Range<int>::New(-1, 0);
+				//Range<int> range = Range<int>::New(-2, 0);
+				Range<int> range = Range<int>::New(-3, 0);
 
+				cx.m_standev1_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
+				cx.m_standev2_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
+
+				CalcStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
+					cx.m_standev1_X_Img->GetVirtAccessor(), range);
+
+				//Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
+				//	cx.m_standev1_X_Img->GetVirtAccessor(),
+				//	range, Range<int>::New(-1, 1));
+
+				CalcStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
+					cx.m_standev2_X_Img->GetVirtAccessor(), Range<int>::New(-range.GetEnd(), -range.GetBgn()));
+
+				//Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
+				//	cx.m_standev2_X_Img->GetVirtAccessor(),
+				//	Range<int>::New(-range.GetEnd(), -range.GetBgn()), Range<int>::New(-1, 1));
 
 
 			}
@@ -86,7 +107,9 @@ namespace Ncv
 			{
 				//Range<int> range = Range<int>::New(-4, 0);
 				//Range<int> range = Range<int>::New(-2, 0);
-				Range<int> range = Range<int>::New(-1, 1);
+				//Range<int> range = Range<int>::New(-1, 1);
+				//Range<int> range = Range<int>::New(-2, 2);
+				Range<int> range = Range<int>::New(-3, 3);
 
 				cx.m_normStandev1_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 				cx.m_normStandev2_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
@@ -892,13 +915,6 @@ namespace Ncv
 			ActualArrayAccessor_1D<float> localAcc_1D_Norm = cx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
 			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_normAvgStandev_X_T_Img->GetActualAccessor().GenAcc_1D();
 
-			//for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
-			//{
-			//	const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
-
-			//	for (int x = 0; x < orgToRotMap_Acc.GetSize_X(); x++)
-			//	{
-			//		const int nOffsetInOrg_1D = nOffset_Y + x;
 
 			for (int y = 0; y < rotToOrgMap_Acc.GetSize_Y(); y++)
 			{
@@ -937,7 +953,7 @@ namespace Ncv
 					////if (1 == cx.m_nIndex)
 					//{
 					//	Assign(&rCommonPsi.Val, standev_Local);
-					//	Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+					//	Assign(&rCommonPsi.NormLeastVal1, standev_Norm);
 					//	
 					//	Assign(&rCommonPsi.Dir, cx.m_nIndex);
 					//}
@@ -946,7 +962,7 @@ namespace Ncv
 					if (IsUndefined(rCommonPsi))
 					{
 						Assign(&rCommonPsi.LeastVal, standev_Local);
-						Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+						Assign(&rCommonPsi.NormLeastVal1, standev_Norm);
 
 						Assign(&rCommonPsi.LeastValDir, cx.m_nIndex);
 
@@ -963,12 +979,12 @@ namespace Ncv
 					if (standev_Local < rCommonPsi.LeastVal)
 					{
 						Assign(&rCommonPsi.SecondLeastVal, rCommonPsi.LeastVal);
-						Assign(&rCommonPsi.NormSecondLeastVal, rCommonPsi.NormLeastVal);
+						Assign(&rCommonPsi.NormSecondLeastVal, rCommonPsi.NormLeastVal1);
 
 						Assign(&rCommonPsi.SecondLeastValDir, rCommonPsi.LeastValDir);
 
 						Assign(&rCommonPsi.LeastVal, standev_Local);
-						Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+						Assign(&rCommonPsi.NormLeastVal1, standev_Norm);
 
 						Assign(&rCommonPsi.LeastValDir, cx.m_nIndex);
 					}
@@ -1015,7 +1031,8 @@ namespace Ncv
 
 
 			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_normStandev1_X_Img->GetActualAccessor().GenAcc_1D();
-			ActualArrayAccessor_1D<float> localAcc_1D_Norm = cx.m_standev1_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> localAcc_1D_Norm1 = cx.m_standev1_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> localAcc_1D_Norm2 = cx.m_standev2_X_Img->GetActualAccessor().GenAcc_1D();
 
 			////ActualArrayAccessor_1D<float> localAcc_1D_Norm = ncx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
 			//ActualArrayAccessor_1D<float> localAcc_1D_Norm = cx.m_normAvgStandev_X_T_Img->GetActualAccessor().GenAcc_1D();
@@ -1023,14 +1040,6 @@ namespace Ncv
 			//ActualArrayAccessor_1D<float> localAcc_1D_Norm = cx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
 			//ActualArrayAccessor_1D<float> localAcc_1D = cx.m_normAvgStandev_X_T_Img->GetActualAccessor().GenAcc_1D();
 
-
-			//for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
-			//{
-			//	const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
-
-			//	for (int x = 0; x < orgToRotMap_Acc.GetSize_X(); x++)
-			//	{
-			//		const int nOffsetInOrg_1D = nOffset_Y + x;
 
 			for (int y = 0; y < rotToOrgMap_Acc.GetSize_Y(); y++)
 			{
@@ -1052,11 +1061,12 @@ namespace Ncv
 					// S32Point pntInRot = rotToOrgMap_Acc.CalcPointFromIndex_1D(nOffsetInRot_1D);
 
 					const float standev_Local = localAcc_1D[nOffsetInRot_1D];
-					const float standev_Norm = localAcc_1D_Norm[nOffsetInRot_1D];
+					const float standev_Norm1 = localAcc_1D_Norm1[nOffsetInRot_1D];
+					const float standev_Norm2 = localAcc_1D_Norm2[nOffsetInRot_1D];
 
 					rCommonPsi.allVals[cx.m_nIndex] = standev_Local;
 
-					if (IsUndefined(standev_Local) || IsUndefined(standev_Norm))
+					if (IsUndefined(standev_Local) || IsUndefined(standev_Norm1) || IsUndefined(standev_Norm2))
 					{
 						continue;
 					}
@@ -1069,7 +1079,7 @@ namespace Ncv
 					////if (1 == cx.m_nIndex)
 					//{
 					//	Assign(&rCommonPsi.Val, standev_Local);
-					//	Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+					//	Assign(&rCommonPsi.NormLeastVal1, standev_Norm);
 					//	
 					//	Assign(&rCommonPsi.Dir, cx.m_nIndex);
 					//}
@@ -1078,12 +1088,13 @@ namespace Ncv
 					if (IsUndefined(rCommonPsi))
 					{
 						Assign(&rCommonPsi.LeastVal, standev_Local);
-						Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+						Assign(&rCommonPsi.NormLeastVal1, standev_Norm1);
+						Assign(&rCommonPsi.NormLeastVal2, standev_Norm2);
 
 						Assign(&rCommonPsi.LeastValDir, cx.m_nIndex);
 
 						Assign(&rCommonPsi.SecondLeastVal, standev_Local);
-						Assign(&rCommonPsi.NormSecondLeastVal, standev_Norm);
+						Assign(&rCommonPsi.NormSecondLeastVal, standev_Norm1);
 
 						Assign(&rCommonPsi.SecondLeastValDir, cx.m_nIndex);
 
@@ -1095,19 +1106,20 @@ namespace Ncv
 					if (standev_Local < rCommonPsi.LeastVal)
 					{
 						Assign(&rCommonPsi.SecondLeastVal, rCommonPsi.LeastVal);
-						Assign(&rCommonPsi.NormSecondLeastVal, rCommonPsi.NormLeastVal);
+						Assign(&rCommonPsi.NormSecondLeastVal, rCommonPsi.NormLeastVal1);
 
 						Assign(&rCommonPsi.SecondLeastValDir, rCommonPsi.LeastValDir);
 
 						Assign(&rCommonPsi.LeastVal, standev_Local);
-						Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+						Assign(&rCommonPsi.NormLeastVal1, standev_Norm1);
+						Assign(&rCommonPsi.NormLeastVal2, standev_Norm2);
 
 						Assign(&rCommonPsi.LeastValDir, cx.m_nIndex);
 					}
 					else if (standev_Local < rCommonPsi.SecondLeastVal)
 					{
 						Assign(&rCommonPsi.SecondLeastVal, standev_Local);
-						Assign(&rCommonPsi.NormSecondLeastVal, standev_Norm);
+						Assign(&rCommonPsi.NormSecondLeastVal, standev_Norm1);
 
 						Assign(&rCommonPsi.SecondLeastValDir, cx.m_nIndex);
 					}
@@ -1682,7 +1694,7 @@ namespace Ncv
 					////if (1 == cx.m_nIndex)
 					//{
 					//	Assign(&rCommonBdc.Val, standev_Local);
-					//	Assign(&rCommonBdc.NormLeastVal, standev_Norm);
+					//	Assign(&rCommonBdc.NormLeastVal1, standev_Norm);
 					//	
 					//	Assign(&rCommonBdc.Dir, cx.m_nIndex);
 					//}
@@ -1716,7 +1728,7 @@ namespace Ncv
 						Assign(&rCommonBdc.LeastValDirMaxVal, bidiffInfoMax_Local);
 						Assign(&rCommonBdc.LeastValDirMinVal, bidiffInfoMin_Local);
 						//Assign(&rCommonBdc.LeastVal, bidiffInfoMin_Local);
-						Assign(&rCommonBdc.NormLeastVal, bidiffInfoMax_Norm);
+						Assign(&rCommonBdc.NormLeastVal1, bidiffInfoMax_Norm);
 						Assign(&rCommonBdc.NormDiff2LeastVal, bidiffInfoDiff2_Norm);
 
 						if (isEdge)
@@ -1765,14 +1777,14 @@ namespace Ncv
 						}
 
 						Assign(&rCommonBdc.SecondLeastVal, rCommonBdc.LeastValDirMaxVal);
-						Assign(&rCommonBdc.NormSecondLeastVal, rCommonBdc.NormLeastVal);
+						Assign(&rCommonBdc.NormSecondLeastVal, rCommonBdc.NormLeastVal1);
 
 						Assign(&rCommonBdc.SecondLeastValDir, rCommonBdc.LeastValDir);
 
 						Assign(&rCommonBdc.LeastValDirMaxVal, bidiffInfoMax_Local);
 						Assign(&rCommonBdc.LeastValDirMinVal, bidiffInfoMin_Local);
 						//Assign(&rCommonBdc.LeastVal, bidiffInfoMin_Local);
-						Assign(&rCommonBdc.NormLeastVal, bidiffInfoMax_Norm);
+						Assign(&rCommonBdc.NormLeastVal1, bidiffInfoMax_Norm);
 						Assign(&rCommonBdc.NormDiff2LeastVal, bidiffInfoDiff2_Norm);
 
 						Assign(&rCommonBdc.LeastValDir, cx.m_nIndex);
@@ -2082,30 +2094,38 @@ namespace Ncv
 
 			disp_Img->SetAll(0);
 
-			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_standev1_X_Img->GetActualAccessor().GenAcc_1D();
-			ActualArrayAccessor_1D<float> norm1Acc_1D = cx.m_normStandev1_X_Img->GetActualAccessor().GenAcc_1D();
-			ActualArrayAccessor_1D<float> norm2Acc_1D = cx.m_normStandev2_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> localAcc1_1D = cx.m_standev1_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> localAcc2_1D = cx.m_standev2_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> normAcc1_1D = cx.m_normStandev1_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> normAcc2_1D = cx.m_normStandev2_X_Img->GetActualAccessor().GenAcc_1D();
 			ActualArrayAccessor_1D<F32ColorVal> dispAcc_1D((F32ColorVal *)disp_Img->GetDataPtr(), disp_Img->GetSize1D());
 
 
-			for (int i = 0; i < localAcc_1D.GetSize(); i++)
+			for (int i = 0; i < localAcc1_1D.GetSize(); i++)
 			{
 
-				const float localVal = localAcc_1D[i];
-				if (IsUndefined(localVal))
+				const float localVal1 = localAcc1_1D[i];
+				if (IsUndefined(localVal1))
 				{
 					continue;
 				}
-				AssertValue(localVal);
+				AssertValue(localVal1);
 
-				const float normVal1 = norm1Acc_1D[i];
+				const float localVal2 = localAcc2_1D[i];
+				if (IsUndefined(localVal2))
+				{
+					continue;
+				}
+				AssertValue(localVal2);
+
+				const float normVal1 = normAcc1_1D[i];
 				if (IsUndefined(normVal1))
 				{
 					continue;
 				}
 				AssertValue(normVal1);
 
-				const float normVal2 = norm2Acc_1D[i];
+				const float normVal2 = normAcc2_1D[i];
 				if (IsUndefined(normVal2))
 				{
 					continue;
@@ -2115,9 +2135,10 @@ namespace Ncv
 
 				F32ColorVal & rDest = dispAcc_1D[i];
 
-				rDest.val0 = normVal1;
-				rDest.val1 = localVal;
-				rDest.val2 = normVal2;
+				rDest.val0 = localVal2;
+				rDest.val1 = localVal1;
+				//rDest.val2 = normVal2;
+				rDest.val2 = normVal1;
 
 			}	//	end i for.
 

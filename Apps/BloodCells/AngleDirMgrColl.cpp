@@ -76,13 +76,13 @@ namespace Ncv
 				//////initPsi.Val = 10000000;
 				////initPsi.Val = 100000;
 				////SetToUndefined(&initPsi.Val);
-				////initPsi.NormLeastVal = 0;
-				//// initPsi.NormLeastVal = 60;
+				////initPsi.NormLeastVal1 = 0;
+				//// initPsi.NormLeastVal1 = 60;
 				//
-				////initPsi.NormLeastVal = 1000;
+				////initPsi.NormLeastVal1 = 1000;
 				////initPsi.NormSecondLeastVal = 1000;
 
-				//initPsi.NormLeastVal = 0;
+				//initPsi.NormLeastVal1 = 0;
 				//initPsi.NormSecondLeastVal = 0;
 
 				//initPsi.LeastVal = 100000;
@@ -386,7 +386,7 @@ namespace Ncv
 
 
 				//const bool isPntInCheckWindow = pnt.IsInWindow(checkWin);
-				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rPsi.NormLeastVal));
+				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rPsi.NormLeastVal1));
 
 				F32ColorVal & rColoredDispElm = coloredDispAcc_1D[i];
 
@@ -426,7 +426,7 @@ namespace Ncv
 					//	weight1 = rPsi.SecondLeastVal;
 					//	weight2 = rPsi.LeastVal;
 
-					//	normVal1 = rPsi.NormLeastVal;
+					//	normVal1 = rPsi.NormLeastVal1;
 					//	normVal2 = rPsi.NormSecondLeastVal;
 					//}
 					//else
@@ -438,7 +438,7 @@ namespace Ncv
 					//	weight2 = rPsi.SecondLeastVal;
 
 					//	normVal1 = rPsi.NormSecondLeastVal;
-					//	normVal2 = rPsi.NormLeastVal;
+					//	normVal2 = rPsi.NormLeastVal1;
 					//}
 
 					//if ((angle2 - angle1) <= (M_PI / 2))
@@ -471,7 +471,7 @@ namespace Ncv
 					//	(rPsi.SecondLeastVal * leastValAngle + rPsi.LeastVal * secondLeastValAngle) /
 					//	(rPsi.LeastVal + rPsi.SecondLeastVal);
 
-					//if (leastValAngle != secondLeastValAngle && rPsi.NormLeastVal > 50.0f)
+					//if (leastValAngle != secondLeastValAngle && rPsi.NormLeastVal1 > 50.0f)
 					//{
 					//	i = i;
 					//}
@@ -480,57 +480,57 @@ namespace Ncv
 					angle = m_angleDirMgrArr[rPsi.LeastValDir]->GetContext()->m_angleByRad;
 					Ncpp_ASSERT(angle >= 0.0f && angle <= M_PI);
 
-					normVal = rPsi.NormLeastVal;
+					normVal = rPsi.NormLeastVal1;
 				}
 
 
-				////rDest.val0 = 127 + rPsi.NormLeastVal / 2;
+				////rDest.val0 = 127 + rPsi.NormLeastVal1 / 2;
 				//rDest.val0 = 127;
-				//rDest.val1 = (127 + 127 * cos(angle) * rPsi.NormLeastVal * 2 / 3);
-				//rDest.val2 = (127 + 127 * sin(angle) * rPsi.NormLeastVal * 2 / 3);
+				//rDest.val1 = (127 + 127 * cos(angle) * rPsi.NormLeastVal1 * 2 / 3);
+				//rDest.val2 = (127 + 127 * sin(angle) * rPsi.NormLeastVal1 * 2 / 3);
 
-				//rDest_Values = rPsi.NormLeastVal;
+				//rDest_Values = rPsi.NormLeastVal1;
 
 				//rColoredDispElm.val0 = 0;
-				//rColoredDispElm.val0 = (rPsi.NormLeastVal > 0.1) ? rPsi.LeastVal * 255 / rPsi.NormLeastVal : 0;
-				//rColoredDispElm.val1 = (rPsi.NormLeastVal > 0.1) ? rPsi.LeastVal * 255 / rPsi.NormLeastVal : 0;
+				//rColoredDispElm.val0 = (rPsi.NormLeastVal1 > 0.1) ? rPsi.LeastVal * 255 / rPsi.NormLeastVal1 : 0;
+				//rColoredDispElm.val1 = (rPsi.NormLeastVal1 > 0.1) ? rPsi.LeastVal * 255 / rPsi.NormLeastVal1 : 0;
 
-				//rDest.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal * 2 / 3);
-				//rDest.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 2 / 3);
+				//rDest.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal1 * 2 / 3);
+				//rDest.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal1 * 2 / 3);
 
-				//rColoredDispElm.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal * 5 / 3);
-				//rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 5 / 3);
+				//rColoredDispElm.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal1 * 5 / 3);
+				//rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal1 * 5 / 3);
 
-				//if (rPsi.LeastVal > 0.5 * rPsi.NormLeastVal)
+				//if (rPsi.LeastVal > 0.5 * rPsi.NormLeastVal1)
 				if (!rPsi.IsDirClear())
-					//if (rPsi.LeastVal > 0.8 * rPsi.NormLeastVal)
+					//if (rPsi.LeastVal > 0.8 * rPsi.NormLeastVal1)
 				{
 					//	for debug.
-					if (rPsi.NormLeastVal > 120)
+					if (rPsi.NormLeastVal1 > 120)
 					{
 						i = i;
 					}
-					rColoredDispElm.val0 = rPsi.NormLeastVal;
-					rColoredDispElm.val1 = 0.75 * rPsi.NormLeastVal;
+					rColoredDispElm.val0 = rPsi.NormLeastVal1;
+					rColoredDispElm.val1 = 0.75 * rPsi.NormLeastVal1;
 					rColoredDispElm.val2 = 0;
 				}
 				//else if (0 == rPsi.LeastValDir)
 				//{
-				//	rColoredDispElm.val0 = rPsi.NormLeastVal;
-				//	rColoredDispElm.val1 = rPsi.NormLeastVal;
-				//	rColoredDispElm.val2 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val0 = rPsi.NormLeastVal1;
+				//	rColoredDispElm.val1 = rPsi.NormLeastVal1;
+				//	rColoredDispElm.val2 = rPsi.NormLeastVal1;
 				//}
 				//else if (1 == rPsi.LeastValDir)
 				//{
-				//	rColoredDispElm.val0 = rPsi.NormLeastVal;
-				//	rColoredDispElm.val1 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val0 = rPsi.NormLeastVal1;
+				//	rColoredDispElm.val1 = rPsi.NormLeastVal1;
 				//	rColoredDispElm.val2 = 0;
 				//}
 				//else if (3 == rPsi.LeastValDir)
 				//{
-				//	rColoredDispElm.val0 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val0 = rPsi.NormLeastVal1;
 				//	rColoredDispElm.val1 = 0;
-				//	rColoredDispElm.val2 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val2 = rPsi.NormLeastVal1;
 				//}
 				else
 				{
@@ -546,19 +546,19 @@ namespace Ncv
 				//rColoredDispElm.val1 = rPsi.MaxVal;
 				//rColoredDispElm.val2 = rPsi.MaxVal;
 
-				//rColoredDispElm.val1 = rPsi.NormLeastVal;
-				//rColoredDispElm.val2 = rPsi.NormLeastVal;
+				//rColoredDispElm.val1 = rPsi.NormLeastVal1;
+				//rColoredDispElm.val2 = rPsi.NormLeastVal1;
 
-				//rDest.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal);
-				//rDest.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal);
+				//rDest.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal1);
+				//rDest.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal1);
 
 				////if (0 == rPsi.Dir)
 				//if (5 == rPsi.Dir)
 				////if (false)
 				//{
-				//	rDest.val0 = rPsi.NormLeastVal;
-				//	rDest.val1 = rPsi.NormLeastVal;
-				//	rDest.val2 = rPsi.NormLeastVal;
+				//	rDest.val0 = rPsi.NormLeastVal1;
+				//	rDest.val1 = rPsi.NormLeastVal1;
+				//	rDest.val2 = rPsi.NormLeastVal1;
 				//}
 				//else
 				//{
@@ -567,7 +567,7 @@ namespace Ncv
 				//	rDest.val2 = 0;
 				//}
 
-				//rDest.val0 = 127 + rPsi.NormLeastVal;
+				//rDest.val0 = 127 + rPsi.NormLeastVal1;
 				//rDest.val1 = 127 + 127 * cos(angle);
 				//rDest.val2 = 127 + 127 * sin(angle);
 			}
@@ -623,7 +623,7 @@ namespace Ncv
 
 
 				//const bool isPntInCheckWindow = pnt.IsInWindow(checkWin);
-				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rPsi.NormLeastVal));
+				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rPsi.NormLeastVal1));
 				
 				F32ColorVal & rColoredDispElm = coloredDispAcc_1D[i];
 
@@ -663,7 +663,7 @@ namespace Ncv
 					//	weight1 = rPsi.SecondLeastVal;
 					//	weight2 = rPsi.LeastVal;
 
-					//	normVal1 = rPsi.NormLeastVal;
+					//	normVal1 = rPsi.NormLeastVal1;
 					//	normVal2 = rPsi.NormSecondLeastVal;
 					//}
 					//else
@@ -675,7 +675,7 @@ namespace Ncv
 					//	weight2 = rPsi.SecondLeastVal;
 
 					//	normVal1 = rPsi.NormSecondLeastVal;
-					//	normVal2 = rPsi.NormLeastVal;
+					//	normVal2 = rPsi.NormLeastVal1;
 					//}
 
 					//if ((angle2 - angle1) <= (M_PI / 2))
@@ -708,7 +708,7 @@ namespace Ncv
 					//	(rPsi.SecondLeastVal * leastValAngle + rPsi.LeastVal * secondLeastValAngle) /
 					//	(rPsi.LeastVal + rPsi.SecondLeastVal);
 
-					//if (leastValAngle != secondLeastValAngle && rPsi.NormLeastVal > 50.0f)
+					//if (leastValAngle != secondLeastValAngle && rPsi.NormLeastVal1 > 50.0f)
 					//{
 					//	i = i;
 					//}
@@ -717,65 +717,67 @@ namespace Ncv
 					angle = m_angleDirMgrArr[rPsi.LeastValDir]->GetContext()->m_angleByRad;
 					Ncpp_ASSERT(angle >= 0.0f && angle <= M_PI);
 
-					normVal = rPsi.NormLeastVal;
+					normVal = rPsi.NormLeastVal1;
 				}
 
 
-				////rDest.val0 = 127 + rPsi.NormLeastVal / 2;
+				////rDest.val0 = 127 + rPsi.NormLeastVal1 / 2;
 				//rDest.val0 = 127;
-				//rDest.val1 = (127 + 127 * cos(angle) * rPsi.NormLeastVal * 2 / 3);
-				//rDest.val2 = (127 + 127 * sin(angle) * rPsi.NormLeastVal * 2 / 3);
+				//rDest.val1 = (127 + 127 * cos(angle) * rPsi.NormLeastVal1 * 2 / 3);
+				//rDest.val2 = (127 + 127 * sin(angle) * rPsi.NormLeastVal1 * 2 / 3);
 
-				//rDest_Values = rPsi.NormLeastVal;
+				//rDest_Values = rPsi.NormLeastVal1;
 
 				//rColoredDispElm.val0 = 0;
-				//rColoredDispElm.val0 = (rPsi.NormLeastVal > 0.1) ? rPsi.LeastVal * 255 / rPsi.NormLeastVal : 0;
-				//rColoredDispElm.val1 = (rPsi.NormLeastVal > 0.1) ? rPsi.LeastVal * 255 / rPsi.NormLeastVal : 0;
+				//rColoredDispElm.val0 = (rPsi.NormLeastVal1 > 0.1) ? rPsi.LeastVal * 255 / rPsi.NormLeastVal1 : 0;
+				//rColoredDispElm.val1 = (rPsi.NormLeastVal1 > 0.1) ? rPsi.LeastVal * 255 / rPsi.NormLeastVal1 : 0;
 
-				//rDest.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal * 2 / 3);
-				//rDest.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 2 / 3);
+				//rDest.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal1 * 2 / 3);
+				//rDest.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal1 * 2 / 3);
 
-				//rColoredDispElm.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal * 5 / 3);
-				//rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 5 / 3);
+				//rColoredDispElm.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal1 * 5 / 3);
+				//rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal1 * 5 / 3);
 
-				//if (rPsi.LeastVal > 0.5 * rPsi.NormLeastVal)
+				//if (rPsi.LeastVal > 0.5 * rPsi.NormLeastVal1)
 				//if (!rPsi.IsDirClear())
 				if (false && !rPsi.IsDirClear())
-				//if (rPsi.LeastVal > 0.8 * rPsi.NormLeastVal)
+				//if (rPsi.LeastVal > 0.8 * rPsi.NormLeastVal1)
 				{
 					//	for debug.
-					if (rPsi.NormLeastVal > 120)
+					if (rPsi.NormLeastVal1 > 120)
 					{
 						i = i;
 					}
-					rColoredDispElm.val0 = rPsi.NormLeastVal;
-					rColoredDispElm.val1 = 0.75 * rPsi.NormLeastVal;
+					rColoredDispElm.val0 = rPsi.NormLeastVal1;
+					rColoredDispElm.val1 = 0.75 * rPsi.NormLeastVal1;
 					rColoredDispElm.val2 = 0;
 				}
 				//else if (0 == rPsi.LeastValDir)
 				//{
-				//	rColoredDispElm.val0 = rPsi.NormLeastVal;
-				//	rColoredDispElm.val1 = rPsi.NormLeastVal;
-				//	rColoredDispElm.val2 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val0 = rPsi.NormLeastVal1;
+				//	rColoredDispElm.val1 = rPsi.NormLeastVal1;
+				//	rColoredDispElm.val2 = rPsi.NormLeastVal1;
 				//}
 				//else if (1 == rPsi.LeastValDir)
 				//{
-				//	rColoredDispElm.val0 = rPsi.NormLeastVal;
-				//	rColoredDispElm.val1 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val0 = rPsi.NormLeastVal1;
+				//	rColoredDispElm.val1 = rPsi.NormLeastVal1;
 				//	rColoredDispElm.val2 = 0;
 				//}
 				//else if (3 == rPsi.LeastValDir)
 				//{
-				//	rColoredDispElm.val0 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val0 = rPsi.NormLeastVal1;
 				//	rColoredDispElm.val1 = 0;
-				//	rColoredDispElm.val2 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val2 = rPsi.NormLeastVal1;
 				//}
 				else
 				{
-					rColoredDispElm.val0 = 0;
 
-					rColoredDispElm.val1 = rPsi.NormLeastVal;
-					rColoredDispElm.val2 = rPsi.LeastVal;
+					//rColoredDispElm.val0 = 0;
+					rColoredDispElm.val0 = rPsi.LeastVal;
+
+					rColoredDispElm.val1 = rPsi.NormLeastVal1;
+					rColoredDispElm.val2 = rPsi.NormLeastVal2;
 
 					//rColoredDispElm.val1 = (fabs(cos(angle)) * normVal * 5 / 3);
 					//rColoredDispElm.val2 = (fabs(sin(angle)) * normVal * 5 / 3);
@@ -788,19 +790,19 @@ namespace Ncv
 				//rColoredDispElm.val1 = rPsi.MaxVal;
 				//rColoredDispElm.val2 = rPsi.MaxVal;
 
-				//rColoredDispElm.val1 = rPsi.NormLeastVal;
-				//rColoredDispElm.val2 = rPsi.NormLeastVal;
+				//rColoredDispElm.val1 = rPsi.NormLeastVal1;
+				//rColoredDispElm.val2 = rPsi.NormLeastVal1;
 
-				//rDest.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal);
-				//rDest.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal);
+				//rDest.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal1);
+				//rDest.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal1);
 
 				////if (0 == rPsi.Dir)
 				//if (5 == rPsi.Dir)
 				////if (false)
 				//{
-				//	rDest.val0 = rPsi.NormLeastVal;
-				//	rDest.val1 = rPsi.NormLeastVal;
-				//	rDest.val2 = rPsi.NormLeastVal;
+				//	rDest.val0 = rPsi.NormLeastVal1;
+				//	rDest.val1 = rPsi.NormLeastVal1;
+				//	rDest.val2 = rPsi.NormLeastVal1;
 				//}
 				//else
 				//{
@@ -809,7 +811,7 @@ namespace Ncv
 				//	rDest.val2 = 0;
 				//}
 
-				//rDest.val0 = 127 + rPsi.NormLeastVal;
+				//rDest.val0 = 127 + rPsi.NormLeastVal1;
 				//rDest.val1 = 127 + 127 * cos(angle);
 				//rDest.val2 = 127 + 127 * sin(angle);
 			}
@@ -864,7 +866,7 @@ namespace Ncv
 
 
 				//const bool isPntInCheckWindow = pnt.IsInWindow(checkWin);
-				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rBdc.NormLeastVal));
+				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rBdc.NormLeastVal1));
 
 				F32ColorVal & rColoredDispElm = coloredDispAcc_1D[i];
 
@@ -904,7 +906,7 @@ namespace Ncv
 					//	weight1 = rBdc.SecondLeastVal;
 					//	weight2 = rBdc.LeastVal;
 
-					//	normVal1 = rBdc.NormLeastVal;
+					//	normVal1 = rBdc.NormLeastVal1;
 					//	normVal2 = rBdc.NormSecondLeastVal;
 					//}
 					//else
@@ -916,7 +918,7 @@ namespace Ncv
 					//	weight2 = rBdc.SecondLeastVal;
 
 					//	normVal1 = rBdc.NormSecondLeastVal;
-					//	normVal2 = rBdc.NormLeastVal;
+					//	normVal2 = rBdc.NormLeastVal1;
 					//}
 
 					//if ((angle2 - angle1) <= (M_PI / 2))
@@ -949,7 +951,7 @@ namespace Ncv
 					//	(rBdc.SecondLeastVal * leastValAngle + rBdc.LeastVal * secondLeastValAngle) /
 					//	(rBdc.LeastVal + rBdc.SecondLeastVal);
 
-					//if (leastValAngle != secondLeastValAngle && rBdc.NormLeastVal > 50.0f)
+					//if (leastValAngle != secondLeastValAngle && rBdc.NormLeastVal1 > 50.0f)
 					//{
 					//	i = i;
 					//}
@@ -958,60 +960,60 @@ namespace Ncv
 					angle = m_angleDirMgrArr[rBdc.LeastValDir]->GetContext()->m_angleByRad;
 					Ncpp_ASSERT(angle >= 0.0f && angle <= M_PI);
 
-					normVal = rBdc.NormLeastVal;
+					normVal = rBdc.NormLeastVal1;
 				}
 
 
-				////rDest.val0 = 127 + rBdc.NormLeastVal / 2;
+				////rDest.val0 = 127 + rBdc.NormLeastVal1 / 2;
 				//rDest.val0 = 127;
-				//rDest.val1 = (127 + 127 * cos(angle) * rBdc.NormLeastVal * 2 / 3);
-				//rDest.val2 = (127 + 127 * sin(angle) * rBdc.NormLeastVal * 2 / 3);
+				//rDest.val1 = (127 + 127 * cos(angle) * rBdc.NormLeastVal1 * 2 / 3);
+				//rDest.val2 = (127 + 127 * sin(angle) * rBdc.NormLeastVal1 * 2 / 3);
 
-				//rDest_Values = rBdc.NormLeastVal;
+				//rDest_Values = rBdc.NormLeastVal1;
 
 				//rColoredDispElm.val0 = 0;
-				//rColoredDispElm.val0 = (rBdc.NormLeastVal > 0.1) ? rBdc.LeastVal * 255 / rBdc.NormLeastVal : 0;
-				//rColoredDispElm.val1 = (rBdc.NormLeastVal > 0.1) ? rBdc.LeastVal * 255 / rBdc.NormLeastVal : 0;
+				//rColoredDispElm.val0 = (rBdc.NormLeastVal1 > 0.1) ? rBdc.LeastVal * 255 / rBdc.NormLeastVal1 : 0;
+				//rColoredDispElm.val1 = (rBdc.NormLeastVal1 > 0.1) ? rBdc.LeastVal * 255 / rBdc.NormLeastVal1 : 0;
 
-				//rDest.val1 = (fabs(cos(angle)) * rBdc.NormLeastVal * 2 / 3);
-				//rDest.val2 = (fabs(sin(angle)) * rBdc.NormLeastVal * 2 / 3);
+				//rDest.val1 = (fabs(cos(angle)) * rBdc.NormLeastVal1 * 2 / 3);
+				//rDest.val2 = (fabs(sin(angle)) * rBdc.NormLeastVal1 * 2 / 3);
 
-				//rColoredDispElm.val1 = (fabs(cos(angle)) * rBdc.NormLeastVal * 5 / 3);
-				//rColoredDispElm.val2 = (fabs(sin(angle)) * rBdc.NormLeastVal * 5 / 3);
+				//rColoredDispElm.val1 = (fabs(cos(angle)) * rBdc.NormLeastVal1 * 5 / 3);
+				//rColoredDispElm.val2 = (fabs(sin(angle)) * rBdc.NormLeastVal1 * 5 / 3);
 
 				if (
-					//rBdc.LeastVal > 0.5 * rBdc.NormLeastVal ||
-					//rBdc.NormDiff2LeastVal < 0.5 * rBdc.NormLeastVal)
-					//rBdc.NormDiff2LeastVal < 0.3 * rBdc.NormLeastVal)
+					//rBdc.LeastVal > 0.5 * rBdc.NormLeastVal1 ||
+					//rBdc.NormDiff2LeastVal < 0.5 * rBdc.NormLeastVal1)
+					//rBdc.NormDiff2LeastVal < 0.3 * rBdc.NormLeastVal1)
 					
 					!rBdc.IsEdge)
-					//if (rBdc.LeastVal > 0.8 * rBdc.NormLeastVal)
+					//if (rBdc.LeastVal > 0.8 * rBdc.NormLeastVal1)
 				{
-					if (rBdc.NormLeastVal > 70)
+					if (rBdc.NormLeastVal1 > 70)
 					{
 						i = i;
 					}
-					rColoredDispElm.val0 = rBdc.NormLeastVal;
+					rColoredDispElm.val0 = rBdc.NormLeastVal1;
 					rColoredDispElm.val1 = 0;
 					rColoredDispElm.val2 = 0;
 				}
 				//else if (0 == rBdc.LeastValDir)
 				//{
-				//	rColoredDispElm.val0 = rBdc.NormLeastVal;
-				//	rColoredDispElm.val1 = rBdc.NormLeastVal;
-				//	rColoredDispElm.val2 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val0 = rBdc.NormLeastVal1;
+				//	rColoredDispElm.val1 = rBdc.NormLeastVal1;
+				//	rColoredDispElm.val2 = rBdc.NormLeastVal1;
 				//}
 				//else if (1 == rBdc.LeastValDir)
 				//{
-				//	rColoredDispElm.val0 = rBdc.NormLeastVal;
-				//	rColoredDispElm.val1 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val0 = rBdc.NormLeastVal1;
+				//	rColoredDispElm.val1 = rBdc.NormLeastVal1;
 				//	rColoredDispElm.val2 = 0;
 				//}
 				//else if (3 == rBdc.LeastValDir)
 				//{
-				//	rColoredDispElm.val0 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val0 = rBdc.NormLeastVal1;
 				//	rColoredDispElm.val1 = 0;
-				//	rColoredDispElm.val2 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val2 = rBdc.NormLeastVal1;
 				//}
 				else
 				{
@@ -1027,19 +1029,19 @@ namespace Ncv
 				//rColoredDispElm.val1 = rBdc.MaxVal;
 				//rColoredDispElm.val2 = rBdc.MaxVal;
 
-				//rColoredDispElm.val1 = rBdc.NormLeastVal;
-				//rColoredDispElm.val2 = rBdc.NormLeastVal;
+				//rColoredDispElm.val1 = rBdc.NormLeastVal1;
+				//rColoredDispElm.val2 = rBdc.NormLeastVal1;
 
-				//rDest.val1 = (fabs(cos(angle)) * rBdc.NormLeastVal);
-				//rDest.val2 = (fabs(sin(angle)) * rBdc.NormLeastVal);
+				//rDest.val1 = (fabs(cos(angle)) * rBdc.NormLeastVal1);
+				//rDest.val2 = (fabs(sin(angle)) * rBdc.NormLeastVal1);
 
 				////if (0 == rBdc.Dir)
 				//if (5 == rBdc.Dir)
 				////if (false)
 				//{
-				//	rDest.val0 = rBdc.NormLeastVal;
-				//	rDest.val1 = rBdc.NormLeastVal;
-				//	rDest.val2 = rBdc.NormLeastVal;
+				//	rDest.val0 = rBdc.NormLeastVal1;
+				//	rDest.val1 = rBdc.NormLeastVal1;
+				//	rDest.val2 = rBdc.NormLeastVal1;
 				//}
 				//else
 				//{
@@ -1048,7 +1050,7 @@ namespace Ncv
 				//	rDest.val2 = 0;
 				//}
 
-				//rDest.val0 = 127 + rBdc.NormLeastVal;
+				//rDest.val0 = 127 + rBdc.NormLeastVal1;
 				//rDest.val1 = 127 + 127 * cos(angle);
 				//rDest.val2 = 127 + 127 * sin(angle);
 			}
@@ -1106,7 +1108,7 @@ namespace Ncv
 
 
 				//const bool isPntInCheckWindow = pnt.IsInWindow(checkWin);
-				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rBdc.NormLeastVal));
+				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rBdc.NormLeastVal1));
 
 				F32ColorVal & rColoredDispElm = coloredDispAcc_1D[i];
 
@@ -1146,41 +1148,41 @@ namespace Ncv
 				//	angle = m_angleDirMgrArr[rBdc.LeastValDir]->GetContext()->m_angleByRad;
 				//	Ncpp_ASSERT(angle >= 0.0f && angle <= M_PI);
 
-				//	normVal = rBdc.NormLeastVal;
+				//	normVal = rBdc.NormLeastVal1;
 				//}
 
 
 
 				if (rBdc.IsEdge)
-					//if (rBdc.LeastVal > 0.8 * rBdc.NormLeastVal)
+					//if (rBdc.LeastVal > 0.8 * rBdc.NormLeastVal1)
 				{
 					rColoredDispElm = rOrg;
 
-					//if (rBdc.NormLeastVal > 70)
+					//if (rBdc.NormLeastVal1 > 70)
 					//{
 					//	i = i;
 					//}
-					//rColoredDispElm.val0 = rBdc.NormLeastVal;
+					//rColoredDispElm.val0 = rBdc.NormLeastVal1;
 					//rColoredDispElm.val1 = 0;
 					//rColoredDispElm.val2 = 0;
 				}
 				//else if (0 == rBdc.LeastValDir)
 				//{
-				//	rColoredDispElm.val0 = rBdc.NormLeastVal;
-				//	rColoredDispElm.val1 = rBdc.NormLeastVal;
-				//	rColoredDispElm.val2 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val0 = rBdc.NormLeastVal1;
+				//	rColoredDispElm.val1 = rBdc.NormLeastVal1;
+				//	rColoredDispElm.val2 = rBdc.NormLeastVal1;
 				//}
 				//else if (1 == rBdc.LeastValDir)
 				//{
-				//	rColoredDispElm.val0 = rBdc.NormLeastVal;
-				//	rColoredDispElm.val1 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val0 = rBdc.NormLeastVal1;
+				//	rColoredDispElm.val1 = rBdc.NormLeastVal1;
 				//	rColoredDispElm.val2 = 0;
 				//}
 				//else if (3 == rBdc.LeastValDir)
 				//{
-				//	rColoredDispElm.val0 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val0 = rBdc.NormLeastVal1;
 				//	rColoredDispElm.val1 = 0;
-				//	rColoredDispElm.val2 = rBdc.NormLeastVal;
+				//	rColoredDispElm.val2 = rBdc.NormLeastVal1;
 				//}
 				else
 				{

@@ -29,7 +29,8 @@ namespace Ncv
 		float SecondLeastVal;
 		int SecondLeastValDir;
 
-		float NormLeastVal;
+		float NormLeastVal1;
+		float NormLeastVal2;
 		float NormSecondLeastVal;
 
 		//float MaxVal;
@@ -39,7 +40,7 @@ namespace Ncv
 
 		bool IsDirClear() const
 		{
-			return this->LeastVal < 0.5 * this->NormLeastVal;
+			return this->LeastVal < 0.5 * this->NormLeastVal1;
 		}
 	};
 

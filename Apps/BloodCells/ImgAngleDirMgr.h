@@ -63,7 +63,8 @@ namespace Ncv
 				char m_hv;
 				ImgSizeRotationRef m_imgRot;
 
-				F32ImageArrayHolder1C_Ref m_standev_X_Img;
+				F32ImageArrayHolder1C_Ref m_standev1_X_Img;
+				F32ImageArrayHolder1C_Ref m_standev2_X_Img;
 				F32ImageArrayHolder1C_Ref m_normStandev1_X_Img;
 				F32ImageArrayHolder1C_Ref m_normStandev2_X_Img;
 				F32ImageArrayHolder1C_Ref m_normAvgStandev_X_Img;
