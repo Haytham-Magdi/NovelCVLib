@@ -52,7 +52,83 @@ namespace Ncv
 
 		}
 
-		void ImgAngleDirMgr::Proceed_1_1()
+		void ImgAngleDirMgr::Proceed_1b_1()
+		{
+			PrepareStandev_X();
+			PrepareNormAvgStandev_X();
+			AffectNormWithNormAvgStandev();
+		}
+
+		void ImgAngleDirMgr::PrepareStandev_X()
+		{
+			Context & cx = *m_context;
+
+			{
+				//Range<int> range = Range<int>::New(-1, 1);
+
+				//cx.m_standev1_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
+				//
+				//CalcStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
+				//	cx.m_standev1_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1));
+				////cx.m_standev1_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2));
+				////cx.m_standev1_X_Img->GetVirtAccessor(), Range<int>::New(-20, 20));
+
+				////Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
+				////	cx.m_standev1_X_Img->GetVirtAccessor(),
+				////	range, Range<int>::New(-1, 1));
+
+
+
+
+
+			}
+
+			{
+				//Range<int> range = Range<int>::New(-4, 0);
+				//Range<int> range = Range<int>::New(-2, 0);
+				Range<int> range = Range<int>::New(-1, 1);
+
+				cx.m_normStandev1_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
+				cx.m_normStandev2_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
+
+				//CalcStandevImage_X(cx.m_org_Img->GetVirtAccessor().GenTranspose(), cx.m_magSqr_Img->GetVirtAccessor().GenTranspose(),
+				//	cx.m_normStandev1_X_Img->GetVirtAccessor().GenTranspose(), range);
+
+				Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor().GenTranspose(), cx.m_magSqr_Img->GetVirtAccessor().GenTranspose(),
+					cx.m_normStandev1_X_Img->GetVirtAccessor().GenTranspose(), 
+					range, Range<int>::New(-1, 1));
+
+				//CalcStandevImage_X(cx.m_org_Img->GetVirtAccessor().GenTranspose(), cx.m_magSqr_Img->GetVirtAccessor().GenTranspose(),
+				//	cx.m_normStandev2_X_Img->GetVirtAccessor().GenTranspose(), Range<int>::New(-range.GetEnd(), -range.GetBgn()));
+
+				Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor().GenTranspose(), cx.m_magSqr_Img->GetVirtAccessor().GenTranspose(),
+					cx.m_normStandev2_X_Img->GetVirtAccessor().GenTranspose(),
+					Range<int>::New(-range.GetEnd(), -range.GetBgn()), Range<int>::New(-1, 1));
+
+				//CalcStandevImage_X(cx.m_org_Img->GetVirtAccessor().GenTranspose(), cx.m_magSqr_Img->GetVirtAccessor().GenTranspose(),
+				//	//cx.m_normStandev_X_Img->GetVirtAccessor().GenTranspose(), Range<int>::New(-7, 7));
+				//cx.m_normStandev_X_Img->GetVirtAccessor().GenTranspose(), Range<int>::New(-3, 3));
+
+				//if (0 == cx.m_nIndex)
+				//{
+				//	ShowImage(GenTriChGrayImg(cx.m_standev1_X_Img->GetSrcImg()), cx.MakeStrWithId("m_standev1_X_Img->GetSrcImg()").c_str());
+				//	GlobalStuff::SetLinePathImg(GenTriChGrayImg(cx.m_standev1_X_Img->GetSrcImg()));
+				//	GlobalStuff::ShowLinePathImg();
+				//}
+			}
+
+			if (0 == cx.m_nIndex)
+			//if (2 == cx.m_nIndex)
+			{
+				DisplayStandevImg();
+
+				//ShowImage(GenTriChGrayImg(cx.m_standev1_X_Img->GetSrcImg()), cx.MakeStrWithId("m_standev1_X_Img->GetSrcImg()").c_str());
+				//GlobalStuff::SetLinePathImg(GenTriChGrayImg(cx.m_standev1_X_Img->GetSrcImg()));
+				//GlobalStuff::ShowLinePathImg();
+			}
+		}
+
+		void ImgAngleDirMgr::PrepareNormAvgStandev_X()
 		{
 			Context & cx = *m_context;
 
@@ -62,46 +138,29 @@ namespace Ncv
 			//	ShowImage(cx.m_org_Img->GetSrcImg(), cx.MakeStrWithId("org_Img->GetSrcImg()").c_str());
 			//}
 
+			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
 
-			cx.m_standev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
-			CalcStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
-				cx.m_standev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1));
-			//cx.m_standev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2));
-			//cx.m_standev_X_Img->GetVirtAccessor(), Range<int>::New(-20, 20));
+			Range<int> rangeX = Range<int>::New(-2, 2), rangeY = Range<int>::New(-2, 2);
+			//Range<int> rangeX = Range<int>::New(-2, 2), rangeY = Range<int>::New(-7, 7);
+			//Range<int> rangeX = Range<int>::New(-7, 7), rangeY = Range<int>::New(-2, 2);
+			//Range<int> rangeX = Range<int>::New(-36, 36), rangeY = Range<int>::New(-36, 36);
 
-			if (0 == cx.m_nIndex)
-			{
-				ShowImage(GenTriChGrayImg(cx.m_standev_X_Img->GetSrcImg()), cx.MakeStrWithId("m_standev_X_Img->GetSrcImg()").c_str());
-				GlobalStuff::SetLinePathImg(GenTriChGrayImg(cx.m_standev_X_Img->GetSrcImg()));
-				GlobalStuff::ShowLinePathImg();
-			}
 
 
 			cx.m_normAvgStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
+			cx.m_normAvgStandev_X_T_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
+			
 			Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
-				
-				//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
-			cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-1, 1));
-			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-2, 2));
-			
-			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1), Range<int>::New(-3, 3));
-			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-1, 1));
-			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-3, 3));
-			
-			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-7, 7), Range<int>::New(-7, 7));
-				//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-3, 3), Range<int>::New(-3, 3));
-			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-6, 6));
-				//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(0, 1));
-			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(0, 0));
-			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-6, 6));
-			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-2, 2));
-			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-36, 36), Range<int>::New(-36, 36));
-			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-6, 6), Range<int>::New(-36, 36));
-			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-36, 36), Range<int>::New(-6, 6));
+				cx.m_normAvgStandev_X_Img->GetVirtAccessor(), rangeX, rangeY);
+
+			Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor().GenTranspose(), cx.m_magSqr_Img->GetVirtAccessor().GenTranspose(),
+				cx.m_normAvgStandev_X_T_Img->GetVirtAccessor().GenTranspose(), rangeY, rangeX);
+
 
 			if (1 == cx.m_nIndex)
 			//if (0 == cx.m_nIndex)
 			{
+				//	for debug.
 				//float & elm1 = cx.m_normAvgStandev_X_Img->GetActualAccessor().GetAt(45, 77);
 				// float & elm1 = cx.m_normAvgStandev_X_Img->GetActualAccessor().GetAt(215, 40);
 				//elm1 = 255;
@@ -112,9 +171,10 @@ namespace Ncv
 			
 		}
 
-		void ImgAngleDirMgr::Proceed_1_2()
+		void ImgAngleDirMgr::Proceed_1b_2()
 		{
-			AffectCommonAvgStandev();
+			AffectCommonNormAvgStandev();
+			AffectCommonNormAvgStandev2();
 		}
 
 		void ImgAngleDirMgr::Proceed_2_1()
@@ -729,10 +789,85 @@ namespace Ncv
 			AffectCommonWideConflictDiff();
 		}
 
-		void ImgAngleDirMgr::AffectCommonAvgStandev()
+		void ImgAngleDirMgr::AffectNormWithNormAvgStandev()
 		{
 			Context & cx = *m_context;
-			Context & ncx = *m_normalContext;
+			//Context & ncx = *m_normalContext;
+
+			//if (0 != cx.m_nIndex % 2)
+			//	return;
+
+
+			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			//ActualArrayAccessor_1D<float> localAcc_1D_Norm = ncx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> localAcc_1D_Norm = cx.m_normAvgStandev_X_T_Img->GetActualAccessor().GenAcc_1D();
+
+			cx.m_normAvgStandev_X_ToNormRatio_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
+			//ncx.m_normAvgStandev_X_ToNormRatio_Img = F32ImageArrayHolder1C::CreateEmptyFrom(ncx.m_org_Img);
+
+			ActualArrayAccessor_1D<float> localToNormRatioAcc_1D = cx.m_normAvgStandev_X_ToNormRatio_Img->GetActualAccessor().GenAcc_1D();
+			//ActualArrayAccessor_1D<float> normToLocalRatioAcc_1D = ncx.m_normAvgStandev_X_ToNormRatio_Img->GetActualAccessor().GenAcc_1D();
+
+			Ncpp_ASSERT(localAcc_1D.GetSize() == localAcc_1D_Norm.GetSize());
+			Ncpp_ASSERT(localAcc_1D.GetSize() == localToNormRatioAcc_1D.GetSize());
+			//Ncpp_ASSERT(localAcc_1D.GetSize() == normToLocalRatioAcc_1D.GetSize());
+
+			for (int i = 0; i < localAcc_1D.GetSize(); i++)
+			{
+				float localVal = localAcc_1D[i];
+				float normVal = localAcc_1D_Norm[i];
+
+				float & rLocalToNormRatio = localToNormRatioAcc_1D[i];
+				//float & rNormToLocalRatio = normToLocalRatioAcc_1D[i];
+
+				if (IsUndefined(localVal) || IsUndefined(normVal))
+				{
+					SetToUndefined(&rLocalToNormRatio);
+					//SetToUndefined(&rNormToLocalRatio);
+
+					continue;
+				}
+
+				//AssertValue(localVal);
+				//AssertValue(normVal);
+
+				Ncpp_ASSERT(localVal >= -0.001);
+				Ncpp_ASSERT(normVal >= -0.001);
+
+				if (localVal < 0.1)
+					localVal = 0.1;
+				else
+					i = i;
+
+				if (normVal < 0.1)
+					normVal = 0.1;
+				else
+					i = i;
+
+				if (localVal != normVal)
+				{
+					i = i;
+				}
+
+				rLocalToNormRatio = localVal / (localVal + normVal);
+				//rNormToLocalRatio = normVal / (localVal + normVal);
+			
+			}	//	end i for.
+
+			if (0 == cx.m_nIndex)
+			//if (4 == cx.m_nIndex)
+			{
+				DisplayNormAvgStandevRatioToNormImg();
+
+				//ShowImage(cx.m_normAvgStandev_X_ToNormRatio_Img->GetSrcImg(), 
+				//	cx.MakeStrWithId("cx.m_normAvgStandev_X_ToNormRatio_Img").c_str());
+			}
+		}
+
+		void ImgAngleDirMgr::AffectCommonNormAvgStandev()
+		{
+			Context & cx = *m_context;
+			//Context & ncx = *m_normalContext;
 
 			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
 			ActualArrayAccessor_1D<int> orgToRotMapAcc_1D = orgToRotMap_Acc.GenAcc_1D();
@@ -742,16 +877,20 @@ namespace Ncv
 
 			// const ActualArrayAccessor_2D<int> & rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
 
-			ActualArrayAccessor_2D<PixelStandevInfoCmn> commonAcc = m_parentContext->m_standevInfoCmnImg->GetActualAccessor();
+			ActualArrayAccessor_2D<PixelStandevInfoCmn> commonAcc = m_parentContext->m_normAvgStandevInfoCmnImg->GetActualAccessor();
 			Ncpp_ASSERT(Size_2D::AreEqual(orgToRotMap_Acc.GetSize(), commonAcc.GetSize()));
 
 			ActualArrayAccessor_1D<PixelStandevInfoCmn> commonAcc_1D = commonAcc.GenAcc_1D();
 
 
 
-			//float * localAcc_1D = (float *)cx.m_normAvgStandev_X_Img->GetActualAccessor().GetData();
-			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
-			ActualArrayAccessor_1D<float> localAcc_1D_Norm = ncx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			////float * localAcc_1D = (float *)cx.m_normAvgStandev_X_Img->GetActualAccessor().GetData();
+			//ActualArrayAccessor_1D<float> localAcc_1D = cx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			////ActualArrayAccessor_1D<float> localAcc_1D_Norm = ncx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			//ActualArrayAccessor_1D<float> localAcc_1D_Norm = cx.m_normAvgStandev_X_T_Img->GetActualAccessor().GenAcc_1D();
+
+			ActualArrayAccessor_1D<float> localAcc_1D_Norm = cx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_normAvgStandev_X_T_Img->GetActualAccessor().GenAcc_1D();
 
 			//for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
 			//{
@@ -790,6 +929,138 @@ namespace Ncv
 						continue;
 					}
 					
+					//Ncpp_ASSERT(standev_Local >= 0.0f || standev_Local > -5000.0f);
+					AssertValue(standev_Local);
+					Ncpp_ASSERT(standev_Local >= -0.001);
+
+					//if (standev_Local < rCommonPsi.Val)
+					////if (1 == cx.m_nIndex)
+					//{
+					//	Assign(&rCommonPsi.Val, standev_Local);
+					//	Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+					//	
+					//	Assign(&rCommonPsi.Dir, cx.m_nIndex);
+					//}
+
+
+					if (IsUndefined(rCommonPsi))
+					{
+						Assign(&rCommonPsi.LeastVal, standev_Local);
+						Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+
+						Assign(&rCommonPsi.LeastValDir, cx.m_nIndex);
+
+						Assign(&rCommonPsi.SecondLeastVal, standev_Local);
+						Assign(&rCommonPsi.NormSecondLeastVal, standev_Norm);
+
+						Assign(&rCommonPsi.SecondLeastValDir, cx.m_nIndex);
+
+						continue;
+					}
+
+					AssertValue(rCommonPsi);
+
+					if (standev_Local < rCommonPsi.LeastVal)
+					{
+						Assign(&rCommonPsi.SecondLeastVal, rCommonPsi.LeastVal);
+						Assign(&rCommonPsi.NormSecondLeastVal, rCommonPsi.NormLeastVal);
+
+						Assign(&rCommonPsi.SecondLeastValDir, rCommonPsi.LeastValDir);
+
+						Assign(&rCommonPsi.LeastVal, standev_Local);
+						Assign(&rCommonPsi.NormLeastVal, standev_Norm);
+
+						Assign(&rCommonPsi.LeastValDir, cx.m_nIndex);
+					}
+					else if (standev_Local < rCommonPsi.SecondLeastVal)
+					{
+						Assign(&rCommonPsi.SecondLeastVal, standev_Local);
+						Assign(&rCommonPsi.NormSecondLeastVal, standev_Norm);
+
+						Assign(&rCommonPsi.SecondLeastValDir, cx.m_nIndex);
+					}
+
+					AssertValue(rCommonPsi);
+
+					////else if (standev_Local > rCommonPsi.MaxVal)
+					//if (standev_Local > rCommonPsi.MaxVal)
+					//{
+					//	Assign(&rCommonPsi.MaxVal, standev_Local);
+					//	Assign(&rCommonPsi.MaxValDir, cx.m_nIndex);
+					//}
+
+				}
+			}
+
+		}
+
+		void ImgAngleDirMgr::AffectCommonNormAvgStandev2()
+		{
+			Context & cx = *m_context;
+			Context & ncx = *m_normalContext;
+
+			const ActualArrayAccessor_2D<int> & orgToRotMap_Acc = cx.m_orgToRotMap_Img->GetActualAccessor();
+			ActualArrayAccessor_1D<int> orgToRotMapAcc_1D = orgToRotMap_Acc.GenAcc_1D();
+
+			const ActualArrayAccessor_2D<int> & rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
+			ActualArrayAccessor_1D<int> rotToOrgMapAcc_1D = rotToOrgMap_Acc.GenAcc_1D();
+
+			// const ActualArrayAccessor_2D<int> & rotToOrgMap_Acc = cx.m_rotToOrgMap_Img->GetActualAccessor();
+
+			ActualArrayAccessor_2D<PixelStandevInfoCmn> commonAcc = m_parentContext->m_standevInfo2CmnImg->GetActualAccessor();
+			Ncpp_ASSERT(Size_2D::AreEqual(orgToRotMap_Acc.GetSize(), commonAcc.GetSize()));
+
+			ActualArrayAccessor_1D<PixelStandevInfoCmn> commonAcc_1D = commonAcc.GenAcc_1D();
+
+
+
+			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_normStandev1_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> localAcc_1D_Norm = cx.m_standev1_X_Img->GetActualAccessor().GenAcc_1D();
+
+			////ActualArrayAccessor_1D<float> localAcc_1D_Norm = ncx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			//ActualArrayAccessor_1D<float> localAcc_1D_Norm = cx.m_normAvgStandev_X_T_Img->GetActualAccessor().GenAcc_1D();
+
+			//ActualArrayAccessor_1D<float> localAcc_1D_Norm = cx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			//ActualArrayAccessor_1D<float> localAcc_1D = cx.m_normAvgStandev_X_T_Img->GetActualAccessor().GenAcc_1D();
+
+
+			//for (int y = 0; y < orgToRotMap_Acc.GetSize_Y(); y++)
+			//{
+			//	const int nOffset_Y = y * orgToRotMap_Acc.GetSize_X();
+
+			//	for (int x = 0; x < orgToRotMap_Acc.GetSize_X(); x++)
+			//	{
+			//		const int nOffsetInOrg_1D = nOffset_Y + x;
+
+			for (int y = 0; y < rotToOrgMap_Acc.GetSize_Y(); y++)
+			{
+				const int nOffset_Y = y * rotToOrgMap_Acc.GetSize_X();
+
+				for (int x = 0; x < rotToOrgMap_Acc.GetSize_X(); x++)
+				{
+					const int nOffsetInRot_1D = nOffset_Y + x;
+
+					int nOffsetInOrg_1D = rotToOrgMapAcc_1D[nOffsetInRot_1D];
+					if (IsUndefined(nOffsetInOrg_1D))
+					{
+						continue;
+					}
+
+					PixelStandevInfoCmn & rCommonPsi = commonAcc_1D[nOffsetInOrg_1D];
+
+
+					// S32Point pntInRot = rotToOrgMap_Acc.CalcPointFromIndex_1D(nOffsetInRot_1D);
+
+					const float standev_Local = localAcc_1D[nOffsetInRot_1D];
+					const float standev_Norm = localAcc_1D_Norm[nOffsetInRot_1D];
+
+					rCommonPsi.allVals[cx.m_nIndex] = standev_Local;
+
+					if (IsUndefined(standev_Local) || IsUndefined(standev_Norm))
+					{
+						continue;
+					}
+
 					//Ncpp_ASSERT(standev_Local >= 0.0f || standev_Local > -5000.0f);
 					AssertValue(standev_Local);
 					Ncpp_ASSERT(standev_Local >= -0.001);
@@ -948,9 +1219,6 @@ namespace Ncv
 			
 			//Ncpp_ASSERT(Size_2D::AreEqual(localVirtAcc.GetSize(), rotToOrgMap_Acc.GetSize()));
 
-
-			//ActualArrayAccessor_2D<PixelStandevInfoCmn> commonPsiAcc = m_parentContext->m_standevInfoCmnImg->GetActualAccessor();
-			//ActualArrayAccessor_1D<PixelStandevInfoCmn> commonPsiAcc_1D = commonPsiAcc.GenAcc_1D();
 
 			//--
 			
@@ -1258,7 +1526,7 @@ namespace Ncv
 			ActualArrayAccessor_1D<BidiffInfoCommon> commonAcc_1D = commonAcc.GenAcc_1D();
 
 
-			ActualArrayAccessor_2D<PixelStandevInfoCmn> commonPsiAcc = m_parentContext->m_standevInfoCmnImg->GetActualAccessor();
+			ActualArrayAccessor_2D<PixelStandevInfoCmn> commonPsiAcc = m_parentContext->m_normAvgStandevInfoCmnImg->GetActualAccessor();
 			ActualArrayAccessor_1D<PixelStandevInfoCmn> commonPsiAcc_1D = commonPsiAcc.GenAcc_1D();
 
 
@@ -1696,6 +1964,175 @@ namespace Ncv
 
 			ShowImage(confDsp_Img, cx.MakeStrWithId("confDsp_Img").c_str());
 		}
+
+		void ImgAngleDirMgr::DisplayNormAvgStandevRatioToNormImg()
+		{
+			Context & cx = *m_context;
+
+
+			const ActualArrayAccessor_2D<float> localToNormRatioAcc = cx.m_normAvgStandev_X_ToNormRatio_Img->GetActualAccessor();
+
+
+			//const ActualArrayAccessor_2D<ConflictInfo2> & confAcc = cx.m_conflict_Img->GetActualAccessor();
+			F32ImageRef disp_Img = F32Image::Create(toCvSize(localToNormRatioAcc.GetSize()), 3);
+
+			disp_Img->SetAll(0);
+
+			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			//ActualArrayAccessor_1D<float> localAcc_1D = cx.m_standev1_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<F32ColorVal> dispAcc_1D((F32ColorVal *)disp_Img->GetDataPtr(), disp_Img->GetSize1D());
+
+
+			const ActualArrayAccessor_1D<float> localToNormRatioAcc_1D = localToNormRatioAcc.GenAcc_1D();
+			//const ActualArrayAccessor_1D<ConflictInfo2> & confAcc_1D = confAcc.GenAcc_1D();
+
+			////	for debug,
+			////int dbgCenter_Pnt(0, 0), dbgSide1_Pnt(0, 0), dbgSide2_Pnt(0, 0);
+			//int dbgCenter_Idx = -1;
+
+			//float angle_Old = -1;
+			for (int i = 0; i < localToNormRatioAcc_1D.GetSize(); i++)
+			{
+				const float ratio = localToNormRatioAcc_1D[i];
+				if (IsUndefined(ratio))
+				{
+					continue;
+				}
+				AssertValue(ratio);
+
+				const float localVal = localAcc_1D[i];
+				if (IsUndefined(localVal))
+				{
+					continue;
+				}
+				AssertValue(localVal);
+
+
+				F32ColorVal & rDest = dispAcc_1D[i];
+
+				//rDest.val0 = 0;
+				//rDest.val1 = 255;
+				//rDest.val2 = 255;
+
+				//continue;
+
+				//Ncpp_ASSERT(-1 != rSrc.Dir);
+
+				//if (rSrc.Exists)
+				//if (rSrc.IsConfirmed)
+				{
+					////	for debug,
+					//dbgCenter_Idx = i;
+
+
+					rDest.val0 = 0;
+					rDest.val1 = localVal * ratio;
+					rDest.val2 = localVal * (1 - ratio);
+
+				}
+			}	//	end i for.
+
+
+			////	for debug,
+			//{
+			//	//dbgCenter_Idx = 144467;
+			//	dbgCenter_Idx = 288212;
+			//	ConflictInfo2 & rSrc = confAcc_1D[dbgCenter_Idx];
+			//	Ncpp_ASSERT(!IsUndefined(rSrc));
+
+			//	F32ColorVal & rDest = dispAcc_1D[dbgCenter_Idx];
+			//	F32ColorVal & rDest_Side_1 = dispAcc_1D[rSrc.Offset_Side_1];
+			//	F32ColorVal & rDest_Side_2 = dispAcc_1D[rSrc.Offset_Side_2];
+
+			//	rDest.val0 = 155;
+			//	//rDest.val1 = 100;
+			//	rDest.val1 = 255;
+			//	//rDest.val2 = 255;
+			//	rDest.val2 = 0;
+
+			//	//rDest_Side_1.val0 = 0;
+			//	//rDest_Side_1.val1 = 255;
+			//	//rDest_Side_1.val2 = 255;
+
+			//	//rDest_Side_2.val0 = 0;
+			//	//rDest_Side_2.val1 = 255;
+			//	//rDest_Side_2.val2 = 255;
+			//}
+
+
+			ShowImage(disp_Img, cx.MakeStrWithId("DisplayNormAvgStandevRatioToNormImg disp_Img").c_str());
+
+			GlobalStuff::SetLinePathImg(disp_Img);
+			GlobalStuff::ShowLinePathImg();
+
+		}
+
+
+		
+
+		void ImgAngleDirMgr::DisplayStandevImg()
+		{
+			Context & cx = *m_context;
+
+			ActualArrayAccessor_2D<float> localAcc = cx.m_standev1_X_Img->GetActualAccessor();
+
+			
+			//const ActualArrayAccessor_2D<ConflictInfo2> & confAcc = cx.m_conflict_Img->GetActualAccessor();
+			F32ImageRef disp_Img = F32Image::Create(toCvSize(localAcc.GetSize()), 3);
+
+			disp_Img->SetAll(0);
+
+			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_standev1_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> norm1Acc_1D = cx.m_normStandev1_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> norm2Acc_1D = cx.m_normStandev2_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<F32ColorVal> dispAcc_1D((F32ColorVal *)disp_Img->GetDataPtr(), disp_Img->GetSize1D());
+
+
+			for (int i = 0; i < localAcc_1D.GetSize(); i++)
+			{
+
+				const float localVal = localAcc_1D[i];
+				if (IsUndefined(localVal))
+				{
+					continue;
+				}
+				AssertValue(localVal);
+
+				const float normVal1 = norm1Acc_1D[i];
+				if (IsUndefined(normVal1))
+				{
+					continue;
+				}
+				AssertValue(normVal1);
+
+				const float normVal2 = norm2Acc_1D[i];
+				if (IsUndefined(normVal2))
+				{
+					continue;
+				}
+				AssertValue(normVal2);
+
+
+				F32ColorVal & rDest = dispAcc_1D[i];
+
+				rDest.val0 = normVal1;
+				rDest.val1 = localVal;
+				rDest.val2 = normVal2;
+
+			}	//	end i for.
+
+
+			ShowImage(disp_Img, cx.MakeStrWithId("m_standev1_X_Img disp_Img").c_str());
+
+			GlobalStuff::SetLinePathImg(disp_Img);
+			GlobalStuff::ShowLinePathImg();
+
+			//ShowImage(GenTriChGrayImg(cx.m_standev1_X_Img->GetSrcImg()), cx.MakeStrWithId("m_standev1_X_Img->GetSrcImg()").c_str());
+			//GlobalStuff::SetLinePathImg(GenTriChGrayImg(cx.m_standev1_X_Img->GetSrcImg()));
+			//GlobalStuff::ShowLinePathImg();
+
+		}
+
 
 		void ImgAngleDirMgr::DisplayDiffImages()
 		{

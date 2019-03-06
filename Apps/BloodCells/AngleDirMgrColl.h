@@ -70,7 +70,8 @@ namespace Ncv
 		protected:
 
 			void Prepare();
-			void DisplayStandiv_Dir_Img();
+			void DisplayNormAvgStandiv_Dir_Img();
+			void DisplayStandiv2_Dir_Img();
 			void DisplayBidiffInfo_Dir_Img();
 			void DisplayImgForEdges();
 			void DisplayConflictImg();

@@ -43,7 +43,8 @@ namespace Ncv
 			//int GetDiffPosDist() { return 2; }
 			//int GetDiffPosDist() { return 5; }
 
-			ArrayHolder_2D_Ref<PixelStandevInfoCmn> m_standevInfoCmnImg;
+			ArrayHolder_2D_Ref<PixelStandevInfoCmn> m_normAvgStandevInfoCmnImg;
+			ArrayHolder_2D_Ref<PixelStandevInfoCmn> m_standevInfo2CmnImg;
 			ArrayHolder_2D_Ref<BidiffInfoCommon> m_bidiffInfoCommonImg;
 			ArrayHolder_2D_Ref<ConflictInfo2_Ex> m_conflictInfoImg;
 			F32ImageArrayHolder1C_Ref m_wideConflictDiff_Img;

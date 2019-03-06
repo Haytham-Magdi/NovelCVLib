@@ -64,7 +64,12 @@ namespace Ncv
 				ImgSizeRotationRef m_imgRot;
 
 				F32ImageArrayHolder1C_Ref m_standev_X_Img;
+				F32ImageArrayHolder1C_Ref m_normStandev1_X_Img;
+				F32ImageArrayHolder1C_Ref m_normStandev2_X_Img;
 				F32ImageArrayHolder1C_Ref m_normAvgStandev_X_Img;
+				F32ImageArrayHolder1C_Ref m_normAvgStandev_X_T_Img;
+
+				F32ImageArrayHolder1C_Ref m_normAvgStandev_X_ToNormRatio_Img;
 
 				//S32ImageArrayHolder1C_Ref m_rotToOrgMap_Img;
 				//S32ImageArrayHolder1C_Ref m_orgToRotMap_Img;
@@ -102,8 +107,10 @@ namespace Ncv
 				return m_normalContext;
 			}
 
-			void Proceed_1_1();
-			void Proceed_1_2();
+			void Proceed_1b_1();
+			void PrepareNormAvgStandev_X();
+			void PrepareStandev_X();
+			void Proceed_1b_2();
 			void Proceed_2_1();
 			void Proceed_2_2();
 			void Proceed_2b_1();
@@ -116,8 +123,10 @@ namespace Ncv
 
 		protected:
 
+			void AffectNormWithNormAvgStandev();
 			//void AffectCommonAvgStandev_0();
-			void AffectCommonAvgStandev();
+			void AffectCommonNormAvgStandev();
+			void AffectCommonNormAvgStandev2();
 			void ConfirmConflict();
 			void AffectCommonConflict();
 			void AffectCommonBidiffInfo();
@@ -125,6 +134,8 @@ namespace Ncv
 			void AffectCommonAvgPStandev_InrWide();
 
 			void DisplayConflictImg();
+			void DisplayNormAvgStandevRatioToNormImg();
+			void DisplayStandevImg();
 			void DisplayDiffImages();
 			
 		protected:

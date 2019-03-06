@@ -67,7 +67,7 @@ namespace Ncv
 
 			m_context_H->m_org_Img = org_Img_H;
 
-			m_context_H->m_standevInfoCmnImg = ArrayHolderUtil::CreateEmptyFrom<PixelStandevInfoCmn>(org_Img_H->AsHolderRef());
+			m_context_H->m_normAvgStandevInfoCmnImg = ArrayHolderUtil::CreateEmptyFrom<PixelStandevInfoCmn>(org_Img_H->AsHolderRef());
 
 			{
 				//PixelStandevInfoCmn initPsi;
@@ -95,17 +95,34 @@ namespace Ncv
 				////initPsi.MaxVal = 0;
 				////initPsi.MaxValDir = 2;
 
-				//FillImage(m_context_H->m_standevInfoCmnImg->GetVirtAccessor(), initPsi);
-				SetImageToUndefined(m_context_H->m_standevInfoCmnImg->GetVirtAccessor());
+				//FillImage(m_context_H->m_normAvgStandevInfoCmnImg->GetVirtAccessor(), initPsi);
+				SetImageToUndefined(m_context_H->m_normAvgStandevInfoCmnImg->GetVirtAccessor());
 
-				//const ActualArrayAccessor_2D<BidiffInfoCommon> & bdcAcc = m_context_H->m_standevInfoCmnImg->GetActualAccessor();
 				ActualArrayAccessor_1D<PixelStandevInfoCmn> psiAcc_1D =
-					m_context_H->m_standevInfoCmnImg->GetActualAccessor().GenAcc_1D();
+					m_context_H->m_normAvgStandevInfoCmnImg->GetActualAccessor().GenAcc_1D();
 
 				for (int i = 0; i < psiAcc_1D.GetSize(); i++)
 				{
 					PixelStandevInfoCmn & rBdc = psiAcc_1D[i];
 					rBdc.Index = i;
+				}
+
+			}
+
+
+			m_context_H->m_standevInfo2CmnImg = ArrayHolderUtil::CreateEmptyFrom<PixelStandevInfoCmn>(org_Img_H->AsHolderRef());
+
+			{
+
+				SetImageToUndefined(m_context_H->m_standevInfo2CmnImg->GetVirtAccessor());
+				
+				ActualArrayAccessor_1D<PixelStandevInfoCmn> psiAcc_1D =
+					m_context_H->m_standevInfo2CmnImg->GetActualAccessor().GenAcc_1D();
+
+				for (int i = 0; i < psiAcc_1D.GetSize(); i++)
+				{
+					PixelStandevInfoCmn & rPsi = psiAcc_1D[i];
+					rPsi.Index = i;
 				}
 
 			}
@@ -175,7 +192,8 @@ namespace Ncv
 
 
 			m_context_V->m_org_Img = m_context_H->m_org_Img->CreateTransposedProxy();
-			m_context_V->m_standevInfoCmnImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_standevInfoCmnImg);
+			m_context_V->m_normAvgStandevInfoCmnImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_normAvgStandevInfoCmnImg);
+			m_context_V->m_standevInfo2CmnImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_standevInfo2CmnImg);
 			m_context_V->m_bidiffInfoCommonImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_bidiffInfoCommonImg);
 			m_context_V->m_conflictInfoImg = ArrayHolderUtil::CreateTransposedProxyFrom(m_context_H->m_conflictInfoImg);
 			m_context_V->m_wideConflictDiff_Img = m_context_H->m_wideConflictDiff_Img->CreateTransposedProxy();
@@ -240,11 +258,11 @@ namespace Ncv
 			}
 
 			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_1_1();
+				m_angleDirMgrArr[i]->Proceed_1b_1();
 			}
 
 			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_1_2();
+				m_angleDirMgrArr[i]->Proceed_1b_2();
 			}
 
 			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
@@ -305,7 +323,9 @@ namespace Ncv
 			//	m_angleDirMgrArr[i]->Proceed_4_2();
 			//}
 
-			DisplayStandiv_Dir_Img();
+			DisplayNormAvgStandiv_Dir_Img();
+			
+			DisplayStandiv2_Dir_Img();
 
 			//DisplayBidiffInfo_Dir_Img();
 
@@ -326,11 +346,246 @@ namespace Ncv
 
 		}
 
-
-		void AngleDirMgrColl::DisplayStandiv_Dir_Img()
+		void AngleDirMgrColl::DisplayNormAvgStandiv_Dir_Img()
 		{
-			const ActualArrayAccessor_2D<PixelStandevInfoCmn> & psiAcc = m_context_H->m_standevInfoCmnImg->GetActualAccessor();
-			const VirtArrayAccessor_2D<PixelStandevInfoCmn> & psiVirtAcc = m_context_H->m_standevInfoCmnImg->GetVirtAccessor();
+			const ActualArrayAccessor_2D<PixelStandevInfoCmn> & psiAcc = m_context_H->m_normAvgStandevInfoCmnImg->GetActualAccessor();
+			const VirtArrayAccessor_2D<PixelStandevInfoCmn> & psiVirtAcc = m_context_H->m_normAvgStandevInfoCmnImg->GetVirtAccessor();
+			//F32ImageRef dspImg_Values = F32Image::Create(cvSize(psiAcc.GetSize()), 1);
+
+			//const int checkMargin = 70;
+			//Window<int> checkWin(checkMargin, psiAcc.GetSize_X() - checkMargin,
+			//	checkMargin, psiAcc.GetSize_Y() - checkMargin);
+
+
+			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(psiAcc.GetSize()), 3);
+
+			const int nSize_1D = psiAcc.CalcSize_1D();
+			ActualArrayAccessor_1D<PixelStandevInfoCmn> psiAcc_1D = psiAcc.GenAcc_1D();
+
+			ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
+
+			for (int i = 0; i < nSize_1D; i++)
+			{
+				PixelStandevInfoCmn & rPsi = psiAcc_1D[i];
+
+				S32Point pnt = psiAcc.CalcPointFromIndex_1D(i);
+				//if (S32Point::AreEqual(pnt, S32Point(55, 270)))
+
+				//if (S32Point::AreEqual(pnt, S32Point(580, 304)))
+				if (S32Point::AreEqual(pnt, S32Point(132, 86)))
+				{
+					i = i;
+				}
+
+				//if (S32Point::AreEqual(pnt, S32Point(576, 312)))
+				//if (S32Point::AreEqual(pnt, S32Point(356, 238)))
+				if (S32Point::AreEqual(pnt, S32Point(359, 232)))
+				{
+					i = i;
+				}
+
+
+				//const bool isPntInCheckWindow = pnt.IsInWindow(checkWin);
+				//Ncpp_ASSERT(!isPntInCheckWindow || (isPntInCheckWindow && 150 == rPsi.NormLeastVal));
+
+				F32ColorVal & rColoredDispElm = coloredDispAcc_1D[i];
+
+				if (IsUndefined(rPsi))
+				{
+					//rColoredDispElm.val0 = 0;
+					rColoredDispElm.val0 = 254;
+					rColoredDispElm.val1 = 254;
+					rColoredDispElm.val2 = 254;
+
+					continue;
+				}
+
+				//Ncpp_ASSERT(-1 != rPsi.Dir);
+				//Ncpp_ASSERT(rPsi.Dir >= 0);
+
+				Ncpp_ASSERT(rPsi.LeastValDir >= 0);
+				Ncpp_ASSERT(rPsi.SecondLeastValDir >= 0);
+
+				//float angle = m_angleDirMgrArr[rPsi.Dir]->GetContext()->m_angleByRad;
+
+				float angle, normVal;
+				{
+					//const float leastValAngle = m_angleDirMgrArr[rPsi.LeastValDir]->GetContext()->m_angleByRad;
+					//Ncpp_ASSERT(leastValAngle >= 0.0f && leastValAngle <= M_PI);
+
+					//const float secondLeastValAngle = m_angleDirMgrArr[rPsi.SecondLeastValDir]->GetContext()->m_angleByRad;
+					//Ncpp_ASSERT(secondLeastValAngle >= 0.0f && secondLeastValAngle <= M_PI);
+					//
+					//float angle1, angle2, weight1, weight2, normVal1, normVal2;
+
+					//if (leastValAngle <= secondLeastValAngle)
+					//{
+					//	angle1 = leastValAngle;
+					//	angle2 = secondLeastValAngle;
+
+					//	weight1 = rPsi.SecondLeastVal;
+					//	weight2 = rPsi.LeastVal;
+
+					//	normVal1 = rPsi.NormLeastVal;
+					//	normVal2 = rPsi.NormSecondLeastVal;
+					//}
+					//else
+					//{
+					//	angle1 = secondLeastValAngle;
+					//	angle2 = leastValAngle;
+
+					//	weight1 = rPsi.LeastVal;
+					//	weight2 = rPsi.SecondLeastVal;
+
+					//	normVal1 = rPsi.NormSecondLeastVal;
+					//	normVal2 = rPsi.NormLeastVal;
+					//}
+
+					//if ((angle2 - angle1) <= (M_PI / 2))
+					//{
+					//	//angle = ((weight1 + weight2) < 0.5) ? leastValAngle :
+					//	angle = ((weight1 + weight2) < 0.01) ? leastValAngle :
+					//		(weight1 * angle1 + weight2 * angle2) /
+					//		(weight1 + weight2);
+
+					//	Ncpp_ASSERT(angle >= 0.0f && angle <= M_PI);
+					//}
+					//else
+					//{
+					//	//angle = ((weight1 + weight2) < 0.5) ? leastValAngle :
+					//	angle = ((weight1 + weight2) < 0.01) ? leastValAngle :
+					//		(weight1 * angle1 + weight2 * (angle2 - M_PI)) /
+					//		(weight1 + weight2);
+
+					//	//angle = (angle <= M_PI) ? angle : (angle + M_PI);
+					//	angle = (angle >= 0.0f) ? angle : (angle + M_PI);
+
+					//	Ncpp_ASSERT(angle >= 0.0f && angle <= M_PI);
+					//}
+
+					//normVal = ((weight1 + weight2) < 0.01) ? normVal1 :
+					//	(weight1 * normVal1 + weight2 * normVal2) / (weight1 + weight2);
+
+					////float angle = m_angleDirMgrArr[rPsi.LeastValDir]->GetContext()->m_angleByRad;
+					//angle = ((rPsi.LeastVal + rPsi.SecondLeastVal) < 0.5) ? leastValAngle :
+					//	(rPsi.SecondLeastVal * leastValAngle + rPsi.LeastVal * secondLeastValAngle) /
+					//	(rPsi.LeastVal + rPsi.SecondLeastVal);
+
+					//if (leastValAngle != secondLeastValAngle && rPsi.NormLeastVal > 50.0f)
+					//{
+					//	i = i;
+					//}
+
+					// to be removed
+					angle = m_angleDirMgrArr[rPsi.LeastValDir]->GetContext()->m_angleByRad;
+					Ncpp_ASSERT(angle >= 0.0f && angle <= M_PI);
+
+					normVal = rPsi.NormLeastVal;
+				}
+
+
+				////rDest.val0 = 127 + rPsi.NormLeastVal / 2;
+				//rDest.val0 = 127;
+				//rDest.val1 = (127 + 127 * cos(angle) * rPsi.NormLeastVal * 2 / 3);
+				//rDest.val2 = (127 + 127 * sin(angle) * rPsi.NormLeastVal * 2 / 3);
+
+				//rDest_Values = rPsi.NormLeastVal;
+
+				//rColoredDispElm.val0 = 0;
+				//rColoredDispElm.val0 = (rPsi.NormLeastVal > 0.1) ? rPsi.LeastVal * 255 / rPsi.NormLeastVal : 0;
+				//rColoredDispElm.val1 = (rPsi.NormLeastVal > 0.1) ? rPsi.LeastVal * 255 / rPsi.NormLeastVal : 0;
+
+				//rDest.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal * 2 / 3);
+				//rDest.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 2 / 3);
+
+				//rColoredDispElm.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal * 5 / 3);
+				//rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 5 / 3);
+
+				//if (rPsi.LeastVal > 0.5 * rPsi.NormLeastVal)
+				if (!rPsi.IsDirClear())
+					//if (rPsi.LeastVal > 0.8 * rPsi.NormLeastVal)
+				{
+					//	for debug.
+					if (rPsi.NormLeastVal > 120)
+					{
+						i = i;
+					}
+					rColoredDispElm.val0 = rPsi.NormLeastVal;
+					rColoredDispElm.val1 = 0.75 * rPsi.NormLeastVal;
+					rColoredDispElm.val2 = 0;
+				}
+				//else if (0 == rPsi.LeastValDir)
+				//{
+				//	rColoredDispElm.val0 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val1 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val2 = rPsi.NormLeastVal;
+				//}
+				//else if (1 == rPsi.LeastValDir)
+				//{
+				//	rColoredDispElm.val0 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val1 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val2 = 0;
+				//}
+				//else if (3 == rPsi.LeastValDir)
+				//{
+				//	rColoredDispElm.val0 = rPsi.NormLeastVal;
+				//	rColoredDispElm.val1 = 0;
+				//	rColoredDispElm.val2 = rPsi.NormLeastVal;
+				//}
+				else
+				{
+					rColoredDispElm.val0 = 0;
+					rColoredDispElm.val1 = (fabs(cos(angle)) * normVal * 5 / 3);
+					rColoredDispElm.val2 = (fabs(sin(angle)) * normVal * 5 / 3);
+				}
+
+
+				//rColoredDispElm.val1 = (fabs(cos(angle)) * rPsi.MaxVal * 5 / 3);
+				//rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.MaxVal * 5 / 3);
+
+				//rColoredDispElm.val1 = rPsi.MaxVal;
+				//rColoredDispElm.val2 = rPsi.MaxVal;
+
+				//rColoredDispElm.val1 = rPsi.NormLeastVal;
+				//rColoredDispElm.val2 = rPsi.NormLeastVal;
+
+				//rDest.val1 = (fabs(cos(angle)) * rPsi.NormLeastVal);
+				//rDest.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal);
+
+				////if (0 == rPsi.Dir)
+				//if (5 == rPsi.Dir)
+				////if (false)
+				//{
+				//	rDest.val0 = rPsi.NormLeastVal;
+				//	rDest.val1 = rPsi.NormLeastVal;
+				//	rDest.val2 = rPsi.NormLeastVal;
+				//}
+				//else
+				//{
+				//	rDest.val0 = 0;
+				//	rDest.val1 = 0;
+				//	rDest.val2 = 0;
+				//}
+
+				//rDest.val0 = 127 + rPsi.NormLeastVal;
+				//rDest.val1 = 127 + 127 * cos(angle);
+				//rDest.val2 = 127 + 127 * sin(angle);
+			}
+
+			//GlobalStuff::SetLinePathImg(GenTriChGrayImg(dspImg_Values));
+			//GlobalStuff::ShowLinePathImg();
+
+			//ShowImage(dspImg_Values, "normAvgStandevDirImg_Colored");
+
+			ShowImage(dspImg_Colored, "normAvgStandevDirImg_Colored");
+		}
+
+
+		
+		void AngleDirMgrColl::DisplayStandiv2_Dir_Img()
+		{
+			const ActualArrayAccessor_2D<PixelStandevInfoCmn> & psiAcc = m_context_H->m_standevInfo2CmnImg->GetActualAccessor();
+			//const VirtArrayAccessor_2D<PixelStandevInfoCmn> & psiVirtAcc = m_context_H->m_standevInfo2CmnImg->GetVirtAccessor();
 			//F32ImageRef dspImg_Values = F32Image::Create(cvSize(psiAcc.GetSize()), 1);
 
 			//const int checkMargin = 70;
@@ -349,6 +604,7 @@ namespace Ncv
 			{
 				PixelStandevInfoCmn & rPsi = psiAcc_1D[i];
 				
+				//	for debug.
 				S32Point pnt = psiAcc.CalcPointFromIndex_1D(i);
 				//if (S32Point::AreEqual(pnt, S32Point(55, 270)))
 				
@@ -483,7 +739,8 @@ namespace Ncv
 				//rColoredDispElm.val2 = (fabs(sin(angle)) * rPsi.NormLeastVal * 5 / 3);
 
 				//if (rPsi.LeastVal > 0.5 * rPsi.NormLeastVal)
-				if (!rPsi.IsDirClear())
+				//if (!rPsi.IsDirClear())
+				if (false && !rPsi.IsDirClear())
 				//if (rPsi.LeastVal > 0.8 * rPsi.NormLeastVal)
 				{
 					//	for debug.
@@ -516,8 +773,12 @@ namespace Ncv
 				else
 				{
 					rColoredDispElm.val0 = 0;
-					rColoredDispElm.val1 = (fabs(cos(angle)) * normVal * 5 / 3);
-					rColoredDispElm.val2 = (fabs(sin(angle)) * normVal * 5 / 3);
+
+					rColoredDispElm.val1 = rPsi.NormLeastVal;
+					rColoredDispElm.val2 = rPsi.LeastVal;
+
+					//rColoredDispElm.val1 = (fabs(cos(angle)) * normVal * 5 / 3);
+					//rColoredDispElm.val2 = (fabs(sin(angle)) * normVal * 5 / 3);
 				}
 
 
@@ -554,11 +815,12 @@ namespace Ncv
 			}
 
 			//GlobalStuff::SetLinePathImg(GenTriChGrayImg(dspImg_Values));
-			//GlobalStuff::ShowLinePathImg();
+			GlobalStuff::SetLinePathImg(dspImg_Colored);
+			GlobalStuff::ShowLinePathImg();
 
-			//ShowImage(dspImg_Values, "standevDirImg_Colored");
+			//ShowImage(dspImg_Values, "standev2DirImg_Colored");
 			
-			ShowImage(dspImg_Colored, "standevDirImg_Colored");
+			ShowImage(dspImg_Colored, "standev2DirImg_Colored");
 		}
 
 
