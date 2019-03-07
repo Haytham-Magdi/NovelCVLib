@@ -30,8 +30,8 @@
 //#include <NovelCVLib\Common\ListElm.h>
 //#include <NovelCVLib\Common\MaxIndexFinder.h>
 //#include <NovelCVLib\Common\MinIndexFinder.h>
-//#include <NovelCVLib\Common\CommonArrCollBuff.h>
-//#include <NovelCVLib\Common\PtrPrvider.h>
+//#include <NovelCVLib\Common\CommonAllocArrColl.h>
+//#include <NovelCVLib\Common\PtrPool.h>
 //#include <NovelCVLib\Common\FilePathMgr.h>
 //
 

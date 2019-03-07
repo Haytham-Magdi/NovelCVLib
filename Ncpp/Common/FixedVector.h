@@ -38,7 +38,7 @@ namespace Ncpp
 		static int MaxID_Activated;
 
 
-		static void Init()
+		static void InitIfFirstTime()
 		{
 			if( nullptr == FixedVectorDebug::FixedVectorID_Arr )
 			{
@@ -195,7 +195,6 @@ namespace Ncpp
 	class FixedVector : public Ncpp::Object
 	{
 	public:
-		//virtual T GetAt(int a_index) = 0;
 
 		FixedVector() { Init(); }
 		FixedVector( int a_capacity ) { Init(); SetCapacity( a_capacity ); }
@@ -226,7 +225,7 @@ namespace Ncpp
 
 		int GetSize() const { return m_size; }
 
-		void SetAllToVal( T a_val ) 
+		void SetAllToVal( const T & a_val ) 
 		{ 
 			for( int i=0; i < m_size; i++ )
 				m_data[ i ] = a_val;
@@ -246,6 +245,10 @@ namespace Ncpp
 			return m_capacity;
 		}
 
+		bool HasFreeCapacity() const
+		{
+			return GetSize() < GetCapacity();
+		}
 
 		void SetCapacity( int a_capacity )
 		{
@@ -301,12 +304,28 @@ namespace Ncpp
 
 		T & operator[](int a_pos) const
 		{
+			//Ncpp_ASSERT(a_pos >= 0 && a_pos < m_size);
+			//return m_data[a_pos];
+			
+			return GetAt(a_pos);
+		}
+
+		T & GetAt(int a_pos) const
+		{
+			Ncpp_ASSERT(a_pos >= 0 && a_pos < m_size);
 			return m_data[a_pos];
 		}
 
+		//T * GetPtrAt(int a_pos)
+		//{
+		//	Ncpp_ASSERT(a_pos >= 0 && a_pos < m_size);
+		//	return &m_data[a_pos];
+		//}
+
 		T & GetAtBack(int a_nBackIndex) const
 		{
-			return m_data[ m_size - 1 - a_nBackIndex ];
+			//return m_data[m_size - 1 - a_nBackIndex];
+			return GetAt(m_size - 1 - a_nBackIndex);
 		}
 
 		void ResetSize()
@@ -317,14 +336,23 @@ namespace Ncpp
 		void SetSize( int a_size )
 		{
 			Ncpp_ASSERT(a_size >= 0);
+			Ncpp_ASSERT(a_size <= m_capacity);
 
-			if( m_capacity < a_size )
-				SetCapacity( a_size );
+			//if( m_capacity < a_size )
+			//	SetCapacity( a_size );
 
 			m_size = a_size;
 		}
 
-		void PushBack( T a_val )
+		void InitSize(int a_size)
+		{
+			if (m_capacity < a_size)
+				SetCapacity(a_size);
+
+			SetSize(a_size);
+		}
+
+		void PushBack(const T & a_val)
 		{
 			Ncpp_ASSERT( m_size < m_capacity );
 
@@ -334,7 +362,7 @@ namespace Ncpp
 
 		T & GetBack() const
 		{
-			return m_data[m_size - 1];
+			return GetAt(m_size - 1);
 		}
 
 
@@ -342,7 +370,7 @@ namespace Ncpp
 
 		void Init()
 		{
-			FixedVectorDebug::Init();
+			FixedVectorDebug::InitIfFirstTime();
 
 			m_data = nullptr;
 			m_size = 0;

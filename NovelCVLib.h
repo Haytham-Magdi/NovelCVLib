@@ -27,8 +27,8 @@
 //#include <NovelCVLib\Ncpp\Common\ListElm.h>
 //#include <NovelCVLib\Ncpp\Common\MaxIndexFinder.h>
 //#include <NovelCVLib\Ncpp\Common\MinIndexFinder.h>
-//#include <NovelCVLib\Ncpp\Common\CommonArrCollBuff.h>
-//#include <NovelCVLib\Ncpp\Common\PtrPrvider.h>
+//#include <NovelCVLib\Ncpp\Common\CommonAllocArrColl.h>
+//#include <NovelCVLib\Ncpp\Common\PtrPool.h>
 //#include <NovelCVLib\Ncpp\Common\FilePathMgr.h>
 //
 

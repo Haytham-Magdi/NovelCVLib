@@ -14,7 +14,7 @@
 namespace Ncpp
 {
 	template<class T>
-	class PtrPrvider : public Ncpp::Object
+	class PtrPool : public Ncpp::Object
 	{
 	protected:
 

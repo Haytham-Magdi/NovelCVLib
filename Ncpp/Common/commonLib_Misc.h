@@ -41,6 +41,7 @@
 #include <NovelCVLib\Ncpp\Common\SimpleArrayHolder_2D.h>
 #include <NovelCVLib\Ncpp\Common\ArrayHolderProxy_2D.h>
 #include <NovelCVLib\Ncpp\Common\ArrayHolderUtil.h>
+#include <NovelCVLib\Ncpp\Common\MultiAllocCollection.h>
 #include <NovelCVLib\Ncpp\Common\Range.h>
 #include <NovelCVLib\Ncpp\Common\Window.h>
 #include <NovelCVLib\Ncpp\Common\PtrIterator2.h>
@@ -52,8 +53,8 @@
 #include <NovelCVLib\Ncpp\Common\ListElm.h>
 #include <NovelCVLib\Ncpp\Common\MaxIndexFinder.h>
 #include <NovelCVLib\Ncpp\Common\MinIndexFinder.h>
-#include <NovelCVLib\Ncpp\Common\CommonArrCollBuff.h>
-#include <NovelCVLib\Ncpp\Common\PtrPrvider.h>
+#include <NovelCVLib\Ncpp\Common\CommonAllocArrColl.h>
+#include <NovelCVLib\Ncpp\Common\PtrPool.h>
 #include <NovelCVLib\Ncpp\Common\FilePathMgr.h>
 //#include <NovelCVLib\Ncpp\Common\NumberIterator.h>
 

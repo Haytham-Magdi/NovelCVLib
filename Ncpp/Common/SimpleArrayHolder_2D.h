@@ -23,7 +23,7 @@ namespace Ncv
 
 		SimpleArrayHolder_2D(const Size_2D & a_size)
 		{
-			m_allocVect.SetSize(a_size.CalcSize_1D());
+			m_allocVect.InitSize(a_size.CalcSize_1D());
 			m_actualAccessor.Init(m_allocVect.GetHeadPtr(), a_size.GetX(), a_size.GetY());
 			m_actualAccessor.AssignVirtAccessorTo(&m_virtAccessor);
 		}

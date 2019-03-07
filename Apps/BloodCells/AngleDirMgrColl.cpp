@@ -200,7 +200,7 @@ namespace Ncv
 			m_context_V->m_avgPStandev_InrWide_Img = m_context_H->m_avgPStandev_InrWide_Img->CreateTransposedProxy();
 
 
-			m_angleDirMgrArr.SetSize(m_rotColl->GetNofRots() * 2);
+			m_angleDirMgrArr.InitSize(m_rotColl->GetNofRots() * 2);
 
 			for (int i = 0; i < m_rotColl->GetNofRots(); i++)
 			{

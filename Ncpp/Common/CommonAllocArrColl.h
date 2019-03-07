@@ -16,21 +16,21 @@
 namespace Ncpp
 {
 	template< class T >
-	class CommonArrCollBuff : public Ncpp::Object
+	class CommonAllocArrColl : public Ncpp::Object
 	{
 	public :
 
-		CommonArrCollBuff()
+		CommonAllocArrColl()
 		{
 			
 		}
 
-		~CommonArrCollBuff()
+		~CommonAllocArrColl()
 		{
 			
 		}
 
-		CommonArrCollBuff( int a_nCommonCap, int a_nMaxNofArrs )
+		CommonAllocArrColl( int a_nCommonCap, int a_nMaxNofArrs )
 		{
 			SetCapacity( a_nCommonCap, a_nMaxNofArrs );
 		}
@@ -46,12 +46,21 @@ namespace Ncpp
 		void AddArr( int a_nSize )
 		{
 			m_headArr.PushBack(
-				//& m_buffArr.GetBack() );
-				& m_buffArr[ m_buffArr.GetSize() ] );
-			
-			m_sizeArr.PushBack( a_nSize );
+				(&m_buffArr.GetBack()) + 1);
+				//&m_buffArr[m_buffArr.GetSize()]);
 
-			m_buffArr.IncSize( a_nSize );
+			m_sizeArr.PushBack(a_nSize);
+
+			m_buffArr.IncSize(a_nSize);
+
+
+			//m_headArr.PushBack(
+			//	//& m_buffArr.GetBack() );
+			//	& m_buffArr[ m_buffArr.GetSize() ] );
+			//
+			//m_sizeArr.PushBack( a_nSize );
+
+			//m_buffArr.IncSize( a_nSize );
 		}
 
 		void Reset()
