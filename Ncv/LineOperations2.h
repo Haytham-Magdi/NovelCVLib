@@ -1696,8 +1696,8 @@ namespace Ncv
 
 			for (int i = start + nBefDiff; i <= nCenterEnd; i++)
 			{
-				//float * pOut = &a_outAcc[i];
-				float * pOut = (float *)&a_outAcc[i];
+				float * pOut = &a_outAcc[i];
+				//float * pOut = (float *)&a_outAcc[i];
 
 				const T & avg_1 = a_avg_Acc[i - nBefDiff];
 				float avg_MagSqr_1 = a_avg_MagSqr_Acc[i - nBefDiff];
@@ -1705,7 +1705,8 @@ namespace Ncv
 				const T & avg_2 = a_avg_Acc[i + nAftDiff];
 				float avg_MagSqr_2 = a_avg_MagSqr_Acc[i + nAftDiff];
 
-				*pOut = ElementOperations2::CalcConflict(avg_1, avg_MagSqr_1, avg_2, avg_MagSqr_2);
+				*pOut = ElementOperations2::Calc_ConflictDiff(avg_1, avg_MagSqr_1, avg_2, avg_MagSqr_2);
+				//AssertUndefinedOrValid(*pOut);
 			}
 
 			///////////////////////////////
@@ -1714,7 +1715,7 @@ namespace Ncv
 			{
 				for (int i = 0; i < start + nBefDiff; i++)
 				{
-					ConflictInfo2 * pDest = (ConflictInfo2 *)&a_outAcc[i];
+					float * pDest = &a_outAcc[i];
 					SetToUndefined(pDest);
 				}
 			}
@@ -1723,7 +1724,7 @@ namespace Ncv
 			{
 				for (int i = end - nAftDiff + 1; i < nSize_1D; i++)
 				{
-					ConflictInfo2 * pDest = (ConflictInfo2 *)&a_outAcc[i];
+					float * pDest = &a_outAcc[i];
 					SetToUndefined(pDest);
 				}
 			}

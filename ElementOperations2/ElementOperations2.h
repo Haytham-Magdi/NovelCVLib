@@ -415,19 +415,19 @@ namespace Ncv
 			Add(a_avg_1, a_avg_2, &avg_12);
 			DivideSelfByNum(avg_12, 2);
 
-			float avg_MagSqr_12 = (a_avg_MagSqr_1 + a_avg_MagSqr_2) / 2;
+			const float avg_MagSqr_12 = (a_avg_MagSqr_1 + a_avg_MagSqr_2) / 2;
 
-			float magSqr_Avg_1 = CalcMagSqr(avg_1);
-			float magSqr_Avg_2 = CalcMagSqr(avg_2);
-			float magSqr_Avg_12 = CalcMagSqr(avg_12);
+			const float magSqr_Avg_1 = CalcMagSqr(a_avg_1);
+			const float magSqr_Avg_2 = CalcMagSqr(a_avg_2);
+			const float magSqr_Avg_12 = CalcMagSqr(avg_12);
 
-			float standev_1 = CalcStandev(avg_1, a_avg_MagSqr_1);
-			float standev_2 = CalcStandev(avg_2, a_avg_MagSqr_2);
-			float standev_12 = CalcStandev(avg_12, avg_MagSqr_12);
+			const float standev_1 = CalcStandev(a_avg_1, a_avg_MagSqr_1);
+			const float standev_2 = CalcStandev(a_avg_2, a_avg_MagSqr_2);
+			const float standev_12 = CalcStandev(avg_12, avg_MagSqr_12);
 
-			float standev_MaxSide = (standev_1 > standev_2) ? standev_1 : standev_2;
+			const float standev_MaxSide = (standev_1 > standev_2) ? standev_1 : standev_2;
 
-			float ret = (standev_12 > standev_MaxSide) ? (standev_12 - standev_MaxSide) : 0;
+			const float ret = (standev_12 > standev_MaxSide) ? (standev_12 - standev_MaxSide) : 0;
 			return ret;
 		}
 
