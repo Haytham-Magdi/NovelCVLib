@@ -227,21 +227,41 @@ namespace Ncv
 			//cx.m_normAvgStandev_X_Img->GetVirtAccessor(), Range<int>::New(-2, 2), Range<int>::New(-2, 2));
 
 			Range<int> rangeX = Range<int>::New(-2, 2), rangeY = Range<int>::New(-2, 2);
+			//Range<int> rangeX = Range<int>::New(-4, 4), rangeY = Range<int>::New(-2, 2);
+			//Range<int> rangeX = Range<int>::New(-2, 2), rangeY = Range<int>::New(-8, 8);
+			//Range<int> rangeX = Range<int>::New(-4, 4), rangeY = Range<int>::New(-4, 4);
 			//Range<int> rangeX = Range<int>::New(-2, 2), rangeY = Range<int>::New(-7, 7);
 			//Range<int> rangeX = Range<int>::New(-7, 7), rangeY = Range<int>::New(-2, 2);
 			//Range<int> rangeX = Range<int>::New(-36, 36), rangeY = Range<int>::New(-36, 36);
 
+			//Window<int> avgWin = Window<int>::New(-0, 0, -0, 0);
+			////Window<int> avgWin = Window<int>::New(-2, 2, -2, 2);
+			////Window<int> avgWin = Window<int>::New(-17, 17, -17, 17);
 
 
 			cx.m_normAvgStandev_X_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 			cx.m_normAvgStandev_X_T_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
-			
+
+			F32ImageArrayHolder1C_Ref tmp_Img;
+			tmp_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
+
 			Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
 				cx.m_normAvgStandev_X_Img->GetVirtAccessor(), rangeX, rangeY);
+			//	tmp_Img->GetVirtAccessor(), rangeX, rangeY);
+
+			//AvgImage(tmp_Img->GetVirtAccessor(), cx.m_normAvgStandev_X_Img->GetVirtAccessor(), avgWin);
+
+
+
+			//F32ImageArrayHolder3C_Ref avg_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
+			//AvgImage(cx.m_org_Img->GetVirtAccessor(), avg_Img->GetVirtAccessor(), avgWin);
+
 
 			Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor().GenTranspose(), cx.m_magSqr_Img->GetVirtAccessor().GenTranspose(),
 				cx.m_normAvgStandev_X_T_Img->GetVirtAccessor().GenTranspose(), rangeY, rangeX);
+			//	tmp_Img->GetVirtAccessor().GenTranspose(), rangeX, rangeY);
 
+			//AvgImage(tmp_Img->GetVirtAccessor().GenTranspose(), cx.m_normAvgStandev_X_T_Img->GetVirtAccessor().GenTranspose(), avgWin);
 
 			if (1 == cx.m_nIndex)
 			//if (0 == cx.m_nIndex)
