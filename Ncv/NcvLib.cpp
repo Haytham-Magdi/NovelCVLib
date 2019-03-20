@@ -98,6 +98,8 @@
 #include <NovelCVLib\Apps\BloodCells\BloodCellsProcess1.cpp>
 #include <NovelCVLib\Apps\BloodCells\PixelInfo_1.cpp>
 
+#include <NovelCVLib\Ncv\PixelLinkTypes.cpp>
+
 
 
 

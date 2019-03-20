@@ -70,6 +70,7 @@ namespace Ncv
 		protected:
 
 			void Prepare();
+			void TryPixelLinkStuff();
 			void DisplayNormAvgStandiv_Dir_Img();
 			void DisplayStandiv2_Dir_Img();
 			void DisplayBidiffInfo_Dir_Img();

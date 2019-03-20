@@ -160,33 +160,6 @@ namespace Ncv
 
 
 		template<class T>
-		void DivideImageByNum(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const float a_num)
-		{
-			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_inpAcc.GenAccessor_Y();
-			VirtArrayAccessor_1D<T> acc_Inp_X = a_inpAcc.GenAccessor_X();
-
-			const VirtArrayAccessor_1D<T> acc_Out_Y = a_outAcc.GenAccessor_Y();
-			VirtArrayAccessor_1D<T> acc_Out_X = a_outAcc.GenAccessor_X();
-
-			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
-
-
-			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
-			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
-
-			for (; ptrItr_Inp_Y.HasValidPos(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
-			{
-				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
-				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
-
-				acc_Inp_X.SetData(ptr_Inp_Y);
-				acc_Out_X.SetData(ptr_Out_Y);
-
-				DivideLineByNum<T>(acc_Inp_X, acc_Out_X, a_num);
-			}
-		}
-
-		template<class T>
 		void AddValueToImage(const VirtArrayAccessor_2D<T> & a_inpAcc, const T & a_value)
 		{
 			AddValueToImage(a_inpAcc, a_inpAcc, a_value);
@@ -309,6 +282,90 @@ namespace Ncv
 				acc_Out_X.SetData(ptr_Out_Y);
 
 				SubtractLines<T>(acc_Inp1_X, acc_Inp2_X, acc_Out_X);
+			}
+		}
+
+		template<class T>
+		void SetLessThanToValueInImage(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const T & a_threshold, const T & a_value)
+		{
+			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp_X = a_inpAcc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
+
+
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			for (; ptrItr_Inp_Y.HasValidPos(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			{
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				SetLessThanToValueInLine<T>(acc_Inp_X, acc_Out_X, a_threshold, a_value);
+			}
+		}
+
+		template<class T>
+		void ThresholdValuesInImage(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const T & a_threshold, const T & a_newLowerValue, const T & a_newUpperValue)
+		{
+			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp_X = a_inpAcc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
+
+
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			for (; ptrItr_Inp_Y.HasValidPos(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			{
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				ThresholdValuesInLine<T>(acc_Inp_X, acc_Out_X, a_threshold, a_newLowerValue, a_newUpperValue);
+			}
+		}
+
+
+
+
+		template<class T>
+		void DivideImageByNum(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_outAcc, const float a_num)
+		{
+			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp_X = a_inpAcc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
+
+
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			for (; ptrItr_Inp_Y.HasValidPos(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			{
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				DivideLineByNum<T>(acc_Inp_X, acc_Out_X, a_num);
 			}
 		}
 
@@ -726,8 +783,8 @@ namespace Ncv
 		}
 
 		template<class T>
-		void CalcConflictImage2_X(const VirtArrayAccessor_2D<T> & a_avg_Acc, const VirtArrayAccessor_2D<float> & a_avg_MagSqr_Acc,
-			const VirtArrayAccessor_2D<float> & a_normStandev_Acc,
+		void CalcConflictImage2_X(const VirtArrayAccessor_2D<T> & a_avg_Acc, const VirtArrayAccessor_2D<float> & a_avg_MagSqr_Acc, 
+			const VirtArrayAccessor_2D<float> & a_normStandev_Acc, 
 			const VirtArrayAccessor_2D<ConflictInfo2> & a_outAcc, const Range<int> & a_range_X)
 		{
 			const VirtArrayAccessor_1D<T> acc_Avg_Y = a_avg_Acc.GenAccessor_Y();
@@ -1023,6 +1080,39 @@ namespace Ncv
 				CalcDiffLine<T>(acc_Inp_X, acc_Out_X, a_range_X);
 			}
 		}
+
+		template<class T>
+		void MarkPeakValuesFromImageX(const VirtArrayAccessor_2D<T> & a_inpAcc,
+			const VirtArrayAccessor_2D<T> & a_outAcc, 
+			const T & a_minValue, const T & a_peakValue, const T & a_nonPeakValue,
+			const Range<int> & a_range_X)
+		{
+			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp_X = a_inpAcc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
+
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			for (; ptrItr_Inp_Y.HasValidPos();
+				ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			{
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				SetPeakValuesInLine<T>(acc_Inp_X, acc_Out_X, 
+					a_minValue, a_peakValue, a_nonPeakValue,
+					a_range_X);
+			}
+		}
+
 
 		template<class T>
 		void PrepareBidiffInfoImageFromDiffImages(const VirtArrayAccessor_2D<T> & a_diff1_Acc, const VirtArrayAccessor_2D<T> & a_diff2_Acc,

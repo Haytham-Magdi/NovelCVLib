@@ -25,6 +25,13 @@
 #include <NovelCVLib\Ncv\ImgSizeRotation.h>
 #include <NovelCVLib\Ncv\ImgSizeRotationColl.h>
 
+#include <NovelCVLib\Ncv\PixelLink.h>
+#include <NovelCVLib\Ncv\PixelLinkType.h>
+#include <NovelCVLib\Ncv\PixelLinkTypes.h>
+#include <NovelCVLib\Ncv\PixelLinkOwner.h>
+#include <NovelCVLib\Ncv\PixelLinkUtil.h>
+
+
 #include <NovelCVLib\Ncv\LineOperations2.h>
 
 #include <NovelCVLib\Ncv\ImageOperations2.h>

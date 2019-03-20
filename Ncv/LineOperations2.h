@@ -360,6 +360,138 @@ namespace Ncv
 		}
 
 		template<class T>
+		void ThresholdValuesInLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const T & a_threshold, const T & a_newLowerValue, const T & a_newUpperValue)
+		{
+			AssertLineUndefinedOrValid(a_inpAcc);
+
+
+			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
+
+
+			PtrIterator2<T> ptrItr_Inp = a_inpAcc.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out = a_outAcc.GenPtrIterator();
+
+
+			// manage undefined from bgn.
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetEnd();
+				T * ptr_Out = ptrItr_Out.GetEnd();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// do main job.
+			int cnt = 0;
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				if (*ptr_Inp < a_threshold)
+				{
+					Assign(ptr_Out, a_newLowerValue);
+				}
+				else
+				{
+					Assign(ptr_Out, a_newUpperValue);
+				}
+			}
+
+			AssertLineUndefinedOrValid(a_outAcc);
+		}
+
+		template<class T>
+		void SetLessThanToValueInLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const T & a_threshold, const T & a_value)
+		{
+			AssertLineUndefinedOrValid(a_inpAcc);
+
+
+			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
+
+
+			PtrIterator2<T> ptrItr_Inp = a_inpAcc.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out = a_outAcc.GenPtrIterator();
+
+
+			// manage undefined from bgn.
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetEnd();
+				T * ptr_Out = ptrItr_Out.GetEnd();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// do main job.
+			int cnt = 0;
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				if (*ptr_Inp < a_threshold)
+				{
+					Assign(ptr_Out, a_value);
+				}
+				else
+				{
+					Assign(ptr_Out, *ptr_Inp);
+				}
+			}
+
+			AssertLineUndefinedOrValid(a_outAcc);
+		}
+
+		template<class T>
 		void DivideLineByNum(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc, const float a_num)
 		{
 			AssertLineUndefinedOrValid(a_inpAcc);
@@ -1986,6 +2118,123 @@ namespace Ncv
 
 			AssertLineUndefinedOrValid(a_outAcc);
 		}
+
+			
+
+		template<class T>
+		void SetPeakValuesInLine(const VirtArrayAccessor_1D<T> & a_inpAcc,
+			const VirtArrayAccessor_1D<T> & a_outAcc,
+			const T & a_minValue, const T & a_peakValue, const T & a_nonPeakValue,
+			const Range<int> & a_range)
+		{
+			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
+
+			AssertLineUndefinedOrValid(a_inpAcc);
+
+			const int nSize_1D = a_outAcc.GetSize();
+
+			const int nBefDiff = -a_range.GetBgn();
+			const int nAftDiff = a_range.GetEnd();
+
+			const int nRangeLen = nBefDiff + 1 + nAftDiff;
+
+
+			//--------------
+
+
+
+			int start = 0;
+			for (; start < nSize_1D; start++)
+			{
+				const T & inpVal = a_inpAcc[start];
+
+				if (IsUndefined(inpVal))
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			int end = nSize_1D - 1;
+			for (; end >= start; end--)
+			{
+				const T & inpVal = a_inpAcc[end];
+
+				if (IsUndefined(inpVal))
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			//------
+
+			if (end + 1 - start < nRangeLen)
+			{
+				SetLineToUndefined(a_outAcc);
+				return;
+			}
+
+			//const int nCenterEnd = nSize_1D - 1 - nAftDiff;
+			const int nCenterEnd = end - nAftDiff;
+
+
+			//--------------
+
+
+
+			for (int i = start + nBefDiff; i <= nCenterEnd; i++)
+			{
+				T * pOut = (T *)&a_outAcc[i];
+
+				const T & inpC = a_inpAcc[i];
+
+				const T & inp1 = a_inpAcc[i - nBefDiff];
+				const T & inp2 = a_inpAcc[i + nAftDiff];
+
+				if (inpC >= a_minValue && inpC > inp1 && inpC > inp2)
+				{
+					Assign(pOut, a_peakValue);
+				}
+				else
+				{
+					Assign(pOut, a_nonPeakValue);
+				}
+
+				//ElementOperations2::Subtract(inp_2, inp_1, pOut);
+			}
+
+			///////////////////////////////
+
+			//	Fill bgn gap in output
+			{
+				for (int i = 0; i < start + nBefDiff; i++)
+				{
+					T * pDest = (T *)&a_outAcc[i];
+					SetToUndefined(pDest);
+				}
+			}
+
+			//	Fill end gap in output
+			{
+				for (int i = end - nAftDiff + 1; i < nSize_1D; i++)
+				{
+					T * pDest = (T *)&a_outAcc[i];
+					SetToUndefined(pDest);
+				}
+			}
+
+
+			AssertLineUndefinedOrValid(a_outAcc);
+		}
+
 
 		template<class T = void>
 		void CalcConflictLine_FromDiffMagImages(const VirtArrayAccessor_1D<float> & a_diffMag1_1_Acc, 
