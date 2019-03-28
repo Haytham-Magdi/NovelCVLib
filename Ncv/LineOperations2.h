@@ -1454,8 +1454,11 @@ namespace Ncv
 				float normStandev_c = a_normStandev_Acc[i];
 
 
-				pOut->Exists = ElementOperations2::CalcConflict2(avg_1, avg_MagSqr_1, normStandev_1,
-					avg_2, avg_MagSqr_2, normStandev_2, normStandev_c);
+				//pOut->Exists = ElementOperations2::CalcConflict2(avg_1, avg_MagSqr_1, normStandev_1,
+				//	avg_2, avg_MagSqr_2, normStandev_2, normStandev_c);
+				ElementOperations2::CalcConflict2(avg_1, avg_MagSqr_1, normStandev_1,
+					avg_2, avg_MagSqr_2, normStandev_2, normStandev_c, pOut);
+
 				//pOut->IsConfirmed = false;
 				pOut->IsConfirmed = pOut->Exists;
 

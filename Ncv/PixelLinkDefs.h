@@ -14,27 +14,25 @@ namespace Ncv
 {
 	using namespace Ncpp;
 
-	class PixelLinkEx;
+	//class F32PixelLinkEx;
+	class F32PixelLinkOwner3C;
 
-	class F32PixelLinkOwner3C : public PixelLinkOwner<F32PixelLinkOwner3C, F32ColorVal, PixelLinkEx>
+	class F32PixelLinkEx : public PixelLink<F32PixelLinkOwner3C>
 	{
 
 
 	};
 
 
-	class PixelLinkEx : public PixelLink<F32PixelLinkOwner3C>
+	//class F32PixelLinkOwner3C : public PixelLinkOwner<F32PixelLinkOwner3C, F32ColorVal, F32PixelLinkEx>
+	class F32PixelLinkOwner3C : public PixelLinkOwner<F32ColorVal, F32PixelLinkEx>
 	{
 
 
 	};
-
-
 
 
 	//typedef PixelLinkOwner<F32ColorVal> F32PixelLinkOwner3C;
-
-
 
 
 

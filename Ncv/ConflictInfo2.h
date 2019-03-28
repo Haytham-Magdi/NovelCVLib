@@ -20,6 +20,8 @@ namespace Ncv
 
 		int Offset_Side_1;
 		int Offset_Side_2;
+
+		float DiffVal;
 	};
 
 	class ConflictInfo2_Ex : public ConflictInfo2//: public Ncpp::Object

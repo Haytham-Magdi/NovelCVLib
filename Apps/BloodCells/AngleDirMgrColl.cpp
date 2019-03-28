@@ -23,13 +23,6 @@
 #include <NovelCVLib\Apps\BloodCells\AngleDirMgrColl.h>
 #include <NovelCVLib\Apps\BloodCells\PixelInfo_1.h>
 
-//#include <NovelCVLib\Ncv\PixelLink.h>
-//#include <NovelCVLib\Ncv\PixelLinkType.h>
-//#include <NovelCVLib\Ncv\PixelLinkTypes.h>
-#include <NovelCVLib\Ncv\PixelLinkOwner.h>
-#include <NovelCVLib\Ncv\PixelLinkUtil.h>
-#include <NovelCVLib\Ncv\PixelLinkDefs.h>
-
 
 
 //#define M_PI 3.14159265358979323846
@@ -273,17 +266,17 @@ namespace Ncv
 				m_angleDirMgrArr[i]->Proceed_1b_2();
 			}
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_2_1();
-			}
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_2_1();
+			//}
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_2_2();
-			}
+			//for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			//	m_angleDirMgrArr[i]->Proceed_2_2();
+			//}
 
-			// for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-			// 	m_angleDirMgrArr[i]->Proceed_2b_1();
-			// }
+			 //for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			 //	m_angleDirMgrArr[i]->Proceed_2b_1();
+			 //}
 
 			// for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
 			// 	m_angleDirMgrArr[i]->Proceed_2b_2();
@@ -336,13 +329,13 @@ namespace Ncv
 
 			DisplayNormAvgStandiv_Dir_Img();
 			
-			//DisplayStandiv2_Dir_Img();
+			DisplayStandiv2_Dir_Img();
 
 			//DisplayBidiffInfo_Dir_Img();
 
 			//DisplayImgForEdges();
 
-			DisplayConflictImg();
+			//DisplayConflictImg();
 
 			////ShowImage(standev_InrWide_Img->GetSrcImg(), "standev_InrWide_Img->GetSrcImg()");
 
@@ -591,24 +584,131 @@ namespace Ncv
 			ShowImage(dspImg_Colored, "normAvgStandevDirImg_Colored");
 		}
 
+
+
+
+		void AngleDirMgrColl::InitPixelLinksForOwnerOnImgFrame(int x, int y,
+			const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & ploAcc, Size_2D & imgSize)
+		{
+			F32Point pnt(x, y);
+			F32PixelLinkOwner3C & rPlo = ploAcc.GetAt(x, y);
+
+			for (int i = 0; i < NOF_ALL_PIXEL_LINK_TYPES; i++)
+			{
+				const PixelLinkIndex linkIndex = (PixelLinkIndex)i;
+
+				PixelLinkType & plType = PixelLinkTypes::GetAt(linkIndex);
+				PixelLinkType & plPeerType = PixelLinkTypes::GetAt(plType.GetReverseIndex());
+
+				S32Point shiftedPnt(x + plType.GetShiftX(), y + plType.GetShiftY());
+				const bool isShiftedPntInSize = shiftedPnt.IsInSize(imgSize);
+
+				if (isShiftedPntInSize)
+				{
+					F32PixelLinkOwner3C & rPeerPlo = ploAcc.GetAt(shiftedPnt.GetX(), shiftedPnt.GetY());
+
+					F32PixelLinkEx & rLink = rPlo.GetLinkAt(plType.GetIndex());
+					rLink.Init(&plType, &rPlo, &rPeerPlo, true);
+
+					F32PixelLinkEx & rPeerReverseLink = rPeerPlo.GetLinkAt(plType.GetReverseIndex());
+					rPeerReverseLink.Init(&plPeerType, &rPeerPlo, &rPlo, true);
+				}
+				else
+				{
+					F32PixelLinkEx & rLink = rPlo.GetLinkAt(plType.GetIndex());
+					rLink.Init(&plType, &rPlo, nullptr, false);
+				}
+
+			}	//	end Index for	
+
+		}
+
+
 		
 		void AngleDirMgrColl::TryPixelLinkStuff()
 		{
 			AngleDirMgrColl_Context & cx = *m_context_H;
 
+			const ActualArrayAccessor_2D<F32ColorVal> orgElmAcc = cx.m_org_Img->GetActualAccessor();
+
 			ArrayHolder_2D_Ref<F32PixelLinkOwner3C> pixelLinkOwner_Img = 
 				ArrayHolderUtil::CreateEmptyFrom<F32PixelLinkOwner3C>(cx.m_org_Img->AsHolderRef());
 
-			const ActualArrayAccessor_2D<F32PixelLinkOwner3C> ploAcc = pixelLinkOwner_Img->GetActualAccessor();
+			const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & ploAcc = pixelLinkOwner_Img->GetActualAccessor();
 
+			Ncpp_ASSERT(Size_2D::AreEqual(ploAcc.GetSize(), orgElmAcc.GetSize()));
 
-			for (int y = 0, x = 0; x < ploAcc.GetSize_X() && x < 1; x++)
 			{
-				F32PixelLinkOwner3C & rPlo = ploAcc.GetAt(x, y);
+				const ActualArrayAccessor_1D<F32PixelLinkOwner3C> ploAcc_1D = ploAcc.GenAcc_1D();
+				const ActualArrayAccessor_1D<F32ColorVal> orgElmAcc_1D = orgElmAcc.GenAcc_1D();
+			
+				for (int i = 0; i < ploAcc_1D.GetSize(); i++)
+				{
+					F32ColorVal & rOrgElm = orgElmAcc_1D[i];
+					F32PixelLinkOwner3C & rPloElm = ploAcc_1D[i];
 
-				//PixelLink 
-
+					rPloElm.SetElm(&rOrgElm);
+				}
 			}
+
+			Size_2D imgSize = ploAcc.GetSize();
+
+			{
+
+				for (int y = 0, x = 0; x < ploAcc.GetSize_X(); x++)
+				{
+					AngleDirMgrColl::InitPixelLinksForOwnerOnImgFrame(x, y, ploAcc, imgSize);
+				}
+
+				for (int y = ploAcc.GetSize_Y() - 1, x = 0; x < ploAcc.GetSize_X(); x++)
+				{
+					AngleDirMgrColl::InitPixelLinksForOwnerOnImgFrame(x, y, ploAcc, imgSize);
+				}
+
+				for (int y = 0, x = 0; y < ploAcc.GetSize_Y(); y++)
+				{
+					AngleDirMgrColl::InitPixelLinksForOwnerOnImgFrame(x, y, ploAcc, imgSize);
+				}
+
+				for (int y = 0, x = ploAcc.GetSize_X() - 1; y < ploAcc.GetSize_Y(); y++)
+				{
+					AngleDirMgrColl::InitPixelLinksForOwnerOnImgFrame(x, y, ploAcc, imgSize);
+				}
+
+			}	//	end of Frame pixels stuff.
+
+
+			for (int y = 1; y < ploAcc.GetSize_Y() - 1; y++)
+			{
+				for (int x = 1; x < ploAcc.GetSize_X() - 1; x++)
+				{
+					F32PixelLinkOwner3C & rPlo = ploAcc.GetAt(x, y);
+
+					for (int i = 0; i < NOF_PRIMARY_PIXEL_LINK_TYPES; i++)
+					{
+						const PixelLinkIndex linkIndex = (PixelLinkIndex)i;
+
+						PixelLinkType & plType = PixelLinkTypes::GetAt(linkIndex);
+						PixelLinkType & plPeerType = PixelLinkTypes::GetAt(plType.GetReverseIndex());
+
+						const int shiftedX = x + plType.GetShiftX();
+						const int shiftedY = y + plType.GetShiftY();
+						
+						Ncpp_ASSERT(S32Point(shiftedX, shiftedY).IsInSize(imgSize));
+
+						F32PixelLinkOwner3C & rPeerPlo = ploAcc.GetAt(shiftedX, shiftedY);
+
+						F32PixelLinkEx & rLink = rPlo.GetLinkAt(plType.GetIndex());
+						rLink.Init(&plType, &rPlo, &rPeerPlo, true);
+
+						F32PixelLinkEx & rPeerReverseLink = rPeerPlo.GetLinkAt(plType.GetReverseIndex());
+						rPeerReverseLink.Init(&plPeerType, &rPeerPlo, &rPlo, true);
+
+					}	//	end Index for	
+
+				}	//	end X for.
+			}	//	end Y for.
+
 
 
 
@@ -1533,9 +1633,17 @@ namespace Ncv
 						dbgSide2_Pnt = side2_Pnt;
 					}
 
+					//rDest.val0 = 0;
+					//rDest.val1 = 70;
+					//rDest.val2 = 155;
+
+					//Ncpp_ASSERT(rSrc.DiffVal > 0);
+					Ncpp_ASSERT(rSrc.DiffVal > 8.0f);
+
 					rDest.val0 = 0;
-					rDest.val1 = 70;
-					rDest.val2 = 155;
+					rDest.val1 = rSrc.DiffVal;
+					rDest.val2 = 0;
+
 
 					//rDest_Side_1.val0 = 0;
 					//rDest_Side_1.val1 = 155;
@@ -1575,10 +1683,10 @@ namespace Ncv
 			}
 
 
-			//GlobalStuff::SetLinePathImg(confDsp_Img);
-			//GlobalStuff::ShowLinePathImg();
+			GlobalStuff::SetLinePathImg(confDsp_Img);
+			GlobalStuff::ShowLinePathImg();
 
-			//ShowImage(confDsp_Img, "confDsp_Img->GetSrcImg()");
+			ShowImage(confDsp_Img, "confDsp_Img->GetSrcImg()");
 		}
 
 

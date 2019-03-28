@@ -18,17 +18,18 @@ namespace Ncv
     class PixelLinkTypes
     {
         public:
+        
+			static PixelLinkType RC;
+			static PixelLinkType RD;
+			static PixelLinkType CD;
+			static PixelLinkType LD;
 
-        static PixelLinkType RC;
-        static PixelLinkType RD;
-        static PixelLinkType CD;
-        static PixelLinkType LD;
+			static PixelLinkType LC;
+			static PixelLinkType LU;
+			static PixelLinkType CU;
+			static PixelLinkType RU;
 
-        static PixelLinkType LC;
-        static PixelLinkType LU;
-        static PixelLinkType CU;
-        static PixelLinkType RU;
-
+			static PixelLinkType & GetAt(PixelLinkIndex a_index);
     };
 
 

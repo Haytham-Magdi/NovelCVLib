@@ -17,6 +17,13 @@
 #include <NovelCVLib\Apps\BloodCells\AngleDirMgrColl_Context.h>
 #include <NovelCVLib\Ncv\ImgSizeRotationColl.h>
 
+//#include <NovelCVLib\Ncv\PixelLink.h>
+//#include <NovelCVLib\Ncv\PixelLinkType.h>
+//#include <NovelCVLib\Ncv\PixelLinkTypes.h>
+#include <NovelCVLib\Ncv\PixelLinkOwner.h>
+#include <NovelCVLib\Ncv\PixelLinkUtil.h>
+#include <NovelCVLib\Ncv\PixelLinkDefs.h>
+
 
 namespace Ncv
 {
@@ -70,6 +77,8 @@ namespace Ncv
 		protected:
 
 			void Prepare();
+			void InitPixelLinksForOwnerOnImgFrame(int x, int y,
+				const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & ploAcc, Size_2D & imgSize);
 			void TryPixelLinkStuff();
 			void DisplayNormAvgStandiv_Dir_Img();
 			void DisplayStandiv2_Dir_Img();

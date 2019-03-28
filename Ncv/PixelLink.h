@@ -19,21 +19,26 @@ namespace Ncv
     {
         public:
 
-			void Init(const PixelLinkType * a_pType, T_LinkOwner * a_pPeer, bool a_exists)
+			void Init(const PixelLinkType * a_pType, T_LinkOwner * a_pOwner, T_LinkOwner * a_pPeerOwner, bool a_exists)
 			{
-				m_pType = a_pType;
-				m_pPeer = a_pPeer;
+				m_pType = (PixelLinkType *)a_pType;
+				m_pOwner = a_pOwner;
+				m_pPeerOwner = a_pPeerOwner;
 				m_exists = a_exists;
 			}
 
 			const PixelLinkType & GetType() const { return *m_pType; }
 
-			T_LinkOwner * GetPeerPtr() const { return m_pPeer; }
+			T_LinkOwner * GetOwnerPtr() const { return m_pOwner; }
+			T_LinkOwner * GetPeerOwnerPtr() const { return m_pPeerOwner; }
+
+			bool Exists() const { return m_exists; }
 
 	private:
 
 		PixelLinkType * m_pType;
-		T_LinkOwner * m_pPeer;
+		T_LinkOwner * m_pOwner;
+		T_LinkOwner * m_pPeerOwner;
 		bool m_exists;
 
 

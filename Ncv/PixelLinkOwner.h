@@ -16,23 +16,36 @@ namespace Ncv
 	using namespace Ncpp;
 
 
-	template<class T_LinkOwnerEx, class T_Elm, class T_PixelLinkEx>
+	//template<class T_LinkOwnerEx, class T_Elm, class T_PixelLinkEx>
+	template<class T_Elm, class T_PixelLinkEx>
     class PixelLinkOwner
     {
         public:
+
+			PixelLinkOwner()
+			{
+				//	This is a necessary workaround to avoid error C2440.
+				m_linksHeadPtr = m_links;
+			}
 
 			void SetElm(T_Elm * a_pElm)
 			{
 				m_pElm = a_pElm;
 			}
 
-			//PixelLink<T_LinkOwnerEx> & GetLinkAt(PixelLinkIndex a_index) const { return GetLinkAt((int)a_index); }
-			T_PixelLinkEx & GetLinkAt(PixelLinkIndex a_index) const { return GetLinkAt((int)a_index); }
 			
 
-			//PixelLink<T_LinkOwnerEx> & GetLinkAt(int a_index) const { return m_links[a_index]; }
-			T_PixelLinkEx & GetLinkAt(int a_index) const { return m_links[a_index]; }
+			//T_PixelLinkEx & GetLinkAt(int a_index) const
+			T_PixelLinkEx & GetLinkAt(PixelLinkIndex a_index) const
+			{ 
+				Ncpp_ASSERT(a_index >= 0 && a_index < NOF_ALL_PIXEL_LINK_TYPES);
 
+				//T_PixelLinkEx & rLink = *((T_PixelLinkEx *)&m_links[a_index]);
+				//return rLink;
+
+				return m_linksHeadPtr[a_index]; 
+			}
+			
 
 			T_Elm * GetElmPtr() const { return m_pElm; }
 
@@ -40,7 +53,13 @@ namespace Ncv
 
 	private:
 
-		PixelLink<T_LinkOwnerEx> m_links[NOF_ALL_PIXEL_LINK_TYPES];
+		//PixelLink<T_LinkOwnerEx> m_links[NOF_ALL_PIXEL_LINK_TYPES];
+
+		T_PixelLinkEx m_links[NOF_ALL_PIXEL_LINK_TYPES];
+		//T_PixelLinkEx m_links[8];
+		
+		T_PixelLinkEx * m_linksHeadPtr;
+
 		T_Elm * m_pElm;
 
     };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <NovelCVLib\Common\commonLib.h>
+#include <NovelCVLib\Ncv\ConflictInfo2.h>
 
 
 
@@ -260,8 +261,10 @@ namespace Ncv
 		}
 
 		template<class T>
-		bool CalcConflict2(const T & a_avg_1, const float a_avg_MagSqr_1, const float a_normStandev_1,
-			const T & a_avg_2, const float a_avg_MagSqr_2, const float a_normStandev_2, const float a_normStandev_c)
+		//bool CalcConflict2(const T & a_avg_1, const float a_avg_MagSqr_1, const float a_normStandev_1,
+		void CalcConflict2(const T & a_avg_1, const float a_avg_MagSqr_1, const float a_normStandev_1,
+			const T & a_avg_2, const float a_avg_MagSqr_2, const float a_normStandev_2, const float a_normStandev_c,
+			ConflictInfo2 * a_pOut)
 		{
 			AssertValue(a_avg_1);
 			AssertValue(a_avg_MagSqr_1);
@@ -288,7 +291,12 @@ namespace Ncv
 			float standev_MaxSide = (standev_1 > standev_2) ? standev_1 : standev_2;
 			//float standev_MaxSide = (standev_1 > standev_2) ? standev_1 : standev_2;
 
-			if (standev_12 > 20 && standev_12 > standev_MaxSide * 2
+			a_pOut->DiffVal = standev_12 - standev_MaxSide;
+
+
+			//if (standev_12 > 20 && standev_12 > standev_MaxSide * 2
+			if (standev_12 > 20 && standev_12 > standev_MaxSide * 3
+			//if (standev_12 > 20 && standev_12 > standev_MaxSide * 4
 			//if (standev_12 > 30 && standev_12 > standev_MaxSide * 2
 				//&& standev_12 > a_normStandev_1 * 3
 				//&& standev_12 > a_normStandev_2 * 3
@@ -303,14 +311,17 @@ namespace Ncv
 					//&& standev_12 > a_normStandev_c * 3
 					))
 				{
-					return false;
+					//return false;
+					a_pOut->Exists = false;
 				}
 
-				return true;
+				//return true;
+				a_pOut->Exists = true;
 			}
 			else
 			{
-				return false;
+				//return false;
+				a_pOut->Exists = false;
 			}
 		}
 
