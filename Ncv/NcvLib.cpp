@@ -99,6 +99,7 @@
 #include <NovelCVLib\Apps\BloodCells\PixelInfo_1.cpp>
 
 #include <NovelCVLib\Ncv\PixelLinkTypes.cpp>
+#include <NovelCVLib\Ncv\F32PixelLink3C_Util.cpp>
 
 
 

@@ -30,7 +30,10 @@
 #include <NovelCVLib\Ncv\PixelLinkTypes.h>
 #include <NovelCVLib\Ncv\PixelLinkOwner.h>
 #include <NovelCVLib\Ncv\PixelLinkUtil.h>
+#include <NovelCVLib\Ncv\CoreSharedPixelLinkDiffMag_Initializer.h>
 
+
+#include <NovelCVLib\Ncv\F32PixelLink3C_Util.h>
 
 #include <NovelCVLib\Ncv\LineOperations2.h>
 

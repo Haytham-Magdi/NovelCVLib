@@ -14,18 +14,16 @@ namespace Ncv
 {
 	using namespace Ncpp;
 
-	template<class T_LinkOwner, class T_CoreSharedPixelLink>
+	template<class T_LinkOwner>
     class PixelLink
     {
         public:
 
-			void Init(const PixelLinkType * a_pType, T_LinkOwner * a_pOwner, T_LinkOwner * a_pPeerOwner,
-				T_CoreSharedPixelLink * a_pCoreSharedLink, bool a_exists)
+			void Init(const PixelLinkType * a_pType, T_LinkOwner * a_pOwner, T_LinkOwner * a_pPeerOwner, bool a_exists)
 			{
 				m_pType = (PixelLinkType *)a_pType;
 				m_pOwner = a_pOwner;
 				m_pPeerOwner = a_pPeerOwner;
-				m_pCoreSharedLink = a_pCoreSharedLink;
 				m_exists = a_exists;
 			}
 
@@ -34,10 +32,6 @@ namespace Ncv
 			T_LinkOwner * GetOwnerPtr() const { return m_pOwner; }
 			T_LinkOwner * GetPeerOwnerPtr() const { return m_pPeerOwner; }
 
-			bool IsPrimary() { return m_pType->GetIndex() < NOF_PRIMARY_PIXEL_LINK_TYPES; }
-
-			T_CoreSharedPixelLink * GetCoreSharedLink() const { return m_pCoreSharedLink; }
-
 			bool Exists() const { return m_exists; }
 
 	private:
@@ -45,7 +39,6 @@ namespace Ncv
 		PixelLinkType * m_pType;
 		T_LinkOwner * m_pOwner;
 		T_LinkOwner * m_pPeerOwner;
-		T_CoreSharedPixelLink * m_pCoreSharedLink;
 		bool m_exists;
 
 
