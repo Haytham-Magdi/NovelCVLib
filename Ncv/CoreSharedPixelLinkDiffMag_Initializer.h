@@ -15,8 +15,8 @@
 
 namespace Ncv
 {
-	namespace PixelLinkUtil
-	{
+	//namespace PixelLinkUtil
+	//{
 
 		using namespace Ncpp;
 
@@ -30,7 +30,7 @@ namespace Ncv
 			{
 				Ncpp_ASSERT(a_primaryLink.IsPrimary());
 
-				T_CoreSharedPixelLink * pCoreLink = a_primaryLink.GetCoreSharedLink();
+				T_CoreSharedPixelLink * pCoreLink = a_primaryLink.GetCoreSharedLinkPtr();
 				T_PixelLinkOwner * pLinkOwner = a_primaryLink.GetOwnerPtr();
 				T_PixelLinkOwner * pLinkPeerOwner = a_primaryLink.GetPeerOwnerPtr();
 
@@ -43,6 +43,6 @@ namespace Ncv
 		};
 
 
-	}
+	//}
 
 }

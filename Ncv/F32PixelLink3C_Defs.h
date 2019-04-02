@@ -9,6 +9,10 @@
 #include <NovelCVLib\Common\Object.h>
 
 #include <NovelCVLib\Ncv\PixelLinkOwner.h>
+#include <NovelCVLib\Ncv\CoreSharedPixelLinkDiffMag_Initializer.h>
+#include <NovelCVLib\Ncv\F32SimpleCoreSharedPixelLink.h>
+
+
 
 namespace Ncv
 {
@@ -18,30 +22,27 @@ namespace Ncv
 	class F32PixelLinkOwner3C;
 
 
-	class F32CoreSharedPixelLink3C
-	{
-	public:
 
-		float DiffMag;
-	};
+	typedef PixelLink<F32PixelLinkOwner3C, F32SimpleCoreSharedPixelLink> F32PixelLink3C;
 
+	//class F32PixelLink3C : public PixelLink<F32PixelLinkOwner3C, F32SimpleCoreSharedPixelLink>
+	//{
 
-	class F32PixelLink3C : public PixelLink<F32PixelLinkOwner3C, F32CoreSharedPixelLink3C>
-	{
-
-	};
+	//};
 
 
-	//class F32PixelLinkOwner3C : public PixelLinkOwner<F32PixelLinkOwner3C, F32ColorVal, F32PixelLink3C>
-	class F32PixelLinkOwner3C : public PixelLinkOwner<F32ColorVal, F32PixelLink3C, F32CoreSharedPixelLink3C>
+	class F32PixelLinkOwner3C : public PixelLinkOwner<F32ColorVal, F32PixelLink3C, F32SimpleCoreSharedPixelLink>
 	{
 
 
 	};
 
 
-	//typedef PixelLinkOwner<F32ColorVal> F32PixelLinkOwner3C;
+	//typedef PixelLinkOwner<F32ColorVal, F32PixelLink3C, F32SimpleCoreSharedPixelLink> F32PixelLinkOwner3C;
 
+
+
+	typedef CoreSharedPixelLinkDiffMag_Initializer<F32PixelLinkOwner3C, F32ColorVal, F32PixelLink3C, F32SimpleCoreSharedPixelLink > F32CoreSharedPixelLink3C_DiffMagSimpleInitializer;
 
 
 }

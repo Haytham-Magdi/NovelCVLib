@@ -51,6 +51,7 @@ namespace Ncv
 					rLink.Init(&plType, &rPlo, &rPeerPlo, &rCoreSharedLink, true);
 					//CoreSharedPixelLinkDiffMag_Initializer<T_PixelLinkOwner, T_Elm, T_PixelLink, T_CoreSharedPixelLink>::InitCoreLink(rLink);
 					T_CoreSharedPixelLinkInitializer::InitCoreLink(rLink);
+					//T_CoreSharedPixelLinkInitializer<T_PixelLinkOwner, T_Elm, T_PixelLink, T_CoreSharedPixelLink>::InitCoreLink(rLink);
 
 					T_PixelLink & rPeerReverseLink = rPeerPlo.GetLinkAt(plType.GetReverseIndex());
 					rPeerReverseLink.Init(&plPeerType, &rPeerPlo, &rPlo, &rCoreSharedLink, true);
@@ -61,7 +62,25 @@ namespace Ncv
 					rLink.Init(&plType, &rPlo, nullptr, nullptr, false);
 				}
 
-			}	//	end Index for	
+			}	//	end Primary Index for	
+
+
+			for (int i = NOF_PRIMARY_PIXEL_LINK_TYPES; i < NOF_ALL_PIXEL_LINK_TYPES; i++)
+			{
+				const PixelLinkIndex linkIndex = (PixelLinkIndex)i;
+
+				PixelLinkType & plType = PixelLinkTypes::GetAt(linkIndex);
+
+				S32Point shiftedPnt(x + plType.GetShiftX(), y + plType.GetShiftY());
+				const bool isShiftedPntInSize = shiftedPnt.IsInSize(imgSize);
+
+				if (!isShiftedPntInSize)
+				{
+					T_PixelLink & rLink = rPlo.GetLinkAt(plType.GetIndex());
+					rLink.Init(&plType, &rPlo, nullptr, nullptr, false);
+				}
+
+			}	//	end Reverse Index for	
 
 		}
 
@@ -148,6 +167,7 @@ namespace Ncv
 
 						T_PixelLink & rLink = rPlo.GetLinkAt(plType.GetIndex());
 						rLink.Init(&plType, &rPlo, &rPeerPlo, &rCoreSharedLink, true);
+						T_CoreSharedPixelLinkInitializer::InitCoreLink(rLink);
 
 						T_PixelLink & rPeerReverseLink = rPeerPlo.GetLinkAt(plType.GetReverseIndex());
 						rPeerReverseLink.Init(&plPeerType, &rPeerPlo, &rPlo, &rCoreSharedLink, true);

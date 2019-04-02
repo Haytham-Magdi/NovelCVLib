@@ -36,7 +36,7 @@ namespace Ncv
 
 			bool IsPrimary() { return m_pType->GetIndex() < NOF_PRIMARY_PIXEL_LINK_TYPES; }
 
-			T_CoreSharedPixelLink * GetCoreSharedLink() const { return m_pCoreSharedLink; }
+			T_CoreSharedPixelLink * GetCoreSharedLinkPtr() const { return m_pCoreSharedLink; }
 
 			bool Exists() const { return m_exists; }
 

@@ -596,7 +596,66 @@ namespace Ncv
 		{
 			AngleDirMgrColl_Context & cx = *m_context_H;
 
-			F32PixelLink3C_Util::TryPixelLinkStuff<F32PixelLinkOwner3C, F32ColorVal, F32PixelLink3C, F32CoreSharedPixelLink3C>(cx.m_org_Img);
+			////F32PixelLink3C_Util::TryPixelLinkStuff<F32PixelLinkOwner3C, F32ColorVal, F32PixelLink3C, F32SimpleCoreSharedPixelLink>(cx.m_org_Img);
+			//F32PixelLink3C_Util::TryPixelLinkStuff(cx.m_org_Img);
+
+			ArrayHolder_2D_Ref<F32PixelLinkOwner3C> pixelLinkOwnerHolder =
+				PixelLinkUtil::GenPixelLinkOwnerHolder<F32PixelLinkOwner3C, F32ColorVal, F32PixelLink3C, F32SimpleCoreSharedPixelLink,
+				F32CoreSharedPixelLink3C_DiffMagSimpleInitializer>(cx.m_org_Img->AsHolderRef());
+
+			const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & ploAcc = pixelLinkOwnerHolder->GetActualAccessor();
+			const ActualArrayAccessor_1D<F32PixelLinkOwner3C> ploAcc_1D = ploAcc.GenAcc_1D();
+
+			F32ImageRef dspImg = F32Image::Create(toCvSize(ploAcc.GetSize()), 1);
+			//const int nSize_1D = ploAcc.CalcSize_1D();
+
+			ActualArrayAccessor_1D<float> dispAcc_1D((float *)dspImg->GetDataPtr(), dspImg->GetSize1D());
+			MaxFinder<float> maxFind(0.0f);
+
+			for (int i = 0; i < ploAcc_1D.GetSize(); i++)
+			{
+				F32PixelLinkOwner3C & rPlo = ploAcc_1D[i];
+
+				float & rDispElm = dispAcc_1D[i];
+
+				//int maxLinkDiff = 0;
+				maxFind.Reset();
+
+				for (int j = 0; j < NOF_ALL_PIXEL_LINK_TYPES; j++)
+				//for (int j = 0; j < NOF_PRIMARY_PIXEL_LINK_TYPES; j++)
+				{
+
+					//F32PixelLink3C & rLink = rPlo.GetLinkAt(PixelLinkIndex::RC);
+					F32PixelLink3C & rLink = rPlo.GetLinkAt((PixelLinkIndex)j);
+					if (!rLink.Exists())
+					{
+						//rDispElm = 0;
+						continue;
+					}
+
+					const float linkDiff = rLink.GetCoreSharedLinkPtr()->DiffMag;
+
+					//if (linkDiff > maxLinkDiff)
+					//{
+					//	maxLinkDiff = linkDiff;
+					//}
+
+					maxFind.PushValue(linkDiff);
+				}
+
+				//rDispElm = rLink.GetCoreSharedLinkPtr()->DiffMag;
+				//rDispElm = maxLinkDiff;
+
+				Ncpp_ASSERT(maxFind.FindMax() >= 0.0f);
+				rDispElm = maxFind.FindMax();
+			}
+
+			ShowImage(dspImg, "TryPixelLinkStuff");
+
+
+
+			SimplePixelRgn pixelRgn1;
+
 
 		}
 

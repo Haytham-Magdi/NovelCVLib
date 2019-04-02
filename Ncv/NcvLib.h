@@ -32,7 +32,12 @@
 #include <NovelCVLib\Ncv\PixelLinkUtil.h>
 #include <NovelCVLib\Ncv\CoreSharedPixelLinkDiffMag_Initializer.h>
 
+#include <NovelCVLib\Ncv\PixelRgn.h>
+#include <NovelCVLib\Ncv\SimplePixelRgn.h>
 
+
+#include <NovelCVLib\Ncv\F32SimpleCoreSharedPixelLink.h>
+#include <NovelCVLib\Ncv\F32PixelLink3C_Defs.h>
 #include <NovelCVLib\Ncv\F32PixelLink3C_Util.h>
 
 #include <NovelCVLib\Ncv\LineOperations2.h>

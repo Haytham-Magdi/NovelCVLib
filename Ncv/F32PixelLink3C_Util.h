@@ -25,15 +25,16 @@ namespace Ncv
 		
 
 
-		template<class F32PixelLinkOwner3C, class T_Elm, class T_PixelLink, class T_CoreSharedPixelLink >
+		//template<class F32PixelLinkOwner3C, class T_Elm, class T_PixelLink, class T_CoreSharedPixelLink >
 		//void TryPixelLinkStuff(const ActualArrayAccessor_2D<F32ColorVal> & srcElmAcc)
-		void TryPixelLinkStuff(F32ImageArrayHolder3C_Ref src_Img)
-		{
-			ArrayHolder_2D_Ref<F32PixelLinkOwner3C> pixelLinkOwnerHolder = 
-				PixelLinkUtil::GenPixelLinkOwnerHolder<F32PixelLinkOwner3C, F32ColorVal, F32PixelLink3C, F32CoreSharedPixelLink3C,
-				CoreSharedPixelLinkDiffMag_Initializer<F32PixelLinkOwner3C, F32ColorVal, F32PixelLink3C, F32CoreSharedPixelLink3C >> (src_Img->AsHolderRef());
+		void TryPixelLinkStuff(F32ImageArrayHolder3C_Ref src_Img);
+		//{
+		//	ArrayHolder_2D_Ref<F32PixelLinkOwner3C> pixelLinkOwnerHolder = 
+		//		PixelLinkUtil::GenPixelLinkOwnerHolder<F32PixelLinkOwner3C, F32ColorVal, F32PixelLink3C, F32SimpleCoreSharedPixelLink,
+		//		F32CoreSharedPixelLink3C_DiffMagSimpleInitializer> (src_Img->AsHolderRef());
+		//		//CoreSharedPixelLinkDiffMag_Initializer > (src_Img->AsHolderRef());
 
-		}
+		//}
 
 
 	}
