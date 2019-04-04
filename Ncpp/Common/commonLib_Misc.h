@@ -46,6 +46,7 @@
 #include <NovelCVLib\Ncpp\Common\Window.h>
 #include <NovelCVLib\Ncpp\Common\PtrIterator2.h>
 #include <NovelCVLib\Ncpp\Common\MultiListQueMgr.h>
+#include <NovelCVLib\Ncpp\Common\CommonMultiListQueMember.h>
 #include <NovelCVLib\Ncpp\Common\MaxFinder.h>
 #include <NovelCVLib\Ncpp\Common\MinFinder.h>
 #include <NovelCVLib\Ncpp\Common\AvgFinder.h>

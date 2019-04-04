@@ -25,6 +25,7 @@
 
 #include <NovelCVLib\Ncv\F32PixelLink3C_Util.h>
 
+#include <NovelCVLib\Ncv\SimplePixelRgn.h>
 
 
 //#define M_PI 3.14159265358979323846
@@ -327,7 +328,11 @@ namespace Ncv
 			//}
 
 
-			TryPixelLinkStuff();
+			//TryPixelLinkStuff();
+
+			//TryPixelLinkMerging();
+			
+			TryEdgeTracking1();
 
 			DisplayNormAvgStandiv_Dir_Img();
 			
@@ -654,10 +659,128 @@ namespace Ncv
 
 
 
-			SimplePixelRgn pixelRgn1;
 
 
 		}
+
+
+		void AngleDirMgrColl::TryPixelLinkMerging()
+		{
+			AngleDirMgrColl_Context & cx = *m_context_H;
+
+
+			//SimplePixelRgn pixelRgn1;
+
+			ArrayHolder_2D_Ref<SimplePixelRgn> pixelRgnHolder = ArrayHolderUtil::CreateEmptyFrom<SimplePixelRgn>(cx.m_org_Img->AsHolderRef());
+			const ActualArrayAccessor_1D<SimplePixelRgn> pixelRgnAcc_1D = pixelRgnHolder->GetActualAccessor().GenAcc_1D();
+			const SimplePixelRgn * pixelRgnHeadPtr = pixelRgnAcc_1D.GetData();
+
+
+			ArrayHolder_2D_Ref<F32PixelLinkOwner3C> pixelLinkOwnerHolder =
+				PixelLinkUtil::GenPixelLinkOwnerHolder<F32PixelLinkOwner3C, F32ColorVal, F32PixelLink3C, F32SimpleCoreSharedPixelLink,
+				F32CoreSharedPixelLink3C_DiffMagSimpleInitializer>(cx.m_org_Img->AsHolderRef());
+
+			const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & ploAcc = pixelLinkOwnerHolder->GetActualAccessor();
+			const ActualArrayAccessor_1D<F32PixelLinkOwner3C> ploAcc_1D = ploAcc.GenAcc_1D();
+			const F32PixelLinkOwner3C * linkOwnerHeadPtr = ploAcc_1D.GetData();
+
+
+			const float mergeThreshold = 3.0f;
+			//const float mergeThreshold = 5.0f;
+			//const float mergeThreshold = 12.0f;
+			//const float mergeThreshold = 18.0f;
+
+			for (int i = 0; i < ploAcc_1D.GetSize(); i++)
+			{
+				F32PixelLinkOwner3C & rPlo = ploAcc_1D[i];
+
+				for (int j = 0; j < NOF_PRIMARY_PIXEL_LINK_TYPES; j++)
+				{
+					F32PixelLink3C & rLink = rPlo.GetLinkAt((PixelLinkIndex)j);
+					if (!rLink.Exists())
+					{
+						continue;
+					}
+
+
+					const int ownerIndex1 = rLink.GetOwnerPtr() - linkOwnerHeadPtr;
+					const int ownerIndex2 = rLink.GetPeerOwnerPtr() - linkOwnerHeadPtr;
+
+					SimplePixelRgn & rRgn1 = pixelRgnAcc_1D[ownerIndex1];
+					SimplePixelRgn & rRgn2 = pixelRgnAcc_1D[ownerIndex2];
+
+					if (SimplePixelRgn::DoBothRgnsHaveTheSameRoot(rRgn1, rRgn2))
+					{
+						continue;
+					}
+
+					const float linkDiffMag = rLink.GetCoreSharedLinkPtr()->DiffMag;
+					if (linkDiffMag > mergeThreshold)
+					{
+						continue;
+					}
+
+					SimplePixelRgn::MergeRgns(rRgn1, rRgn2);
+				
+				}	//	end j for.
+
+			}	//	end i for.
+
+
+
+//------------------
+
+
+			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(pixelRgnHolder->GetActualSize()), 3);
+			//ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
+			ActualArrayAccessor_2D<F32ColorVal> coloredDispAcc((F32ColorVal *)dspImg_Colored->GetDataPtr(), pixelRgnHolder->GetActualSize());
+
+			PixelRgnUtil::PrepareRandomColorRepForRgns<SimplePixelRgn>(
+				pixelRgnHolder->GetActualAccessor(), coloredDispAcc);
+
+			ShowImage(dspImg_Colored, "pixelRgnHolder");
+		}
+
+
+		void AngleDirMgrColl::TryEdgeTracking1()
+		{
+			AngleDirMgrColl_Context & cx = *m_context_H;
+
+
+			//SimplePixelRgn pixelRgn1;
+
+			ArrayHolder_2D_Ref<SimplePixelRgn> pixelRgnHolder = ArrayHolderUtil::CreateEmptyFrom<SimplePixelRgn>(cx.m_org_Img->AsHolderRef());
+
+			//const ActualArrayAccessor_1D<SimplePixelRgn> pixelRgnAcc_1D = pixelRgnHolder->GetActualAccessor().GenAcc_1D();
+			//const SimplePixelRgn * pixelRgnHeadPtr = pixelRgnAcc_1D.GetData();
+
+
+			ArrayHolder_2D_Ref<F32PixelLinkOwner3C> pixelLinkOwnerHolder =
+				PixelLinkUtil::GenPixelLinkOwnerHolder<F32PixelLinkOwner3C, F32ColorVal, F32PixelLink3C, F32SimpleCoreSharedPixelLink,
+				F32CoreSharedPixelLink3C_DiffMagSimpleInitializer>(cx.m_org_Img->AsHolderRef());
+
+			//const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & ploAcc = pixelLinkOwnerHolder->GetActualAccessor();
+			//const ActualArrayAccessor_1D<F32PixelLinkOwner3C> ploAcc_1D = ploAcc.GenAcc_1D();
+			//const F32PixelLinkOwner3C * linkOwnerHeadPtr = ploAcc_1D.GetData();
+
+
+			EdgeTrackingMgr1 edm1;
+			edm1.Proceed(pixelLinkOwnerHolder->GetActualAccessor(), pixelRgnHolder->GetActualAccessor());
+
+
+			//------------------
+
+
+			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(pixelRgnHolder->GetActualSize()), 3);
+			//ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
+			ActualArrayAccessor_2D<F32ColorVal> coloredDispAcc((F32ColorVal *)dspImg_Colored->GetDataPtr(), pixelRgnHolder->GetActualSize());
+
+			PixelRgnUtil::PrepareRandomColorRepForRgns<SimplePixelRgn>(
+				pixelRgnHolder->GetActualAccessor(), coloredDispAcc);
+
+			ShowImage(dspImg_Colored, "TryEdgeTracking1");
+		}
+
 
 
 		void AngleDirMgrColl::DisplayStandiv2_Dir_Img()

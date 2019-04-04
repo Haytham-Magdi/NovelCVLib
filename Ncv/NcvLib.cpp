@@ -101,6 +101,9 @@
 #include <NovelCVLib\Ncv\PixelLinkTypes.cpp>
 #include <NovelCVLib\Ncv\F32PixelLink3C_Util.cpp>
 
+#include <NovelCVLib\Ncv\EdgeTrackingMgr1.cpp>
+
+
 
 
 

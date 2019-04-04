@@ -21,10 +21,10 @@ namespace Ncpp
 
 		void Init(int a_nofQues)
 		{
-			m_pushVect.SetSize(a_nofQues);
-			m_popVect.SetSize(a_nofQues);
+			m_pushVect.InitSize(a_nofQues);
+			m_popVect.InitSize(a_nofQues);
 
-			for(int i=0; i<a_nofQues; i++)
+			for (int i = 0; i<a_nofQues; i++)
 			{
 				m_pushVect[i] = nullptr;
 				m_popVect[i] = nullptr;

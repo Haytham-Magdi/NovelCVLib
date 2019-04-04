@@ -34,6 +34,9 @@
 
 #include <NovelCVLib\Ncv\PixelRgn.h>
 #include <NovelCVLib\Ncv\SimplePixelRgn.h>
+#include <NovelCVLib\Ncv\PixelRgnUtil.h>
+
+#include <NovelCVLib\Ncv\EdgeTrackingMgr1.h>
 
 
 #include <NovelCVLib\Ncv\F32SimpleCoreSharedPixelLink.h>

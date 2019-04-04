@@ -551,7 +551,8 @@ namespace Ncv
 
 				Calc_NormAvgStandevImage_X(cx.m_org_Img->GetVirtAccessor().GenTranspose(), cx.m_magSqr_Img->GetVirtAccessor().GenTranspose(),
 					//normStandev_X_Img->GetVirtAccessor().GenTranspose(), Range<int>::New(-2, 2), Range<int>::New(0, 0));
-					normStandev_X_Img->GetVirtAccessor().GenTranspose(), Range<int>::New(-1, 1), Range<int>::New(0, 0));
+					//normStandev_X_Img->GetVirtAccessor().GenTranspose(), Range<int>::New(-1, 1), Range<int>::New(0, 0));
+				normStandev_X_Img->GetVirtAccessor().GenTranspose(), Range<int>::New(0, 0), Range<int>::New(0, 0));
 
 			}
 

@@ -80,6 +80,8 @@ namespace Ncv
 
 			void Prepare();
 			void TryPixelLinkStuff();
+			void TryPixelLinkMerging();
+			void TryEdgeTracking1();
 			void DisplayNormAvgStandiv_Dir_Img();
 			void DisplayStandiv2_Dir_Img();
 			void DisplayBidiffInfo_Dir_Img();

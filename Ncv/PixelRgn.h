@@ -33,7 +33,7 @@ namespace Ncv
 				}
 				else
 				{
-					m_pRoot = m_pRoot->GetRootAfterUpdating();
+					m_pRoot = m_pRoot->GetRootAfterNecessaryUpdating();
 					return m_pRoot;
 				}
 			}
@@ -60,9 +60,10 @@ namespace Ncv
 				T_PixelRgnEx::MergeRgnDataIntoAnother(*pMinRoot, *pMaxRoot);
 			}
 
+			bool IsSelfRoot() const { return this == m_pRoot; }
+
 	private:
 
-		bool IsSelfRoot() { return this == m_pRoot; }
 
 		static void MergeRgnDataIntoAnother(T_PixelRgnEx & a_destRgn, const T_PixelRgnEx & a_srcRgn)
 		{
