@@ -37,6 +37,8 @@ namespace Ncv
 				T_Elm tmpElm;
 				Subtract(*pLinkOwner->GetElmPtr(), *pLinkPeerOwner->GetElmPtr(), &tmpElm);
 				Assign(&pCoreLink->DiffMag, CalcMag(tmpElm));
+				
+				pCoreLink->IsProcessed = false;
 			}
 
 

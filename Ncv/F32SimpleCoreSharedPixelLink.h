@@ -19,6 +19,7 @@ namespace Ncv
 	public:
 
 		float DiffMag;
+		bool IsProcessed;
 	};
 
 

@@ -26,7 +26,8 @@ namespace Ncv
 		
 		}
 
-		T & ProvideNewElement()
+		//T & ProvideNewElement()
+		T * ProvideNewElementPtr()
 		{
 			if (!GetLastAllocVectPtr()->HasFreeCapacity())
 			{
@@ -44,7 +45,7 @@ namespace Ncv
 
 		FixedVector<T> * GetAllocVectorPtrAt(int a_index)
 		{
-			return m_vectOfAllocVectors.GetAt();
+			return m_vectOfAllocVectors.GetAt(a_index);
 		}
 
 		~MultiAllocCollection()

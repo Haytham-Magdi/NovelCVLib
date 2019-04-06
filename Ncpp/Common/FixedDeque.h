@@ -37,9 +37,14 @@ namespace Ncpp
 			}
 		}
 
-		int GetSize() { return m_size; }
+		int GetSize() const { return m_size; }
 
-		int GetCapacity() { return m_capacity; }
+		int GetCapacity() const { return m_capacity; }
+
+		bool HasFreeCapacity() const
+		{
+			return GetSize() < GetCapacity();
+		}
 
 		void SetCapacity( int a_capacity )
 		{
@@ -67,13 +72,13 @@ namespace Ncpp
 			FixedVectorDebug::ActivateID( m_id );
 		}
 
-		T operator[](int a_pos)
+		T & operator[](int a_pos) const
 		{
 			int index = ( m_frontIdx + a_pos ) % m_capacity;
 			return m_data[index];
 		}
 
-		T GetAtRev(int a_pos)
+		T & GetAtRev(int a_pos) const
 		{
 			int index = ( m_frontIdx + m_size - 1 - a_pos ) % m_capacity;
 			return m_data[index];
@@ -95,23 +100,23 @@ namespace Ncpp
 
 			int newIdx = ( m_frontIdx + m_size ) % m_capacity;
 
-			if( 64997 == newIdx )
-				newIdx = newIdx;
+			//if( 64997 == newIdx )
+			//	newIdx = newIdx;
 
 			m_data[ newIdx ] = a_val;
 			m_size++;
 		}
 
-		T GetBack()
+		T & GetBack() const
 		{
 			int backIdx = ( m_frontIdx + m_size - 1 ) % m_capacity;
 			return m_data[ backIdx ];
 		}
 
-		T GetFront()
+		T & GetFront() const
 		{
-			if( 64997 == m_frontIdx )
-				m_frontIdx = m_frontIdx;
+			//if( 64997 == m_frontIdx )
+			//	m_frontIdx = m_frontIdx;
 
 			return m_data[ m_frontIdx ];
 		}

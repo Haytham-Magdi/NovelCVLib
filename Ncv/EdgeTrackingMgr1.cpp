@@ -90,17 +90,18 @@ namespace Ncv
 			nPushedCnt++;
 
 
-			F32PixelLink3C & rLink = *pQueMember->pInner;
-			Ncpp_ASSERT(rLink.Exists());
+			F32PixelLink3C & rMainLink = *pQueMember->pInner;
+			Ncpp_ASSERT(rMainLink.Exists());
 
-			//if (!rLink.Exists())
+			//if (!rMainLink.Exists())
 			//{
 			//	continue;
 			//}
 
+			rMainLink.GetCoreSharedLinkPtr()->IsProcessed = true;
 
-			const int ownerIndex1 = rLink.GetOwnerPtr() - linkOwnerHeadPtr;
-			const int ownerIndex2 = rLink.GetPeerOwnerPtr() - linkOwnerHeadPtr;
+			const int ownerIndex1 = rMainLink.GetOwnerPtr() - linkOwnerHeadPtr;
+			const int ownerIndex2 = rMainLink.GetPeerOwnerPtr() - linkOwnerHeadPtr;
 
 			SimplePixelRgn & rRgn1 = pixelRgnAcc_1D[ownerIndex1];
 			SimplePixelRgn & rRgn2 = pixelRgnAcc_1D[ownerIndex2];
@@ -110,15 +111,108 @@ namespace Ncv
 				continue;
 			}
 
-			const float linkDiffMag = rLink.GetCoreSharedLinkPtr()->DiffMag;
-			if (linkDiffMag > mergeThreshold)
+			Ncpp_ASSERT(!SimplePixelRgn::DoBothRgnsHaveTheSameRoot(rRgn1, rRgn2));
+
+			const F32PixelLinkOwner3C & rMainLinkOwner = *rMainLink.GetOwnerPtr();
+			const F32PixelLinkOwner3C & rMainLinkPeerOwner = *rMainLink.GetPeerOwnerPtr();
+
+			const float mainLinkDiffMag = rMainLink.GetCoreSharedLinkPtr()->DiffMag;
+
+			Ncpp_ASSERT(!SimplePixelRgn::DoBothRgnsHaveTheSameRoot(rRgn1, rRgn2));
+
+			for (int i = 0; i < NOF_ALL_PIXEL_LINK_TYPES; i++)
 			{
-				continue;
-			}
+				Ncpp_ASSERT(!SimplePixelRgn::DoBothRgnsHaveTheSameRoot(rRgn1, rRgn2));
 
-			SimplePixelRgn::MergeRgns(rRgn1, rRgn2);
+				F32PixelLink3C & rOwnerSideLink = rMainLinkOwner.GetLinkAt((PixelLinkIndex)i);
+
+				if (!rOwnerSideLink.Exists())
+				{
+					continue;
+				}
+
+				if (rOwnerSideLink.GetCoreSharedLinkPtr() == rMainLink.GetCoreSharedLinkPtr())
+				{
+					continue;
+				}
+				Ncpp_ASSERT(rOwnerSideLink.GetPeerOwnerPtr() != &rMainLinkPeerOwner);
+
+				if (!rOwnerSideLink.GetCoreSharedLinkPtr()->IsProcessed)
+				{
+					continue;
+				}
+
+				const float ownerLinkDiffMag = rOwnerSideLink.GetCoreSharedLinkPtr()->DiffMag;
 
 
+				for (int j = 0; j < NOF_ALL_PIXEL_LINK_TYPES; j++)
+				{
+					Ncpp_ASSERT(!SimplePixelRgn::DoBothRgnsHaveTheSameRoot(rRgn1, rRgn2));
+
+					F32PixelLink3C & rPeerOwnerSideLink = rMainLinkPeerOwner.GetLinkAt((PixelLinkIndex)j);
+
+					if (!rPeerOwnerSideLink.Exists())
+					{
+						continue;
+					}
+
+					if (rPeerOwnerSideLink.GetCoreSharedLinkPtr() == rMainLink.GetCoreSharedLinkPtr())
+					{
+						continue;
+					}
+					Ncpp_ASSERT(rPeerOwnerSideLink.GetPeerOwnerPtr() != &rMainLinkOwner);
+
+					if (!rPeerOwnerSideLink.GetCoreSharedLinkPtr()->IsProcessed)
+					{
+						continue;
+					}
+
+
+
+					if (rOwnerSideLink.GetPeerOwnerPtr() == rPeerOwnerSideLink.GetPeerOwnerPtr())
+					{
+						const float peerOwnerLinkDiffMag = rPeerOwnerSideLink.GetCoreSharedLinkPtr()->DiffMag;
+
+						//const float maxCmpRatio = 0.25f;
+						const float maxCmpRatio = 0.4f;
+
+						if (
+							//mainLinkDiffMag > 17 &&
+							ownerLinkDiffMag > 17 &&
+							(mainLinkDiffMag / ownerLinkDiffMag) < maxCmpRatio &&
+
+							peerOwnerLinkDiffMag > 17 &&
+							(mainLinkDiffMag / peerOwnerLinkDiffMag) < maxCmpRatio
+							)
+						{
+							Ncpp_ASSERT(!SimplePixelRgn::DoBothRgnsHaveTheSameRoot(rRgn1, rRgn2));
+
+							SimplePixelRgn::MergeRgns(rRgn1, rRgn2);
+							
+							//break;
+							goto Outer_While_End;
+						}
+
+					}
+
+				}	//	end j for.
+
+			}	//	end i for.
+
+
+
+
+
+			//const float mainLinkDiffMag = rLink.GetCoreSharedLinkPtr()->DiffMag;
+			//if (mainLinkDiffMag > mergeThreshold)
+			//{
+			//	continue;
+			//}
+
+			//SimplePixelRgn::MergeRgns(rRgn1, rRgn2);
+
+		Outer_While_End:
+			;
 
 		} while (nullptr != pQueMember);
 
@@ -151,8 +245,8 @@ namespace Ncv
 		//			continue;
 		//		}
 
-		//		const float linkDiffMag = rLink.GetCoreSharedLinkPtr()->DiffMag;
-		//		if (linkDiffMag > mergeThreshold)
+		//		const float mainLinkDiffMag = rLink.GetCoreSharedLinkPtr()->DiffMag;
+		//		if (mainLinkDiffMag > mergeThreshold)
 		//		{
 		//			continue;
 		//		}
