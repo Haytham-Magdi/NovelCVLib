@@ -22,7 +22,7 @@ namespace Ncpp
 
 		void Init(int a_nSize)
 		{
-			m_allocVect.SetSize( a_nSize );
+			m_allocVect.InitSize( a_nSize );
 
 			m_ptrQue.SetCapacity( a_nSize );
 

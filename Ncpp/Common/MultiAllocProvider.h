@@ -6,24 +6,27 @@
 //#include <vector>
 
 
-namespace Ncv
+//namespace Ncv
+namespace Ncpp
 {
-	using namespace Ncpp;
+	//using namespace Ncpp;
 
 	//template<class T>
-	//class MultiAllocCollection;
+	//class MultiAllocProvider;
 
 
 	template<class T>
-	class MultiAllocCollection : public Ncpp::Object
+	class MultiAllocProvider : public Ncpp::Object
 	{
 	public:
 
-		MultiAllocCollection()
+		MultiAllocProvider(const int a_firstAllocVectorCapacity, const int a_anyOtherAllocVectorCapacity = a_firstAllocVectorCapacity,
+			const int a_vectorOfAllocVectorsCapacity = 3000)
 		{
-			m_vectOfAllocVectors.SetCapacity(3000);
-			AddNewAllocVector();
-		
+			m_vectOfAllocVectors.SetCapacity(a_vectorOfAllocVectorsCapacity);
+			AddNewAllocVector(a_firstAllocVectorCapacity);
+
+			m_anyOtherAllocVectorCapacity = a_anyOtherAllocVectorCapacity;		
 		}
 
 		//T & ProvideNewElement()
@@ -31,7 +34,7 @@ namespace Ncv
 		{
 			if (!GetLastAllocVectPtr()->HasFreeCapacity())
 			{
-				AddNewAllocVector();
+				AddNewAllocVector(m_anyOtherAllocVectorCapacity);
 			}
 
 			GetLastAllocVectPtr()->IncSize();
@@ -48,7 +51,7 @@ namespace Ncv
 			return m_vectOfAllocVectors.GetAt(a_index);
 		}
 
-		~MultiAllocCollection()
+		~MultiAllocProvider()
 		{
 			for (int i = 0; i < m_vectOfAllocVectors.GetSize(); i++)
 			{
@@ -59,9 +62,9 @@ namespace Ncv
 
 	protected:
 
-		void AddNewAllocVector()
+		void AddNewAllocVector(const int a_newVectorCapacity)
 		{
-			m_pLastAllocVect = new FixedVector<T>(10000);
+			m_pLastAllocVect = new FixedVector<T>(a_newVectorCapacity);
 			m_vectOfAllocVectors.PushBack(m_pLastAllocVect);
 		}
 
@@ -74,10 +77,12 @@ namespace Ncv
 
 		FixedVector< FixedVector<T> * > m_vectOfAllocVectors;
 		FixedVector<T> * m_pLastAllocVect;
+
+		int m_anyOtherAllocVectorCapacity;
 	};
 
 	template<class T>
-	using MultiAllocCollectionRef = ObjRef< MultiAllocCollection< T >>;
+	using MultiAllocProviderRef = ObjRef< MultiAllocProvider< T >>;
 
 }
 

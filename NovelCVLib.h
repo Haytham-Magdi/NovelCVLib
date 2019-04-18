@@ -29,6 +29,7 @@
 //#include <NovelCVLib\Ncpp\Common\MinIndexFinder.h>
 //#include <NovelCVLib\Ncpp\Common\CommonAllocArrColl.h>
 //#include <NovelCVLib\Ncpp\Common\PtrPool.h>
+//#include <NovelCVLib\Ncpp\Common\ExtendableMultiAllocPtrPool.h>
 //#include <NovelCVLib\Ncpp\Common\FilePathMgr.h>
 //
 

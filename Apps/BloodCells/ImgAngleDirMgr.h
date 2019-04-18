@@ -17,9 +17,6 @@
 #include <NovelCVLib\OpenCV\ImageArrayHolderTypeDefs.h>
 
 
-//#include <NovelCVLib\Ncv\ImageLineItrProvider.h>
-//#include <NovelCVLib\Ncv\ImageItrMgr.h>
-
 #include <NovelCVLib\Ncv\ImgSizeRotation.h>
 #include <NovelCVLib\Apps\BloodCells\ImgAngleDirMgr.h>
 #include <NovelCVLib\Apps\BloodCells\AngleDirMgrColl_Context.h>

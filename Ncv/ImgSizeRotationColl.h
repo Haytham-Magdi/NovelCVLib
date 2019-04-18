@@ -9,9 +9,6 @@
 //#include <NovelCVLib\OpenCV\Channel.h>
 //#include <NovelCVLib\OpenCV\Image.h>
 
-//#include <NovelCVLib\Ncv\ImageLineItrProvider.h>
-//#include <NovelCVLib\Ncv\ImageItrMgr.h>
-
 #include <NovelCVLib\Ncv\ImgSizeRotation.h>
 
 

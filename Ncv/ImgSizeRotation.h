@@ -15,9 +15,6 @@
 //#include <NovelCVLib\OpenCV\Channel.h>
 //#include <NovelCVLib\OpenCV\Image.h>
 
-//#include <NovelCVLib\Ncv\ImageLineItrProvider.h>
-//#include <NovelCVLib\Ncv\ImageItrMgr.h>
-
 //#define M_PI 3.14159265358979323846
 #define M_PI 3.14159265358979323846f
 
