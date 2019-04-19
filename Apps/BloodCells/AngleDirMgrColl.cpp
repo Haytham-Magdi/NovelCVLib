@@ -333,6 +333,8 @@ namespace Ncv
 			//TryPixelLinkMerging();
 			
 			//TryEdgeTracking1();
+			
+			TryEdgeTracking2();
 
 			DisplayNormAvgStandiv_Dir_Img();
 			
@@ -780,6 +782,47 @@ namespace Ncv
 
 			ShowImage(dspImg_Colored, "TryEdgeTracking1");
 		}
+
+
+		void AngleDirMgrColl::TryEdgeTracking2()
+		{
+			AngleDirMgrColl_Context & cx = *m_context_H;
+
+
+			//SimplePixelRgn pixelRgn1;
+
+			ArrayHolder_2D_Ref<SimplePixelRgn> pixelRgnHolder = ArrayHolderUtil::CreateEmptyFrom<SimplePixelRgn>(cx.m_org_Img->AsHolderRef());
+
+			//const ActualArrayAccessor_1D<SimplePixelRgn> pixelRgnAcc_1D = pixelRgnHolder->GetActualAccessor().GenAcc_1D();
+			//const SimplePixelRgn * pixelRgnHeadPtr = pixelRgnAcc_1D.GetData();
+
+
+			ArrayHolder_2D_Ref<F32PixelLinkOwner3C> pixelLinkOwnerHolder =
+				PixelLinkUtil::GenPixelLinkOwnerHolder<F32PixelLinkOwner3C, F32ColorVal, F32PixelLink3C, F32SimpleCoreSharedPixelLink,
+				F32CoreSharedPixelLink3C_DiffMagSimpleInitializer>(cx.m_org_Img->AsHolderRef());
+
+			//const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & ploAcc = pixelLinkOwnerHolder->GetActualAccessor();
+			//const ActualArrayAccessor_1D<F32PixelLinkOwner3C> ploAcc_1D = ploAcc.GenAcc_1D();
+			//const F32PixelLinkOwner3C * linkOwnerHeadPtr = ploAcc_1D.GetData();
+
+
+			EdgeTrackingMgr2 edm1;
+			edm1.Proceed(pixelLinkOwnerHolder->GetActualAccessor(), pixelRgnHolder->GetActualAccessor());
+
+
+			//------------------
+
+
+			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(pixelRgnHolder->GetActualSize()), 3);
+			//ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
+			ActualArrayAccessor_2D<F32ColorVal> coloredDispAcc((F32ColorVal *)dspImg_Colored->GetDataPtr(), pixelRgnHolder->GetActualSize());
+
+			PixelRgnUtil::PrepareRandomColorRepForRgns<SimplePixelRgn>(
+				pixelRgnHolder->GetActualAccessor(), coloredDispAcc);
+
+			ShowImage(dspImg_Colored, "TryEdgeTracking2");
+		}
+
 
 
 
