@@ -19,7 +19,7 @@ namespace Ncpp
 	template<class T>
 	class ExtendableMultiAllocPtrPool : public Ncpp::Object
 	{
-	protected:
+	private:
 
 	public:
 
@@ -64,14 +64,14 @@ namespace Ncpp
 			}
 			else
 			{
-				T * ptr = m_provider.ProvideNewElementPtr();
+				T * ptr = m_provider->ProvideNewElementPtr();
 				return ptr;
 			}
 
 		}
 
 
-	protected:
+	private:
 
 
 		FixedDeque< T *> * GetBackWorkingQuePtr()
@@ -129,7 +129,7 @@ namespace Ncpp
 			m_pFrontWorkingQue = m_queOfWorkingQues.GetFront();
 		}
 
-	protected:
+	private:
 
 		int m_singleAllocCapacity;
 		int m_nofElmsInQues;

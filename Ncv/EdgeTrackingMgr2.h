@@ -28,27 +28,51 @@ namespace Ncv
 
 		public:
 
-			int SrcPixIndex;
+			void Init(int a_srcPixIndex)
+			{
+				m_srcPixIndex = a_srcPixIndex;
+			}
+
+			int GetSrcPixIndex() { return m_srcPixIndex; }
 
 			StaticAllocVector<int, 15> FavourateFriendsArr;
 
+		private:
+			
+			int m_srcPixIndex;
 		};
 
 
 	private:
 
-		class PixSpreadLink
+
+		class PixSpreadLink : public MultiListQueMember< PixSpreadLink >
 		{
 		public:
 
-			void Init(int a_srcPixIndex, int a_peerPixIndex)
+			void Init(int a_srcPixIndex, int a_peerPixIndex, PixSpreadOp * a_pSpreadOp)
 			{
-				SrcPixIndex = a_srcPixIndex;
-				PeerPixIndex = a_peerPixIndex;
+				m_srcPixIndex = a_srcPixIndex;
+				m_peerPixIndex = a_peerPixIndex;
+
+				m_pSpreadOp = a_pSpreadOp;
 			}
 
-			int SrcPixIndex;
-			int PeerPixIndex;
+		public:
+
+			int GetSrcPixIndex() { return m_srcPixIndex; }
+
+			int GetPeerPixIndex() { return m_peerPixIndex; }
+
+			PixSpreadOp * GetSpreadOp() { return m_pSpreadOp; }
+
+
+		private:
+
+			int m_srcPixIndex;
+			int m_peerPixIndex;
+			
+			PixSpreadOp * m_pSpreadOp;
 		};
 
 
@@ -61,7 +85,7 @@ namespace Ncv
 		}
 
 		void Proceed(const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & ploAcc,
-			const ActualArrayAccessor_2D<SimplePixelRgn> pixelRgnAcc);
+			const ActualArrayAccessor_2D<F32ColorVal> valuesAcc);
 
 
 
@@ -71,7 +95,7 @@ namespace Ncv
 
 	private:
 
-		ExtendableMultiAllocPtrPoolRef<EdgeTrackingMgr2::PixSpreadLink> m_spreadLinkPool;
+		ExtendableMultiAllocPtrPoolRef< EdgeTrackingMgr2::PixSpreadLink> m_spreadLinkPool;
 		MultiAllocProviderRef<EdgeTrackingMgr2::PixSpreadOp> m_spreadOpProvider;
 
     };

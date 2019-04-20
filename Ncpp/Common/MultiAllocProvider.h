@@ -20,13 +20,15 @@ namespace Ncpp
 	{
 	public:
 
-		MultiAllocProvider(const int a_firstAllocVectorCapacity, const int a_anyOtherAllocVectorCapacity = a_firstAllocVectorCapacity,
-			const int a_vectorOfAllocVectorsCapacity = 3000)
+		MultiAllocProvider(const int a_firstAllocVectorCapacity, const int a_anyOtherAllocVectorCapacity,
+			const int a_vectorOfAllocVectorsCapacity)
 		{
-			m_vectOfAllocVectors.SetCapacity(a_vectorOfAllocVectorsCapacity);
-			AddNewAllocVector(a_firstAllocVectorCapacity);
+			Init(a_firstAllocVectorCapacity, a_anyOtherAllocVectorCapacity, a_vectorOfAllocVectorsCapacity);
+		}
 
-			m_anyOtherAllocVectorCapacity = a_anyOtherAllocVectorCapacity;		
+		MultiAllocProvider(const int a_allocVectorCapacity, const int a_vectorOfAllocVectorsCapacity = 3000)
+		{
+			Init(a_allocVectorCapacity, a_allocVectorCapacity, a_vectorOfAllocVectorsCapacity);
 		}
 
 		//T & ProvideNewElement()
@@ -61,6 +63,16 @@ namespace Ncpp
 		}
 
 	protected:
+
+		void Init(const int a_firstAllocVectorCapacity, const int a_anyOtherAllocVectorCapacity,
+			const int a_vectorOfAllocVectorsCapacity)
+		{
+			m_vectOfAllocVectors.SetCapacity(a_vectorOfAllocVectorsCapacity);
+			AddNewAllocVector(a_firstAllocVectorCapacity);
+
+			m_anyOtherAllocVectorCapacity = a_anyOtherAllocVectorCapacity;
+		}
+
 
 		void AddNewAllocVector(const int a_newVectorCapacity)
 		{

@@ -33,22 +33,22 @@ namespace Ncv
 		{
 		protected:
 
-			class RgnInfo
-			{
-			public:
+			//class RgnInfo
+			//{
+			//public:
 
-				//RgnInfo * pPrev;	//	for being ListQue Entry
-			};
+			//	//RgnInfo * pPrev;	//	for being ListQue Entry
+			//};
 
-			class LinkAction_2 : public MultiListQueMember< LinkAction_2 >
-			{
-			public:
+			//class LinkAction_2 : public MultiListQueMember< LinkAction_2 >
+			//{
+			//public:
 
-				int nIndex;
+			//	int nIndex;
 
-				RgnInfo * pRgn1;
-				RgnInfo * pRgn2;
-			};
+			//	RgnInfo * pRgn1;
+			//	RgnInfo * pRgn2;
+			//};
 
 
 

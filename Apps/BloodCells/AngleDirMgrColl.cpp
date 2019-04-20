@@ -807,7 +807,7 @@ namespace Ncv
 
 
 			EdgeTrackingMgr2 edm1;
-			edm1.Proceed(pixelLinkOwnerHolder->GetActualAccessor(), pixelRgnHolder->GetActualAccessor());
+			edm1.Proceed(pixelLinkOwnerHolder->GetActualAccessor(), cx.m_org_Img->GetActualAccessor());
 
 
 			//------------------

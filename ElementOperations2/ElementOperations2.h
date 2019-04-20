@@ -105,6 +105,18 @@ namespace Ncv
 			Assign(a_pOut, a_inp1 - a_inp2);
 		}
 
+		template<class T>
+		float CalcSubtractionMag(const T & a_inp1, const T & a_inp2)
+		{
+			AssertValue(a_inp1);
+			AssertValue(a_inp2);
+
+			T tmp;
+
+			Subtract(a_inp1, a_inp2, &tmp);
+			return CalcMag(tmp);
+		}
+
 
 		template<class T>
 		void DecBy(T & a_arg, const T & a_dec)
