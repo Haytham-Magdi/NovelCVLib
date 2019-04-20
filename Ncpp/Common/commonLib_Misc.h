@@ -24,6 +24,7 @@
 #include <NovelCVLib\Ncpp\Common\IIterator.h>
 //#include <NovelCVLib\Ncpp\Common\ArrayIterator.h>
 #include <NovelCVLib\Ncpp\Common\FixedVector.h>
+#include <NovelCVLib\Ncpp\Common\StaticAllocVector.h>
 #include <NovelCVLib\Ncpp\Common\FixedDeque.h>
 #include <NovelCVLib\Ncpp\Common\CircIndex.h>
 //#include <NovelCVLib\Ncpp\Common\Accessor2D.h>

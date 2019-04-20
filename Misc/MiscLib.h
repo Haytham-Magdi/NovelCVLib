@@ -14,6 +14,7 @@
 //#include <NovelCVLib\Ncpp\Common\PtrRef.h>
 
 #include <NovelCVLib\Ncpp\Common\FixedVector.h>
+#include <NovelCVLib\Ncpp\Common\StaticAllocVector.h>
 #include <NovelCVLib\Ncpp\Common\FixedDeque.h>
 #include <NovelCVLib\Ncpp\Common\CircIndex.h>
 //#include <NovelCVLib\Ncpp\Common\Accessor2D.h>

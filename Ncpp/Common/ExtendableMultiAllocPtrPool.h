@@ -23,18 +23,18 @@ namespace Ncpp
 
 	public:
 
-		ExtendableMultiAllocPtrPool(const int a_singleAllocCapacity, const int a_higherOrderCapacity)
+		ExtendableMultiAllocPtrPool(const int a_singleAllocCapacity, const int a_higherOrderCapacity = 2000)
 		{ 
 			m_singleAllocCapacity = a_singleAllocCapacity;
 			m_nofElmsInQues = 0;
 			
-			m_provider = MultiAllocProviderRef(a_singleAllocCapacity, a_singleAllocCapacity, a_higherOrderCapacity);
-			m_providerOfQues = MultiAllocProviderRef(a_higherOrderCapacity, a_higherOrderCapacity, 1);
+			m_provider = new MultiAllocProvider<T>(a_singleAllocCapacity, a_singleAllocCapacity, a_higherOrderCapacity);
+			m_providerOfQues = new MultiAllocProvider< FixedDeque<T *> >(a_higherOrderCapacity, a_higherOrderCapacity, 1);
 
 			m_queOfWorkingQues.SetCapacity(a_higherOrderCapacity);
 			m_queOfReserveQues.SetCapacity(a_higherOrderCapacity);
 
-			m_pBackWorkingQue = m_pFrontWorkingQue = m_providerOfQues.ProvideNewElementPtr();
+			m_pBackWorkingQue = m_pFrontWorkingQue = m_providerOfQues->ProvideNewElementPtr();
 			m_pBackWorkingQue->SetCapacity(a_singleAllocCapacity);
 			m_queOfWorkingQues.PushBack(m_pBackWorkingQue);
 		}
@@ -135,7 +135,7 @@ namespace Ncpp
 		int m_nofElmsInQues;
 
 		MultiAllocProviderRef<T> m_provider;
-		MultiAllocProviderRef< FixedDeque<T> > m_providerOfQues;
+		MultiAllocProviderRef< FixedDeque<T *> > m_providerOfQues;
 		
 		FixedDeque< FixedDeque< T *> * > m_queOfWorkingQues;
 		FixedDeque< FixedDeque< T *> * > m_queOfReserveQues;

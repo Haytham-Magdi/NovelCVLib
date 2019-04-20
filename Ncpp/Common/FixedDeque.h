@@ -131,7 +131,7 @@ namespace Ncpp
 
 		void Init()
 		{
-			FixedVectorDebug::Init();
+			FixedVectorDebug::InitIfFirstTime();
 
 			m_data = nullptr;
 			m_size = 0;

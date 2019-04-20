@@ -55,7 +55,7 @@ namespace Ncpp
 		{
 			for (int i = 0; i < m_vectOfAllocVectors.GetSize(); i++)
 			{
-				FixedVector<T> * vectPtr = &m_vectOfAllocVectors.GetAt(i);
+				FixedVector<T> * vectPtr = m_vectOfAllocVectors.GetAt(i);
 				delete vectPtr;
 			}
 		}

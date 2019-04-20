@@ -24,6 +24,14 @@ namespace Ncv
 	{
 		Ncpp_ASSERT(Size_2D::AreEqual(ploAcc.GetSize(), pixelRgnAcc.GetSize()));
 
+		m_spreadOpProvider = new MultiAllocProvider<EdgeTrackingMgr2::PixSpreadOp>(ploAcc.CalcSize_1D());
+		m_spreadLinkPool = new ExtendableMultiAllocPtrPool<EdgeTrackingMgr2::PixSpreadLink>(ploAcc.CalcSize_1D() * 10);
+
+		//m_spreadOpProvider = new MultiAllocProvider<EdgeTrackingMgr2::PixSpreadOp>(ploAcc.CalcSize_1D() / 3);
+		//m_spreadLinkPool = new ExtendableMultiAllocPtrPool<EdgeTrackingMgr2::PixSpreadLink>(ploAcc.CalcSize_1D());
+
+
+
 		const ActualArrayAccessor_1D<SimplePixelRgn> pixelRgnAcc_1D = pixelRgnAcc.GenAcc_1D();
 
 		const SimplePixelRgn * pixelRgnHeadPtr = pixelRgnAcc_1D.GetData();
