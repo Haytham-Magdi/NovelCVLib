@@ -42,6 +42,12 @@ namespace Ncv
 
 		//FixedVector<CommonMultiListQueMember<F32PixelLink3C>> queMemberVect(ploAcc_1D.GetSize() * NOF_PRIMARY_PIXEL_LINK_TYPES);
 
+		const int nQueScale = 10;
+
+		MultiListQueMgr< PixSpreadLink > linkMngQues;
+		linkMngQues.InitSize(700 * nQueScale + 2);
+
+
 		for (int i = 0; i < ploAcc_1D.GetSize(); i++)
 		{
 			const F32PixelLinkOwner3C & rPlo = ploAcc_1D[i];
@@ -49,10 +55,15 @@ namespace Ncv
 			PixSpreadOp * pSpreadOp = m_spreadOpProvider->ProvideNewElementPtr();
 			pSpreadOp->Init(i);
 
-			//for (int j = 0; j < NOF_PRIMARY_PIXEL_LINK_TYPES; j++)
+
 			for (int j = 0; j < NOF_ALL_PIXEL_LINK_TYPES; j++)
 			{
 				F32PixelLink3C & rLink = rPlo.GetLinkAt((PixelLinkIndex)j);
+
+				if (!rLink.Exists())
+				{
+					continue;
+				}
 
 				PixSpreadLink * pSpreadLink = m_spreadLinkPool->ProvidePtr();
 
@@ -64,8 +75,10 @@ namespace Ncv
 				F32ColorVal & rPeerVal = valuesAcc_1D[peerIndex];
 
 				const float valDiff = CalcSubtractionMag(rSrcVal, rPeerVal);
+				// const float valDiff = 0;
 
-
+				const int queIndex = valDiff * nQueScale;
+				linkMngQues.PushPtr(queIndex, pSpreadLink);
 			}
 		}
 
