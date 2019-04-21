@@ -100,7 +100,7 @@ namespace Ncpp
 			}
 			else
 			{
-				pTmpQue = m_providerOfQues.ProvideNewElementPtr();
+				pTmpQue = m_providerOfQues->ProvideNewElementPtr();
 			}
 
 			m_queOfWorkingQues.PushBack(pTmpQue);

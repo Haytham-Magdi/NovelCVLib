@@ -75,7 +75,6 @@ namespace Ncv
 				F32ColorVal & rPeerVal = valuesAcc_1D[peerIndex];
 
 				const float valDiff = CalcSubtractionMag(rSrcVal, rPeerVal);
-				// const float valDiff = 0;
 
 				const int queIndex = valDiff * nQueScale;
 				linkMngQues.PushPtr(queIndex, pSpreadLink);
@@ -83,23 +82,64 @@ namespace Ncv
 		}
 
 
-		//const int nQueScale = 10;
+		PixSpreadLink * pSpreadLink = nullptr;
+		int nPushedCnt = 0;
 
-		//MultiListQueMgr< CommonMultiListQueMember<F32PixelLink3C > > linkMngQues;
-		//linkMngQues.InitSize(700 * nQueScale + 2);
+		do
+		{
+			pSpreadLink = linkMngQues.PopPtrMin();
+			if (nullptr == pSpreadLink)
+			{
+				continue;
+			}
 
-		//for (int i = 0; i < queMemberVect.GetSize(); i++)
-		//{
-		//	CommonMultiListQueMember<F32PixelLink3C> & rQueMember = queMemberVect[i];
-		//	if (!rQueMember.pInner->Exists())
-		//	{
-		//		continue;
-		//	}
+			nPushedCnt++;
 
-		//	const int queIndex = rQueMember.pInner->GetCoreSharedLinkPtr()->DiffMag * nQueScale;
-		//	linkMngQues.PushPtr(queIndex, &rQueMember);
-		//}
+			if (pSpreadLink->GetSpreadOp()->AreFriendsComplete())
+			{
+				goto SPREAD_LINK_DONE;
+			}
 
+			const F32ColorVal & rOpSrcVal = valuesAcc_1D[pSpreadLink->GetOpSrcPixIndex()];
+
+			const F32PixelLinkOwner3C & rPeerPlo1 = ploAcc_1D[pSpreadLink->GetPeerPixIndex()];
+
+			for (int i = 0; i < NOF_ALL_PIXEL_LINK_TYPES; i++)
+			{
+				F32PixelLink3C & rPeerSideLink = rPeerPlo1.GetLinkAt((PixelLinkIndex)i);
+
+				if (!rPeerSideLink.Exists())
+				{
+					continue;
+				}
+
+				const int sidePeerIndex = rPeerSideLink.GetPeerOwnerPtr() - linkOwnerHeadPtr;
+
+				const F32ColorVal & rSidePeerVal = valuesAcc_1D[sidePeerIndex];
+
+				const float valDiff = CalcSubtractionMag(rOpSrcVal, rSidePeerVal);
+
+
+				PixSpreadLink * pSpreadLink = m_spreadLinkPool->ProvidePtr();
+
+				const int peerIndex = rLink.GetPeerOwnerPtr() - linkOwnerHeadPtr;
+
+				pSpreadLink->Init(i, peerIndex, pSpreadOp);
+ 
+
+
+				const int queIndex = valDiff * nQueScale;
+				linkMngQues.PushPtr(queIndex, pSpreadLink);
+
+			}
+
+
+		SPREAD_LINK_DONE:
+			
+			m_spreadLinkPool->TakePtrBack(pSpreadLink);
+
+
+		} while (nullptr != pSpreadLink);
 
 
 

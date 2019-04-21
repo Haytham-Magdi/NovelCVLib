@@ -37,6 +37,11 @@ namespace Ncv
 
 			StaticAllocVector<int, 15> FavourateFriendsArr;
 
+			bool AreFriendsComplete()
+			{
+				return !FavourateFriendsArr.HasFreeCapacity();
+			}
+
 		private:
 			
 			int m_srcPixIndex;
@@ -52,7 +57,7 @@ namespace Ncv
 
 			void Init(int a_srcPixIndex, int a_peerPixIndex, PixSpreadOp * a_pSpreadOp)
 			{
-				m_srcPixIndex = a_srcPixIndex;
+				//m_srcPixIndex = a_srcPixIndex;
 				m_peerPixIndex = a_peerPixIndex;
 
 				m_pSpreadOp = a_pSpreadOp;
@@ -60,16 +65,18 @@ namespace Ncv
 
 		public:
 
-			int GetSrcPixIndex() { return m_srcPixIndex; }
+			//int GetSrcPixIndex() { return m_srcPixIndex; }
 
 			int GetPeerPixIndex() { return m_peerPixIndex; }
 
 			PixSpreadOp * GetSpreadOp() { return m_pSpreadOp; }
 
+			int GetOpSrcPixIndex() { return GetSpreadOp()->GetSrcPixIndex(); }
+
 
 		private:
 
-			int m_srcPixIndex;
+			//int m_srcPixIndex;
 			int m_peerPixIndex;
 			
 			PixSpreadOp * m_pSpreadOp;
