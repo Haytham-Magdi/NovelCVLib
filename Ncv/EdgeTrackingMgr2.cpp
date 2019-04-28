@@ -79,7 +79,7 @@ namespace Ncv
 				const int queIndex = valDiff * nQueScale;
 				linkMngQues.PushPtr(queIndex, pSpreadLink);
 			}
-		}
+		}	//	end Init Ques for.
 
 
 		PixSpreadLink * pSpreadLink = nullptr;
@@ -100,6 +100,31 @@ namespace Ncv
 				goto SPREAD_LINK_DONE;
 			}
 
+			const int opSrcIndex = pSpreadLink->GetOpSrcPixIndex();
+
+			const int peerIndex = pSpreadLink->GetPeerPixIndex();
+			Ncpp_ASSERT(peerIndex != opSrcIndex);
+
+			//if (peerIndex == opSrcIndex)
+			//{
+			//	goto SPREAD_LINK_DONE;
+			//}
+
+			FixedCapacityVectorAccessor<int> & rFriendsArr = pSpreadLink->GetSpreadOp()->FavourateFriendsVectorAcc;
+
+			{
+				//FixedCapacityVectorAccessor<int> & rFriendsArr = pSpreadLink->GetSpreadOp()->FavourateFriendsVectorAcc;
+				for (int j = 0; j < rFriendsArr.GetSize(); j++)
+				{
+					if (peerIndex == rFriendsArr[j])
+					{
+						goto SPREAD_LINK_DONE;
+					}
+				}
+			}
+
+
+
 			const F32ColorVal & rOpSrcVal = valuesAcc_1D[pSpreadLink->GetOpSrcPixIndex()];
 
 			const F32PixelLinkOwner3C & rPeerPlo1 = ploAcc_1D[pSpreadLink->GetPeerPixIndex()];
@@ -115,23 +140,38 @@ namespace Ncv
 
 				const int sidePeerIndex = rPeerSideLink.GetPeerOwnerPtr() - linkOwnerHeadPtr;
 
-				const F32ColorVal & rSidePeerVal = valuesAcc_1D[sidePeerIndex];
+				if (sidePeerIndex == opSrcIndex)
+				{
+					continue;
+				}
 
+				{
+					//FixedCapacityVectorAccessor<int> & rFriendsArr = pSpreadLink->GetSpreadOp()->FavourateFriendsVectorAcc;
+					for (int j = 0; j < rFriendsArr.GetSize(); j++)
+					{
+						if (sidePeerIndex == rFriendsArr[j])
+						{
+							goto END_SIDE_PEER_FOR;
+						}
+					}
+				}
+
+
+				const F32ColorVal & rSidePeerVal = valuesAcc_1D[sidePeerIndex];
 				const float valDiff = CalcSubtractionMag(rOpSrcVal, rSidePeerVal);
 
-
-				PixSpreadLink * pSpreadLink = m_spreadLinkPool->ProvidePtr();
-
-				const int peerIndex = rLink.GetPeerOwnerPtr() - linkOwnerHeadPtr;
-
-				pSpreadLink->Init(i, peerIndex, pSpreadOp);
- 
-
+				PixSpreadLink * pSideSpreadLink = m_spreadLinkPool->ProvidePtr();
+				pSideSpreadLink->Init(opSrcIndex, sidePeerIndex, pSpreadLink->GetSpreadOp());
 
 				const int queIndex = valDiff * nQueScale;
-				linkMngQues.PushPtr(queIndex, pSpreadLink);
+				linkMngQues.PushPtr(queIndex, pSideSpreadLink);
 
-			}
+			END_SIDE_PEER_FOR:
+				continue;
+
+			}	//	end Side Peer for.
+
+			rFriendsArr.PushBack(peerIndex);
 
 
 		SPREAD_LINK_DONE:

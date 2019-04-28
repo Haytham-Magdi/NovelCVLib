@@ -8,7 +8,8 @@
 #include <NovelCVLib\Common\Debug.h>
 #include <NovelCVLib\Common\Object.h>
 
-#include <NovelCVLib\Ncpp\Common\StaticAllocVector.h>
+#include <NovelCVLib\Ncpp\Common\StaticAllocMem.h>
+#include <NovelCVLib\Ncpp\Common\FixedCapacityVectorAccessor.h>
 
 #include <NovelCVLib\Ncv\F32PixelLink3C_Util.h>
 #include <NovelCVLib\Ncv\SimplePixelRgn.h>
@@ -31,20 +32,26 @@ namespace Ncv
 			void Init(int a_srcPixIndex)
 			{
 				m_srcPixIndex = a_srcPixIndex;
+				FavourateFriendsMem.InitAccessor(&FavourateFriendsVectorAcc);
 			}
 
 			int GetSrcPixIndex() { return m_srcPixIndex; }
 
-			StaticAllocVector<int, 15> FavourateFriendsArr;
-
 			bool AreFriendsComplete()
 			{
-				return !FavourateFriendsArr.HasFreeCapacity();
+				return !FavourateFriendsVectorAcc.HasFreeCapacity();
 			}
+
+		public:
+
+			FixedCapacityVectorAccessor<int> FavourateFriendsVectorAcc;
 
 		private:
 			
 			int m_srcPixIndex;
+			//StaticAllocMem<int, 15> FavourateFriendsMem;
+			StaticAllocMem<int, 7> FavourateFriendsMem;
+			//StaticAllocMem<int, 40> FavourateFriendsMem;
 		};
 
 
@@ -94,7 +101,11 @@ namespace Ncv
 		void Proceed(const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & ploAcc,
 			const ActualArrayAccessor_2D<F32ColorVal> valuesAcc);
 
-
+		MultiAllocProviderRef<EdgeTrackingMgr2::PixSpreadOp> GetSpreadOpProvider()
+		{
+			return m_spreadOpProvider;
+		}
+			
 
 	private:
 

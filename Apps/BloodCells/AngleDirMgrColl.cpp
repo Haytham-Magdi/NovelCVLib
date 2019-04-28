@@ -816,9 +816,71 @@ namespace Ncv
 			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(pixelRgnHolder->GetActualSize()), 3);
 			//ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
 			ActualArrayAccessor_2D<F32ColorVal> coloredDispAcc((F32ColorVal *)dspImg_Colored->GetDataPtr(), pixelRgnHolder->GetActualSize());
+			ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D = coloredDispAcc.GenAcc_1D();
 
-			PixelRgnUtil::PrepareRandomColorRepForRgns<SimplePixelRgn>(
-				pixelRgnHolder->GetActualAccessor(), coloredDispAcc);
+
+			CopyImage(coloredDispAcc.GenVirtAccessor(), cx.m_org_Img->GetVirtAccessor());
+			
+			//MultiplyImageByNum(coloredDispAcc.GenVirtAccessor(), 0.25);
+			MultiplyImageByNum(coloredDispAcc.GenVirtAccessor(), 0.125);
+			
+			AddValueToImage(coloredDispAcc.GenVirtAccessor(), F32ColorVal::FromNum(130));
+
+
+
+			S32Point testPnt1(130, 270);
+			S32Point testPnt2(129, 201);
+			S32Point testPnt3(361, 232);
+			S32Point testPnt4(126, 274);
+
+			MultiAllocProviderRef<EdgeTrackingMgr2::PixSpreadOp> spreadOpProvider = edm1.GetSpreadOpProvider();
+
+			for (int i = 0; i < spreadOpProvider->GetNofAllocVectors(); i++)
+			{
+				FixedVector<EdgeTrackingMgr2::PixSpreadOp> & rAllocVect = *spreadOpProvider->GetAllocVectorPtrAt(i);
+
+				for (int j = 0; j < rAllocVect.GetSize(); j++)
+				{
+					EdgeTrackingMgr2::PixSpreadOp & rSpreadOp = rAllocVect[j];
+
+					const int srcPixIndex = rSpreadOp.GetSrcPixIndex();
+
+					S32Point pnt = coloredDispAcc.CalcPointFromIndex_1D(srcPixIndex);
+
+					if (!S32Point::AreEqual(pnt, testPnt1) &&
+						!S32Point::AreEqual(pnt, testPnt2) &&
+						!S32Point::AreEqual(pnt, testPnt3) &&
+						!S32Point::AreEqual(pnt, testPnt4)
+						)
+					{
+						continue;
+					}
+
+					FixedCapacityVectorAccessor<int> & rFriendsArr = rSpreadOp.FavourateFriendsVectorAcc;
+					for (int k = 0; k < rFriendsArr.GetSize(); k++)
+					{
+						const int friendIndex = rFriendsArr[k];
+
+						F32ColorVal & rFriendDispVal = coloredDispAcc_1D[friendIndex];
+
+						rFriendDispVal.val0 = 0;
+						rFriendDispVal.val1 = 128;
+						rFriendDispVal.val2 = 255;
+					}
+
+
+					F32ColorVal & rDispVal = coloredDispAcc.GetAt(pnt.GetX(), pnt.GetY());
+
+					rDispVal.val0 = 0;
+					rDispVal.val1 = 255;
+					rDispVal.val2 = 0;
+				}
+			}
+
+
+
+			//PixelRgnUtil::PrepareRandomColorRepForRgns<SimplePixelRgn>(
+			//	pixelRgnHolder->GetActualAccessor(), coloredDispAcc);
 
 			ShowImage(dspImg_Colored, "TryEdgeTracking2");
 		}

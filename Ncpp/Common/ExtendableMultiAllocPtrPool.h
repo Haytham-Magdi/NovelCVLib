@@ -101,6 +101,7 @@ namespace Ncpp
 			else
 			{
 				pTmpQue = m_providerOfQues->ProvideNewElementPtr();
+				pTmpQue->SetCapacity(m_singleAllocCapacity);
 			}
 
 			m_queOfWorkingQues.PushBack(pTmpQue);
