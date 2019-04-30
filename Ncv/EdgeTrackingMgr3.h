@@ -20,7 +20,7 @@ namespace Ncv
 {
 	using namespace Ncpp;
 
-    class EdgeTrackingMgr2
+    class EdgeTrackingMgr3
     {
 	public:
 
@@ -49,9 +49,10 @@ namespace Ncv
 		private:
 			
 			int m_srcPixIndex;
-			//StaticAllocMem<int, 15> FavourateFriendsMem;
-			StaticAllocMem<int, 7> FavourateFriendsMem;
+			StaticAllocMem<int, 15> FavourateFriendsMem;
+			//StaticAllocMem<int, 7> FavourateFriendsMem;
 			//StaticAllocMem<int, 40> FavourateFriendsMem;
+			//StaticAllocMem<int, 80> FavourateFriendsMem;
 		};
 
 
@@ -62,12 +63,14 @@ namespace Ncv
 		{
 		public:
 
-			void Init(const int a_srcPixIndex, const int a_peerPixIndex, PixSpreadOp * a_pSpreadOp)
+			void Init(const int a_srcPixIndex, const int a_peerPixIndex, const float a_cost, PixSpreadOp * a_pSpreadOp)
 			{
 				//m_srcPixIndex = a_srcPixIndex;
 				m_peerPixIndex = a_peerPixIndex;
 
 				m_pSpreadOp = a_pSpreadOp;
+
+				m_cost = a_cost;
 			}
 
 		public:
@@ -80,6 +83,7 @@ namespace Ncv
 
 			int GetOpSrcPixIndex() { return GetSpreadOp()->GetSrcPixIndex(); }
 
+			int GetCost() { return m_cost; }
 
 		private:
 
@@ -87,13 +91,14 @@ namespace Ncv
 			int m_peerPixIndex;
 			
 			PixSpreadOp * m_pSpreadOp;
+			float m_cost;
 		};
 
 
 
     public:
 
-		EdgeTrackingMgr2() 
+		EdgeTrackingMgr3() 
 		{
 
 		}
@@ -101,7 +106,7 @@ namespace Ncv
 		void Proceed(const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & ploAcc,
 			const ActualArrayAccessor_2D<F32ColorVal> valuesAcc);
 
-		MultiAllocProviderRef<EdgeTrackingMgr2::PixSpreadOp> GetSpreadOpProvider()
+		MultiAllocProviderRef<EdgeTrackingMgr3::PixSpreadOp> GetSpreadOpProvider()
 		{
 			return m_spreadOpProvider;
 		}
@@ -113,8 +118,8 @@ namespace Ncv
 
 	private:
 
-		ExtendableMultiAllocPtrPoolRef< EdgeTrackingMgr2::PixSpreadLink> m_spreadLinkPool;
-		MultiAllocProviderRef<EdgeTrackingMgr2::PixSpreadOp> m_spreadOpProvider;
+		ExtendableMultiAllocPtrPoolRef< EdgeTrackingMgr3::PixSpreadLink> m_spreadLinkPool;
+		MultiAllocProviderRef<EdgeTrackingMgr3::PixSpreadOp> m_spreadOpProvider;
 
     };
 

@@ -103,6 +103,7 @@
 
 #include <NovelCVLib\Ncv\EdgeTrackingMgr1.cpp>
 #include <NovelCVLib\Ncv\EdgeTrackingMgr2.cpp>
+#include <NovelCVLib\Ncv\EdgeTrackingMgr3.cpp>
 
 
 

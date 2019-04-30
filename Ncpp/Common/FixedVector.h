@@ -233,11 +233,20 @@ namespace Ncpp
 
 		void IncSize( int a_nInc = 1 ) 
 		{ 
-			Ncpp_ASSERT( m_size + a_nInc <= m_capacity );
+			Ncpp_ASSERT(a_nInc >= 0);
+			//Ncpp_ASSERT( m_size + a_nInc <= m_capacity );
 
-			SetSize( GetSize() + a_nInc ); 
+			SetSize( GetSize() + a_nInc);
 		}
 
+
+		void DecSize(int a_nDec = 1)
+		{
+			Ncpp_ASSERT(a_nDec >= 0);
+			//Ncpp_ASSERT(m_size - a_nDec >= 0);
+
+			SetSize( GetSize() - a_nDec);
+		}
 
 
 		int GetCapacity() const

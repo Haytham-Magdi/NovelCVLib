@@ -334,7 +334,9 @@ namespace Ncv
 			
 			//TryEdgeTracking1();
 			
-			TryEdgeTracking2();
+			//TryEdgeTracking2();
+		
+			TryEdgeTracking3();
 
 			DisplayNormAvgStandiv_Dir_Img();
 			
@@ -885,6 +887,195 @@ namespace Ncv
 			ShowImage(dspImg_Colored, "TryEdgeTracking2");
 		}
 
+		void AngleDirMgrColl::TryEdgeTracking3()
+		{
+			AngleDirMgrColl_Context & cx = *m_context_H;
+
+
+			//SimplePixelRgn pixelRgn1;
+
+			ArrayHolder_2D_Ref<SimplePixelRgn> pixelRgnHolder = ArrayHolderUtil::CreateEmptyFrom<SimplePixelRgn>(cx.m_org_Img->AsHolderRef());
+
+			//const ActualArrayAccessor_1D<SimplePixelRgn> pixelRgnAcc_1D = pixelRgnHolder->GetActualAccessor().GenAcc_1D();
+			//const SimplePixelRgn * pixelRgnHeadPtr = pixelRgnAcc_1D.GetData();
+
+
+			ArrayHolder_2D_Ref<F32PixelLinkOwner3C> pixelLinkOwnerHolder =
+				PixelLinkUtil::GenPixelLinkOwnerHolder<F32PixelLinkOwner3C, F32ColorVal, F32PixelLink3C, F32SimpleCoreSharedPixelLink,
+				F32CoreSharedPixelLink3C_DiffMagSimpleInitializer>(cx.m_org_Img->AsHolderRef());
+
+			//const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & ploAcc = pixelLinkOwnerHolder->GetActualAccessor();
+			//const ActualArrayAccessor_1D<F32PixelLinkOwner3C> ploAcc_1D = ploAcc.GenAcc_1D();
+			//const F32PixelLinkOwner3C * linkOwnerHeadPtr = ploAcc_1D.GetData();
+
+
+			EdgeTrackingMgr3 edm1;
+			edm1.Proceed(pixelLinkOwnerHolder->GetActualAccessor(), cx.m_org_Img->GetActualAccessor());
+
+
+			//------------------
+
+
+			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(pixelRgnHolder->GetActualSize()), 3);
+			//ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
+			ActualArrayAccessor_2D<F32ColorVal> coloredDispAcc((F32ColorVal *)dspImg_Colored->GetDataPtr(), pixelRgnHolder->GetActualSize());
+			ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D = coloredDispAcc.GenAcc_1D();
+
+
+			CopyImage(coloredDispAcc.GenVirtAccessor(), cx.m_org_Img->GetVirtAccessor());
+
+			//MultiplyImageByNum(coloredDispAcc.GenVirtAccessor(), 0.25);
+			MultiplyImageByNum(coloredDispAcc.GenVirtAccessor(), 0.125);
+
+			AddValueToImage(coloredDispAcc.GenVirtAccessor(), F32ColorVal::FromNum(130));
+
+
+			ArrayHolder_2D_Ref<EdgeTrackingMgr3::PixSpreadOp *> spreadOp_Img;
+			spreadOp_Img = ArrayHolderUtil::CreateEmptyFrom<EdgeTrackingMgr3::PixSpreadOp *>(cx.m_org_Img->AsHolderRef());
+
+			ActualArrayAccessor_2D<EdgeTrackingMgr3::PixSpreadOp *> spreadOp_Acc = spreadOp_Img->GetActualAccessor();
+			ActualArrayAccessor_1D<EdgeTrackingMgr3::PixSpreadOp *> spreadOp_Acc_1D = spreadOp_Acc.GenAcc_1D();
+			for (int i = 0; i < spreadOp_Acc_1D.GetSize(); i++)
+			{
+				spreadOp_Acc_1D[i] = nullptr;
+			}
+
+			MultiAllocProviderRef<EdgeTrackingMgr3::PixSpreadOp> spreadOpProvider = edm1.GetSpreadOpProvider();
+
+			for (int i = 0; i < spreadOpProvider->GetNofAllocVectors(); i++)
+			{
+				FixedVector<EdgeTrackingMgr3::PixSpreadOp> & rAllocVect = *spreadOpProvider->GetAllocVectorPtrAt(i);
+
+				for (int j = 0; j < rAllocVect.GetSize(); j++)
+				{
+					EdgeTrackingMgr3::PixSpreadOp & rSpreadOp = rAllocVect[j];
+
+					const int srcPixIndex = rSpreadOp.GetSrcPixIndex();
+					spreadOp_Acc_1D[srcPixIndex] = &rSpreadOp;
+				}
+			}
+
+			//S32Point testPnt1(130, 270);
+			//S32Point testPnt2(129, 201);
+			//S32Point testPnt3(361, 232);
+			////S32Point testPnt4(126, 274);
+			//S32Point testPnt4(65, 188);
+			////S32Point testPnt4(129, 207);
+
+			S32Point testPnt1(407, 221);
+			S32Point testPnt2(302, 211);
+			S32Point testPnt3(428, 152);
+			S32Point testPnt4(394, 151);
+
+
+			//FixedDeque<int> friendIndexQue(20000);
+			//FixedDeque<int> depthQue(20000);
+
+			FixedVector<int> friendIndexQue(20000);
+			FixedVector<int> depthQue(20000);
+
+			FixedVector<int> lastSrcIndexVect;
+			lastSrcIndexVect.InitSize(spreadOp_Acc_1D.GetSize());
+			
+			for (int i = 0; i < lastSrcIndexVect.GetSize(); i++)
+			{
+				lastSrcIndexVect[i] = -1;
+			}
+
+			for (int i = 0; i < spreadOp_Acc_1D.GetSize(); i++)
+			{
+				//const int srcPixIndex = rSpreadOp.GetSrcPixIndex();
+				const int srcPixIndex = i;
+
+				S32Point pnt = coloredDispAcc.CalcPointFromIndex_1D(srcPixIndex);
+
+				if (!S32Point::AreEqual(pnt, testPnt1) &&
+					!S32Point::AreEqual(pnt, testPnt2) &&
+					!S32Point::AreEqual(pnt, testPnt3) &&
+					!S32Point::AreEqual(pnt, testPnt4)
+					)
+				{
+					continue;
+				}
+
+				friendIndexQue.ResetSize();
+				depthQue.ResetSize();
+
+				//const int maxSrcDepth = 1;
+				const int maxSrcDepth = 2;
+				//const int maxSrcDepth = 10;
+
+				friendIndexQue.PushBack(srcPixIndex);
+				depthQue.PushBack(0);
+
+				while (friendIndexQue.GetSize() > 0)
+				{
+					//const int srcIndex2 = friendIndexQue.GetFront();
+					//friendIndexQue.PopFront();
+
+					//const int depth = depthQue.GetFront();
+					//depthQue.PopFront();
+
+					const int srcIndex2 = friendIndexQue.GetBack();
+					friendIndexQue.DecSize();
+
+					const int depth = depthQue.GetBack();
+					depthQue.DecSize();
+
+					{
+						F32ColorVal & rDispVal = coloredDispAcc_1D[srcIndex2];
+
+						rDispVal.val0 = 0;
+						rDispVal.val1 = 128;
+						rDispVal.val2 = 255;
+					}
+
+					lastSrcIndexVect[srcIndex2] = srcPixIndex;
+
+					if (depth > maxSrcDepth)
+					{
+						continue;
+					}
+
+					EdgeTrackingMgr3::PixSpreadOp * pSpreadOp2 = spreadOp_Acc_1D[srcIndex2];
+					if (nullptr == pSpreadOp2)
+					{
+						continue;
+					}
+
+					FixedCapacityVectorAccessor<int> & rFriendsArr = pSpreadOp2->FavourateFriendsVectorAcc;
+					for (int k = 0; k < rFriendsArr.GetSize(); k++)
+					{
+						const int friendIndex = rFriendsArr[k];
+
+						if (srcPixIndex == lastSrcIndexVect[friendIndex])
+						{
+							continue;
+						}
+						
+						friendIndexQue.PushBack(friendIndex);
+						depthQue.PushBack(depth + 1);
+					}
+
+
+				}
+
+				{
+					F32ColorVal & rMainSrcDispVal = coloredDispAcc.GetAt(pnt.GetX(), pnt.GetY());
+
+					rMainSrcDispVal.val0 = 0;
+					rMainSrcDispVal.val1 = 255;
+					rMainSrcDispVal.val2 = 0;
+				}
+			}
+
+
+
+			//PixelRgnUtil::PrepareRandomColorRepForRgns<SimplePixelRgn>(
+			//	pixelRgnHolder->GetActualAccessor(), coloredDispAcc);
+
+			ShowImage(dspImg_Colored, "TryEdgeTracking3");
+		}
 
 
 
