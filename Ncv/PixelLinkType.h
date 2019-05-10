@@ -41,6 +41,8 @@ namespace Ncv
 
 			ShiftX = a_shiftX;
 			ShiftY = a_shiftY;
+
+			m_isDiagonal = (a_shiftX != 0 && a_shiftY != 0);
 		}
 
         
@@ -52,6 +54,8 @@ namespace Ncv
 		int GetShiftX() const { return ShiftX; }
 		int GetShiftY() const { return ShiftY; }
 
+		bool IsDiagonal() const { return m_isDiagonal; }
+
 	private:
 
 		PixelLinkIndex Index;
@@ -60,7 +64,7 @@ namespace Ncv
 		int ShiftX;
 		int ShiftY;
 
-
+		bool m_isDiagonal;
     };
 
 

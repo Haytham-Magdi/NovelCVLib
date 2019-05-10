@@ -20,9 +20,27 @@ namespace Ncv
 
 
 	void EdgeTrackingMgr3::Proceed(const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & ploAcc,
-		const ActualArrayAccessor_2D<F32ColorVal> valuesAcc)
+		const ActualArrayAccessor_2D<F32ColorVal> valuesAcc, const ActualArrayAccessor_2D<float> standevAcc)
 	{
 		Ncpp_ASSERT(Size_2D::AreEqual(ploAcc.GetSize(), valuesAcc.GetSize()));
+		Ncpp_ASSERT(Size_2D::AreEqual(ploAcc.GetSize(), standevAcc.GetSize()));
+
+		ArrayHolder_2D_Ref<S32Point> posHolder = ArrayHolderUtil::CreateFrom<S32Point>(ploAcc.GetSize());
+		{
+			const Size_2D imgSiz = ploAcc.GetSize();
+
+			ActualArrayAccessor_2D<S32Point> posAcc = posHolder->GetActualAccessor();
+			for (int y = 0; y < imgSiz.GetY(); y++)
+			{
+				for (int x = 0; x < imgSiz.GetX(); x++)
+				{
+					S32Point & rPnt = posAcc.GetAt(x, y);
+					//posAcc.GetAt(x, y).SetValue(x, y);
+					rPnt.SetValue(x, y);
+				}
+			}
+		}
+		ActualArrayAccessor_1D<S32Point> posAcc_1D = posHolder->GetActualAccessor().GenAcc_1D();
 
 		m_spreadOpProvider = new MultiAllocProvider<EdgeTrackingMgr3::PixSpreadOp>(ploAcc.CalcSize_1D());
 		m_spreadLinkPool = new ExtendableMultiAllocPtrPool<EdgeTrackingMgr3::PixSpreadLink>(ploAcc.CalcSize_1D() * 10);
@@ -30,9 +48,12 @@ namespace Ncv
 		//m_spreadOpProvider = new MultiAllocProvider<EdgeTrackingMgr3::PixSpreadOp>(ploAcc.CalcSize_1D() / 3);
 		//m_spreadLinkPool = new ExtendableMultiAllocPtrPool<EdgeTrackingMgr3::PixSpreadLink>(ploAcc.CalcSize_1D());
 
-
+		const float minStandev = 7.0f;
+		//const float minStandev = 0.0f;
 
 		const ActualArrayAccessor_1D<F32ColorVal> valuesAcc_1D = valuesAcc.GenAcc_1D();
+		const ActualArrayAccessor_1D<float> standevAcc_1D = standevAcc.GenAcc_1D();
+		
 
 		//const SimplePixelRgn * pixelRgnHeadPtr = pixelRgnAcc_1D.GetData();
 
@@ -53,10 +74,19 @@ namespace Ncv
 		{
 			const F32PixelLinkOwner3C & rPlo = ploAcc_1D[i];
 
+			const F32ColorVal & rSrcVal = valuesAcc_1D[i];
+			
+			const float & rSrcStandev = standevAcc_1D[i];
+
+			if (IsUndefined(rSrcStandev) || rSrcStandev < minStandev)
+			{
+				continue;
+			}
+
+			
 			PixSpreadOp * pSpreadOp = m_spreadOpProvider->ProvideNewElementPtr();
 			pSpreadOp->Init(i);
-
-
+			
 			for (int j = 0; j < NOF_ALL_PIXEL_LINK_TYPES; j++)
 			{
 				F32PixelLink3C & rLink = rPlo.GetLinkAt((PixelLinkIndex)j);
@@ -69,13 +99,25 @@ namespace Ncv
 
 				const int peerIndex = rLink.GetPeerOwnerPtr() - linkOwnerHeadPtr;
 
-				F32ColorVal & rSrcVal = valuesAcc_1D[i];
 				F32ColorVal & rPeerVal = valuesAcc_1D[peerIndex];
 
-				const float valDiff = CalcSubtractionMag(rSrcVal, rPeerVal);
-				//const float valDiff = rLink.GetCoreSharedLinkPtr()->DiffMag;
+				const float & rPeerStandev = standevAcc_1D[peerIndex];
 
-				const float cost = valDiff;
+				if (IsUndefined(rPeerStandev) || rPeerStandev < minStandev)
+				{
+					continue;
+				}
+
+				const float valDiff = CalcSubtractionMag(rSrcVal, rPeerVal);
+				////const float valDiff = rLink.GetCoreSharedLinkPtr()->DiffMag;
+
+				const float standevDiff = fabs(rSrcStandev - rPeerStandev);
+				//Ncpp_ASSERT(standevDiff < 10000.0f);
+
+				//const float cost = valDiff * 0.75f + standevDiff * 0.25f;
+				const float cost = valDiff * 0.5f + standevDiff * 0.5f;
+				//const float cost = valDiff;
+				//const float cost = standevDiff;
 
 				PixSpreadLink * pSpreadLink = m_spreadLinkPool->ProvidePtr();
 				pSpreadLink->Init(i, peerIndex, cost, pSpreadOp);
@@ -130,6 +172,15 @@ namespace Ncv
 
 
 			const F32ColorVal & rOpSrcVal = valuesAcc_1D[pSpreadLink->GetOpSrcPixIndex()];
+			
+			const float & rOpSrcStandev = standevAcc_1D[pSpreadLink->GetOpSrcPixIndex()];
+			if (IsUndefined(rOpSrcStandev))
+			{
+				goto SPREAD_LINK_DONE;
+			}
+
+			
+			const S32Point & rOpSrcPos = posAcc_1D[opSrcIndex];
 
 			const F32PixelLinkOwner3C & rPeerPlo1 = ploAcc_1D[pSpreadLink->GetPeerPixIndex()];
 
@@ -145,6 +196,28 @@ namespace Ncv
 				const int sidePeerIndex = rPeerSideLink.GetPeerOwnerPtr() - linkOwnerHeadPtr;
 
 				if (sidePeerIndex == opSrcIndex)
+				{
+					continue;
+				}
+
+				const float & rSidePeerStandev = standevAcc_1D[sidePeerIndex];
+
+				if (IsUndefined(rSidePeerStandev) || rSidePeerStandev < minStandev)
+				{
+					continue;
+				}
+
+
+
+
+
+				const S32Point & rSidePeerPos = posAcc_1D[sidePeerIndex];
+				Ncpp_ASSERT(!rSidePeerPos.IsUndefined());
+
+				const float posDiff = S32Point::Subtract(rOpSrcPos, rSidePeerPos).CalcMag();
+
+				if (posDiff > 10.0f)
+				//if (posDiff > 1000.0f)
 				{
 					continue;
 				}
@@ -166,10 +239,19 @@ namespace Ncv
 				
 				//const float valDiff = rPeerSideLink.GetCoreSharedLinkPtr()->DiffMag;
 
-				//const float cost = pSpreadLink->GetCost() + valDiff;
-				//const float cost = valDiff + pSpreadLink->GetCost() * 0.25;
-				//const float cost = valDiff + pSpreadLink->GetCost() * 0.75;
-				const float cost = valDiff;
+
+
+				const float standevDiff = fabs(rOpSrcStandev - rSidePeerStandev);
+				//Ncpp_ASSERT(standevDiff < 10000.0f);
+
+
+				////const float cost = pSpreadLink->GetCost() + valDiff;
+				////const float cost = valDiff + pSpreadLink->GetCost() * 0.25;
+				////const float cost = valDiff + pSpreadLink->GetCost() * 0.75;
+				//const float cost = valDiff;
+				//const float cost = standevDiff;
+				//const float cost = valDiff * 0.75f + standevDiff * 0.25f;
+				const float cost = valDiff * 0.5f + standevDiff * 0.5f;
 
 				PixSpreadLink * pSideSpreadLink = m_spreadLinkPool->ProvidePtr();
 				pSideSpreadLink->Init(opSrcIndex, sidePeerIndex, cost, pSpreadLink->GetSpreadOp());

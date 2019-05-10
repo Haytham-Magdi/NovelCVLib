@@ -69,13 +69,13 @@ namespace Ncpp
 			return ret;
 		}
 
-		static void Subtract(S32Point & a_inp1, S32Point & a_inp2, S32Point * a_pOut)
+		static void Subtract(const S32Point & a_inp1, const S32Point & a_inp2, S32Point * a_pOut)
 		{
 			a_pOut->x = a_inp1.x - a_inp2.x;
 			a_pOut->y = a_inp1.y - a_inp2.y;
 		}
 
-		static S32Point Subtract(S32Point & a_inp1, S32Point & a_inp2)
+		static S32Point Subtract(const S32Point & a_inp1, const S32Point & a_inp2)
 		{
 			S32Point ret;
 
@@ -154,6 +154,27 @@ namespace Ncpp
 		//{
 		//	y = a_sizeY;
 		//}
+
+
+		static int CalcMagSqr(const S32Point & a_arg)
+		{
+			return Math::Sqr(a_arg.x) + Math::Sqr(a_arg.y);
+		}
+
+		static float CalcMag(const S32Point & a_arg)
+		{
+			return sqrt((float)CalcMagSqr(a_arg));
+		}
+
+		int CalcMagSqr()
+		{
+			return S32Point::CalcMagSqr(*this);
+		}
+
+		float CalcMag()
+		{
+			return S32Point::CalcMag(*this);
+		}
 
 
 	//protected:

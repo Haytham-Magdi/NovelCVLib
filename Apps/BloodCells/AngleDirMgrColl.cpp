@@ -332,11 +332,11 @@ namespace Ncv
 
 			//TryPixelLinkMerging();
 			
-			//TryEdgeTracking1();
+			TryEdgeTracking1();
 			
 			//TryEdgeTracking2();
 		
-			TryEdgeTracking3();
+			//TryEdgeTracking3();
 
 			DisplayNormAvgStandiv_Dir_Img();
 			
@@ -894,7 +894,7 @@ namespace Ncv
 
 			//SimplePixelRgn pixelRgn1;
 
-			ArrayHolder_2D_Ref<SimplePixelRgn> pixelRgnHolder = ArrayHolderUtil::CreateEmptyFrom<SimplePixelRgn>(cx.m_org_Img->AsHolderRef());
+			//ArrayHolder_2D_Ref<SimplePixelRgn> pixelRgnHolder = ArrayHolderUtil::CreateEmptyFrom<SimplePixelRgn>(cx.m_org_Img->AsHolderRef());
 
 			//const ActualArrayAccessor_1D<SimplePixelRgn> pixelRgnAcc_1D = pixelRgnHolder->GetActualAccessor().GenAcc_1D();
 			//const SimplePixelRgn * pixelRgnHeadPtr = pixelRgnAcc_1D.GetData();
@@ -909,16 +909,36 @@ namespace Ncv
 			//const F32PixelLinkOwner3C * linkOwnerHeadPtr = ploAcc_1D.GetData();
 
 
+			
+			F32ImageArrayHolder1C_Ref standev_Img;
+			{
+				//Range<int> avgRange = Range<int>::New(-a_avgRadius, a_avgRadius);
+				Window<int> avgWin = Window<int>::New(-1, 1, -1, 1);
+
+				//F32ImageArrayHolder3C_Ref avg_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
+				F32ImageArrayHolder3C_Ref avg_Img = new F32ImageArrayHolder3C(cx.m_org_Img->GetActualSize());
+				standev_Img = new F32ImageArrayHolder1C(cx.m_org_Img->GetActualSize());
+
+				Calc_Avg_And_Standev_Image(cx.m_org_Img->GetVirtAccessor(), avg_Img->GetVirtAccessor(),
+					standev_Img->GetVirtAccessor(), avgWin);
+
+				ShowImage(GenTriChGrayImg(standev_Img->GetSrcImg()), "standev_Img TryEdgeTracking3");
+			}
+
+
+			//return;
+
+
 			EdgeTrackingMgr3 edm1;
-			edm1.Proceed(pixelLinkOwnerHolder->GetActualAccessor(), cx.m_org_Img->GetActualAccessor());
+			edm1.Proceed(pixelLinkOwnerHolder->GetActualAccessor(), cx.m_org_Img->GetActualAccessor(), standev_Img->GetActualAccessor());
 
 
 			//------------------
 
 
-			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(pixelRgnHolder->GetActualSize()), 3);
+			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(pixelLinkOwnerHolder->GetActualSize()), 3);
 			//ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
-			ActualArrayAccessor_2D<F32ColorVal> coloredDispAcc((F32ColorVal *)dspImg_Colored->GetDataPtr(), pixelRgnHolder->GetActualSize());
+			ActualArrayAccessor_2D<F32ColorVal> coloredDispAcc((F32ColorVal *)dspImg_Colored->GetDataPtr(), pixelLinkOwnerHolder->GetActualSize());
 			ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D = coloredDispAcc.GenAcc_1D();
 
 
@@ -961,11 +981,15 @@ namespace Ncv
 			////S32Point testPnt4(126, 274);
 			//S32Point testPnt4(65, 188);
 			////S32Point testPnt4(129, 207);
+			//S32Point testPnt5(344, 382);
 
 			S32Point testPnt1(407, 221);
 			S32Point testPnt2(302, 211);
 			S32Point testPnt3(428, 152);
-			S32Point testPnt4(394, 151);
+			//S32Point testPnt4(394, 151);
+			//S32Point testPnt5(394, 151);
+			S32Point testPnt4(393, 152);
+			S32Point testPnt5(324, 150);
 
 
 			//FixedDeque<int> friendIndexQue(20000);
@@ -992,7 +1016,8 @@ namespace Ncv
 				if (!S32Point::AreEqual(pnt, testPnt1) &&
 					!S32Point::AreEqual(pnt, testPnt2) &&
 					!S32Point::AreEqual(pnt, testPnt3) &&
-					!S32Point::AreEqual(pnt, testPnt4)
+					!S32Point::AreEqual(pnt, testPnt4) &&
+					!S32Point::AreEqual(pnt, testPnt5)
 					)
 				{
 					continue;
@@ -1001,8 +1026,10 @@ namespace Ncv
 				friendIndexQue.ResetSize();
 				depthQue.ResetSize();
 
+				const int maxSrcDepth = 0;
 				//const int maxSrcDepth = 1;
-				const int maxSrcDepth = 2;
+				//const int maxSrcDepth = 2;
+				//const int maxSrcDepth = 4;
 				//const int maxSrcDepth = 10;
 
 				friendIndexQue.PushBack(srcPixIndex);

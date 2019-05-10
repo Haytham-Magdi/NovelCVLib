@@ -49,8 +49,9 @@ namespace Ncv
 		private:
 			
 			int m_srcPixIndex;
-			StaticAllocMem<int, 15> FavourateFriendsMem;
+			//StaticAllocMem<int, 15> FavourateFriendsMem;
 			//StaticAllocMem<int, 7> FavourateFriendsMem;
+			StaticAllocMem<int, 22> FavourateFriendsMem;
 			//StaticAllocMem<int, 40> FavourateFriendsMem;
 			//StaticAllocMem<int, 80> FavourateFriendsMem;
 		};
@@ -104,7 +105,7 @@ namespace Ncv
 		}
 
 		void Proceed(const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & ploAcc,
-			const ActualArrayAccessor_2D<F32ColorVal> valuesAcc);
+			const ActualArrayAccessor_2D<F32ColorVal> valuesAcc, const ActualArrayAccessor_2D<float> standevAcc);
 
 		MultiAllocProviderRef<EdgeTrackingMgr3::PixSpreadOp> GetSpreadOpProvider()
 		{

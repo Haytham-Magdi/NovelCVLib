@@ -105,7 +105,7 @@ namespace Ncv
 				}
 
 
-
+				//	//	CalcDiffImageX
 				{
 					//-
 
@@ -116,7 +116,10 @@ namespace Ncv
 					F32ImageArrayHolder3C_Ref diff_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 					CalcDiffImageX(cx.m_org_Img->GetVirtAccessor(), diff_Img->GetVirtAccessor(), diffRange);
 
-					CalcMagImage(diff_Img->GetVirtAccessor(), cx.m_standev1_X_Img->GetVirtAccessor());
+					//CalcMagImage(diff_Img->GetVirtAccessor(), cx.m_standev1_X_Img->GetVirtAccessor());
+
+					CalcStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),
+						cx.m_standev1_X_Img->GetVirtAccessor(), Range<int>::New(-1, 1));
 
 					F32ImageArrayHolder3C_Ref diff2_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 					CalcDiffImageX(diff_Img->GetVirtAccessor(), diff2_Img->GetVirtAccessor(), diffRange);
@@ -133,6 +136,7 @@ namespace Ncv
 					//	Range<int>::New(-1, 1));
 				}
 
+				//	//	Conflict
 				//{
 				//	//- 
 
@@ -163,6 +167,7 @@ namespace Ncv
 				//}
 
 
+				//		//CalcConflictImage_X
 				//{
 
 				//	//Range<int> range = Range<int>::New(-1, 1);
@@ -225,7 +230,7 @@ namespace Ncv
 
 
 
-
+				////CalcConflictImage_X
 				{
 					//-
 
@@ -1265,8 +1270,8 @@ namespace Ncv
 			ActualArrayAccessor_1D<float> localAcc_1D = cx.m_normAvgStandev_X_T_Img->GetActualAccessor().GenAcc_1D();
 			ActualArrayAccessor_1D<float> localAcc_1D_Norm1 = cx.m_standev1_X_Img->GetActualAccessor().GenAcc_1D();
 			//ActualArrayAccessor_1D<float> localAcc_1D_Norm1 = cx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
-			//ActualArrayAccessor_1D<float> localAcc_1D_Norm2 = cx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
-			ActualArrayAccessor_1D<float> localAcc_1D_Norm2 = cx.m_standev2_X_Img->GetActualAccessor().GenAcc_1D();
+			ActualArrayAccessor_1D<float> localAcc_1D_Norm2 = cx.m_normAvgStandev_X_Img->GetActualAccessor().GenAcc_1D();
+			//ActualArrayAccessor_1D<float> localAcc_1D_Norm2 = cx.m_standev2_X_Img->GetActualAccessor().GenAcc_1D();
 
 
 			//ActualArrayAccessor_1D<float> localAcc_1D = cx.m_normAvgStandev_X_T_Img->GetActualAccessor().GenAcc_1D();
