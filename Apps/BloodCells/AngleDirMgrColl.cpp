@@ -332,11 +332,11 @@ namespace Ncv
 
 			//TryPixelLinkMerging();
 			
-			TryEdgeTracking1();
+			//TryEdgeTracking1();
 			
 			//TryEdgeTracking2();
 		
-			//TryEdgeTracking3();
+			TryEdgeTracking3();
 
 			DisplayNormAvgStandiv_Dir_Img();
 			
@@ -975,21 +975,21 @@ namespace Ncv
 				}
 			}
 
-			//S32Point testPnt1(130, 270);
-			//S32Point testPnt2(129, 201);
-			//S32Point testPnt3(361, 232);
-			////S32Point testPnt4(126, 274);
-			//S32Point testPnt4(65, 188);
-			////S32Point testPnt4(129, 207);
-			//S32Point testPnt5(344, 382);
+			S32Point testPnt1(130, 270);
+			S32Point testPnt2(129, 201);
+			S32Point testPnt3(361, 232);
+			//S32Point testPnt4(126, 274);
+			S32Point testPnt4(65, 188);
+			//S32Point testPnt4(129, 207);
+			S32Point testPnt5(344, 382);
 
-			S32Point testPnt1(407, 221);
-			S32Point testPnt2(302, 211);
-			S32Point testPnt3(428, 152);
-			//S32Point testPnt4(394, 151);
-			//S32Point testPnt5(394, 151);
-			S32Point testPnt4(393, 152);
-			S32Point testPnt5(324, 150);
+			//S32Point testPnt1(407, 221);
+			//S32Point testPnt2(302, 211);
+			//S32Point testPnt3(428, 152);
+			////S32Point testPnt4(394, 151);
+			////S32Point testPnt5(394, 151);
+			//S32Point testPnt4(393, 152);
+			//S32Point testPnt5(324, 150);
 
 
 			//FixedDeque<int> friendIndexQue(20000);

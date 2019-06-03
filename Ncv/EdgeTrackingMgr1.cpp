@@ -64,11 +64,17 @@ namespace Ncv
 
 			//F32SimpleCoreSharedPixelLink * pCoreSharedLink = 
 
-			//const bool isLinkDiagonal = rQueMember.pInner->GetType().IsDiagonal();
+			const bool isLinkDiagonal = rQueMember.pInner->GetType().IsDiagonal();
 
-			const int queIndex = rQueMember.pInner->GetCoreSharedLinkPtr()->DiffMag * nQueScale;
-			//const int queIndex = rQueMember.pInner->GetCoreSharedLinkPtr()->DiffMag *
-			//	(isLinkDiagonal ? 1.4f : 1.0f) * nQueScale;
+			if (isLinkDiagonal)
+			{
+				continue;
+			}
+
+			//const int queIndex = rQueMember.pInner->GetCoreSharedLinkPtr()->DiffMag * nQueScale;
+			const int queIndex = rQueMember.pInner->GetCoreSharedLinkPtr()->DiffMag *
+				//(isLinkDiagonal ? 1.4f : 1.0f) * nQueScale;
+				(1.0f / (isLinkDiagonal ? 1.4f : 1.0f)) * nQueScale;
 			linkMngQues.PushPtr(queIndex, &rQueMember);
 		}
 
@@ -208,11 +214,18 @@ namespace Ncv
 
 
 
-			//const bool isLinkDiagonal = rMainLink.GetType().IsDiagonal();
+			const bool isLinkDiagonal = rMainLink.GetType().IsDiagonal();
+
+			if (isLinkDiagonal)
+			{
+				continue;
+			}
+
 
 			//const float mainLinkDiffMag = rMainLink.GetCoreSharedLinkPtr()->DiffMag;
-			if (mainLinkDiffMag > mergeThreshold)
+			//if (mainLinkDiffMag > mergeThreshold)
 			//if (mainLinkDiffMag * (isLinkDiagonal ? 1.4f : 1.0f) > mergeThreshold)
+			if (mainLinkDiffMag * (1.0f / (isLinkDiagonal ? 1.4f : 1.0f)) > mergeThreshold)
 			{
 				continue;
 			}

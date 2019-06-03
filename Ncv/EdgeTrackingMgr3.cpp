@@ -48,8 +48,10 @@ namespace Ncv
 		//m_spreadOpProvider = new MultiAllocProvider<EdgeTrackingMgr3::PixSpreadOp>(ploAcc.CalcSize_1D() / 3);
 		//m_spreadLinkPool = new ExtendableMultiAllocPtrPool<EdgeTrackingMgr3::PixSpreadLink>(ploAcc.CalcSize_1D());
 
-		const float minStandev = 7.0f;
+		//const float minStandev = 7.0f;
+		const float minStandev = 5.0f;
 		//const float minStandev = 0.0f;
+		//const float minStandev = -100.0f;
 
 		const ActualArrayAccessor_1D<F32ColorVal> valuesAcc_1D = valuesAcc.GenAcc_1D();
 		const ActualArrayAccessor_1D<float> standevAcc_1D = standevAcc.GenAcc_1D();
@@ -68,6 +70,13 @@ namespace Ncv
 		MultiListQueMgr< PixSpreadLink > linkMngQues;
 		//linkMngQues.InitSize(700 * nQueScale + 2);
 		linkMngQues.InitSize(700 * 50 * nQueScale + 2);
+
+		//const float toStandevCmpRatio = 0.4;
+		const float toStandevCmpRatio = 0.7;
+		//const float toStandevCmpRatio = 1.7;
+		//const float toStandevCmpRatio = 1000.0;
+
+		const float toLocalStandevCmpRatio = 0.7;
 
 
 		for (int i = 0; i < ploAcc_1D.GetSize(); i++)
@@ -108,14 +117,39 @@ namespace Ncv
 					continue;
 				}
 
+				//const bool isLinkDiagonal = rLink.GetType().IsDiagonal();
+
+				const float localValDiff = rLink.GetCoreSharedLinkPtr()->DiffMag;
+
 				const float valDiff = CalcSubtractionMag(rSrcVal, rPeerVal);
-				////const float valDiff = rLink.GetCoreSharedLinkPtr()->DiffMag;
+				//const float valDiff = rLink.GetCoreSharedLinkPtr()->DiffMag;
+				//const float valDiff = rLink.GetCoreSharedLinkPtr()->DiffMag
+				//	* (isLinkDiagonal ? 1.4f : 1.0f);
+
+				if (valDiff > rSrcStandev * toStandevCmpRatio)
+				//if (localValDiff > rSrcStandev * toStandevCmpRatio)
+				{
+					continue;
+				}
+
+				if (localValDiff > rPeerStandev * toLocalStandevCmpRatio)
+				{
+					continue;
+				}
+
+
+				
 
 				const float standevDiff = fabs(rSrcStandev - rPeerStandev);
 				//Ncpp_ASSERT(standevDiff < 10000.0f);
 
+				const float totalDiff = valDiff * 0.5f + standevDiff * 0.5f;
+				//const float totalDiff = standevDiff;
+
+				const float cost = totalDiff;
+
 				//const float cost = valDiff * 0.75f + standevDiff * 0.25f;
-				const float cost = valDiff * 0.5f + standevDiff * 0.5f;
+				//const float cost = valDiff * 0.5f + standevDiff * 0.5f;
 				//const float cost = valDiff;
 				//const float cost = standevDiff;
 
@@ -184,6 +218,9 @@ namespace Ncv
 
 			const F32PixelLinkOwner3C & rPeerPlo1 = ploAcc_1D[pSpreadLink->GetPeerPixIndex()];
 
+
+			const float & rPeerStandev = standevAcc_1D[peerIndex];
+
 			for (int i = 0; i < NOF_ALL_PIXEL_LINK_TYPES; i++)
 			{
 				F32PixelLink3C & rPeerSideLink = rPeerPlo1.GetLinkAt((PixelLinkIndex)i);
@@ -216,8 +253,8 @@ namespace Ncv
 
 				const float posDiff = S32Point::Subtract(rOpSrcPos, rSidePeerPos).CalcMag();
 
-				if (posDiff > 10.0f)
-				//if (posDiff > 1000.0f)
+				//if (posDiff > 10.0f)
+				if (posDiff > 10000.0f)
 				{
 					continue;
 				}
@@ -228,7 +265,7 @@ namespace Ncv
 					{
 						if (sidePeerIndex == rFriendsArr[j])
 						{
-							goto END_SIDE_PEER_FOR;
+							goto End_Side_Peer_For;
 						}
 					}
 				}
@@ -237,21 +274,42 @@ namespace Ncv
 				const F32ColorVal & rSidePeerVal = valuesAcc_1D[sidePeerIndex];
 				const float valDiff = CalcSubtractionMag(rOpSrcVal, rSidePeerVal);
 				
+				const float localValDiff = rPeerSideLink.GetCoreSharedLinkPtr()->DiffMag;
+
+				if (valDiff > rOpSrcStandev * toStandevCmpRatio)
+				//if (localValDiff > rOpSrcStandev * toStandevCmpRatio)
+				{
+					goto End_Side_Peer_For;
+				}
+
+				if (localValDiff > rPeerStandev * toLocalStandevCmpRatio)
+				{
+					goto End_Side_Peer_For;
+				}
+
+
+				//const bool isLinkDiagonal = rPeerSideLink.GetType().IsDiagonal();
+
 				//const float valDiff = rPeerSideLink.GetCoreSharedLinkPtr()->DiffMag;
+				//const float valDiff = rPeerSideLink.GetCoreSharedLinkPtr()->DiffMag
+				//	* (isLinkDiagonal ? 1.4f : 1.0f);
 
 
 
 				const float standevDiff = fabs(rOpSrcStandev - rSidePeerStandev);
 				//Ncpp_ASSERT(standevDiff < 10000.0f);
 
+				const float totalDiff = valDiff * 0.5f + standevDiff * 0.5f;
+				//const float totalDiff = standevDiff;
 
-				////const float cost = pSpreadLink->GetCost() + valDiff;
+				const float cost = pSpreadLink->GetCost() + totalDiff;
 				////const float cost = valDiff + pSpreadLink->GetCost() * 0.25;
 				////const float cost = valDiff + pSpreadLink->GetCost() * 0.75;
 				//const float cost = valDiff;
 				//const float cost = standevDiff;
 				//const float cost = valDiff * 0.75f + standevDiff * 0.25f;
-				const float cost = valDiff * 0.5f + standevDiff * 0.5f;
+				//const float cost = valDiff * 0.5f + standevDiff * 0.5f;
+
 
 				PixSpreadLink * pSideSpreadLink = m_spreadLinkPool->ProvidePtr();
 				pSideSpreadLink->Init(opSrcIndex, sidePeerIndex, cost, pSpreadLink->GetSpreadOp());
@@ -260,7 +318,7 @@ namespace Ncv
 				const int queIndex = cost * nQueScale;
 				linkMngQues.PushPtr(queIndex, pSideSpreadLink);
 
-			END_SIDE_PEER_FOR:
+			End_Side_Peer_For:
 				continue;
 
 			}	//	end Side Peer for.
