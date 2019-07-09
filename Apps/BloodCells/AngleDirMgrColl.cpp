@@ -1027,9 +1027,9 @@ namespace Ncv
 				friendIndexQue.ResetSize();
 				depthQue.ResetSize();
 
-				//const int maxSrcDepth = 0;
+				const int maxSrcDepth = 0;
 				//const int maxSrcDepth = 1;
-				const int maxSrcDepth = 2;
+				//const int maxSrcDepth = 2;
 				//const int maxSrcDepth = 4;
 				//const int maxSrcDepth = 10;
 
