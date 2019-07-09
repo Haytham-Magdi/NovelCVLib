@@ -985,7 +985,8 @@ namespace Ncv
 
 			//S32Point testPnt1(407, 221);
 			//S32Point testPnt2(302, 211);
-			//S32Point testPnt3(428, 152);
+			////S32Point testPnt3(428, 152);
+			//S32Point testPnt3(426, 146);
 			////S32Point testPnt4(394, 151);
 			////S32Point testPnt5(394, 151);
 			//S32Point testPnt4(393, 152);
@@ -1026,9 +1027,9 @@ namespace Ncv
 				friendIndexQue.ResetSize();
 				depthQue.ResetSize();
 
-				const int maxSrcDepth = 0;
+				//const int maxSrcDepth = 0;
 				//const int maxSrcDepth = 1;
-				//const int maxSrcDepth = 2;
+				const int maxSrcDepth = 2;
 				//const int maxSrcDepth = 4;
 				//const int maxSrcDepth = 10;
 

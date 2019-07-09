@@ -74,9 +74,11 @@ namespace Ncv
 		//const float toStandevCmpRatio = 0.4;
 		const float toStandevCmpRatio = 0.7;
 		//const float toStandevCmpRatio = 1.7;
-		//const float toStandevCmpRatio = 1000.0;
+		//const float toStandevCmpRatio = 100000.0;
 
 		const float toLocalStandevCmpRatio = 0.7;
+		//const float toLocalStandevCmpRatio = 1.7;
+		//const float toLocalStandevCmpRatio = 100000.0;
 
 
 		for (int i = 0; i < ploAcc_1D.GetSize(); i++)
@@ -143,7 +145,10 @@ namespace Ncv
 				const float standevDiff = fabs(rSrcStandev - rPeerStandev);
 				//Ncpp_ASSERT(standevDiff < 10000.0f);
 
-				const float totalDiff = valDiff * 0.5f + standevDiff * 0.5f;
+				//const float totalDiff = valDiff;
+				const float totalDiff = (valDiff > standevDiff) ? valDiff : standevDiff;
+				//const float totalDiff = valDiff * 0.5f + standevDiff * 0.5f;
+				//const float totalDiff = sqrt( Sqr(valDiff) + Sqr(standevDiff));
 				//const float totalDiff = standevDiff;
 
 				const float cost = totalDiff;
@@ -299,7 +304,10 @@ namespace Ncv
 				const float standevDiff = fabs(rOpSrcStandev - rSidePeerStandev);
 				//Ncpp_ASSERT(standevDiff < 10000.0f);
 
-				const float totalDiff = valDiff * 0.5f + standevDiff * 0.5f;
+				//const float totalDiff = valDiff;
+				const float totalDiff = (valDiff > standevDiff) ? valDiff : standevDiff;
+				//const float totalDiff = valDiff * 0.5f + standevDiff * 0.5f;
+				//const float totalDiff = sqrt(Sqr(valDiff) + Sqr(standevDiff));
 				//const float totalDiff = standevDiff;
 
 				const float cost = pSpreadLink->GetCost() + totalDiff;

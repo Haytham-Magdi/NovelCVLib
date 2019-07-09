@@ -49,10 +49,11 @@ namespace Ncv
 		private:
 			
 			int m_srcPixIndex;
-			//StaticAllocMem<int, 15> FavourateFriendsMem;
 			//StaticAllocMem<int, 7> FavourateFriendsMem;
-			//StaticAllocMem<int, 22> FavourateFriendsMem;
-			StaticAllocMem<int, 40> FavourateFriendsMem;
+			//StaticAllocMem<int, 9> FavourateFriendsMem;
+			//StaticAllocMem<int, 15> FavourateFriendsMem;
+			StaticAllocMem<int, 22> FavourateFriendsMem;
+			//StaticAllocMem<int, 40> FavourateFriendsMem;
 			//StaticAllocMem<int, 80> FavourateFriendsMem;
 		};
 
