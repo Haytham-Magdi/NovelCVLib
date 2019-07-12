@@ -101,7 +101,43 @@ namespace Ncv
 				1 );
 		}
 
-		//float scaleX = 1;
+
+
+		for (int j = -1; j < m_nMaxSignalLength - 1; j++)
+		{
+			const int x = j * m_nScaleX + m_margX;
+
+
+			//const int y0 = 255 - (0 * scale) + rSD.ShiftY + m_margY;
+
+			//retCh0->SetAt( x, y, color.val0 );
+			//retCh1->SetAt( x, y, color.val1 );
+			//retCh2->SetAt( x, y, color.val2 );
+
+
+			cvLine(
+				ret->GetIplImagePtr(),
+				cvPoint(x, 0),
+				cvPoint(x, ret->GetSize().height - 1),
+				//CV_RGB(180, 180, 180),
+				CV_RGB(120, 120, 120),
+				1);
+
+
+			//cvLine(
+			//	ret->GetIplImagePtr(),
+			//	cvPoint((x - 1) * nScaleX + m_margX, y0),
+			//	//cvPoint(x * nScaleX + m_margX, y0),
+			//	cvPoint(x * nScaleX + m_margX, y),
+			//	CV_RGB(color.val2, color.val1, color.val0),
+			//	1);
+		}
+
+
+
+
+
+
 
 		for(int i=0; i < m_signalInfoVect.size(); i++)
 		{
