@@ -336,7 +336,7 @@ namespace Ncv
 			
 			//TryEdgeTracking2();
 		
-			TryEdgeTracking3();
+			//TryEdgeTracking3();
 
 			DisplayNormAvgStandiv_Dir_Img();
 			
@@ -1027,9 +1027,9 @@ namespace Ncv
 				friendIndexQue.ResetSize();
 				depthQue.ResetSize();
 
-				const int maxSrcDepth = 0;
+				//const int maxSrcDepth = 0;
 				//const int maxSrcDepth = 1;
-				//const int maxSrcDepth = 2;
+				const int maxSrcDepth = 2;
 				//const int maxSrcDepth = 4;
 				//const int maxSrcDepth = 10;
 
@@ -1302,7 +1302,10 @@ namespace Ncv
 					rColoredDispElm.val0 = rPsi.LeastVal;
 
 					rColoredDispElm.val1 = rPsi.NormLeastVal1;
-					rColoredDispElm.val2 = rPsi.NormLeastVal2;
+
+					//rColoredDispElm.val2 = rPsi.NormLeastVal2;
+					//rColoredDispElm.val2 = rPsi.NormLeastVal2 * 0.5f;
+					rColoredDispElm.val2 = 0.0f;
 
 					//rColoredDispElm.val1 = (fabs(cos(angle)) * normVal * 5 / 3);
 					//rColoredDispElm.val2 = (fabs(sin(angle)) * normVal * 5 / 3);
