@@ -15,13 +15,14 @@ namespace Ncv
 	using namespace Ncpp::Math;
 
 
-	Signal1DViewer::Signal1DViewer( int a_nScaleX ) : m_margX(40), m_margY(40)
+	Signal1DViewer::Signal1DViewer(int a_nScaleX, int a_nScaleY) : m_margX(40), m_margY(40)
 	{
 		m_nMaxSignalLength = 0;
 		m_bkgColor = u8ColorVal(128, 180, 180);
 		//m_bkgColor = u8ColorVal(110, 0, 0);
 
 		m_nScaleX = a_nScaleX;
+		m_nScaleY = a_nScaleY;
 	}
 
 
@@ -62,9 +63,10 @@ namespace Ncv
 		//const int nScaleX = 10;
 
 		const int nScaleX = m_nScaleX;
+		const int nScaleY = m_nScaleY;
 
 		U8ImageRef ret = U8Image::Create( cvSize( 2 * m_margX + m_nMaxSignalLength * nScaleX, 
-			2 * m_margY + 256 ), 3);
+			2 * m_margY + 256 * nScaleY), 3);
 
 
 		U8ChannelRef retCh0 = ret->GetAt(0);
@@ -90,15 +92,15 @@ namespace Ncv
 
 			cvLine(
 				ret->GetIplImagePtr(),
-				cvPoint(0, ret->GetSize().height - 1 - m_margY - 127 + 20),
-				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 127 + 20),
+				cvPoint(0, ret->GetSize().height - 1 - m_margY - (127 - 20) * nScaleY),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - (127 - 20) * nScaleY),
 				CV_RGB(140, 140, 140),
 				1);
 
 			cvLine(
 				ret->GetIplImagePtr(),
-				cvPoint(0, ret->GetSize().height - 1 - m_margY - 127 + 10),
-				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 127 + 10),
+				cvPoint(0, ret->GetSize().height - 1 - m_margY - (127 - 10) * nScaleY),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - (127 - 10) * nScaleY),
 				CV_RGB(140, 140, 140),
 				1);
 
@@ -107,8 +109,8 @@ namespace Ncv
 
 			cvLine(
 				ret->GetIplImagePtr(),
-				cvPoint(0, ret->GetSize().height - 1 - m_margY - 127),
-				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 127),
+				cvPoint(0, ret->GetSize().height - 1 - m_margY - 127 * nScaleY),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 127 * nScaleY),
 				CV_RGB(30, 30, 30),
 				1);
 
@@ -116,15 +118,15 @@ namespace Ncv
 
 			cvLine(
 				ret->GetIplImagePtr(),
-				cvPoint(0, ret->GetSize().height - 1 - m_margY - 127 - 20),
-				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 127 - 20),
+				cvPoint(0, ret->GetSize().height - 1 - m_margY - (127 + 20) * nScaleY),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - (127 + 20) * nScaleY),
 				CV_RGB(140, 140, 140),
 				1);
 
 			cvLine(
 				ret->GetIplImagePtr(),
-				cvPoint(0, ret->GetSize().height - 1 - m_margY - 127 - 10),
-				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 127 - 10),
+				cvPoint(0, ret->GetSize().height - 1 - m_margY - (127 + 10) * nScaleY),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - (127 + 10) * nScaleY),
 				CV_RGB(140, 140, 140),
 				1);
 
@@ -134,15 +136,15 @@ namespace Ncv
 
 			cvLine (
 				ret->GetIplImagePtr(), 
-				cvPoint( 0, ret->GetSize().height - 1 - m_margY - 10), 
-				cvPoint( ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 10), 
+				cvPoint(0, ret->GetSize().height - 1 - m_margY - 10 * nScaleY),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 10 * nScaleY),
 				CV_RGB(140, 140, 140),
 				1 );
 
 			cvLine(
 				ret->GetIplImagePtr(),
-				cvPoint(0, ret->GetSize().height - 1 - m_margY - 20),
-				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 20),
+				cvPoint(0, ret->GetSize().height - 1 - m_margY - 20 * nScaleY),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 20 * nScaleY),
 				CV_RGB(30, 30, 30),
 				1);
 
@@ -164,35 +166,13 @@ namespace Ncv
 		{
 			const int x = j * m_nScaleX + m_margX;
 
-
-			//const int y0 = 255 - (0 * scale) + rSD.ShiftY + m_margY;
-
-			//retCh0->SetAt( x, y, color.val0 );
-			//retCh1->SetAt( x, y, color.val1 );
-			//retCh2->SetAt( x, y, color.val2 );
-
-
 			cvLine(
 				ret->GetIplImagePtr(),
 				cvPoint(x, 0),
 				cvPoint(x, ret->GetSize().height - 1),
-				//CV_RGB(180, 180, 180),
 				CV_RGB(120, 120, 120),
 				1);
-
-
-			//cvLine(
-			//	ret->GetIplImagePtr(),
-			//	cvPoint((x - 1) * nScaleX + m_margX, y0),
-			//	//cvPoint(x * nScaleX + m_margX, y0),
-			//	cvPoint(x * nScaleX + m_margX, y),
-			//	CV_RGB(color.val2, color.val1, color.val0),
-			//	1);
 		}
-
-
-
-
 
 
 
@@ -207,30 +187,19 @@ namespace Ncv
 
 			const float scale = m_signalInfoVect[i].Scale;
 
-			//for(int j = 1; j < rData.size(); j++, x++)
 			for(int j = 1; j < rData.size(); j++, x++)
 			{
-				const int y = 255 - (rData[j] * scale) + rSD.ShiftY + m_margY;
-				const int y0 = 255 - (rData[j - 1] * scale) + rSD.ShiftY + m_margY;
+				const int y = (255 - (rData[j] * scale) + rSD.ShiftY) * nScaleY + m_margY;
+				const int y0 = (255 - (rData[j - 1] * scale) + rSD.ShiftY) * nScaleY + m_margY;
 			
-				//const int y0 = 255 - (0 * scale) + rSD.ShiftY + m_margY;
-
-				//retCh0->SetAt( x, y, color.val0 );
-				//retCh1->SetAt( x, y, color.val1 );
-				//retCh2->SetAt( x, y, color.val2 );
-
-				
-
 				cvLine (
 					ret->GetIplImagePtr(), 
 					cvPoint((x - 1) * nScaleX + m_margX, y0),
-					//cvPoint(x * nScaleX + m_margX, y0),
 					cvPoint(x * nScaleX + m_margX , y), 
 					CV_RGB(color.val2, color.val1, color.val0),
 					1 );
 			}
 		}
-
 
 		return ret;
 	}
@@ -243,9 +212,10 @@ namespace Ncv
 		}
 
 		const int nScaleX = m_nScaleX;
+		const int nScaleY = m_nScaleY;
 
 		U8ImageRef ret = U8Image::Create(cvSize(2 * m_margX + m_nMaxSignalLength * nScaleX,
-			2 * m_margY + 256), 3);
+			2 * m_margY + 256 * nScaleY), 3);
 
 
 		U8ChannelRef retCh0 = ret->GetAt(0);
@@ -263,27 +233,16 @@ namespace Ncv
 		{
 			const int x = j * m_nScaleX + m_margX;
 
-
-			//const int y0 = 255 - (0 * scale) + rSD.ShiftY + m_margY;
-
-			//retCh0->SetAt( x, y, color.val0 );
-			//retCh1->SetAt( x, y, color.val1 );
-			//retCh2->SetAt( x, y, color.val2 );
-
-
 			cvLine(
 				ret->GetIplImagePtr(),
 				cvPoint(x, ret->GetSize().height * 2 / 3 - 1),
 				cvPoint(x, ret->GetSize().height - 1),
-				//CV_RGB(180, 180, 180),
 				CV_RGB(120, 120, 120),
 				1);
-
 		}
 
 
 
-		//for (int i = 0; i < m_signalInfoVect.size(); i++)
 		{
 			Signal1DDrawing & rSD0 = m_signalInfoVect[0];
 			Signal1DDrawing & rSD1 = m_signalInfoVect[1];
@@ -300,21 +259,10 @@ namespace Ncv
 
 			for (int j = 1; j < rData0.size(); j++, x++)
 			{
-				const int y = 255 - (255) + rSD0.ShiftY + m_margY;
-				const int y0 = 255 - (0) + rSD0.ShiftY + m_margY;
+				const int y = (255 - (255) + rSD0.ShiftY) * nScaleY + m_margY;
+				const int y0 = (255 - (0) + rSD0.ShiftY) * nScaleY + m_margY;
 
-				//const int y = 255 - (rData[j] * scale) + rSD.ShiftY + m_margY;
-				//const int y0 = 255 - (rData[j - 1] * scale) + rSD.ShiftY + m_margY;
-
-				//const int y0 = 255 - (0 * scale) + rSD.ShiftY + m_margY;
-
-				//retCh0->SetAt( x, y, color.val0 );
-				//retCh1->SetAt( x, y, color.val1 );
-				//retCh2->SetAt( x, y, color.val2 );
-
-				//const U8ColorVal color = U8ColorVal(rData0[j - 1], rData1[j - 1], rData2[j - 1]);
 				const U8ColorVal color = U8ColorVal(rData2[j - 1], rData1[j - 1], rData0[j - 1]);
-
 
 				cvRectangle(
 					ret->GetIplImagePtr(),
@@ -322,15 +270,6 @@ namespace Ncv
 					cvPoint(x * nScaleX + m_margX, y),
 					CV_RGB(color.val0, color.val1, color.val2),
 					-1);
-
-
-				//cvLine(
-				//	ret->GetIplImagePtr(),
-				//	cvPoint((x - 1) * nScaleX + m_margX, y0),
-				//	//cvPoint(x * nScaleX + m_margX, y0),
-				//	cvPoint(x * nScaleX + m_margX, y),
-				//	CV_RGB(color.val2, color.val1, color.val0),
-				//	1);
 			}
 		}
 

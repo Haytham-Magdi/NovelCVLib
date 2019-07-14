@@ -144,16 +144,21 @@ namespace Ncv
 
 					F32ImageArrayHolder3C_Ref absDiff2_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 					AbsImage(diff2_Img->GetVirtAccessor(), absDiff2_Img->GetVirtAccessor());
-					MultiplyImageByNum(absDiff2_Img->GetVirtAccessor(), 2);
+					//MultiplyImageByNum(absDiff2_Img->GetVirtAccessor(), 2);
 					SetUndefinedInImageToZero(absDiff2_Img->GetVirtAccessor());
-					
+
+					F32ImageArrayHolder3C_Ref diff2_Dsp_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
+
+					MultiplyImageByNum(diff2_Img->GetVirtAccessor(), diff2_Dsp_Img->GetVirtAccessor(), 0.5);
+					AddValueToImage(diff2_Dsp_Img->GetVirtAccessor(), F32ColorVal::FromNum(127));
+
 					//F32ImageArrayHolder1C_Ref diff2_Mag_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 					//CalcMagImage(diff2_Img->GetVirtAccessor(), diff2_Mag_Img->GetVirtAccessor());
 
 
 					if (0 == cx.m_nIndex)
 					{
-						GlobalStuff::SetImageInLinePathMap("diff2_Img 0", diff2_Img->GetSrcImg());
+						GlobalStuff::SetImageInLinePathMap("diff2_Dsp_Img 0", diff2_Dsp_Img->GetSrcImg());
 						GlobalStuff::SetImageInLinePathMap("AbsDiff2 0", absDiff2_Img->GetSrcImg());
 						//GlobalStuff::SetImageInLinePathMap("Diff2 Mag 0", GenTriChGrayImg(diff2_Mag_Img->GetSrcImg()));
 

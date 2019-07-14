@@ -54,7 +54,7 @@ namespace Ncv
 
 
 	public:
-		Signal1DViewer( int a_nScaleX = 1 );
+		Signal1DViewer(int a_nScaleX = 1, int a_nScaleY = 1);
 
 		void AddSignal( Signal1DRef a_signal )
 		{
@@ -82,6 +82,7 @@ namespace Ncv
 		int m_nMaxSignalLength;
 
 		int m_nScaleX;
+		int m_nScaleY;
 
 		const int m_margX;
 		const int m_margY;
