@@ -25,7 +25,7 @@ namespace Ncv
 		m_sig->m_nBgn = a_nBgn;
 	}
 
-	void Signal1DBuilder::AddValue( float a_value )
+	void Signal1DBuilder::AddValue(const float a_value)
 	{
 		if( true == m_bDone )
 		{

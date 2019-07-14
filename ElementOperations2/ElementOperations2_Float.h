@@ -26,5 +26,6 @@ namespace Ncv
 		template<> bool IsUndefined(const float & a_arg);
 		template<> void SetToUndefined(float * a_pArg);
 		template<> void SetToBadValue(float * a_pArg);
+		template<> void Abs(const float & a_inp, float * a_pOut);
 	};
 }

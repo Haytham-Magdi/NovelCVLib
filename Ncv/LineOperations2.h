@@ -607,6 +607,66 @@ namespace Ncv
 			AssertLineUndefinedOrValid(a_outAcc);
 		}
 
+		template<class T>
+		void AbsLine(const VirtArrayAccessor_1D<T> & a_inpAcc, const VirtArrayAccessor_1D<T> & a_outAcc)
+		{
+			AssertLineUndefinedOrValid(a_inpAcc);
+
+
+			Ncpp_ASSERT(a_inpAcc.GetSize() == a_outAcc.GetSize());
+
+
+			PtrIterator2<T> ptrItr_Inp = a_inpAcc.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out = a_outAcc.GenPtrIterator();
+
+
+			// manage undefined from bgn.
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// manage undefined from end.
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveEnd(), ptrItr_Out.MoveEnd())
+			{
+				T * ptr_Inp = ptrItr_Inp.GetEnd();
+				T * ptr_Out = ptrItr_Out.GetEnd();
+
+				if (IsUndefined(*ptr_Inp))
+				{
+					SetToUndefined(ptr_Out);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// do main job.
+			int cnt = 0;
+			for (; ptrItr_Inp.HasValidPos(); ptrItr_Inp.MoveBgn(), ptrItr_Out.MoveBgn(), cnt++)
+			{
+				T * ptr_Inp = ptrItr_Inp.GetBgn();
+				T * ptr_Out = ptrItr_Out.GetBgn();
+
+				ElementOperations2::Abs<T>(*ptr_Inp, ptr_Out);
+			}
+
+			AssertLineUndefinedOrValid(a_outAcc);
+		}
+
+
 
 		template<class T>
 		void CopyLine(const VirtArrayAccessor_1D<T> & a_destAcc, const VirtArrayAccessor_1D<T> & a_srcAcc)

@@ -57,5 +57,12 @@ namespace Ncv
 			*a_pArg = -77777777.0f;
 		}
 
+		void Abs(const float & a_inp, float * a_pOut)
+		{
+			AssertValue(a_inp);
+			
+			*a_pOut = fabs(a_inp);
+		}
+
 	};
 }

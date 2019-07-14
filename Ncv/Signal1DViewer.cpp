@@ -178,6 +178,135 @@ namespace Ncv
 		return ret;
 	}
 
+	U8ImageRef Signal1DViewer::GenColorBarsDisplayImage()
+	{
+		if (3 != m_signalInfoVect.size())
+		{
+			ThrowNcvException();
+		}
+
+		const int nScaleX = m_nScaleX;
+
+		U8ImageRef ret = U8Image::Create(cvSize(2 * m_margX + m_nMaxSignalLength * nScaleX,
+			2 * m_margY + 256), 3);
+
+
+		U8ChannelRef retCh0 = ret->GetAt(0);
+		U8ChannelRef retCh1 = ret->GetAt(1);
+		U8ChannelRef retCh2 = ret->GetAt(2);
+
+
+		retCh0->SetAll(m_bkgColor.val0);
+		retCh1->SetAll(m_bkgColor.val1);
+		retCh2->SetAll(m_bkgColor.val2);
+
+
+
+		for (int j = -1; j < m_nMaxSignalLength - 1; j++)
+		{
+			const int x = j * m_nScaleX + m_margX;
+
+
+			//const int y0 = 255 - (0 * scale) + rSD.ShiftY + m_margY;
+
+			//retCh0->SetAt( x, y, color.val0 );
+			//retCh1->SetAt( x, y, color.val1 );
+			//retCh2->SetAt( x, y, color.val2 );
+
+
+			cvLine(
+				ret->GetIplImagePtr(),
+				cvPoint(x, ret->GetSize().height * 2 / 3 - 1),
+				cvPoint(x, ret->GetSize().height - 1),
+				//CV_RGB(180, 180, 180),
+				CV_RGB(120, 120, 120),
+				1);
+
+		}
+
+
+
+		//for (int i = 0; i < m_signalInfoVect.size(); i++)
+		{
+			Signal1DDrawing & rSD0 = m_signalInfoVect[0];
+			Signal1DDrawing & rSD1 = m_signalInfoVect[1];
+			Signal1DDrawing & rSD2 = m_signalInfoVect[2];
+
+			//U8ColorVal color = rSD.DspColor;
+			int x = rSD0.Signal->m_nBgn + rSD0.ShiftX;
+
+			vector<float> & rData0 = m_signalInfoVect[0].Signal->m_data;
+			vector<float> & rData1 = m_signalInfoVect[1].Signal->m_data;
+			vector<float> & rData2 = m_signalInfoVect[2].Signal->m_data;
+
+			const float scale = m_signalInfoVect[0].Scale;
+
+			for (int j = 1; j < rData0.size(); j++, x++)
+			{
+				const int y = 255 - (255) + rSD0.ShiftY + m_margY;
+				const int y0 = 255 - (0) + rSD0.ShiftY + m_margY;
+
+				//const int y = 255 - (rData[j] * scale) + rSD.ShiftY + m_margY;
+				//const int y0 = 255 - (rData[j - 1] * scale) + rSD.ShiftY + m_margY;
+
+				//const int y0 = 255 - (0 * scale) + rSD.ShiftY + m_margY;
+
+				//retCh0->SetAt( x, y, color.val0 );
+				//retCh1->SetAt( x, y, color.val1 );
+				//retCh2->SetAt( x, y, color.val2 );
+
+				//const U8ColorVal color = U8ColorVal(rData0[j - 1], rData1[j - 1], rData2[j - 1]);
+				const U8ColorVal color = U8ColorVal(rData2[j - 1], rData1[j - 1], rData0[j - 1]);
+
+
+				cvRectangle(
+					ret->GetIplImagePtr(),
+					cvPoint((x - 1) * nScaleX + m_margX, y0),
+					cvPoint(x * nScaleX + m_margX, y),
+					CV_RGB(color.val0, color.val1, color.val2),
+					-1);
+
+
+				//cvLine(
+				//	ret->GetIplImagePtr(),
+				//	cvPoint((x - 1) * nScaleX + m_margX, y0),
+				//	//cvPoint(x * nScaleX + m_margX, y0),
+				//	cvPoint(x * nScaleX + m_margX, y),
+				//	CV_RGB(color.val2, color.val1, color.val0),
+				//	1);
+			}
+		}
+
+		{
+			cvLine(
+				ret->GetIplImagePtr(),
+				cvPoint(0, m_margY),
+				cvPoint(ret->GetSize().width - 1, m_margY),
+				CV_RGB(0, 0, 0),
+				1);
+
+
+			cvLine(
+				ret->GetIplImagePtr(),
+				cvPoint(0, ret->GetSize().height - 1 - m_margY - 20),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 20),
+				CV_RGB(0, 0, 0),
+				1);
+
+			cvLine(
+				ret->GetIplImagePtr(),
+				cvPoint(0, ret->GetSize().height - 1 - m_margY),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY),
+				CV_RGB(0, 0, 0),
+				1);
+		}
+
+
+
+		return ret;
+	}
+
+
 
 
 }

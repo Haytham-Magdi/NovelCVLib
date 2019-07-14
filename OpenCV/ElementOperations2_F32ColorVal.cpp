@@ -113,6 +113,15 @@ namespace Ncv
 			//SetToBadValue(&a_pArg->val2);
 		}
 
+		void Abs(const F32ColorVal & a_inp, F32ColorVal * a_pOut)
+		{
+			AssertValue(a_inp);
+
+			Abs(a_inp.val0, &a_pOut->val0);
+			Abs(a_inp.val1, &a_pOut->val1);
+			Abs(a_inp.val2, &a_pOut->val2);
+		}
+
 
 	}
 }

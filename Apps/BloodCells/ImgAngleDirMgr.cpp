@@ -116,6 +116,23 @@ namespace Ncv
 					F32ImageArrayHolder3C_Ref diff_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 					CalcDiffImageX(cx.m_org_Img->GetVirtAccessor(), diff_Img->GetVirtAccessor(), diffRange);
 
+					GlobalStuff::SetImageInLinePathMap("diff_Img", diff_Img->GetSrcImg());
+
+					F32ImageArrayHolder3C_Ref absDiff_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
+					AbsImage(diff_Img->GetVirtAccessor(), absDiff_Img->GetVirtAccessor());
+					SetUndefinedInImageToZero(absDiff_Img->GetVirtAccessor());
+
+					//if (0 == cx.m_nIndex)
+					//{
+					//	ShowImage(absDiff_Img->GetSrcImg(), cx.MakeStrWithId("absDiff_Img").c_str());
+
+					//	GlobalStuff::SetLinePathImg(absDiff_Img->GetSrcImg());
+					//	GlobalStuff::ShowLinePathImg();
+					//}
+
+
+					GlobalStuff::SetImageInLinePathMap("AbsDiff", absDiff_Img->GetSrcImg());
+
 					CalcMagImage(diff_Img->GetVirtAccessor(), cx.m_standev1_X_Img->GetVirtAccessor());
 
 					//CalcStandevImage_X(cx.m_org_Img->GetVirtAccessor(), cx.m_magSqr_Img->GetVirtAccessor(),

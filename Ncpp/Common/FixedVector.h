@@ -9,6 +9,8 @@
 #include <NovelCVLib\Common\Debug.h>
 #include <NovelCVLib\Common\Object.h>
 
+#include <NovelCVLib\Ncpp\Common\ActualArrayAccessor_1D.h>
+
 
 namespace Ncpp
 {
@@ -373,6 +375,19 @@ namespace Ncpp
 		{
 			return GetAt(m_size - 1);
 		}
+
+		void PrepareAccessor_1D(ActualArrayAccessor_1D<T> * a_pAcc_1D) const
+		{
+			a_pAcc_1D->Init(m_data, m_size);
+		}
+
+		ActualArrayAccessor_1D<T> GenAcc_1D() const
+		{
+			ActualArrayAccessor_1D<T> acc;
+			PrepareAccessor_1D(&acc);
+			return acc;
+		}
+
 
 
 	protected:

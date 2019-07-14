@@ -19,6 +19,7 @@
 
 namespace Ncpp
 {
+
 	class S32Point // : public Ncpp::Object
 	{
 	public:
@@ -32,11 +33,16 @@ namespace Ncpp
 			SetValue(a_x, a_y);
 		}
 
-		void SetValue(int a_x, int a_y)
+		void SetValue(const int a_x, const int a_y)
 		{
 			x = a_x;
 			y = a_y;
 		}
+
+		//void SetValue(const F32Point & a_src)
+		//{
+		//	this->SetValue((int)a_src.x, (int)a_src.y);
+		//}
 
 		int GetX() const
 		{

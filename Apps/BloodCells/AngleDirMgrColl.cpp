@@ -1345,8 +1345,10 @@ namespace Ncv
 			}
 
 			//GlobalStuff::SetLinePathImg(GenTriChGrayImg(dspImg_Values));
-			GlobalStuff::SetLinePathImg(dspImg_Colored);
-			GlobalStuff::ShowLinePathImg();
+			//GlobalStuff::SetLinePathImg(dspImg_Colored);
+			//GlobalStuff::ShowLinePathImg();
+
+			GlobalStuff::SetImageInLinePathMap("standev2DirImg_Colored", dspImg_Colored);
 
 			//ShowImage(dspImg_Values, "standev2DirImg_Colored");
 			

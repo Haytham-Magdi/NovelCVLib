@@ -42,32 +42,32 @@ namespace Ncpp
 			m_bInitDone = true;
 		}
 
-		int Calc(int a_x, int a_y)
+		int Calc(const int a_x, const int a_y) const
 		{
 			return a_x + a_y * m_nSizX;
 		}
 
-		int Calc_X(int a_nIdx)
+		int Calc_X(const int a_nIdx)  const
 		{
 			return a_nIdx % m_nSizX;
 		}
 
-		int Calc_Y(int a_nIdx)
+		int Calc_Y(const int a_nIdx)  const
 		{
 			return a_nIdx / m_nSizX;
 		}
 
-		int GetSizeX()
+		int GetSizeX() const
 		{
 			return m_nSizX;
 		}
 
-		int GetSizeY()
+		int GetSizeY() const
 		{
 			return m_nSizY;
 		}
 
-		int GetTotalSize()
+		int GetTotalSize() const
 		{
 			return m_nSizTot;
 		}

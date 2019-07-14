@@ -73,6 +73,7 @@ namespace Ncv
 		void AddSignalDrawingColl( IIterator_REF( Signal1DDrawingRef ) a_sigDrwIter );
 
 		U8ImageRef GenDisplayImage();
+		U8ImageRef GenColorBarsDisplayImage();
 
 	protected:
 		vector< Signal1DDrawing > m_signalInfoVect;

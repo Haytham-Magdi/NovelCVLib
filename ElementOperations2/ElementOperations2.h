@@ -164,6 +164,12 @@ namespace Ncv
 			MultiplyByNum(a_arg, a_num, &a_arg);
 		}
 
+		template<class T>
+		void Abs(const T & a_inp, T * a_pOut)
+		{
+			Ncpp::Exception::ThrowNotImplemented();
+		}
+
 
 		template<class T>
 		void SetToZero(T * a_pArg)

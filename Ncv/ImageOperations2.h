@@ -411,6 +411,35 @@ namespace Ncv
 			MultiplyImageByNum(a_inpAcc, a_inpAcc, a_num);
 		}
 
+		template<class T>
+		void AbsImage(const VirtArrayAccessor_2D<T> & a_inpAcc, const VirtArrayAccessor_2D<T> & a_outAcc)
+		{
+			const VirtArrayAccessor_1D<T> acc_Inp_Y = a_inpAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Inp_X = a_inpAcc.GenAccessor_X();
+
+			const VirtArrayAccessor_1D<T> acc_Out_Y = a_outAcc.GenAccessor_Y();
+			VirtArrayAccessor_1D<T> acc_Out_X = a_outAcc.GenAccessor_X();
+
+			Ncpp_ASSERT(acc_Inp_Y.GetSize() == acc_Out_Y.GetSize());
+
+
+			PtrIterator2<T> ptrItr_Inp_Y = acc_Inp_Y.GenPtrIterator();
+			PtrIterator2<T> ptrItr_Out_Y = acc_Out_Y.GenPtrIterator();
+
+			for (; ptrItr_Inp_Y.HasValidPos(); ptrItr_Inp_Y.MoveBgn(), ptrItr_Out_Y.MoveBgn())
+			{
+				T * ptr_Inp_Y = ptrItr_Inp_Y.GetBgn();
+				T * ptr_Out_Y = ptrItr_Out_Y.GetBgn();
+
+				acc_Inp_X.SetData(ptr_Inp_Y);
+				acc_Out_X.SetData(ptr_Out_Y);
+
+				AbsLine<T>(acc_Inp_X, acc_Out_X);
+			}
+		}
+
+
+
 
 		template<class T>
 		void CopyImage(const VirtArrayAccessor_2D<T> & a_destAcc, const VirtArrayAccessor_2D<T> & a_srcAcc)

@@ -43,6 +43,7 @@ namespace Ncv
 		
 		template<> void SetToBadValue(F32ColorVal * a_pArg);
 
+		template<> void Abs(const F32ColorVal & a_inp, F32ColorVal * a_pOut);
 
 	}
 }
