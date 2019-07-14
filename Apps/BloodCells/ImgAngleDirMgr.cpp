@@ -116,22 +116,23 @@ namespace Ncv
 					F32ImageArrayHolder3C_Ref diff_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 					CalcDiffImageX(cx.m_org_Img->GetVirtAccessor(), diff_Img->GetVirtAccessor(), diffRange);
 
-					GlobalStuff::SetImageInLinePathMap("diff_Img", diff_Img->GetSrcImg());
 
 					F32ImageArrayHolder3C_Ref absDiff_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 					AbsImage(diff_Img->GetVirtAccessor(), absDiff_Img->GetVirtAccessor());
 					SetUndefinedInImageToZero(absDiff_Img->GetVirtAccessor());
 
-					//if (0 == cx.m_nIndex)
-					//{
-					//	ShowImage(absDiff_Img->GetSrcImg(), cx.MakeStrWithId("absDiff_Img").c_str());
+					if (0 == cx.m_nIndex)
+					{
+						//GlobalStuff::SetImageInLinePathMap("diff_Img 0", diff_Img->GetSrcImg());
+						//GlobalStuff::SetImageInLinePathMap("AbsDiff 0", absDiff_Img->GetSrcImg());
 
-					//	GlobalStuff::SetLinePathImg(absDiff_Img->GetSrcImg());
-					//	GlobalStuff::ShowLinePathImg();
-					//}
+						//ShowImage(absDiff_Img->GetSrcImg(), cx.MakeStrWithId("absDiff_Img").c_str());
+
+						//GlobalStuff::SetLinePathImg(absDiff_Img->GetSrcImg());
+						//GlobalStuff::ShowLinePathImg();
+					}
 
 
-					GlobalStuff::SetImageInLinePathMap("AbsDiff", absDiff_Img->GetSrcImg());
 
 					CalcMagImage(diff_Img->GetVirtAccessor(), cx.m_standev1_X_Img->GetVirtAccessor());
 
@@ -141,7 +142,31 @@ namespace Ncv
 					F32ImageArrayHolder3C_Ref diff2_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
 					CalcDiffImageX(diff_Img->GetVirtAccessor(), diff2_Img->GetVirtAccessor(), diffRange);
 
+					F32ImageArrayHolder3C_Ref absDiff2_Img = F32ImageArrayHolder3C::CreateEmptyFrom(cx.m_org_Img);
+					AbsImage(diff2_Img->GetVirtAccessor(), absDiff2_Img->GetVirtAccessor());
+					MultiplyImageByNum(absDiff2_Img->GetVirtAccessor(), 2);
+					SetUndefinedInImageToZero(absDiff2_Img->GetVirtAccessor());
+					
+					//F32ImageArrayHolder1C_Ref diff2_Mag_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
+					//CalcMagImage(diff2_Img->GetVirtAccessor(), diff2_Mag_Img->GetVirtAccessor());
+
+
+					if (0 == cx.m_nIndex)
+					{
+						GlobalStuff::SetImageInLinePathMap("diff2_Img 0", diff2_Img->GetSrcImg());
+						GlobalStuff::SetImageInLinePathMap("AbsDiff2 0", absDiff2_Img->GetSrcImg());
+						//GlobalStuff::SetImageInLinePathMap("Diff2 Mag 0", GenTriChGrayImg(diff2_Mag_Img->GetSrcImg()));
+
+						//ShowImage(absDiff_Img->GetSrcImg(), cx.MakeStrWithId("absDiff_Img").c_str());
+
+						//GlobalStuff::SetLinePathImg(absDiff_Img->GetSrcImg());
+						//GlobalStuff::ShowLinePathImg();
+					}
+
+
 					CalcMagImage(diff2_Img->GetVirtAccessor(), cx.m_standev2_X_Img->GetVirtAccessor());
+
+
 
 					//F32ImageArrayHolder1C_Ref diffMag_Img = F32ImageArrayHolder1C::CreateEmptyFrom(cx.m_org_Img);
 					//CalcMagImage(diff_Img->GetVirtAccessor(), diffMag_Img->GetVirtAccessor());

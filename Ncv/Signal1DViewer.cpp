@@ -85,13 +85,70 @@ namespace Ncv
 				CV_RGB(0, 0, 0),
 				1 );
 
+//------
+
+
+			cvLine(
+				ret->GetIplImagePtr(),
+				cvPoint(0, ret->GetSize().height - 1 - m_margY - 127 + 20),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 127 + 20),
+				CV_RGB(140, 140, 140),
+				1);
+
+			cvLine(
+				ret->GetIplImagePtr(),
+				cvPoint(0, ret->GetSize().height - 1 - m_margY - 127 + 10),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 127 + 10),
+				CV_RGB(140, 140, 140),
+				1);
+
+
+
+
+			cvLine(
+				ret->GetIplImagePtr(),
+				cvPoint(0, ret->GetSize().height - 1 - m_margY - 127),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 127),
+				CV_RGB(30, 30, 30),
+				1);
+
+
+
+			cvLine(
+				ret->GetIplImagePtr(),
+				cvPoint(0, ret->GetSize().height - 1 - m_margY - 127 - 20),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 127 - 20),
+				CV_RGB(140, 140, 140),
+				1);
+
+			cvLine(
+				ret->GetIplImagePtr(),
+				cvPoint(0, ret->GetSize().height - 1 - m_margY - 127 - 10),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 127 - 10),
+				CV_RGB(140, 140, 140),
+				1);
+
+
+
+//--------
 
 			cvLine (
 				ret->GetIplImagePtr(), 
-				cvPoint( 0, ret->GetSize().height - 1 - m_margY - 20), 
-				cvPoint( ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 20), 
-				CV_RGB(0, 0, 0),
+				cvPoint( 0, ret->GetSize().height - 1 - m_margY - 10), 
+				cvPoint( ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 10), 
+				CV_RGB(140, 140, 140),
 				1 );
+
+			cvLine(
+				ret->GetIplImagePtr(),
+				cvPoint(0, ret->GetSize().height - 1 - m_margY - 20),
+				cvPoint(ret->GetSize().width - 1, ret->GetSize().height - 1 - m_margY - 20),
+				CV_RGB(30, 30, 30),
+				1);
+
+
+
+
 
 			cvLine (
 				ret->GetIplImagePtr(), 
