@@ -161,17 +161,19 @@ namespace Ncv
 		}
 
 
-
-		for (int j = -1; j < m_nMaxSignalLength - 1; j++)
+		if (m_nScaleX > 1)
 		{
-			const int x = j * m_nScaleX + m_margX;
+			for (int j = -1; j < m_nMaxSignalLength - 1; j++)
+			{
+				const int x = j * m_nScaleX + m_margX;
 
-			cvLine(
-				ret->GetIplImagePtr(),
-				cvPoint(x, 0),
-				cvPoint(x, ret->GetSize().height - 1),
-				CV_RGB(120, 120, 120),
-				1);
+				cvLine(
+					ret->GetIplImagePtr(),
+					cvPoint(x, 0),
+					cvPoint(x, ret->GetSize().height - 1),
+					CV_RGB(120, 120, 120),
+					1);
+			}
 		}
 
 

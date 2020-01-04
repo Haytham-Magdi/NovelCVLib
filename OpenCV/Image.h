@@ -37,6 +37,8 @@ namespace Ncv
 	public:
 		Image(IplImage * a_src)
 		{
+			Ncpp:Ncpp_ASSERT(nullptr != a_src);
+
 			Ncv::InitLib();
 
 			Init(a_src);

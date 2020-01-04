@@ -21,12 +21,12 @@ namespace Ncpp
 		{
 		}
 
-		ActualArrayAccessor_1D(T * a_data, int a_nSize)
+		ActualArrayAccessor_1D(T * a_data, const int a_nSize)
 		{
 			Init(a_data, a_nSize);
 		}
 
-		void Init(T * a_data, int a_nSize)
+		void Init(T * a_data, const int a_nSize)
 		{
 			Ncpp_ASSERT(a_nSize >= 0);
 
@@ -34,7 +34,7 @@ namespace Ncpp
 			m_nSize = a_nSize;
 		}
 
-		T & operator[](int a_pos) const
+		T & operator[](const int a_pos) const
 		{
 			Ncpp_ASSERT(a_pos >= 0);
 			Ncpp_ASSERT(a_pos < m_nSize);

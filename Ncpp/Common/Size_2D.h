@@ -6,7 +6,7 @@
 
 
 #include <NovelCVLib\Common\Debug.h>
-#include <NovelCVLib\Common\Object.h>
+//#include <NovelCVLib\Common\Object.h>
 
 
 namespace Ncpp

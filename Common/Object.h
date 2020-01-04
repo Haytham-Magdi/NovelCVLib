@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #include <NovelCVLib\Common\Debug.h>
-#include <NovelCVLib\Common\ObjRef.h>
+//#include <NovelCVLib\Common\ObjRef.h>
 
 
 
