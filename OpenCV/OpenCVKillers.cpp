@@ -6,14 +6,10 @@
 namespace Ncpp
 {
 	
-	void KillObj(IplImage * a_ptr)
+	void KillObj(cv::Mat * a_ptr)
 	{
-		cvReleaseImage(&a_ptr);
-	}
-
-	void KillObj(CvMat * a_ptr)
-	{
-		cvReleaseMat(&a_ptr);
+		////cvReleaseMat(&a_ptr);
+		//a_ptr->deallocate();
 	}
 
 }

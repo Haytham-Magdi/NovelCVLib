@@ -21,13 +21,13 @@ namespace Ncv
 	{
 		using namespace Ncpp;
 
-		Size_2D size_2D(const CvSize & src);
-		CvSize toCvSize(const Size_2D & src);
+		Size_2D size_2D(const cv::Size & src);
+		cv::Size toCvSize(const Size_2D & src);
 
-		S32Point toS32Point(const CvPoint & src);
-		CvPoint toCvPoint(const S32Point & src);
+		S32Point toS32Point(const cv::Point & src);
+		cv::Point toCvPoint(const S32Point & src);
 
-		S64Point toS64Point(const CvPoint & src);
-		CvPoint toCvPoint(const S64Point & src);
+		S64Point toS64Point(const cv::Point & src);
+		cv::Point toCvPoint(const S64Point & src);
 	}
 }

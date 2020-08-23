@@ -884,9 +884,9 @@ void CMfcCvTut_11Jun07Dlg::RgnSgmImg_Mouse_Callback(
 
 			HCV_CALL(
 
-				cvCircle (
-					img1->GetIplImagePtr(),
-					cvPoint( a_x, a_y ),
+				cv::Circle (
+					img1->GetMat(),
+					cv::Point( a_x, a_y ),
 					3,
 					//CV_RGB( a_color.val2, a_color.val1, a_color.val0 ),
 					CV_RGB( 255, 0, 0 ),

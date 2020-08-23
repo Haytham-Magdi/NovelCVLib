@@ -35,9 +35,9 @@ namespace Ncv
 	class Image : public Ncpp::Object
 	{
 	public:
-		Image(IplImage * a_src)
+		Image(CvMatRef a_src)
 		{
-			Ncpp:Ncpp_ASSERT(nullptr != a_src);
+			//Ncpp:Ncpp_ASSERT(nullptr != a_src);
 
 			Ncv::InitLib();
 
@@ -49,16 +49,9 @@ namespace Ncv
 			return m_channels[a_nChannel];
 		}
 
-		IplImage * GetIplImagePtr(void)
-		{
-			Ncpp_ASSERT( nullptr != (IplImage *)m_orgImg );
-
-			return (IplImage *)m_orgImg;
-		}
-
 		int GetNofChannels(void)
 		{
-			return m_orgImg->nChannels;
+			return m_orgImg->channels();
 		}
 
 		int GetWidth(void)
@@ -71,14 +64,14 @@ namespace Ncv
 			return m_channels[0]->GetHeight();
 		}
 
-		CvSize GetSize()
+		cv::Size GetSize()
 		{
-			return cvGetSize (this->GetIplImagePtr());
+			return this->GetMat().size();
 		}
 
 		int GetSize1D()
 		{
-			CvSize siz = GetSize();
+			cv::Size siz = GetSize();
 
 			return siz.width * siz.height;
 		}
@@ -88,15 +81,62 @@ namespace Ncv
 			return GetNofChannels() * GetSize1D() * sizeof(T);
 		}
 
-		CvMat* GetMatPtr()
+		cv::Mat& GetMat()
 		{
-			return cvGetMat(this->GetIplImagePtr(), &m_mat);
+			//return cvGetMat(this->GetMat(), &m_mat);
+			return this->m_mat;
 		}
 
-		static Image * Create(CvSize a_siz, int a_nChannels)
+		cv::Mat* GetMatPtr()
 		{
-			return new Image(cvCreateImage(a_siz, 
-				NCV_DEPTH_ID(T), a_nChannels)); 
+			//return cvGetMat(this->GetMat(), &m_mat);
+			return &this->m_mat;
+		}
+
+		static Image * Create(cv::Size a_size, int a_nChannels)
+		{
+			Ncv::CvMatRef matRef = new cv::Mat();
+
+			//int type;
+
+			T v1;
+
+			if (std::is_same<T, float>::value)
+			{
+				(*matRef).create(a_size, CV_32FC(a_nChannels));
+			}
+			else if (std::is_same<T, double>::value)
+			{
+				(*matRef).create(a_size, CV_64FC(a_nChannels));
+			}
+			else if (std::is_same<T, int>::value)
+			{
+				(*matRef).create(a_size, CV_32SC(a_nChannels));
+			}
+			else if (std::is_same<T, short>::value)
+			{
+				(*matRef).create(a_size, CV_16SC(a_nChannels));
+			}
+			else if (std::is_same<T, unsigned short>::value)
+			{
+				(*matRef).create(a_size, CV_16UC(a_nChannels));
+			}
+			else if (std::is_same<T, char>::value)
+			{
+				(*matRef).create(a_size, CV_8SC(a_nChannels));
+			}
+			else if (std::is_same<T, uchar>::value)
+			{
+				(*matRef).create(a_size, CV_8UC(a_nChannels));
+			}
+			else
+			{
+				throw "Invalid type case!";
+			}
+
+
+			//return new Image(cvCreateImage(a_siz, 
+			//	NCV_DEPTH_ID(T), a_nChannels)); 
 		}
 
 		void SetAll(T a_val)
@@ -129,7 +169,7 @@ namespace Ncv
 
 		IMAGE_REF(T) Clone()
 		{
-			CvSize siz = this->GetSize();
+			cv::Size siz = this->GetSize();
 
 			IMAGE_REF(T) pRet = this->CloneEmpty();
 			this->CopyTo(pRet);
@@ -147,11 +187,12 @@ namespace Ncv
 		}
 
 	protected:
-		void Init(IplImage * a_src)
+		void Init(CvMatRef a_src)
+		//void Init(cv::Mat &  a_src)
 		{
 			m_orgImg = a_src;
 
-			int nofChns = m_nofChannels = a_src->nChannels;
+			int nofChns = m_nofChannels = a_src->channels();
 
 			m_channels.resize(0);
 
@@ -162,15 +203,9 @@ namespace Ncv
 				//m_nWidth = a_src->width;
 				//m_nHeight = a_src->height;				
 
-				m_nofLineUnits = a_src->widthStep / sizeof(T);
+				m_nofLineUnits = a_src->cols / sizeof(T);
 
-				//HCV_CALL( cvGetImageRawData ((IplImage *)a_src, (Ncpp::Uint8 **) &m_pixs, 
-				HCV_CALL( cvGetRawData ((IplImage *)a_src, (Ncpp::Uint8 **) &m_pixs, 
-					nullptr, nullptr));			
-
-			//m_pixs = &srcData[m_nBgnX * m_nStepX + a_nChnl +
-			//	m_nBgnY * m_nLineLen];
-
+				m_pixs = (T *)a_src->data;
 			}
 
 		}
@@ -178,9 +213,9 @@ namespace Ncv
 
 
 	protected:
-		IplImageRef m_orgImg;
+		CvMatRef m_orgImg;
 		ChannelRefColl<T> m_channels;
-		CvMat m_mat;
+		cv::Mat m_mat;
 
 		int m_nofChannels;
 

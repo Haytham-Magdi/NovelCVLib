@@ -16,19 +16,19 @@ namespace Ncv
 	class Channel : public Ncpp::Object
 	{
 	public:
-		Channel(IplImageRef a_src, int a_nChnl,
+		Channel(CvMatRef a_src, int a_nChnl,
 			int a_nBgnX, int a_nBgnY, int a_nLimX, int a_nLimY)
 		{
 			Init(a_src, a_nChnl,
 				a_nBgnX, a_nBgnY, a_nLimX, a_nLimY);
 		}
 
-		Channel(IplImageRef a_src, int a_nChnl)
+		Channel(CvMatRef a_src, int a_nChnl)
 		{
 			int nBgnX = 0;
 			int nBgnY = 0;
-			int nLimX = a_src->width;
-			int nLimY = a_src->height;
+			int nLimX = a_src->cols;
+			int nLimY = a_src->rows;
 
 			Init(a_src, a_nChnl,
 				nBgnX, nBgnY, nLimX, nLimY);
@@ -77,12 +77,12 @@ namespace Ncv
 
 	protected :
 
-		void Init(IplImageRef a_src, int a_nChnl,
+		void Init(CvMatRef a_src, int a_nChnl,
 			int a_nBgnX, int a_nBgnY, int a_nLimX, int a_nLimY)
 		{
-			Ncpp_ASSERT(NCV_DEPTH_ID(T) == a_src->depth);
+			//Ncpp_ASSERT(NCV_DEPTH_ID(T) == a_src->depth);
 
-			m_orgImg = a_src;
+			m_orgMat = a_src;
 
 			m_nBgnX = a_nBgnX;
 			m_nBgnY = a_nBgnY;
@@ -92,13 +92,12 @@ namespace Ncv
 			m_nWidth = a_nLimX - m_nBgnX;
 			m_nHeight = a_nLimY - m_nBgnY;
 
-			m_nStepX = a_src->nChannels;
-			m_nLineLen = a_src->widthStep / sizeof(T);
+			m_nStepX = a_src->channels();
+			//m_nLineLen = a_src->widthStep / sizeof(T);
+			m_nLineLen = a_src->cols * a_src->channels() / sizeof(T);
 
-			T * srcData;
-			//HCV_CALL( cvGetImageRawData ((IplImage *)a_src, (Ncpp::Uint8 **) &srcData, 
-			HCV_CALL( cvGetRawData ((IplImage *)a_src, (Ncpp::Uint8 **) &srcData, 
-				nullptr, nullptr));			
+
+			T * srcData = (T *)a_src->data;
 
 			m_pixs = &srcData[m_nBgnX * m_nStepX + a_nChnl +
 				m_nBgnY * m_nLineLen];
@@ -110,7 +109,6 @@ namespace Ncv
 
 	protected :
 		int m_nChnl;
-		IplImageRef m_orgImg;
 		CvMatRef m_orgMat;
 
 		int m_nBgnX;

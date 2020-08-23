@@ -133,7 +133,7 @@ namespace Ncv
 
 
 
-	void Convolve2D(const CvMat* a, CvMat* b, const CvMat* kernel, CvPoint anchor)
+	void Convolve2D(const cv::Mat* a, cv::Mat* b, const cv::Mat* kernel, cv::Point anchor)
 	{
 		ThrowNcvException();
 
@@ -673,10 +673,10 @@ namespace Ncv
 
 		double nMin, nMax;
 
-		HCV_CALL(cvMinMaxLoc(a_src->GetIplImagePtr(), &nMin, &nMax));
+		HCV_CALL(cv::minMaxLoc(a_src->GetMat(), &nMin, &nMax));
 
-		HCV_CALL(cvConvertScale(a_src->GetIplImagePtr(),
-			ret->GetIplImagePtr(),
+		HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
+			ret->GetMat(),
 			255 / (nMax - nMin),
 			-nMin));
 
@@ -690,7 +690,7 @@ namespace Ncv
 
 	S16ImageRef GenDownSampledImage(S16ImageRef a_src, int a_nStepX, int a_nStepY)
 	{
-		CvSize retSiz = cvSize(a_src->GetWidth() / a_nStepX,
+		cv::Size retSiz = cvSize(a_src->GetWidth() / a_nStepX,
 			a_src->GetHeight() / a_nStepY);
 
 		S16ImageRef ret;
@@ -725,7 +725,7 @@ namespace Ncv
 
 	S16ImageRef GenUpSampledImage(S16ImageRef a_src, int a_nStepX, int a_nStepY)
 	{
-		CvSize retSiz = cvSize(a_src->GetWidth() * a_nStepX,
+		cv::Size retSiz = cvSize(a_src->GetWidth() * a_nStepX,
 			a_src->GetHeight() * a_nStepY);
 
 		S16ImageRef ret;
@@ -760,7 +760,7 @@ namespace Ncv
 
 	F32ImageRef GenUpSampledImage(F32ImageRef a_src, int a_nStepX, int a_nStepY)
 	{
-		CvSize retSiz = cvSize(a_src->GetWidth() * a_nStepX,
+		cv::Size retSiz = cvSize(a_src->GetWidth() * a_nStepX,
 			a_src->GetHeight() * a_nStepY);
 
 		F32ImageRef ret;
@@ -796,7 +796,7 @@ namespace Ncv
 
 		Ncpp_ASSERT(3 == a_src->GetNofChannels());
 
-		CvSize retSiz = a_src->GetSize();
+		cv::Size retSiz = a_src->GetSize();
 
 		int nSrcSiz1D = retSiz.width * retSiz.height;
 
@@ -877,10 +877,10 @@ namespace Ncv
 		F32ImageRef ret;
 
 		ret = F32Image::Create(
-			cvGetSize(a_src->GetIplImagePtr()), a_src->GetNofChannels());
+			a_src->GetMat().size(), a_src->GetNofChannels());
 
-		HCV_CALL(cvConvertScale(a_src->GetIplImagePtr(),
-			ret->GetIplImagePtr()));
+		HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
+			ret->GetMat()));
 
 		return ret;
 	}
@@ -895,13 +895,14 @@ namespace Ncv
 	{
 		S16ImageRef ret;
 
-		Ncpp_ASSERT(nullptr != a_src->GetIplImagePtr());
+		//Ncpp_ASSERT(nullptr != a_src->GetMat());
+		Ncpp_ASSERT(nullptr != a_src);
 
 		ret = S16Image::Create(
-			cvGetSize(a_src->GetIplImagePtr()), a_src->GetNofChannels());
+			a_src->GetMat().size(), a_src->GetNofChannels());
 
-		HCV_CALL(cvConvertScale(a_src->GetIplImagePtr(),
-			ret->GetIplImagePtr()));
+		HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
+			ret->GetMat()));
 
 		return ret;
 	}
@@ -911,10 +912,10 @@ namespace Ncv
 		S16ImageRef ret;
 
 		ret = S16Image::Create(
-			cvGetSize(a_src->GetIplImagePtr()), a_src->GetNofChannels());
+			a_src->GetMat().size(), a_src->GetNofChannels());
 
-		HCV_CALL(cvConvertScale(a_src->GetIplImagePtr(),
-			ret->GetIplImagePtr()));
+		HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
+			ret->GetMat()));
 
 		return ret;
 	}
@@ -924,29 +925,29 @@ namespace Ncv
 		U8ImageRef ret;
 
 		ret = U8Image::Create(
-			cvGetSize(a_src->GetIplImagePtr()), a_src->GetNofChannels());
+			a_src->GetMat().size(), a_src->GetNofChannels());
 
 		if (1 == a_src->GetNofChannels())
 		{
 			double dMin, dMax;
 
-			HCV_CALL(cvMinMaxLoc(a_src->GetIplImagePtr(), &dMin, &dMax));
+			HCV_CALL(cv::minMaxLoc(a_src->GetMat(), &dMin, &dMax));
 
 			if (dMin < 0 || dMax > 255)
 			{
-				HCV_CALL(cvConvertScale(a_src->GetIplImagePtr(),
-					ret->GetIplImagePtr(), (255 / (dMax - dMin)), -dMin));
+				HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
+					ret->GetMat(), (255 / (dMax - dMin)), -dMin));
 			}
 			else
 			{
-				HCV_CALL(cvConvertScale(a_src->GetIplImagePtr(),
-					ret->GetIplImagePtr()));
+				HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
+					ret->GetMat()));
 			}
 		}
 		else
 		{
-			HCV_CALL(cvConvertScale(a_src->GetIplImagePtr(),
-				ret->GetIplImagePtr()));
+			HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
+				ret->GetMat()));
 		}
 
 
@@ -965,40 +966,40 @@ namespace Ncv
 		S16ImageRef ret;
 
 		ret = S16Image::Create(
-			cvGetSize(a_src->GetIplImagePtr()), a_src->GetNofChannels());
+			a_src->GetMat().size(), a_src->GetNofChannels());
 
 		double dMin, dMax;
 
-		HCV_CALL(cvMinMaxLoc(a_src->GetIplImagePtr(), &dMin, &dMax));
+		HCV_CALL(cv::minMaxLoc(a_src->GetMat(), &dMin, &dMax));
 
 		if (dMin < 0 || dMax > 255)
 		{
 			double scale = (255 / (dMax - dMin));
 			double shift = -dMin * scale;
 
-			HCV_CALL(cvConvertScale(a_src->GetIplImagePtr(),
-				a_src->GetIplImagePtr(), scale, shift));
+			HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
+				a_src->GetMat(), scale, shift));
 		}
 		else
 		{
-			HCV_CALL(cvConvertScale(a_src->GetIplImagePtr(),
-				ret->GetIplImagePtr()));
+			HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
+				ret->GetMat()));
 		}
 
 		return ret;
 	}
 
-	void ShowImage(IplImage * a_iplImagePtr, const char * a_sWndName)
+	void ShowImage(cv::Mat & a_mat, const char * a_sWndName)
 	{
 		//	hthm 241012
 		//return;
 
-		bool bFstShow = (nullptr == cvGetWindowHandle(a_sWndName));
+		//bool bFstShow = (nullptr == cvGetWindowHandle(a_sWndName));
 
 		HCV_CALL(cvNamedWindow(a_sWndName, 1));
-		HCV_CALL(cvShowImage(a_sWndName, a_iplImagePtr));
+		HCV_CALL(cv::imshow(a_sWndName, a_mat));
 
-		if (bFstShow)
+		//if (bFstShow)
 			//HCV_CALL( cvMoveWindow( a_sWndName, 100, 100 ) );
 			HCV_CALL(cvMoveWindow(a_sWndName, 100, 10));
 	}
@@ -1009,7 +1010,7 @@ namespace Ncv
 		S16ImageRef ret;
 
 		ret = S16Image::Create(
-			cvGetSize(a_src->GetIplImagePtr()), 1);
+			a_src->GetMat().size(), 1);
 
 		int nAprSiz = 3;
 		int nMarg = nAprSiz / 2;
@@ -1092,7 +1093,7 @@ namespace Ncv
 		S16ImageRef ret;
 
 		ret = S16Image::Create(
-			cvGetSize(a_src->GetIplImagePtr()), 1);
+			a_src->GetMat().size(), 1);
 
 		int nAprSiz = 3;
 		int nMarg = nAprSiz / 2;
@@ -1249,14 +1250,14 @@ namespace Ncv
 
 		for (int i = 0; i < a_nIterCnt; i++)
 		{
-			CvSize retSiz = cvGetSize(src->GetIplImagePtr());
+			cv::Size retSiz = src->GetMat().size();
 			retSiz.width *= 2; retSiz.width;
 			retSiz.height *= 2; retSiz.height;
 
 			//ret = S16Image::Create(retSiz, src->GetNofChannels());
 			//ret->SetAll(0);
 
-			//cvPyrUp (src->GetIplImagePtr(), ret->GetIplImagePtr());
+			//cv::pyrUp (src->GetMat(), ret->GetMat());
 
 			ret = GenUpSampledImage(src, 2);
 
@@ -1280,7 +1281,7 @@ namespace Ncv
 
 		for (int i = 0; i < a_nIterCnt; i++)
 		{
-			CvSize retSiz = cvGetSize(src->GetIplImagePtr());
+			cv::Size retSiz = src->GetMat().size();
 			retSiz.width *= 2; retSiz.width;
 			retSiz.height *= 2; retSiz.height;
 
@@ -1288,7 +1289,7 @@ namespace Ncv
 				ret = F32Image::Create(retSiz, src->GetNofChannels());
 				//ret->SetAll(0);
 
-				cvPyrUp(src->GetIplImagePtr(), ret->GetIplImagePtr());
+				cv::pyrUp(src->GetMat(), ret->GetMat());
 			}
 
 			//ret = GenUpSampledImage( src, 2 );
@@ -1316,14 +1317,14 @@ namespace Ncv
 
 		for (int i = 0; i < a_nIterCnt; i++)
 		{
-			CvSize retSiz = cvGetSize(src->GetIplImagePtr());
+			cv::Size retSiz = src->GetMat().size();
 			retSiz.width /= 2; retSiz.width;
 			retSiz.height /= 2; retSiz.height;
 
 			//ret = S16Image::Create(retSiz, src->GetNofChannels());
 			//ret->SetAll(0);
 
-			//cvPyrDown (src->GetIplImagePtr(), ret->GetIplImagePtr());
+			//cvPyrDown (src->GetMat(), ret->GetMat());
 
 			ret = GenDownSampledImage(src, 2);
 
@@ -1346,14 +1347,14 @@ namespace Ncv
 
 		for (int i = 0; i < a_nIterCnt; i++)
 		{
-			CvSize retSiz = cvGetSize(src->GetIplImagePtr());
+			cv::Size retSiz = src->GetMat().size();
 			retSiz.width /= 2; retSiz.width;
 			retSiz.height /= 2; retSiz.height;
 
 			ret = F32Image::Create(retSiz, src->GetNofChannels());
 			//ret->SetAll(0);
 
-			cvPyrDown(src->GetIplImagePtr(), ret->GetIplImagePtr());
+			cv::pyrDown(src->GetMat(), ret->GetMat());
 
 			//ret = GenDownSampledImage( src, 2 );
 
@@ -1370,9 +1371,9 @@ namespace Ncv
 		return ret;
 	}
 
-	std::vector<CvPoint> GenDataPoints(S16ImageRef a_src, const int nDataVal)
+	std::vector<cv::Point> GenDataPoints(S16ImageRef a_src, const int nDataVal)
 	{
-		std::vector<CvPoint> dataPts(1000);
+		std::vector<cv::Point> dataPts(1000);
 		dataPts.resize(0);
 
 		S16ChannelRef ch0 = a_src->GetAt(0);
@@ -1382,14 +1383,14 @@ namespace Ncv
 			for (int x = 0; x < ch0->GetWidth(); x++)
 			{
 				if (nDataVal == ch0->GetAt(x, y))
-					dataPts.push_back(cvPoint(x, y));
+					dataPts.push_back(cv::Point(x, y));
 			}
 		}
 
 		return dataPts;
 	}
 
-	S16ImageRef GenDataImage(std::vector<CvPoint> a_data, CvSize a_imgSiz,
+	S16ImageRef GenDataImage(std::vector<cv::Point> a_data, cv::Size a_imgSiz,
 		int nDataVal, const int nBkgVal)
 	{
 		S16ImageRef ret;
@@ -1413,7 +1414,7 @@ namespace Ncv
 
 		const int nIntvX = 23;
 
-		CvSize retSiz = cvGetSize(a_hdifImg->GetIplImagePtr());
+		cv::Size retSiz = a_hdifImg->GetMat().size();
 		retSiz.width /= nIntvX; retSiz.width--;
 
 		ret = S16Image::Create(retSiz, 1);
@@ -1449,7 +1450,7 @@ namespace Ncv
 
 		//const int nIntvX = 23;
 
-		CvSize retSiz = cvGetSize(a_src->GetIplImagePtr());
+		cv::Size retSiz = a_src->GetMat().size();
 
 		ret = S16Image::Create(retSiz, a_src->GetNofChannels());
 
@@ -1502,7 +1503,7 @@ namespace Ncv
 	{
 		F32ImageRef ret;
 
-		CvSize srcSiz = a_src->GetSize();
+		cv::Size srcSiz = a_src->GetSize();
 		int nSrcSiz1D = srcSiz.width * srcSiz.height;
 
 		float * srcBuf = a_src->GetPixAt(0, 0);
@@ -1535,7 +1536,7 @@ namespace Ncv
 
 		//const int nIntvX = 23;
 
-		CvSize retSiz = cvGetSize(a_src->GetIplImagePtr());
+		cv::Size retSiz = a_src->GetMat().size();
 
 		ret = F32Image::Create(retSiz, a_src->GetNofChannels());
 
@@ -1567,13 +1568,13 @@ namespace Ncv
 
 
 
-	void DrawPoints(std::vector<CvPoint> a_data, S16ImageRef a_img, CvScalar a_color)
+	void DrawPoints(std::vector<cv::Point> a_data, S16ImageRef a_img, CvScalar a_color)
 	{
 		DrawPoints(&a_data[0], a_data.size(), a_img, a_color);
 	}
 
 
-	void DrawPoints(CvPoint * a_data, int a_nofPoints,
+	void DrawPoints(cv::Point * a_data, int a_nofPoints,
 		S16ImageRef a_img, CvScalar a_color)
 	{
 		const int nBlue = a_color.val[0];
@@ -1599,10 +1600,10 @@ namespace Ncv
 
 
 
-	void DrawPoints(S16ImageRef a_img, std::vector<CvPoint> * a_pPointArr,
+	void DrawPoints(S16ImageRef a_img, std::vector<cv::Point> * a_pPointArr,
 		std::vector<int> * a_pPointIDs, std::vector<U8ColorVal> * a_pColorArr)
 	{
-		std::vector<CvPoint> & pointArr = *a_pPointArr;
+		std::vector<cv::Point> & pointArr = *a_pPointArr;
 		std::vector<int> & pointIDs = *a_pPointIDs;
 		std::vector<U8ColorVal> & colorArr = *a_pColorArr;
 
@@ -1614,7 +1615,7 @@ namespace Ncv
 	}
 
 
-	//void DrawPoints(S16ImageRef a_img, CvPoint * a_points,
+	//void DrawPoints(S16ImageRef a_img, cv::Point * a_points,
 	//	//int a_nofPoints, int * a_ids, U8ColorVal * a_colors)
 	//	int a_nofPoints, ClusteringMgr & a_rCm, U8ColorVal * a_colors)
 	//{
@@ -1650,8 +1651,8 @@ namespace Ncv
 
 		const int nMarg = a_nAprSiz / 2;
 
-		CvSize srcSiz = a_src->GetSize();
-		CvSize retSiz = cvSize(srcSiz.width - 2 * nMarg, srcSiz.height);
+		cv::Size srcSiz = a_src->GetSize();
+		cv::Size retSiz = cvSize(srcSiz.width - 2 * nMarg, srcSiz.height);
 
 		ret = S16Image::Create(retSiz, a_src->GetNofChannels());
 
@@ -1696,8 +1697,8 @@ namespace Ncv
 
 		const int nMarg = a_nAprSiz / 2;
 
-		CvSize srcSiz = a_src->GetSize();
-		CvSize retSiz = cvSize(srcSiz.width, srcSiz.height - 2 * nMarg);
+		cv::Size srcSiz = a_src->GetSize();
+		cv::Size retSiz = cvSize(srcSiz.width, srcSiz.height - 2 * nMarg);
 
 		ret = S16Image::Create(retSiz, a_src->GetNofChannels());
 
@@ -1795,9 +1796,9 @@ namespace Ncv
 
 		const int nMarg = a_nAprSiz / 2;
 
-		CvSize srcSiz = a_src->GetSize();
-		//CvSize retSiz = cvSize( srcSiz.width - 2 * nMarg, srcSiz.height);
-		CvSize retSiz = cvSize(srcSiz.width, srcSiz.height);
+		cv::Size srcSiz = a_src->GetSize();
+		//cv::Size retSiz = cvSize( srcSiz.width - 2 * nMarg, srcSiz.height);
+		cv::Size retSiz = cvSize(srcSiz.width, srcSiz.height);
 
 		ret = F32Image::Create(retSiz, a_src->GetNofChannels());
 
@@ -1882,9 +1883,9 @@ namespace Ncv
 
 		const int nMarg = a_nAprSiz / 2;
 
-		CvSize srcSiz = a_src->GetSize();
-		//CvSize retSiz = cvSize( srcSiz.width - 2 * nMarg, srcSiz.height);
-		CvSize retSiz = cvSize(srcSiz.width, srcSiz.height);
+		cv::Size srcSiz = a_src->GetSize();
+		//cv::Size retSiz = cvSize( srcSiz.width - 2 * nMarg, srcSiz.height);
+		cv::Size retSiz = cvSize(srcSiz.width, srcSiz.height);
 
 		ret = F32Image::Create(retSiz, a_src->GetNofChannels());
 
@@ -2097,7 +2098,7 @@ namespace Ncv
 	}
 
 
-	S16ImageRef GenCenterPixImg(CvSize a_siz, int a_nofChannels)
+	S16ImageRef GenCenterPixImg(cv::Size a_siz, int a_nofChannels)
 	{
 		S16ImageRef ret = S16Image::Create(a_siz, a_nofChannels);
 
@@ -2126,9 +2127,9 @@ namespace Ncv
 
 					HCV_CALL(
 					cvRectangle(
-					ret2->GetIplImagePtr(),
-					cvPoint(50, 50),
-					cvPoint( 150, 150),
+					ret2->GetMat(),
+					cv::Point(50, 50),
+					cv::Point( 150, 150),
 					CV_RGB(255, 255, 255),
 					-1)
 					);
@@ -2138,17 +2139,17 @@ namespace Ncv
 		S16ImageRef ret = S16Image::Create(
 			a_src->GetSize(), a_src->GetNofChannels());
 
-		HCV_CALL(cvConvertScale(a_src->GetIplImagePtr(),
-			ret->GetIplImagePtr(),
+		HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
+			ret->GetMat(),
 			//255 / (nMax - nMin), 
 			//- nMin) );
 			//0.75, 50) );
 			1, 0));
 
-		//cvSetCOI( ret->GetIplImagePtr() , 1 );
+		//cvSetCOI( ret->GetMat() , 1 );
 
 		//double dMin, dMax;
-		//HCV_CALL( cvMinMaxLoc( ret->GetIplImagePtr(), &dMin, &dMax) );
+		//HCV_CALL( cv::minMaxLoc( ret->GetMat(), &dMin, &dMax) );
 
 
 		S16ChannelRef binCh = a_binImg->GetAt(0);
@@ -2718,8 +2719,8 @@ namespace Ncv
 
 			const int nMarg = a_nAprSiz / 2;
 
-			CvSize srcSiz = a_src->GetSize();
-			CvSize retSiz = cvSize(srcSiz.width - 2 * nMarg, srcSiz.height);
+			cv::Size srcSiz = a_src->GetSize();
+			cv::Size retSiz = cvSize(srcSiz.width - 2 * nMarg, srcSiz.height);
 
 			ret = S16Image::Create(retSiz, a_src->GetNofChannels());
 			ret->SetAll(0);
@@ -2802,8 +2803,8 @@ namespace Ncv
 
 
 
-			CvSize srcSiz = src->GetSize();
-			CvSize retSiz = cvSize(srcSiz.width, srcSiz.height - 2 * nMarg);
+			cv::Size srcSiz = src->GetSize();
+			cv::Size retSiz = cvSize(srcSiz.width, srcSiz.height - 2 * nMarg);
 
 			ret = S16Image::Create(retSiz, src->GetNofChannels());
 			ret->SetAll(0);
@@ -3011,10 +3012,10 @@ namespace Ncv
 		F32ImageRef img3 = img1->Clone();
 
 		HCV_CALL(
-			cvSub(
-			img1->GetIplImagePtr(),
-			img2->GetIplImagePtr(),
-			img3->GetIplImagePtr())
+			cv::subtract(
+			img1->GetMat(),
+			img2->GetMat(),
+			img3->GetMat())
 			);
 
 		return img3;
@@ -3046,11 +3047,11 @@ namespace Ncv
 
 		for(int i=0; i<1; i++)
 		{
-		cvDilate( resF32->GetIplImagePtr(),
-		resMax->GetIplImagePtr(), 0, j );
+		cv::dilate( resF32->GetMat(),
+		resMax->GetMat(), 0, j );
 
-		cvErode( resF32->GetIplImagePtr(),
-		resMin->GetIplImagePtr(), 0, j );
+		cv::erode( resF32->GetMat(),
+		resMin->GetMat(), 0, j );
 
 		}
 		*/
@@ -3062,10 +3063,10 @@ namespace Ncv
 			resF32->GetNofChannels());
 
 		HCV_CALL(
-			cvSub(
-			resMax->GetIplImagePtr(),
-			resMin->GetIplImagePtr(),
-			resDif->GetIplImagePtr())
+			cv::subtract(
+			resMax->GetMat(),
+			resMin->GetMat(),
+			resDif->GetMat())
 			);
 
 		resF32 = resDif;
@@ -3099,35 +3100,26 @@ namespace Ncv
 		//int j = ( nAprSiz / 2 );
 		int j = nAprSiz;
 
-		/*		{
-					CvSize siz1 = cvSize(300, 200);
-					F32ImageRef f32img1 = F32Image::Create( siz1 , 3);
-					f32img1->SetAll(0);
+		throw "Refactor not Complete";
 
-					F32ImageRef f32img2 = F32Image::Create( siz1 , 3);
+		//for (int i = 0; i < 1; i++)
+		//{
+		//	cv::dilate(resF32->GetMat(),
+		//		resMax->GetMat(), 0, j);
 
-					cvDilate( f32img1->GetIplImagePtr(),
-					f32img2->GetIplImagePtr(), 0, 5 );
-					}*/
+		//	cv::erode(resF32->GetMat(),
+		//		resMin->GetMat(), 0, j);
 
-		for (int i = 0; i < 1; i++)
-		{
-			cvDilate(resF32->GetIplImagePtr(),
-				resMax->GetIplImagePtr(), 0, j);
-
-			cvErode(resF32->GetIplImagePtr(),
-				resMin->GetIplImagePtr(), 0, j);
-
-		}
+		//}
 
 		F32ImageRef resDif = F32Image::Create(resF32->GetSize(),
 			resF32->GetNofChannels());
 
 		HCV_CALL(
-			cvSub(
-			resMax->GetIplImagePtr(),
-			resMin->GetIplImagePtr(),
-			resDif->GetIplImagePtr())
+			cv::subtract(
+			resMax->GetMat(),
+			resMin->GetMat(),
+			resDif->GetMat())
 			);
 
 		res = GenS16FromF32Image(resDif);
@@ -3141,19 +3133,19 @@ namespace Ncv
 
 	void ShowImage(U8ImageRef dsp, const char * a_sWndName)
 	{
-		ShowImage(dsp->GetIplImagePtr(), a_sWndName);
+		ShowImage(dsp->GetMat(), a_sWndName);
 	}
 
 	void ShowImage(S16ImageRef a_src, const char * a_sWndName)
 	{
 		U8ImageRef dsp = GenU8FromS16Image(a_src);
-		ShowImage(dsp->GetIplImagePtr(), a_sWndName);
+		ShowImage(dsp->GetMat(), a_sWndName);
 	}
 
 	void ShowImage(F32ImageRef a_src, const char * a_sWndName)
 	{
 		U8ImageRef dsp = GenU8FromF32Image(a_src);
-		ShowImage(dsp->GetIplImagePtr(), a_sWndName);
+		ShowImage(dsp->GetMat(), a_sWndName);
 	}
 
 	void SaveImage(S16ImageRef a_src, char * a_sFilePath)
@@ -3166,12 +3158,12 @@ namespace Ncv
 
 		strcat(sFullPath, a_sFilePath);
 
-		//HCV_CALL( cvvSaveImage(a_sFilePath, 
-		HCV_CALL(cvvSaveImage(sFullPath,
-			//HCV_CALL( cvvSaveImage("e:\\res.jpg", 
+		//HCV_CALL( cv::imwrite(a_sFilePath, 
+		HCV_CALL(cv::imwrite(sFullPath,
+			//HCV_CALL( cv::imwrite("e:\\res.jpg", 
 
 
-			dsp->GetIplImagePtr()));
+			dsp->GetMat()));
 	}
 
 	void SaveImage(F32ImageRef a_src, char * a_sFilePath)
@@ -3187,11 +3179,11 @@ namespace Ncv
 
 		strcat(sFullPath, a_sFilePath);
 
-		//HCV_CALL( cvvSaveImage(a_sFilePath, 
-		HCV_CALL(cvvSaveImage(sFullPath,
-			//HCV_CALL( cvvSaveImage("e:\\res.jpg", 
+		//HCV_CALL( cv::imwrite(a_sFilePath, 
+		HCV_CALL(cv::imwrite(sFullPath,
+			//HCV_CALL( cv::imwrite("e:\\res.jpg", 
 
-			dsp->GetIplImagePtr()));
+			dsp->GetMat()));
 	}
 
 	//S16ImageRef GenImageFromHorzSignal(SignalOneDimRef a_sig, int a_nHeight)
@@ -3226,23 +3218,25 @@ namespace Ncv
 		F32ImageRef ret = F32Image::Create(a_src->GetSize(),
 			a_src->GetNofChannels());
 
-		IplConvKernel* pKernel;
+		throw "Refactor not Complete";
 
-		HCV_CALL(
-			pKernel = cvCreateStructuringElementEx(
-			(a_nAprSiz * 2) + 1,
-			(a_nAprSiz * 2) + 1,
-			a_nAprSiz,
-			a_nAprSiz,
-			CV_SHAPE_ELLIPSE,
-			nullptr
-			)
-			);
+		//IplConvKernel* pKernel;
 
-		HCV_CALL(
-			cvErode(a_src->GetIplImagePtr(),
-			ret->GetIplImagePtr(), pKernel, 1)
-			);
+		//HCV_CALL(
+		//	pKernel = cvCreateStructuringElementEx(
+		//	(a_nAprSiz * 2) + 1,
+		//	(a_nAprSiz * 2) + 1,
+		//	a_nAprSiz,
+		//	a_nAprSiz,
+		//	CV_SHAPE_ELLIPSE,
+		//	nullptr
+		//	)
+		//	);
+
+		//HCV_CALL(
+		//	cv::erode(a_src->GetMat(),
+		//	ret->GetMat(), pKernel, 1)
+		//	);
 
 		return ret;
 	}
@@ -3256,10 +3250,12 @@ namespace Ncv
 		F32ImageRef ret = F32Image::Create(a_src->GetSize(),
 			a_src->GetNofChannels());
 
-		HCV_CALL(
-			cvErode(a_src->GetIplImagePtr(),
-			ret->GetIplImagePtr(), 0, a_nAprSiz)
-			);
+		throw "Refactor not Complete";
+
+		//HCV_CALL(
+		//	cv::erode(a_src->GetMat(),
+		//	ret->GetMat(), 0, a_nAprSiz)
+		//	);
 
 		return ret;
 	}
@@ -3271,23 +3267,25 @@ namespace Ncv
 		F32ImageRef ret = F32Image::Create(a_src->GetSize(),
 			a_src->GetNofChannels());
 
-		IplConvKernel* pKernel;
+		throw "Refactor not Complete";
 
-		HCV_CALL(
-			pKernel = cvCreateStructuringElementEx(
-			(a_nAprSiz * 2) + 1,
-			(a_nAprSiz * 2) + 1,
-			a_nAprSiz,
-			a_nAprSiz,
-			CV_SHAPE_ELLIPSE,
-			nullptr
-			)
-			);
+		//IplConvKernel* pKernel;
 
-		HCV_CALL(
-			cvDilate(a_src->GetIplImagePtr(),
-			ret->GetIplImagePtr(), pKernel, 1)
-			);
+		//HCV_CALL(
+		//	pKernel = cvCreateStructuringElementEx(
+		//	(a_nAprSiz * 2) + 1,
+		//	(a_nAprSiz * 2) + 1,
+		//	a_nAprSiz,
+		//	a_nAprSiz,
+		//	CV_SHAPE_ELLIPSE,
+		//	nullptr
+		//	)
+		//	);
+
+		//HCV_CALL(
+		//	cv::dilate(a_src->GetMat(),
+		//	ret->GetMat(), pKernel, 1)
+		//	);
 
 		return ret;
 	}
@@ -3301,10 +3299,12 @@ namespace Ncv
 		F32ImageRef ret = F32Image::Create(a_src->GetSize(),
 			a_src->GetNofChannels());
 
-		HCV_CALL(
-			cvDilate(a_src->GetIplImagePtr(),
-			ret->GetIplImagePtr(), 0, a_nAprSiz)
-			);
+		throw "Refactor not Complete";
+
+		//HCV_CALL(
+		//	cv::dilate(a_src->GetMat(),
+		//	ret->GetMat(), 0, a_nAprSiz)
+		//	);
 
 		return ret;
 	}
@@ -3328,23 +3328,25 @@ namespace Ncv
 		retU8 = U8Image::Create(srcU8->GetSize(),
 			srcU8->GetNofChannels());
 
-		IplConvKernel* pKernel;
+		throw "Refactor not Complete";
 
-		HCV_CALL(
-			pKernel = cvCreateStructuringElementEx(
-			(a_nAprSiz * 2) + 1,
-			(a_nAprSiz * 2) + 1,
-			a_nAprSiz,
-			a_nAprSiz,
-			CV_SHAPE_ELLIPSE,
-			nullptr
-			)
-			);
+		//IplConvKernel* pKernel;
 
-		HCV_CALL(
-			cvErode(srcU8->GetIplImagePtr(),
-			retU8->GetIplImagePtr(), pKernel, 1)
-			);
+		//HCV_CALL(
+		//	pKernel = cvCreateStructuringElementEx(
+		//	(a_nAprSiz * 2) + 1,
+		//	(a_nAprSiz * 2) + 1,
+		//	a_nAprSiz,
+		//	a_nAprSiz,
+		//	CV_SHAPE_ELLIPSE,
+		//	nullptr
+		//	)
+		//	);
+
+		//HCV_CALL(
+		//	cv::erode(srcU8->GetMat(),
+		//	retU8->GetMat(), pKernel, 1)
+		//	);
 
 
 		S16ImageRef ret = GenS16FromU8Image(retU8);
@@ -3366,10 +3368,12 @@ namespace Ncv
 		retU8 = U8Image::Create(srcU8->GetSize(),
 			srcU8->GetNofChannels());
 
-		HCV_CALL(
-			cvErode(srcU8->GetIplImagePtr(),
-			retU8->GetIplImagePtr(), 0, a_nAprSiz)
-			);
+		throw "Refactor not Complete";
+
+		//HCV_CALL(
+		//	cv::erode(srcU8->GetMat(),
+		//	retU8->GetMat(), 0, a_nAprSiz)
+		//	);
 
 
 		S16ImageRef ret = GenS16FromU8Image(retU8);
@@ -3389,24 +3393,26 @@ namespace Ncv
 		retU8 = U8Image::Create(srcU8->GetSize(),
 			srcU8->GetNofChannels());
 
-		IplConvKernel* pKernel;
+		throw "Refactor not Complete";
 
-		HCV_CALL(
+		//IplConvKernel* pKernel;
 
-			pKernel = cvCreateStructuringElementEx(
-			(a_nAprSiz * 2) + 1,
-			(a_nAprSiz * 2) + 1,
-			a_nAprSiz,
-			a_nAprSiz,
-			CV_SHAPE_ELLIPSE,
-			nullptr
-			)
-			);
+		//HCV_CALL(
 
-		HCV_CALL(
-			cvDilate(srcU8->GetIplImagePtr(),
-			retU8->GetIplImagePtr(), pKernel, 1)
-			);
+		//	pKernel = cvCreateStructuringElementEx(
+		//	(a_nAprSiz * 2) + 1,
+		//	(a_nAprSiz * 2) + 1,
+		//	a_nAprSiz,
+		//	a_nAprSiz,
+		//	CV_SHAPE_ELLIPSE,
+		//	nullptr
+		//	)
+		//	);
+
+		//HCV_CALL(
+		//	cv::dilate(srcU8->GetMat(),
+		//	retU8->GetMat(), pKernel, 1)
+		//	);
 
 
 		S16ImageRef ret = GenS16FromU8Image(retU8);
@@ -3428,10 +3434,12 @@ namespace Ncv
 		retU8 = U8Image::Create(srcU8->GetSize(),
 			srcU8->GetNofChannels());
 
-		HCV_CALL(
-			cvDilate(srcU8->GetIplImagePtr(),
-			retU8->GetIplImagePtr(), 0, a_nAprSiz)
-			);
+		throw "Refactor not Complete";
+
+		//HCV_CALL(
+		//	cv::dilate(srcU8->GetMat(),
+		//	retU8->GetMat(), 0, a_nAprSiz)
+		//	);
 
 
 		S16ImageRef ret = GenS16FromU8Image(retU8);
@@ -3450,7 +3458,7 @@ namespace Ncv
 
 
 		HCV_CALL(
-			cvEqualizeHist(srcU8->GetIplImagePtr(), retU8->GetIplImagePtr())
+			cv::equalizeHist(srcU8->GetMat(), retU8->GetMat())
 			);
 
 		F32ImageRef ret = GenF32FromU8Image(retU8);
@@ -3461,7 +3469,7 @@ namespace Ncv
 
 	F32ImageRef Gen_CovMatNonPure_Img(F32ImageRef a_src, int a_nAprSiz)
 	{
-		CvSize srcSiz = a_src->GetSize();
+		cv::Size srcSiz = a_src->GetSize();
 
 		F32ImageRef ret = F32Image::Create(
 			srcSiz, 6);
@@ -3505,7 +3513,7 @@ namespace Ncv
 		}
 
 
-		CvSize srcSiz = a_src->GetSize();
+		cv::Size srcSiz = a_src->GetSize();
 
 		F32ImageRef ret = F32Image::Create(
 			srcSiz, 6);
@@ -3534,7 +3542,7 @@ namespace Ncv
 		if (6 != a_src->GetNofChannels())
 			ThrowNcvException();
 
-		CvSize srcSiz = a_src->GetSize();
+		cv::Size srcSiz = a_src->GetSize();
 
 		F32ImageRef ret = F32Image::Create(
 			srcSiz, 1);
@@ -3563,8 +3571,8 @@ namespace Ncv
 			srcU8->GetNofChannels());
 
 		HCV_CALL(
-			cvSmooth(srcU8->GetIplImagePtr(), retU8->GetIplImagePtr(),
-			CV_MEDIAN, a_nAprSiz)
+			cv::medianBlur(srcU8->GetMat(), retU8->GetMat(),
+				a_nAprSiz)
 			);
 
 
@@ -3584,8 +3592,8 @@ namespace Ncv
 
 
 		HCV_CALL(
-			cvSmooth(srcU8->GetIplImagePtr(), retU8->GetIplImagePtr(),
-			CV_MEDIAN, a_nAprSiz)
+			cv::medianBlur(srcU8->GetMat(), retU8->GetMat(),
+				a_nAprSiz)
 			);
 
 
@@ -3597,15 +3605,6 @@ namespace Ncv
 
 	S16ImageRef GenCvMedGausImg(S16ImageRef a_src, int a_nAprSiz)
 	{
-		//S16ImageRef ret = S16Image::Create( a_src->GetSize(),
-		//	a_src->GetNofChannels());
-
-		/*		HCV_CALL(
-				cvSmooth( a_src->GetIplImagePtr(), ret->GetIplImagePtr(),
-				CV_GAUSSIAN, a_nAprSiz)
-				//CV_BILATERAL, 30, 5)
-				);*/
-
 		int i = 1;
 
 		U8ImageRef srcU8 = GenU8FromS16Image(a_src);
@@ -3617,11 +3616,8 @@ namespace Ncv
 		{
 
 			HCV_CALL(
-				cvSmooth(srcU8->GetIplImagePtr(), retU8->GetIplImagePtr(),
-				//CV_GAUSSIAN, a_nAprSiz)
-				//CV_BILATERAL, a_nAprSiz, 0, 30, a_nAprSiz / 2)
-				//CV_BILATERAL, a_nAprSiz, 0, 300, 100)
-				CV_MEDIAN, a_nAprSiz)
+				cv::medianBlur(srcU8->GetMat(), retU8->GetMat(),
+					a_nAprSiz)
 				);
 
 			srcU8 = retU8;
@@ -3629,15 +3625,12 @@ namespace Ncv
 			retU8 = U8Image::Create(srcU8->GetSize(),
 				srcU8->GetNofChannels());
 
-			HCV_CALL(
-				cvSmooth(srcU8->GetIplImagePtr(), retU8->GetIplImagePtr(),
-				//CV_GAUSSIAN, a_nAprSiz)
-				CV_GAUSSIAN, (a_nAprSiz - 1) * 2 + 1)
-				//CV_BILATERAL, a_nAprSiz, 0, 10, 10)
-				//CV_BILATERAL, a_nAprSiz, 0, 50, a_nAprSiz)
-				//CV_BILATERAL, a_nAprSiz, 0, 300, 100)
-				//CV_MEDIAN, a_nAprSiz)
-				);
+			throw "Refactor not Complete";
+
+			//HCV_CALL(
+			//	cv::GaussianBlur(srcU8->GetMat(), retU8->GetMat(),
+			//		(a_nAprSiz - 1) * 2 + 1)
+			//	);
 
 			i++;
 			i = 1000;
@@ -3651,15 +3644,6 @@ namespace Ncv
 
 	S16ImageRef GenCvSmoothedImg(S16ImageRef a_src, int a_nAprSiz)
 	{
-		//S16ImageRef ret = S16Image::Create( a_src->GetSize(),
-		//	a_src->GetNofChannels());
-
-		/*		HCV_CALL(
-				cvSmooth( a_src->GetIplImagePtr(), ret->GetIplImagePtr(),
-				CV_GAUSSIAN, a_nAprSiz)
-				//CV_BILATERAL, 30, 5)
-				);*/
-
 		int i = 1;
 
 		U8ImageRef srcU8 = GenU8FromS16Image(a_src);
@@ -3669,30 +3653,15 @@ namespace Ncv
 
 		do
 		{
-
-			/*			HCV_CALL(
-						cvSmooth( srcU8->GetIplImagePtr(), retU8->GetIplImagePtr(),
-						//CV_GAUSSIAN, a_nAprSiz)
-						//CV_BILATERAL, a_nAprSiz, 0, 30, a_nAprSiz / 2)
-						//CV_BILATERAL, a_nAprSiz, 0, 300, 100)
-						CV_MEDIAN, a_nAprSiz)
-						);
-
-						srcU8 = retU8;*/
-
 			retU8 = U8Image::Create(srcU8->GetSize(),
 				srcU8->GetNofChannels());
 
-			HCV_CALL(
-				cvSmooth(srcU8->GetIplImagePtr(), retU8->GetIplImagePtr(),
-				//CV_GAUSSIAN, a_nAprSiz)
-				//CV_GAUSSIAN, (a_nAprSiz - 1) * 2 + 1
-				CV_GAUSSIAN, a_nAprSiz
-				//CV_BILATERAL, a_nAprSiz, 0, 10, 10)
-				//CV_BILATERAL, a_nAprSiz, 0, 50, a_nAprSiz)
-				//CV_BILATERAL, a_nAprSiz, 0, 300, 100)
-				//CV_MEDIAN, a_nAprSiz)
-				));
+			throw "Refactor not Complete";
+
+			//HCV_CALL(
+			//	cv::GaussianBlur(srcU8->GetMat(), retU8->GetMat(),
+			//		a_nAprSiz
+			//	));
 
 			i++;
 			i = 1000;
@@ -3707,49 +3676,19 @@ namespace Ncv
 
 	F32ImageRef GenCvSmoothedImg(F32ImageRef a_src, int a_nAprSiz)
 	{
-		//S16ImageRef ret = S16Image::Create( a_src->GetSize(),
-		//	a_src->GetNofChannels());
-
-		/*		HCV_CALL(
-				cvSmooth( a_src->GetIplImagePtr(), ret->GetIplImagePtr(),
-				CV_GAUSSIAN, a_nAprSiz)
-				//CV_BILATERAL, 30, 5)
-				);*/
-
 		int i = 1;
-
-		//U8ImageRef srcU8 = GenU8FromS16Image(a_src);
 
 		F32ImageRef retF32 = F32Image::Create(a_src->GetSize(),
 			a_src->GetNofChannels());
 
 		do
 		{
+			throw "Refactor not Complete";
 
-			/*			HCV_CALL(
-						cvSmooth( srcU8->GetIplImagePtr(), retU8->GetIplImagePtr(),
-						//CV_GAUSSIAN, a_nAprSiz)
-						//CV_BILATERAL, a_nAprSiz, 0, 30, a_nAprSiz / 2)
-						//CV_BILATERAL, a_nAprSiz, 0, 300, 100)
-						CV_MEDIAN, a_nAprSiz)
-						);
-
-						srcU8 = retU8;*/
-
-			//retU8 = U8Image::Create( srcU8->GetSize(),
-			//	srcU8->GetNofChannels());
-
-			HCV_CALL(
-				cvSmooth(a_src->GetIplImagePtr(), retF32->GetIplImagePtr(),
-				//CV_GAUSSIAN, a_nAprSiz)
-				//CV_GAUSSIAN, (a_nAprSiz - 1) * 2 + 1
-				CV_GAUSSIAN, a_nAprSiz
-				//CV_BLUR_NO_SCALE, (a_nAprSiz - 1) * 2 + 1)
-				//CV_BILATERAL, a_nAprSiz, 0, 10, 10)
-				//CV_BILATERAL, a_nAprSiz, 0, 50, a_nAprSiz)
-				//CV_BILATERAL, a_nAprSiz, 0, 300, 100)
-				//CV_MEDIAN, a_nAprSiz)
-				));
+			//HCV_CALL(
+			//	cv::GaussianBlur(a_src->GetMat(), retF32->GetMat(),
+			//		a_nAprSiz
+			//	));
 
 			i++;
 			i = 1000;
@@ -3777,8 +3716,8 @@ namespace Ncv
 
 
 		HCV_CALL(
-			cvLaplace(srcU8->GetIplImagePtr(),
-			ret->GetIplImagePtr(), a_nAprSiz)
+			cv::Laplacian(srcU8->GetMat(),
+			ret->GetMat(), a_nAprSiz)
 			);
 
 
@@ -3802,9 +3741,9 @@ namespace Ncv
 
 		HCV_CALL(
 
-			cvSobel(
-			srcU8->GetIplImagePtr(),
-			ret->GetIplImagePtr(),
+			cv::Sobel(
+			srcU8->GetMat(),
+			ret->GetMat(),
 			a_xorder,
 			a_yorder,
 			a_nAprSiz
@@ -3842,7 +3781,7 @@ namespace Ncv
 
 	F32ImageRef GenMultByColorImg(F32ImageRef a_src, F32ColorVal & a_rColor)
 	{
-		CvSize srcSiz = a_src->GetSize();
+		cv::Size srcSiz = a_src->GetSize();
 
 		F32ImageRef ret = F32Image::Create(
 			srcSiz, a_src->GetNofChannels());
@@ -3897,7 +3836,7 @@ namespace Ncv
 
 	void BalanceImageWithIntensityFactors(F32ImageRef a_img)
 	{
-		CvSize siz = a_img->GetSize();
+		cv::Size siz = a_img->GetSize();
 
 		for (int y = 0; y < siz.height; y++)
 		{
@@ -3914,7 +3853,7 @@ namespace Ncv
 
 	F32ImageRef GenClipedImg(F32ImageRef a_src, F32Point & a_p1, F32Point & a_p2)
 	{
-		CvSize siz = cvSize(a_p2.x - a_p1.x + 1, a_p2.y - a_p1.y + 1);
+		cv::Size siz = cvSize(a_p2.x - a_p1.x + 1, a_p2.y - a_p1.y + 1);
 
 
 		F32ImageRef ret = F32Image::Create(siz, a_src->GetNofChannels());
@@ -3936,14 +3875,14 @@ namespace Ncv
 		return ret;
 	}
 
-	bool AreEqualCvSizes(CvSize & rSize1, CvSize & rSize2)
+	bool AreEqualCvSizes(cv::Size & rSize1, cv::Size & rSize2)
 	{
 		return (rSize1.width == rSize2.width) && (rSize1.height == rSize2.height);
 	}
 
 	//F32ImageRef GenAvgColorsImg(F32ImageRef a_src, F32Point & a_p1, F32Point & a_p2)
 	//{
-	//	CvSize clipSiz = cvSize(a_p2.x - a_p1.x + 1, a_p2.y - a_p1.y + 1);
+	//	cv::Size clipSiz = cvSize(a_p2.x - a_p1.x + 1, a_p2.y - a_p1.y + 1);
 	//	int nofPixes = clipSiz.width * clipSiz.height;
 
 
@@ -4006,9 +3945,9 @@ namespace Ncv
 
 	//	//int nofColors = 3;
 
-	//	CvSize barSiz = cvSize(30, 500);
+	//	cv::Size barSiz = cvSize(30, 500);
 
-	//	CvSize retSiz = cvSize(0, 500);
+	//	cv::Size retSiz = cvSize(0, 500);
 	//	retSiz.width = rColorArr.GetSize() * barSiz.width;
 	//	retSiz.width = (retSiz.width < 300) ? 300 : retSiz.width;
 
@@ -4025,14 +3964,14 @@ namespace Ncv
 	//	{
 	//		F32ColorVal & dspColor = rColorArr[i];
 
-	//		CvPoint p1 = cvPoint(i * barSiz.width, 0);
-	//		CvPoint p2 = cvPoint(
+	//		cv::Point p1 = cv::Point(i * barSiz.width, 0);
+	//		cv::Point p2 = cv::Point(
 	//			p1.x + barSiz.width, colorSum.ColorBuff[i]);
 
 
 	//		HCV_CALL(
 	//			cvRectangle(
-	//			ret->GetIplImagePtr(),
+	//			ret->GetMat(),
 	//			p1,
 	//			p2,
 	//			CV_RGB(dspColor.val2, dspColor.val1, dspColor.val0),
@@ -4060,7 +3999,7 @@ namespace Ncv
 
 	//void Try17May10(F32ImageRef a_img)
 	//{
-	//	CvSize imgSiz = a_img->GetSize();
+	//	cv::Size imgSiz = a_img->GetSize();
 
 	//	//std::vector<int> vect1;
 	//	//vect1.resize(2000);
@@ -4127,9 +4066,9 @@ namespace Ncv
 	{
 		HCV_CALL(
 
-			cvCircle(
-			a_img->GetIplImagePtr(),
-			cvPoint(a_pt.x, a_pt.y),
+			cv::circle(
+			a_img->GetMat(),
+			cv::Point(a_pt.x, a_pt.y),
 			a_nRadius,
 			CV_RGB(a_color.val2, a_color.val1, a_color.val0),
 			-1 // CV_FILL
@@ -4152,7 +4091,7 @@ namespace Ncv
 		return GenMinPosDepthImg(cvSize(a_nSizeX, a_nSizeY));
 	}
 
-	S32ImageRef GenMinPosDepthImg(CvSize a_siz)
+	S32ImageRef GenMinPosDepthImg(cv::Size a_siz)
 	{
 		S32ImageRef ret = S32Image::Create(a_siz, 1);
 
@@ -4191,7 +4130,7 @@ namespace Ncv
 
 		FixedVector< F32Point > & rPointArr = *a_pPointArr;
 
-		CvSize srcSiz = a_src->GetSize();
+		cv::Size srcSiz = a_src->GetSize();
 
 		Ncpp::Debug::Assert(rPointArr.GetSize() == srcSiz.width * srcSiz.height);
 
@@ -4202,14 +4141,16 @@ namespace Ncv
 			F32ImageRef img1 = src;
 			src = img0;
 
-			HCV_CALL(
-				cvPow(
-				img1->GetIplImagePtr(),
-				src->GetIplImagePtr(),
-				//				2)
-				//				4)
-				1)
-				);
+			throw "Refactor not Complete";
+
+			//HCV_CALL(
+			//	cv::pow(
+			//	img1->GetMat(),
+			//	src->GetMat(),
+			//	//				2)
+			//	//				4)
+			//	1)
+			//	);
 		}
 
 
@@ -4223,9 +4164,9 @@ namespace Ncv
 
 				HCV_CALL(
 				cvMul(
-				img1->GetIplImagePtr(),
-				img1->GetIplImagePtr(),
-				src->GetIplImagePtr())
+				img1->GetMat(),
+				img1->GetMat(),
+				src->GetMat())
 				);
 				}
 				*/
@@ -4389,9 +4330,9 @@ namespace Ncv
 				src = img0;
 
 				HCV_CALL(
-				cvPow(
-				img1->GetIplImagePtr(),
-				src->GetIplImagePtr(),
+				cv::pow(
+				img1->GetMat(),
+				src->GetMat(),
 				//				2)
 				4)
 				//				1)
@@ -4403,7 +4344,7 @@ namespace Ncv
 
 		FixedVector< F32Point > & rPointArr = *a_pPointArr;
 
-		CvSize srcSiz = a_src->GetSize();
+		cv::Size srcSiz = a_src->GetSize();
 
 		Ncpp::Debug::Assert(rPointArr.GetSize() == srcSiz.width * srcSiz.height);
 
@@ -4742,9 +4683,9 @@ namespace Ncv
 				src = img0;
 
 				HCV_CALL(
-				cvPow(
-				img1->GetIplImagePtr(),
-				src->GetIplImagePtr(),
+				cv::pow(
+				img1->GetMat(),
+				src->GetMat(),
 				//				2)
 				4)
 				//				1)
@@ -4756,7 +4697,7 @@ namespace Ncv
 
 		FixedVector< F32Point > & rPointArr = *a_pPointArr;
 
-		CvSize srcSiz = a_src->GetSize();
+		cv::Size srcSiz = a_src->GetSize();
 
 		Ncpp::Debug::Assert(rPointArr.GetSize() == srcSiz.width * srcSiz.height);
 
@@ -5125,7 +5066,7 @@ namespace Ncv
 	//		rIsRootArr[i] = 0;
 
 	//	{
-	//		CvSize siz1 = a_src->GetSize();
+	//		cv::Size siz1 = a_src->GetSize();
 	//		const int nSiz1D = siz1.width * siz1.height;
 
 	//		Ncpp_ASSERT(rIsRootArr.GetSize() == nSiz1D);
@@ -5168,7 +5109,7 @@ namespace Ncv
 
 	//	src = GenImageFromChannel(src, 0);
 
-	//	CvSize srcSiz = src->GetSize();
+	//	cv::Size srcSiz = src->GetSize();
 
 	//	const int nSrcSiz1D = srcSiz.width * srcSiz.height;
 
@@ -5412,7 +5353,7 @@ namespace Ncv
 	//		rIsRootArr[i] = 0;
 
 	//	{
-	//		CvSize siz1 = a_src->GetSize();
+	//		cv::Size siz1 = a_src->GetSize();
 	//		const int nSiz1D = siz1.width * siz1.height;
 
 	//		Ncpp_ASSERT(rIsRootArr.GetSize() == nSiz1D);
@@ -5455,7 +5396,7 @@ namespace Ncv
 
 	//	src = GenImageFromChannel(src, 0);
 
-	//	CvSize srcSiz = src->GetSize();
+	//	cv::Size srcSiz = src->GetSize();
 
 	//	const int nSrcSiz1D = srcSiz.width * srcSiz.height;
 
@@ -5697,7 +5638,7 @@ namespace Ncv
 
 
 
-	F32Point GetPntOfIndex(int a_nIndex, CvSize a_siz)
+	F32Point GetPntOfIndex(int a_nIndex, cv::Size a_siz)
 	{
 		F32Point retPnt;
 

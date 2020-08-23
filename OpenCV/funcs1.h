@@ -806,7 +806,7 @@ namespace Ncv
 			return ret;
 		}
 
-		static F32Point CreateFromIndex( int a_nIndex, CvSize & a_siz )
+		static F32Point CreateFromIndex( int a_nIndex, cv::Size & a_siz )
 		{
 			F32Point retPnt;
 
@@ -866,7 +866,7 @@ namespace Ncv
 
 	void CvtRgbToHsl0(U8ImageRef a_src, U8ImageRef a_dst);
 	void CvtRgbToHsl(U8ImageRef a_src, U8ImageRef a_dst);
-	void Convolve2D( const CvMat* a, CvMat* b, const CvMat* kernel, CvPoint anchor );
+	void Convolve2D( const cv::Mat* a, cv::Mat* b, const cv::Mat* kernel, cv::Point anchor );
 	void GetMaxImg(S16ImageRef a_src1, S16ImageRef a_src2, S16ImageRef a_dst);
 	void CalcColorSblXY(S16ImageRef a_srcX, S16ImageRef a_srcY, S16ImageRef a_dst);
 	void GetColorMidean(S16ImageRef a_src, S16ImageRef a_dst);
@@ -890,7 +890,7 @@ namespace Ncv
 	U8ImageRef GenU8FromF32Image(F32ImageRef a_src);
 	U8ImageRef GenU8FromS16Image(S16ImageRef a_src);
 	S16ImageRef GenScaledS16FromS32Image(S32ImageRef a_src);
-	void ShowImage(IplImage * a_iplImagePtr, const char * a_sWndName);
+	void ShowImage(cv::Mat & a_mat, const char * a_sWndName);
 	S16ImageRef GenMinimaImage(S16ImageRef a_src);
 	S16ImageRef GenMaximaImage(S16ImageRef a_src);
 	S32ImageRef GenNeighbourhoodImage(S16ImageRef a_src);
@@ -903,9 +903,9 @@ namespace Ncv
 
 	S16ImageRef GenHDensityImg(S16ImageRef a_hdifImg);
 
-	std::vector<CvPoint> GenDataPoints(S16ImageRef a_src, const int nDataVal = 0);
+	std::vector<cv::Point> GenDataPoints(S16ImageRef a_src, const int nDataVal = 0);
 
-	S16ImageRef GenDataImage(std::vector<CvPoint> a_data, CvSize a_imgSiz,
+	S16ImageRef GenDataImage(std::vector<cv::Point> a_data, cv::Size a_imgSiz,
 		int nDataVal = 0, const int nBkgVal = 255);
 
 	S16ImageRef GenThresholdImg(S16ImageRef a_src, int a_nVal);
@@ -914,19 +914,19 @@ namespace Ncv
 	F32ImageRef GenClippedPixValImg( F32ImageRef a_src, 
 		float a_maxVal, float a_minVal );
 
-	void DrawPoints(CvPoint * a_data, int a_nofPoints, 
+	void DrawPoints(cv::Point * a_data, int a_nofPoints, 
 		S16ImageRef a_img, CvScalar a_color);
 
-	void DrawPoints(std::vector<CvPoint> a_data, S16ImageRef a_img, CvScalar a_color);
+	void DrawPoints(std::vector<cv::Point> a_data, S16ImageRef a_img, CvScalar a_color);
 
 	class ClusteringMgr;
-	void DrawPoints(S16ImageRef a_img, CvPoint * a_points, 
+	void DrawPoints(S16ImageRef a_img, cv::Point * a_points, 
 		//int a_nofPoints, int * a_ids, U8ColorVal * a_colors);
 		int a_nofPoints, ClusteringMgr & a_rCm, U8ColorVal * a_colors);
 
 	
 
-	void DrawPoints(S16ImageRef a_img, std::vector<CvPoint> * a_pPointArr,
+	void DrawPoints(S16ImageRef a_img, std::vector<cv::Point> * a_pPointArr,
 		std::vector<int> * a_pPointIDs, std::vector<U8ColorVal> * a_pColorArr);
 
 	U8ColorVal u8ColorVal(Uint8 a_val0, Uint8 a_val1, Uint8 a_val2);
@@ -945,7 +945,7 @@ namespace Ncv
 	F32ImageRef Gen4DirEdgeImg(F32ImageRef a_src);
 	F32ImageRef GenMagImgF32(F32ImageRef a_src);
 	S16ImageRef GenDifMagImg(S16ImageRef a_src);
-	S16ImageRef GenCenterPixImg( CvSize a_siz, int a_nofChannels );
+	S16ImageRef GenCenterPixImg( cv::Size a_siz, int a_nofChannels );
 	S16ImageRef GenBinImposedImg( S16ImageRef a_src, S16ImageRef a_binImg );
 	void NormalizeEdgeDirImages( F32ImageRef a_gradMagX, F32ImageRef a_gradMagY,
 		float a_normVal = 254);
@@ -1006,7 +1006,7 @@ namespace Ncv
 
 	//F32ImageRef GenAvgColorsImg( F32ImageRef a_src, F32Point & a_p1, F32Point & a_p2 );
 	
-	bool AreEqualCvSizes(CvSize & rSize1, CvSize & rSize2);
+	bool AreEqualCvSizes(cv::Size & rSize1, cv::Size & rSize2);
 
 	void ThrowNcvException();
 	//void Try17May10( F32ImageRef a_img  );
@@ -1016,7 +1016,7 @@ namespace Ncv
 	void BreakAtPoint( F32Point a_p1, F32Point a_refPt, float a_marg );
 
 	S32ImageRef GenMinPosDepthImg( int a_nSizeX, int a_nSizeY );
-	S32ImageRef GenMinPosDepthImg( CvSize a_siz );
+	S32ImageRef GenMinPosDepthImg( cv::Size a_siz );
 
 	void FillCenterOfMassArr( F32ImageRef a_src, int a_nAprSiz,
 		FixedVector< F32Point > * a_pPointArr, F32ImageRef * a_pAvgImgRef = nullptr );
@@ -1036,7 +1036,7 @@ namespace Ncv
 
 	float CalcColorUnitDif( F32ColorVal & a_c1, F32ColorVal & a_c2 );
 
-	F32Point GetPntOfIndex( int a_nIndex, CvSize a_siz );
+	F32Point GetPntOfIndex( int a_nIndex, cv::Size a_siz );
 
 
 	F32ImageRef Gen_CovMatPure_Img( F32ImageRef a_src, int a_nAprSiz, 

@@ -11,7 +11,7 @@ namespace Ncv
 		//using namespace Ncv::OpenCV_Util;
 
 
-		Size_2D size_2D(const CvSize & src)
+		Size_2D size_2D(const cv::Size & src)
 		{
 			//return Size_2D(src.width, src.height);
 
@@ -19,33 +19,33 @@ namespace Ncv
 			return ret;
 		}
 
-		CvSize toCvSize(const Size_2D & src)
+		cv::Size toCvSize(const Size_2D & src)
 		{
 			return cvSize(src.GetX(), src.GetY());
 		}
 
 
-		S32Point toS32Point(const CvPoint & src)
+		S32Point toS32Point(const cv::Point & src)
 		{
 			S32Point ret(src.x, src.y);
 			return ret;
 		}
 
-		CvPoint toCvPoint(const S32Point & src)
+		cv::Point toCvPoint(const S32Point & src)
 		{
-			return cvPoint(src.GetX(), src.GetY());
+			return cv::Point(src.GetX(), src.GetY());
 		}
 
 
-		S64Point toS64Point(const CvPoint & src)
+		S64Point toS64Point(const cv::Point & src)
 		{
 			S64Point ret(src.x, src.y);
 			return ret;
 		}
 
-		CvPoint toCvPoint(const S64Point & src)
+		cv::Point toCvPoint(const S64Point & src)
 		{
-			return cvPoint(src.GetX(), src.GetY());
+			return cv::Point(src.GetX(), src.GetY());
 		}
 
 

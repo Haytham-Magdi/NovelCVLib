@@ -7,7 +7,6 @@
 namespace Ncpp
 {
 
-	template<> inline void KillObj<>(IplImage * a_ptr);
-	template<> inline void KillObj(CvMat * a_ptr);
+	template<> inline void KillObj(cv::Mat * a_ptr);
 
 }
