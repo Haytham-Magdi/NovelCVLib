@@ -83,14 +83,16 @@ namespace Ncv
 
 		cv::Mat& GetMat()
 		{
-			//return cvGetMat(this->GetMat(), &m_mat);
-			return this->m_mat;
+			cv::Mat * matPtr = m_orgImg;
+
+			return *matPtr;
 		}
 
 		cv::Mat* GetMatPtr()
 		{
-			//return cvGetMat(this->GetMat(), &m_mat);
-			return &this->m_mat;
+			cv::Mat * matPtr = m_orgImg;
+
+			return matPtr;
 		}
 
 		static Image * Create(cv::Size a_size, int a_nChannels)
@@ -101,39 +103,47 @@ namespace Ncv
 
 			T v1;
 
+			
+			cv::Mat * matPtr = (cv::Mat *)matRef;
+
 			if (std::is_same<T, float>::value)
 			{
-				(*matRef).create(a_size, CV_32FC(a_nChannels));
+				matRef->create(a_size, CV_32FC(a_nChannels));
 			}
 			else if (std::is_same<T, double>::value)
 			{
-				(*matRef).create(a_size, CV_64FC(a_nChannels));
+				matRef->create(a_size, CV_64FC(a_nChannels));
 			}
 			else if (std::is_same<T, int>::value)
 			{
-				(*matRef).create(a_size, CV_32SC(a_nChannels));
+				matRef->create(a_size, CV_32SC(a_nChannels));
 			}
 			else if (std::is_same<T, short>::value)
 			{
-				(*matRef).create(a_size, CV_16SC(a_nChannels));
+				matRef->create(a_size, CV_16SC(a_nChannels));
+				//(*matRef).create(a_size, CV_16SC(a_nChannels));
 			}
 			else if (std::is_same<T, unsigned short>::value)
 			{
-				(*matRef).create(a_size, CV_16UC(a_nChannels));
+				matRef->create(a_size, CV_16UC(a_nChannels));
 			}
 			else if (std::is_same<T, char>::value)
 			{
-				(*matRef).create(a_size, CV_8SC(a_nChannels));
+				matRef->create(a_size, CV_8SC(a_nChannels));
 			}
 			else if (std::is_same<T, uchar>::value)
 			{
-				(*matRef).create(a_size, CV_8UC(a_nChannels));
+				matRef->create(a_size, CV_8UC(a_nChannels));
 			}
 			else
 			{
 				throw "Invalid type case!";
 			}
 
+
+			matPtr = matPtr;
+
+			return new Image<T>(matRef); 
 
 			//return new Image(cvCreateImage(a_siz, 
 			//	NCV_DEPTH_ID(T), a_nChannels)); 
@@ -215,7 +225,7 @@ namespace Ncv
 	protected:
 		CvMatRef m_orgImg;
 		ChannelRefColl<T> m_channels;
-		cv::Mat m_mat;
+		//cv::Mat m_mat;
 
 		int m_nofChannels;
 

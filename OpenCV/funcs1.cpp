@@ -879,8 +879,10 @@ namespace Ncv
 		ret = F32Image::Create(
 			a_src->GetMat().size(), a_src->GetNofChannels());
 
-		HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
-			ret->GetMat()));
+		a_src->GetMat().convertTo(ret->GetMat(), CV_32FC(a_src->GetMat().channels()));
+
+		//HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
+		//	ret->GetMat()));
 
 		return ret;
 	}
@@ -901,8 +903,10 @@ namespace Ncv
 		ret = S16Image::Create(
 			a_src->GetMat().size(), a_src->GetNofChannels());
 
-		HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
-			ret->GetMat()));
+		a_src->GetMat().convertTo(ret->GetMat(), CV_16SC(a_src->GetMat().channels()));
+
+		//HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
+		//	ret->GetMat()));
 
 		return ret;
 	}
@@ -914,8 +918,13 @@ namespace Ncv
 		ret = S16Image::Create(
 			a_src->GetMat().size(), a_src->GetNofChannels());
 
-		HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
-			ret->GetMat()));
+		a_src->GetMat().convertTo(ret->GetMat(), CV_16SC(a_src->GetMat().channels()));
+
+		//HCV_CALL(cv::convertScaleAbs(a_src->GetMat(),
+		//	ret->GetMat()));
+
+		Ncpp::Uint8 * srcDataPtr = a_src->GetDataPtr();
+		Ncpp::Int16 * retDataPtr = ret->GetDataPtr();
 
 		return ret;
 	}
@@ -926,6 +935,8 @@ namespace Ncv
 
 		ret = U8Image::Create(
 			a_src->GetMat().size(), a_src->GetNofChannels());
+
+		//throw "Refactor not Complete";
 
 		if (1 == a_src->GetNofChannels())
 		{
@@ -950,6 +961,8 @@ namespace Ncv
 				ret->GetMat()));
 		}
 
+		Ncpp::Int16 * srcDataPtr = a_src->GetDataPtr();
+		Ncpp::Uint8 * retDataPtr = ret->GetDataPtr();
 
 		return ret;
 	}
@@ -963,6 +976,8 @@ namespace Ncv
 
 	S16ImageRef GenScaledS16FromS32Image(S32ImageRef a_src)
 	{
+		throw "Refactor not Complete";
+
 		S16ImageRef ret;
 
 		ret = S16Image::Create(
