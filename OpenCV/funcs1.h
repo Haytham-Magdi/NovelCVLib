@@ -915,9 +915,9 @@ namespace Ncv
 		float a_maxVal, float a_minVal );
 
 	void DrawPoints(cv::Point * a_data, int a_nofPoints, 
-		S16ImageRef a_img, CvScalar a_color);
+		S16ImageRef a_img, cv::Scalar a_color);
 
-	void DrawPoints(std::vector<cv::Point> a_data, S16ImageRef a_img, CvScalar a_color);
+	void DrawPoints(std::vector<cv::Point> a_data, S16ImageRef a_img, cv::Scalar a_color);
 
 	class ClusteringMgr;
 	void DrawPoints(S16ImageRef a_img, cv::Point * a_points, 

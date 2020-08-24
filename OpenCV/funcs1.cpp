@@ -1583,14 +1583,14 @@ namespace Ncv
 
 
 
-	void DrawPoints(std::vector<cv::Point> a_data, S16ImageRef a_img, CvScalar a_color)
+	void DrawPoints(std::vector<cv::Point> a_data, S16ImageRef a_img, cv::Scalar a_color)
 	{
 		DrawPoints(&a_data[0], a_data.size(), a_img, a_color);
 	}
 
 
 	void DrawPoints(cv::Point * a_data, int a_nofPoints,
-		S16ImageRef a_img, CvScalar a_color)
+		S16ImageRef a_img, cv::Scalar a_color)
 	{
 		const int nBlue = a_color.val[0];
 		const int nGreen = a_color.val[1];
