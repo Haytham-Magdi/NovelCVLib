@@ -21,11 +21,14 @@ namespace Ncv
 			PixelRgn() 
 			{
 				m_pRoot = (T_PixelRgnEx *)this;
-
 			}
 
+			T_PixelRgnEx * GetDirectRoot()
+			{
+				return m_pRoot;
+			}
 
-			T_PixelRgnEx * GetRootAfterNecessaryUpdating()
+			T_PixelRgnEx * GetActRootAfterNecessaryUpdating()
 			{
 				if (m_pRoot->IsSelfRoot())
 				{
@@ -33,23 +36,23 @@ namespace Ncv
 				}
 				else
 				{
-					m_pRoot = m_pRoot->GetRootAfterNecessaryUpdating();
+					m_pRoot = m_pRoot->GetActRootAfterNecessaryUpdating();
 					return m_pRoot;
 				}
 			}
 
 			static bool DoBothRgnsHaveTheSameRoot(T_PixelRgnEx & a_rgn1, T_PixelRgnEx & a_rgn2)
 			{
-				T_PixelRgnEx * pRoot1 = a_rgn1.GetRootAfterNecessaryUpdating();
-				T_PixelRgnEx * pRoot2 = a_rgn2.GetRootAfterNecessaryUpdating();
+				T_PixelRgnEx * pRoot1 = a_rgn1.GetActRootAfterNecessaryUpdating();
+				T_PixelRgnEx * pRoot2 = a_rgn2.GetActRootAfterNecessaryUpdating();
 
 				return pRoot1 == pRoot2;
 			}
 
 			static void MergeRgns(T_PixelRgnEx & a_rgn1, T_PixelRgnEx & a_rgn2)
 			{
-				T_PixelRgnEx * pRoot1 = a_rgn1.GetRootAfterNecessaryUpdating();
-				T_PixelRgnEx * pRoot2 = a_rgn2.GetRootAfterNecessaryUpdating();
+				T_PixelRgnEx * pRoot1 = a_rgn1.GetActRootAfterNecessaryUpdating();
+				T_PixelRgnEx * pRoot2 = a_rgn2.GetActRootAfterNecessaryUpdating();
 
 				Ncpp_ASSERT(pRoot1 != pRoot2);
 
@@ -61,6 +64,8 @@ namespace Ncv
 			}
 
 			bool IsSelfRoot() const { return this == m_pRoot; }
+
+
 
 	private:
 

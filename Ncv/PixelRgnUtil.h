@@ -38,7 +38,7 @@ namespace Ncv
 			for (int i = 0; i < a_inpAcc_1D.GetSize(); i++)
 			{
 				T_PixelRgn & rRgn = a_inpAcc_1D[i];
-				const T_PixelRgn * pRootRgn = (T_PixelRgn *)rRgn.GetRootAfterNecessaryUpdating();
+				const T_PixelRgn * pRootRgn = (T_PixelRgn *)rRgn.GetActRootAfterNecessaryUpdating();
 
 				const int rootIndex = pRootRgn - pixelRgnHeadPtr;
 

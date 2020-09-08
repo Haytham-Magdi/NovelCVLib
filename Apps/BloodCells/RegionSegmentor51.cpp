@@ -331,35 +331,34 @@ namespace Hcv
 					GlobalStuff::m_nLA_Index = pLA->nIndex;
 
 					{
-						int nLastLA_MinIdx = 
-							m_linkActionMergeQues.GetLastMinIndex();
+						// int nLastLA_MinIdx = 
+						// 	m_linkActionMergeQues.GetLastMinIndex();
 
-						while(
-							//true)
-							false)
-							//m_edgeInfo_Ques.Get_CurMinIndex() < 
-							//nLastLA_MinIdx )
-							//nLastLA_MinIdx * 0.7 )
-							//nLastLA_MinIdx * 0.1 )
-							//nLastLA_MinIdx * 3 )
-						{
-							UpdateActRgn( pRootRgn1 );
-							RgnInfo * pRgnAct1 = pRootRgn1->GetActRgn();
+						// while(
+						// 	//true)
+						// 	false)
+						// 	//m_edgeInfo_Ques.Get_CurMinIndex() < 
+						// 	//nLastLA_MinIdx )
+						// 	//nLastLA_MinIdx * 0.7 )
+						// 	//nLastLA_MinIdx * 0.1 )
+						// 	//nLastLA_MinIdx * 3 )
+						// {
+						// 	UpdateActRgn( pRootRgn1 );
+						// 	RgnInfo * pRgnAct1 = pRootRgn1->GetActRgn();
 
-							UpdateActRgn( pRootRgn2 );
-							RgnInfo * pRgnAct2 = pRootRgn2->GetActRgn();
+						// 	UpdateActRgn( pRootRgn2 );
+						// 	RgnInfo * pRgnAct2 = pRootRgn2->GetActRgn();
 
-							if( pRgnAct1 == pRgnAct2 )
-								continue;
+						// 	if( pRgnAct1 == pRgnAct2 )
+						// 		continue;
 
-							CreateConflict( pRgnAct1, pRgnAct2);
-						}
+						// 	CreateConflict( pRgnAct1, pRgnAct2);
+						// }
 
 					}
 
 
-
-					RgnInfo * pRootRgn1 = pRgn1->GetRootAfterNecessaryUpdating();
+					RgnInfo * pRootRgn1 = pRgn1->GetDirectRoot();
 
 					if( NULL == pRootRgn1 )
 					{
@@ -367,7 +366,7 @@ namespace Hcv
 						ThrowHcvException();
 					}
 
-					RgnInfo * pRootRgn2 = pRgn2->GetRootAfterNecessaryUpdating();
+					RgnInfo * pRootRgn2 = pRgn2->GetDirectRoot();
 
 					//const int nTestIdx = 181157;
 					const int nTestIdx = 173209;
@@ -450,7 +449,7 @@ namespace Hcv
 						UpdateActRgn( pRgn1 );
 						RgnInfo * pActRgn1 = pRgn1->GetActRgn();
 
-						if( NULL == pRgn2->GetRootAfterNecessaryUpdating() )
+						if(NULL == pRgn2->GetActRootAfterNecessaryUpdating())
 						{
 							// Bug
 							ThrowHcvException();
@@ -689,7 +688,7 @@ namespace Hcv
 		RgnInfo * pRgn1 = a_rLink.pRgn1;
 		RgnInfo * pRgn2 = a_rLink.pRgn2;
 
-		Hcpl_ASSERT( NULL != pRgn1->GetRootAfterNecessaryUpdating() );
+		Hcpl_ASSERT( NULL != pRgn1->GetActRootAfterNecessaryUpdating() );
 
 		LinkAction * pLA = m_linkAction_Provider.ProvidePtr();
 
@@ -777,7 +776,7 @@ namespace Hcv
 
 		Hcpl_ASSERT( nDistNew >= 0 );
 
-		//if( nDistNew > pRgn1->GetRootAfterNecessaryUpdating()->RootMedColorDist )
+		//if( nDistNew > pRgn1->GetActRootAfterNecessaryUpdating()->RootMedColorDist )
 			//nDistNew = ( GetMaxDif() - 1 ) * m_difScale;
 
 
@@ -811,7 +810,7 @@ namespace Hcv
 		{
 			RgnInfo * pPeerRgn = pConflict->pPeerRgn;
 
-			pPeerRgn = pPeerRgn->GetRootAfterNecessaryUpdating();
+			pPeerRgn = pPeerRgn->GetActRootAfterNecessaryUpdating();
  			pConflict->pPeerRgn = pPeerRgn;
 
 			if( pPeerRgn == a_pMaxSizRgn )
@@ -915,23 +914,10 @@ namespace Hcv
 
 	void RegionSegmentor51::CreateConflict( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2)
 	{
-		if( NULL == a_pOrgEdge )
-			a_pOrgEdge = a_pOrgEdge;
-
-		//if( ! a_pEI->DoesConflict() )
-			//return;
-
-		int a = 0;
-		
 		{
 			RgnConflict * pRc = &m_rgnConflictVect[ m_nofConflicts++ ];
 			pRc->pNext = pRc;
 			pRc->pPrev = pRc;
-
-			pRc->pEI = a_pEI;
-			pRc->pOrgEdge = a_pOrgEdge;
-			pRc->pOrgR1 = a_pRgn1;
-			pRc->pOrgR2 = a_pRgn2;
 
 			pRc->pPeerRgn = a_pRgn2->pRgn_DeepR;
 			a_pRgn1->pRgn_DeepR->conflictList.PushLast( pRc );
@@ -941,14 +927,6 @@ namespace Hcv
 			RgnConflict * pRc2 = &m_rgnConflictVect[ m_nofConflicts++ ];
 			pRc2->pNext = pRc2;
 			pRc2->pPrev = pRc2;
-
-			pRc2->pEI = a_pEI;
-			pRc2->pOrgEdge = a_pOrgEdge;
-			pRc2->pOrgR1 = a_pRgn1;
-			pRc2->pOrgR2 = a_pRgn2;
-
-			pRc2->pOrgDeep1 = a_pRgn1->pRgn_DeepR;
-			pRc2->pOrgDeep2 = a_pRgn2->pRgn_DeepR;
 
 			pRc2->pPeerRgn = a_pRgn1->pRgn_DeepR;
 			a_pRgn2->pRgn_DeepR->conflictList.PushLast( pRc2 );

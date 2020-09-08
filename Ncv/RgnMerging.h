@@ -25,7 +25,7 @@ namespace Ncv
 			}
 
 
-			T_RgnPix * GetRootAfterNecessaryUpdating()
+			T_RgnPix * GetActRootAfterNecessaryUpdating()
 			{
 				if (m_pRoot->IsSelfRoot())
 				{
@@ -33,23 +33,23 @@ namespace Ncv
 				}
 				else
 				{
-					m_pRoot = m_pRoot->GetRootAfterNecessaryUpdating();
+					m_pRoot = m_pRoot->GetActRootAfterNecessaryUpdating();
 					return m_pRoot;
 				}
 			}
 
 			static bool DoBothRgnsHaveTheSameRoot(T_RgnPix & a_rgn1, T_RgnPix & a_rgn2)
 			{
-				T_RgnPix * pRoot1 = a_rgn1.GetRootAfterNecessaryUpdating();
-				T_RgnPix * pRoot2 = a_rgn2.GetRootAfterNecessaryUpdating();
+				T_RgnPix * pRoot1 = a_rgn1.GetActRootAfterNecessaryUpdating();
+				T_RgnPix * pRoot2 = a_rgn2.GetActRootAfterNecessaryUpdating();
 
 				return pRoot1 == pRoot2;
 			}
 
 			static void MergeRgns(T_RgnPix & a_rgn1, T_RgnPix & a_rgn2)
 			{
-				T_RgnPix * pRoot1 = a_rgn1.GetRootAfterNecessaryUpdating();
-				T_RgnPix * pRoot2 = a_rgn2.GetRootAfterNecessaryUpdating();
+				T_RgnPix * pRoot1 = a_rgn1.GetActRootAfterNecessaryUpdating();
+				T_RgnPix * pRoot2 = a_rgn2.GetActRootAfterNecessaryUpdating();
 
 				Ncpp_ASSERT(pRoot1 != pRoot2);
 
