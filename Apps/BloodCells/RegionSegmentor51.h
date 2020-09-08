@@ -43,7 +43,7 @@ namespace Hcv
 */
 
 
-	class RegionSegmentor51 : public IRegionSegmentor20
+	class RegionSegmentor51 // : public IRegionSegmentor20
 	{
 //////////////////////////////////////////////////////////////
 
@@ -58,17 +58,6 @@ namespace Hcv
 
 	public:
 
-		class FillInfo
-		{ 
-		public:
-
-			FillInfo()
-			{
-				bRootMet = false;
-			}
-
-			bool bRootMet;
-		};
 
 
 		class LinkTypeMgr;
@@ -80,6 +69,7 @@ namespace Hcv
 			class CoreStuff
 			{
 			public:
+
 				CoreStuff() : m_mapIndexCalc(8, 8), m_dxyIndexCalc(3, 3)
 				{
 					InitLinkTypeMgrs();
@@ -213,13 +203,6 @@ namespace Hcv
 
 
 
-
-
-
-
-
-
-
 //////////////////////////////////////////////////////////////
 
 	protected:
@@ -231,65 +214,23 @@ namespace Hcv
 	public:
 
 
-		typedef struct _TraceUnit
-		{
-/*			struct _TraceUnit(
-				RgnInfo * pRgn,
 
-				struct _TraceUnit * pFwdTU,
-				class RgnLink * pFwdLink,
-
-				struct _TraceUnit * pBkdTU,							
-				class RgnLink * pBkdLink
-					)
-			{
-				pFwdTU = NULL;
-				pBkdTU = NULL;
-
-				pFwdLink = NULL;
-				pBkdLink = NULL;						
-			}*/
-
-
-/*			struct _TraceUnit()
-			{
-				pFwdTU = NULL;
-				pBkdTU = NULL;
-
-				pFwdLink = NULL;
-				pBkdLink = NULL;						
-			}*/
-
-			RgnInfo * pRgn;
-
-			struct _TraceUnit * pFwdTU;
-			struct _TraceUnit * pBkdTU;
-
-			class RgnLink * pFwdLink;
-			class RgnLink * pBkdLink;
-
-			char Type;
-			int Index;
-		}TraceUnit;
-
-
-
-		typedef struct _RgnConflict
+		struct RgnConflict
 		{
 			RgnInfo * pPeerRgn;
 
-			RgnInfo * pOrgEdge;
-			RgnInfo * pOrgR1;
-			RgnInfo * pOrgR2;
+			// RgnInfo * pOrgEdge;
+			// RgnInfo * pOrgR1;
+			// RgnInfo * pOrgR2;
 
-			RgnInfo * pOrgDeep1;
-			RgnInfo * pOrgDeep2;
+			// RgnInfo * pOrgDeep1;
+			// RgnInfo * pOrgDeep2;
 
-			ImgScanMgr_Ns::EdgeInfo * pEI;
+			// ImgScanMgr_Ns::EdgeInfo * pEI;
 
 			struct _RgnConflict * pNext;	//	for being APtrList Entry
 			struct _RgnConflict * pPrev;	//	for being APtrList Entry
-		}RgnConflict;
+		};
 
 
 
@@ -321,14 +262,14 @@ namespace Hcv
 			RgnLinkDir dir;
 			bool bProcessed;
 			bool bExists;
-			bool bInTrace;
+			// bool bInTrace;
 
-			float DistMag;
-			F32ColorVal UnitDist;
+			// float DistMag;
+			// F32ColorVal UnitDist;
 
 			LinkAction * pCurLA;
 
-			RgnLink * pPrev;	//	for being ListQue Entry
+			// RgnLink * pPrev;	//	for being ListQue Entry
 		};
 
 		class RgnInfoListElm;
@@ -342,13 +283,12 @@ namespace Hcv
 			};
 */
 
-		class RgnInfo : public PixelRgn<SimplePixelRgn>
+		class RgnInfo : public PixelRgn<RgnInfo>
 		{
 		protected:
 			RgnInfo * pActRgn;
 
-			bool bIsRoot;
-			//bool bInTrace;
+			// // bool bIsRoot;
 			RgnInfo * pRootRgn;
 
 		public:
@@ -356,51 +296,6 @@ namespace Hcv
 
 			RgnInfo()
 			{
-				this->BeNotRoot();
-				bShowLocalColor = false;
-				//bShowLocalColor = true;
-				bInTrace = false;
-
-				//bInTraceDam_Pos = false;
-				//bInTraceDam_Neg = false;
-
-				nTraceRank = 0;
-
-				bFlag1 = false;
-
-				bFlag2 = false;
-
-				maxTrace_BWR = 0;
-
-				bInTraceAttachDone = false;
-
-				//minRootSpaceDist = 1000000;
-
-				pShortestEI = NULL;
-
-				bIsValleyRoot = false;
-				
-				nTraceProcID = -1;
-
-				bIsPassiveRoot = false;
-
-				pSrcRgn = NULL;
-
-				pFillInfo = NULL;
-
-				nFstBadGrpID = -1;
-
-				nFill_Cycle = -1;
-
-				//pRgn_DeepR = NULL;
-				//pRgn_DeepMed = NULL;
-
-				pRgn_DeepR = this;
-				pRgn_DeepMed = this;
-
-				RootMedColorDist = -1;
-
-				nSegIndex = -1;
 			}
 
 			RgnInfo * GetRootRgn()
@@ -408,245 +303,34 @@ namespace Hcv
 				return pRootRgn;
 			}
 
-			void SetRootRgn(RgnInfo * a_pRootRgn)
-			{
-				//if( NULL != pRootRgn )
-					//pRootRgn = pRootRgn;
+			// void SetRootRgn(RgnInfo * a_pRootRgn)
+			// {
+			// 	nMergeOrder = s_MergeOrder++;
 
-				int a = 0;
-
-				if( 101896 == this->nIndex 
-					|| 101896 == a_pRootRgn->nIndex )
-					a = 1;
-
-				if( 122171 == this->nIndex )
-					a = 1;
-
-				if( 122171 == a_pRootRgn->nIndex )
-					a = 1;
+			// 	this->pRootRgn = a_pRootRgn;
+			// }
 
 
-				//if( 257 == this->pos.x && 4 == this->pos.y )
-				if( 581 == this->pos.x && 345 == this->pos.y )
-					a = 1;
-
-				if(NULL != this->pRootRgn)
-				{
-					//ThrowHcvException();
-					a = 1;
-				}
-
-				nMergeOrder = s_MergeOrder++;
-
-				this->pRootRgn = a_pRootRgn;
-			}
-
-			RgnInfo * GetActRgn_2()
-			{
-				//Hcpl_ASSERT( NULL != pRootRgn );
-
-				if( NULL == pRootRgn )
-					return this;
-
-				return pRootRgn->pActRgn;
-			}
-
-			RgnInfo * GetActRgn()
-			{
-				Hcpl_ASSERT( NULL != pRootRgn );
-
-				return pRootRgn->pActRgn;
-			}
-
-			void SetActRgn(RgnInfo * a_pActRgn)
-			{
-				int a = 0;
-
-				if( 101896 == this->nIndex 
-					|| 101896 == a_pActRgn->nIndex )
-					a = 1;
-
-				pRootRgn->pActRgn = a_pActRgn;
-
-				if(pRootRgn != a_pActRgn)
-					pRootRgn = pRootRgn;
-			}
-
-			bool IsRoot()
-			{
-				//return this->bIsRoot;
-				return this == pRootRgn;
-			}
-
-
-			void BeARoot()
-			{
-				int a = 0;
-
-				if( 122171 == this->nIndex )
-					a = 1;
-
-
-				if( 581 == this->pos.x && 345 == this->pos.y )
-					a = 1;
-
-				/*if( pos.x == 249 &&
-					pos.y == 11 )
-					pos.x = pos.x;*/
-
-				if(NULL != this->pRootRgn)
-					a = 1;
-
-				//nMergeOrder = 0;
-				nMergeOrder = s_MergeOrder++;
-
-				this->pRootRgn = this;
-				this->bIsRoot = true;
-				this->SetActRgn( this );
-			}
-
-			void BeNotRoot()
-			{
-				int a = 0;
-
-				if( 101896 == this->nIndex )
-					a = 1;
-
-				this->pRootRgn = NULL;
-				this->bIsRoot = false;
-			}
-
-			bool IsInMidTrace()
-			{
-				return ( -1 != maxAccXYDistFromRoot );
-			}
-
-			void IncPopulationBy( RgnInfo * a_pRgn2 )
-			{
-				//this->meanColors.IncBy( *a_pRgn2->pixColors );
-				this->meanColors.IncBy( a_pRgn2->meanColors );
-				this->nPixCnt += a_pRgn2->nPixCnt;
-
-				this->dataElm_Mean.IncBy( a_pRgn2->dataElm_Mean );
-
-				this->magSqr += a_pRgn2->magSqr;
-			}
-
-
-			//ListQue< ImgScanMgr_Ns::EdgeInfoAcc > m_listQue_eiAcc;
 
 			int nIndex;
 
 			int nSegIndex;
 
-			RgnInfo * pRgn_DeepR;
-			RgnInfo * pRgn_DeepMed;
-
-			float RootMedColorDist;
-
-			bool bShowLocalColor;
-
-			bool bInTrace;
-
-			//bool bInTraceDam_Pos;
-			//bool bInTraceDam_Neg;
-
-			int nTraceRank;
-	
-
-			//float minRootSpaceDist;
-
-			ImgScanMgr_Ns::EdgeInfo * pShortestEI;
-
-			// Max Trace Bad Width Ratio
-			float maxTrace_BWR;
-
-			//RgnLinkDir localGradDir;
-
-			bool bIsValleyRoot;
-
-			bool bInTraceAttachDone;
-
-			int nTraceProcID;
-
-
-			float distMagFromRoot;
-
-
-			ImgDataElm_CovMat * pDataElm;
-
-			ImgDataElm_CovMat dataElm_Mean;
-
-			float magSqr;
-
-			//m_avgSqrMag_Buf = & (pDataMgr_Exact->GetAvgSqrMag_Arr())[0];
-
 
 			F32ColorVal * pixColors;
 
-			F32ColorVal meanColors;
-			F32ColorVal showColor;
 
-			int nPixCnt;
 
-			//int x;
-			//int y;
-
-			F32Point pos;
+			// F32Point pos;
 
 			//bool bIsInConflict;
 
-			int nMaxDistMet;
 
 			RgnLink links[8];
 			APtrList< RgnConflict > conflictList;
 
-			bool bHasConflicts;
+			// bool bHasConflicts;
 
-			float accXYDistFromRoot;
-
-			float maxAccXYDistFromRoot;
-
-			float minDistFromRoot;
-
-			bool bFromBadSrc;
-
-			RgnInfo * m_pDeepSrcBadRgn;
-
-			bool bFlag1;			
-
-			bool bFlag2;			
-
-			bool bFromBadSrc_Org;			
-
-			bool bFrom_MaybeBadSrc;			
-
-			bool bMaybe_FstFromBadSrc;			
-
-			bool bFromSureBadSrc;
-
-			bool bFstFromBadSrc;
-
-			FillInfo * pFillInfo;
-
-			int nFstBadGrpID;
-
-			bool bInNativeTrace;
-
-			bool bBadFillDone;
-			
-			bool bBad_UnfillDone;
-
-			int nFill_Cycle;
-
-			ImgScanMgr_Ns::EdgeInfo * m_pMinDist_EI;
-
-			RgnInfoListElm * pTraceRootElm;
-
-			bool bInIntersection;
-
-			RgnInfo * pTraceFwdRoot;
-			RgnInfo * pTraceBkdRoot;
 
 			RgnInfo * pSrcRgn;
 
@@ -654,7 +338,7 @@ namespace Hcv
 
 			int nMergeOrder;
 
-			bool bIsPassiveRoot;
+			// bool bIsPassiveRoot;
 
 			static int s_MergeOrder;
 
@@ -663,90 +347,6 @@ namespace Hcv
 			RgnInfo * pPrev;	//	for being ListQue Entry
 		};
 
-
-		class RgnInfoListElm
-		{
-		public:
-			RgnInfo * pRgn;
-			RgnInfoListElm * pNext;
-		};
-
-		class EdgeInfoAccessor
-		{
-		public:
-
-			EdgeInfoAccessor( RegionSegmentor51 * a_pSgm )
-			{
-				m_pSgm = a_pSgm;
-
-				m_rgn_Buf = &(m_pSgm->m_rgnInfoVect)[ 0 ];
-			}
-
-			void SetEdgeInfo( ImgScanMgr_Ns::EdgeInfo * a_pEI )
-			{
-				m_pEI = a_pEI;
-
-				//m_ioaBuf = m_pEI->ioa_HeadPtr;
-			}
-
-/*			RgnInfo * GetRgnOf_IOL( int a_nIOL )
-			{
-				int nIOA = m_ioaBuf[ a_nIOL ];
-
-				return & m_rgn_Buf[ nIOA ];
-			}*/
-
-			RgnInfo * GetR1_Rgn()
-			{
-				int nIOA = m_pEI->GetIOA_Org_R1();
-
-				return & m_rgn_Buf[ nIOA ];
-			}
-
-			RgnInfo * GetR2_Rgn()
-			{
-				int nIOA = m_pEI->GetIOA_Org_R2();
-
-				return & m_rgn_Buf[ nIOA ];
-			}
-
-/*
-			RgnInfo * GetMed1_Rgn()
-			{
-				int nIOA = m_ioaBuf[ m_pEI->Med1_IOL ];
-
-				return & m_rgn_Buf[ nIOA ];
-			}
-
-			RgnInfo * GetMed2_Rgn()
-			{
-				int nIOA = m_ioaBuf[ m_pEI->Med2_IOL ];
-
-				return & m_rgn_Buf[ nIOA ];
-			}
-*/
-
-			RgnInfo * GetEdge_Rgn()
-			{
-				int nIOA = m_pEI->GetIOA_Org_E();
-
-				return & m_rgn_Buf[ nIOA ];
-			}
-
-		protected:
-
-			RegionSegmentor51 * m_pSgm;
-
-			
-			RgnInfo * m_rgn_Buf;
-
-
-			ImgScanMgr_Ns::EdgeInfo * m_pEI;
-
-			int * m_ioaBuf;
-		};
-
-		friend class EdgeInfoAccessor;
 
 		class LinkAction_2 : public MultiListQueMember< LinkAction_2 >
 		{
@@ -802,6 +402,8 @@ namespace Hcv
 
 
 		
+		static inline bool HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn);
+
 
 		S16ImageRef GenDifImg(bool a_bRC, bool a_bRB,
 			bool a_bCB, bool a_bLB);
@@ -917,15 +519,9 @@ namespace Hcv
 
 		//inline LinkAction * CloneLinkAction(LinkAction * a_pLA );
 
-		inline bool HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn);
-
 		inline void Push_LA_To_MergeQues( int a_nIndex, LinkAction_2 * pLA );
 
-		inline LinkAction_2 * PopMinPtr_From_MergeQues();
-
-		inline LinkAction_2 * PopMaxPtr_From_MergeQues();
-
-		inline RgnConflict * GetExistingConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn);
+		inline RgnConflict * GetConflictIfExists( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn);
 
 		inline void RemoveDuplicateConflicts( RgnInfo * a_pRgn );
 

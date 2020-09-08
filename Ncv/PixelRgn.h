@@ -56,8 +56,8 @@ namespace Ncv
 				T_PixelRgnEx * pMinRoot = (pRoot1 <= pRoot2) ? pRoot1 : pRoot2;
 				T_PixelRgnEx * pMaxRoot = (pRoot1 > pRoot2) ? pRoot1 : pRoot2;
 
-				pMaxRoot->m_pRoot = pMinRoot;
 				T_PixelRgnEx::MergeRgnDataIntoAnother(*pMinRoot, *pMaxRoot);
+				pMaxRoot->m_pRoot = pMinRoot;
 			}
 
 			bool IsSelfRoot() const { return this == m_pRoot; }

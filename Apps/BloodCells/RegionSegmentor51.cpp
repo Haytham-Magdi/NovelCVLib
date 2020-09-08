@@ -295,7 +295,7 @@ namespace Hcv
 					links[i].dir = (RgnLinkDir)i;
 				}
 
-				pRgnInfo->bHasConflicts = false;
+				// pRgnInfo->bHasConflicts = false;
 			}
 		}
 
@@ -555,7 +555,7 @@ namespace Hcv
 
 				do
 				{
-					pLA = PopMinPtr_From_MergeQues();
+					pLA = m_linkActionMergeQues.PopPtrMin();
 
 					if( NULL == pLA )
 					{
@@ -626,21 +626,21 @@ namespace Hcv
 							//nLastLA_MinIdx * 0.1 )
 							//nLastLA_MinIdx * 3 )
 						{
-							ImgScanMgr_Ns::EdgeInfo * pEI = 
-								m_edgeInfo_Ques.PopPtrMin();
+							// ImgScanMgr_Ns::EdgeInfo * pEI = 
+							// 	m_edgeInfo_Ques.PopPtrMin();
 
-							if( NULL == pEI )
-								break;
+							// if( NULL == pEI )
+							// 	break;
 
-							ImgScanMgr_Ns::EdgeInfo & rEI = *pEI;
+							// ImgScanMgr_Ns::EdgeInfo & rEI = *pEI;
 
-							if( rEI.IsCanceled )
-								continue;
+							// if( rEI.IsCanceled )
+							// 	continue;
 
-							eiAcc.SetEdgeInfo( & rEI );
+							// eiAcc.SetEdgeInfo( & rEI );
 
-							RgnInfo * pRootRgn1 = eiAcc.GetR1_Rgn();
-							RgnInfo * pRootRgn2 = eiAcc.GetR2_Rgn();
+							// RgnInfo * pRootRgn1 = eiAcc.GetR1_Rgn();
+							// RgnInfo * pRootRgn2 = eiAcc.GetR2_Rgn();
 
 							UpdateActRgn( pRootRgn1 );
 							RgnInfo * pRgnAct1 = pRootRgn1->GetActRgn();
@@ -794,9 +794,6 @@ namespace Hcv
 								pMinSizRgn = pActRgn2;
 								pMaxSizRgn = pActRgn1;
 							}
-
-							if( 3590427 == pLA->nIndex )
-								pLA = pLA;
 
 							bHaveConflict = HaveConflict( pMinSizRgn, pMaxSizRgn );
 						}
@@ -1008,404 +1005,6 @@ namespace Hcv
 
 
 		//return dist;
-	}
-
-	void RegionSegmentor51::UpdateActRgn(RgnInfo * a_pRgn)
-	{
-		if( NULL == a_pRgn->GetRootRgn() )
-			return;
-		
-		if( a_pRgn->GetRootRgn() == a_pRgn->GetRootRgn()->GetActRgn() )
-			return;
-
-		static FixedVector<RgnInfo *> rgnVect(10000);
-		rgnVect.SetSize(10000);
-		static int nMaxNofRgns = rgnVect.GetSize();
-
-		RgnInfo * pActRgn;
-		do
-		{
-			pActRgn = a_pRgn ;
-			int nofRgns = 0;
-
-//			while(pActRgn != pActRgn->GetActRgn() && nofRgns < nMaxNofRgns)
-			while(pActRgn != pActRgn->GetActRgn())
-			{
-				rgnVect[nofRgns++] = pActRgn;
-				pActRgn = pActRgn->GetActRgn();
-			}
-
-			for(int i=0; i<nofRgns; i++)
-				rgnVect[i]->SetActRgn( pActRgn );
-
-		}while( pActRgn != pActRgn->GetActRgn() );
-	}
-
-
-
-	S16ImageRef RegionSegmentor51::GenSegmentedImage( bool a_bShowMeanColor )
-	{
-		//Gen_SegData();
-
-		S16ImageRef ret = S16Image::Create(m_src->GetSize(), 3);
-		//S16ImageRef ret = GenS16FromF32Image(
-			//GenSegmentedImage2());
-
-		//return ret;
-
-		for(int i=0; i < m_rgnInfoVect.GetSize(); i++)
-		{
-			RgnInfo * pRgn = &m_rgnInfoVect[i];
-			RgnInfo * pActRgn = pRgn->GetActRgn();
-
-			//pActRgn->IncPopulationBy( 
-
-			//pActRgn->meanColors.IncBy( *pActRgn->pixColors );
-
-			//pActRgn->nPixCnt++;
-		}
-
-		for(int i=0; i < m_rgnInfoVect.GetSize(); i++)
-		{
-			RgnInfo * pRgn = &m_rgnInfoVect[i];
-			RgnInfo * pActRgn = pRgn->GetActRgn();
-
-			if( pActRgn == pRgn )
-			{
-				pRgn->meanColors.DividSelfBy( pRgn->nPixCnt );
-
-				if( false == a_bShowMeanColor )
-				{
-					pRgn->meanColors.val0 = rand() % 256;
-					pRgn->meanColors.val1 = rand() % 256;
-					pRgn->meanColors.val2 = rand() % 256;
-				}
-			}
-		}
-
-		S16ChannelRef retCh0 = ret->GetAt(0);
-		S16ChannelRef retCh1 = ret->GetAt(1);
-		S16ChannelRef retCh2 = ret->GetAt(2);
-
-		for(int i=0; i < m_rgnInfoVect.GetSize(); i++)
-		{
-			RgnInfo * pRgn = &m_rgnInfoVect[i];
-			RgnInfo * pActRgn = pRgn->GetActRgn();
-																			
-				
-
-			{
-				if(pRgn->bShowLocalColor)
-				//if(false)
-				{
-					/*
-					retCh0->SetAt( pRgn->pos.x, pRgn->pos.y, (short)pRgn->pixColors->val0 );
-					retCh1->SetAt( pRgn->pos.x, pRgn->pos.y, (short)pRgn->pixColors->val1 );
-					retCh2->SetAt( pRgn->pos.x, pRgn->pos.y, (short)pRgn->pixColors->val2 );
-					*/
-
-					retCh0->SetAt( pRgn->pos.x, pRgn->pos.y, (short)pRgn->showColor.val0 );
-					retCh1->SetAt( pRgn->pos.x, pRgn->pos.y, (short)pRgn->showColor.val1 );
-					retCh2->SetAt( pRgn->pos.x, pRgn->pos.y, (short)pRgn->showColor.val2 );
-					
-				}
-				else
-				{
-					retCh0->SetAt( pRgn->pos.x, pRgn->pos.y, (short)pActRgn->meanColors.val0 );
-					retCh1->SetAt( pRgn->pos.x, pRgn->pos.y, (short)pActRgn->meanColors.val1 );
-					retCh2->SetAt( pRgn->pos.x, pRgn->pos.y, (short)pActRgn->meanColors.val2 );
-				}
-
-			}
-		}
-
-		m_outImg = ret;
-
-		return ret;
-	}
-
-
-
-
-	F32ImageRef RegionSegmentor51::GenSegmentedImage2( bool a_bShowMeanColor )
-	{
-		S16ImageRef difImg = GenDifImg( true, true, true, true );
-
-		//F32ImageRef ret = F32Image::Create(m_src->GetSize(), 3);
-		F32ImageRef ret = m_src->Clone();
-
-
-
-
-		for(int i=0; i < m_rgnInfoVect.GetSize(); i++)
-		{
-			RgnInfo * pRgn = &m_rgnInfoVect[i];
-			RgnInfo * pActRgn = pRgn->GetActRgn();
-
-		}
-
-		F32ChannelRef retCh0 = ret->GetAt(0);
-		F32ChannelRef retCh1 = ret->GetAt(1);
-		F32ChannelRef retCh2 = ret->GetAt(2);
-
-		for(int i=0; i < m_rgnInfoVect.GetSize(); i++)
-		{
-			RgnInfo * pRgn = &m_rgnInfoVect[i];
-			RgnInfo * pActRgn = pRgn->GetActRgn();
-
-			F32ColorVal * retPix = (F32ColorVal *)ret->GetPixAt( pRgn->pos.x, pRgn->pos.y );
-
-			short * pDifPix = difImg->GetPixAt( pRgn->pos.x, pRgn->pos.y );
-
-			if( *pDifPix > 0 )
-			{
-				retPix->AssignVal( 255, 255, 255 );
-			}
-			else
-			{
-				retPix->MultSelfBy( 0.8 );
-			}
-				
-
-		}
-
-		return ret;
-	}
-
-
-
-	void RegionSegmentor51::ShowValleyPath(int a_x, int a_y)
-	{
-		Hcv::S16ImageRef img0 = this->GenSegmentedImage(false);
-		//Hcv::F32ImageRef img1 = this->GenSegmentedImage2(false);
-
-		//img1 = img1->Clone();
-		Hcv::F32ImageRef img1 = GenF32FromS16Image( img0 );
-
-
-		RgnInfo * pRgn1 = GetPointRgn( a_x, a_y );
-
-
-		ShowImage(img1, "RgnSgmImg");
-
-	}
-
-
-	void RegionSegmentor51::ShowSrcPath(int a_x, int a_y)
-	{
-		//a_x = 266;
-		//a_y = 426;
-
-		//a_x = 588;
-		//a_y = 341;
-
-
-		Hcv::S16ImageRef img0 = this->GenSegmentedImage(false);
-		//Hcv::F32ImageRef img1 = this->GenSegmentedImage2(false);
-
-		//img1 = img1->Clone();
-		Hcv::F32ImageRef img1 = GenF32FromS16Image( img0 );
-
-
-		RgnInfo * pRgn1 = GetPointRgn( a_x, a_y );
-
-		Signal1DBuilderRef sb0 = new Signal1DBuilder( 1300 );
-		Signal1DBuilderRef sb1 = new Signal1DBuilder( 1300 );
-		Signal1DBuilderRef sb2 = new Signal1DBuilder( 1300 );
-
-
-		RgnInfo * pRgn1_Old = NULL;
-
-		int nSrcCnt = 0;
-		do
-		{
-			F32ColorVal * pColor = (F32ColorVal *)img1->GetPixAt(
-				pRgn1->pos.x, pRgn1->pos.y );
-
-			{
-				float gradVal = *m_srcGrad->GetPixAt(
-					pRgn1->pos.x, pRgn1->pos.y );
-
-				sb0->AddValue( gradVal );
-			}
-
-			{
-				float rootDist = *m_rootRgnImg->GetPixAt(
-					pRgn1->pos.x, pRgn1->pos.y );
-
-				sb1->AddValue( rootDist );
-			}
-
-			{
-				float minRootDist = pRgn1->minDistFromRoot / m_difScale;
-
-				sb2->AddValue( minRootDist );
-			}
-
-			pColor->AssignVal( 0, 255, 0 );
-
-			pRgn1_Old = pRgn1;
-			pRgn1 = pRgn1->pSrcRgn;
-
-			nSrcCnt++;
-
-			if( nSrcCnt >= 1500 )
-				break;
-
-		}while( NULL != pRgn1 );
-
-		{
-			//F32ColorVal * pColor = (F32ColorVal *)img1->GetPixAt(
-				//a_x, a_y );
-
-			//pColor->AssignVal( 0, 0, 255 );
-
-			RgnInfo * pRgn1_1 = GetPointRgn( a_x, a_y );
-
-			DrawCircle( img1, F32Point( a_x, a_y ), u8ColorVal( 0, 0, 255 ) );
-
-			DrawCircle( img1, pRgn1_Old->pos, u8ColorVal( 0, 140, 255 ) );
-
-			UpdateActRgn( pRgn1_1 );
-			UpdateActRgn( pRgn1_Old );
-
-			Hcpl_ASSERT( pRgn1_1->GetActRgn() == pRgn1_Old->GetActRgn() );
-
-
-
-			if( NULL != pRgn1_1->m_pDeepSrcBadRgn )
-			{
-				DrawCircle( img1, pRgn1_1->m_pDeepSrcBadRgn->pos, 
-				u8ColorVal( 0, 255, 255 ) );
-			}
-
-		}
-
-
-		ShowImage(img1, "RgnSgmImg");
-
-		{
-			Signal1DViewer sv1;
-
-			sv1.AddSignal( sb0->GetResult(), u8ColorVal( 255, 0, 0 ) );
-			sv1.AddSignal( sb1->GetResult(), u8ColorVal( 0, 255, 0 ) );
-			sv1.AddSignal( sb2->GetResult(), u8ColorVal( 0, 0, 255 ) );
-
-			ShowImage( sv1.GenDisplayImage(), "Src Path" );
-		}
-
-	}
-
-
-	void RegionSegmentor51::ShowEdgeOfConflict()
-	{
-		const float x1 = IOMgr::ReadInt("x1");
-		const float y1 = IOMgr::ReadInt("y1");
-		const float x2 = IOMgr::ReadInt("x2");
-		const float y2 = IOMgr::ReadInt("y2");
-
-
-		RgnInfo * pRgn1 = GetPointRgn(x1, y1);
-
-		UpdateActRgn( pRgn1 );
-		RgnInfo * pActRgn1 = pRgn1->GetActRgn();
-
-
-		RgnInfo * pRgn2 = GetPointRgn(x2, y2);
-
-		UpdateActRgn( pRgn2 );
-		RgnInfo * pActRgn2 = pRgn2->GetActRgn();
-
-
-		RgnConflict * pConflict = GetExistingConflict( pActRgn1, pActRgn2);
-
-		if( NULL == pConflict )
-			pConflict = pConflict;
-		
-		if( NULL != pConflict )
-		{
-			//Hcv::S16ImageRef img1 = this->GenSegmentedImage(false);
-			//Hcv::F32ImageRef img1 = this->GenSegmentedImage2(false);
-
-			Hcv::F32ImageRef img1 = GenF32FromS16Image(
-				this->GenSegmentedImage(false) );
-
-			img1 = img1->Clone();
-
-			{
-				RgnInfo * pRgn = pConflict->pOrgEdge;
-
-				DrawCircle( img1, pRgn->pos, 
-					u8ColorVal( 0, 255, 0 ), 3 );
-			}
-
-			{
-				RgnInfo * pRgn = pConflict->pOrgR1;
-
-				DrawCircle( img1, pRgn->pos, 
-					u8ColorVal( 0, 0, 255 ), 3 );
-			}
-
-			{
-				RgnInfo * pRgn = pConflict->pOrgR2;
-
-				DrawCircle( img1, pRgn->pos, 
-					u8ColorVal( 0, 0, 255 ), 3 );
-			}
-
-			{
-				RgnInfo * pRgn = pConflict->pOrgDeep1;
-
-				DrawCircle( img1, pRgn->pos, 
-					u8ColorVal( 0, 180, 255 ), 3 );
-			}
-
-			{
-				RgnInfo * pRgn = pConflict->pOrgDeep2;
-
-				DrawCircle( img1, pRgn->pos, 
-					u8ColorVal( 0, 180, 255 ), 3 );
-			}
-
-			ShowImage(img1, "RgnSgmImg");
-
-		}
-
-
-
-
-
-
-
-/*
-		HCV_CALL(
-
-			cvCircle (
-				img1->GetIplImagePtr(),
-				//cvPoint( x1, y1 ),
-				cvPoint( x1, y1 ),
-				3,
-				//CV_RGB( a_color.val2, a_color.val1, a_color.val0 ),
-				CV_RGB( 0, 255, 0 ),
-				-1 // CV_FILL
-			) );
-
-
-		HCV_CALL(
-
-			cvCircle (
-				img1->GetIplImagePtr(),
-				cvPoint( x2, y2 ),
-				3,
-				//CV_RGB( a_color.val2, a_color.val1, a_color.val0 ),
-				CV_RGB( 255, 0, 0 ),
-				-1 // CV_FILL
-			) );
-*/
-
-		//ShowImage(img1, "RgnSgmImg");
-
-
 	}
 
 
@@ -1663,72 +1262,17 @@ namespace Hcv
 		//	Push_LA_To_MergeQues( nDistNew, pLA);		
 	}
 
-	void RegionSegmentor51::Push_LA_To_MergeQues( int a_nIndex, LinkAction_2 * pLA )
-	{
-		//pLA->bIsActive = true;
 
-		m_linkActionMergeQues.PushPtr( a_nIndex, pLA);
+	bool RegionSegmentor51::RgnInfo::HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn)
+	{
+		RegionSegmentor51::RgnConflict * pConflict = GetConflictIfExists( a_pMinSizRgn, a_pMaxSizRgn);
+		return nullptr != pConflict;
 	}
 
 
-	RegionSegmentor51::LinkAction_2 * RegionSegmentor51::PopMinPtr_From_MergeQues()
+	RegionSegmentor51::RgnConflict * RegionSegmentor51::GetConflictIfExists( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn)
 	{
-		PopPtr:
-
-		LinkAction_2 * pLA = m_linkActionMergeQues.PopPtrMin();
-
-		if( NULL != pLA )
-		{
-			//if( ! pLA->bIsActive )
-			//	goto PopPtr;
-			//else
-				//pLA->bIsActive = false;
-		}
-
-		return pLA;
-	}
-
-					
-
-	RegionSegmentor51::LinkAction_2 * RegionSegmentor51::PopMaxPtr_From_MergeQues()
-	{
-		PopPtr:
-
-		LinkAction_2 * pLA = m_linkActionMergeQues.PopPtrMax();
-
-		if( NULL != pLA )
-		{
-			//if( ! pLA->bIsActive )
-			//	goto PopPtr;
-			//else
-			//	pLA->bIsActive = false;
-		}
-
-		return pLA;
-	}
-
-					
-
-	bool RegionSegmentor51::HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn)
-	{
-		RegionSegmentor51::RgnConflict * pConflict = GetExistingConflict( a_pMinSizRgn, a_pMaxSizRgn);
-
-		if( NULL != pConflict )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	RegionSegmentor51::RgnConflict * RegionSegmentor51::GetExistingConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn)
-	{
-		//bool bRet = false;
-
-		APtrList< RgnConflict > & minConfList = 
-			a_pMinSizRgn->conflictList;
+		APtrList< RgnConflict > & minConfList = a_pMinSizRgn->conflictList;
 
 		RegionSegmentor51::RgnConflict * pConflict = minConfList.Last();
 
@@ -1736,12 +1280,10 @@ namespace Hcv
 		{
 			RgnInfo * pPeerRgn = pConflict->pPeerRgn;
 
-			UpdateActRgn( pPeerRgn );
-			pPeerRgn = pPeerRgn->GetActRgn();
+			pPeerRgn = pPeerRgn->GetRootAfterNecessaryUpdating();
  			pConflict->pPeerRgn = pPeerRgn;
 
 			if( pPeerRgn == a_pMaxSizRgn )
-				//return true;
 				return pConflict;
 
 			RgnConflict * pNext = minConfList.Next();
@@ -2250,8 +1792,10 @@ namespace Hcv
 					pLA->pRgn1 = & m_rgnInfoVect[ rPL.nIOA ];
 					pLA->pRgn2 = & m_rgnInfoVect[ rLink.nIOA_Peer ];
 					
-					this->Push_LA_To_MergeQues( 
-						rLink.Rate * m_difScale, pLA );
+					m_linkActionMergeQues.PushPtr(rLink.Rate * m_difScale, pLA);
+
+					// this->Push_LA_To_MergeQues( 
+					// 	rLink.Rate * m_difScale, pLA );
 
 					nLA_Cnt++;
 				}
@@ -2432,66 +1976,6 @@ namespace Hcv
 				pix->AssignVal( 0, 0, 0 );
 			}
 		}
-
-/*
-		//if( 282873 == pRgn->nIndex )
-		{
-			{
-				RgnInfo * pEdgeRgn = &m_rgnInfoVect[ 230998 ];			
-
-				DrawCircle( ret, pEdgeRgn->pos, u8ColorVal( 255, 155, 0 ), 5 );
-			}
-
-			{
-				RgnInfo * pMed1_Rgn = &m_rgnInfoVect[ 204649 ];			
-
-				DrawCircle( ret, pMed1_Rgn->pos, u8ColorVal( 255, 0, 155 ), 5 );
-			}
-
-			{
-				RgnInfo * pMed2_Rgn = &m_rgnInfoVect[ 340512 ];			
-
-				DrawCircle( ret, pMed2_Rgn->pos, u8ColorVal( 255, 0, 155 ), 5 );
-			}
-
-			RgnInfo * pRgn = &m_rgnInfoVect[ 282873 ];
-
-			DrawCircle( ret, pRgn->pos, u8ColorVal( 0, 255, 0 ), 5 );
-			//pix->AssignVal( 0, 255, 0 );
-
-
-			RgnInfoListElm * pRootElm = pRgn->pTraceRootElm;
-
-			if( NULL != pRootElm )
-			{
-				UpdateActRgn( pRgn );
-				RgnInfo * pActRgn_0 = pRgn->GetActRgn();
-
-				bool bMergeOK = false;
-
-				do
-				{
-					UpdateActRgn( pRootElm->pRgn );
-					RgnInfo * pActRgnR = pRootElm->pRgn->GetActRgn();
-
-					if(	pActRgnR == pActRgn_0 )
-					{
-						bMergeOK = true;
-						break;
-					}
-
-					DrawCircle( ret, pRootElm->pRgn->pos, 
-						u8ColorVal( 255, 0, 255 ), 5 );
-
-					pRootElm = pRootElm->pNext;
-				}while( NULL != pRootElm );
-
-			}
-
-		}
-*/
-
-
 
 		return ret;
 	}
