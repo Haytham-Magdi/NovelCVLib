@@ -1,23 +1,25 @@
 #pragma once
 
-#include <Lib\Cpp\Common\commonLib.h>
-#include <Lib\Cpp\Math\mathLib.h>
-#include <Lib\Hcv\CvIncludes.h>
-#include <Lib\Hcv\Types.h>
-#include <Lib\Hcv\error.h>
+#include <NovelCVLib\Cpp\Common\commonLib.h>
+#include <NovelCVLib\Cpp\Math\mathLib.h>
+#include <NovelCVLib\Hcv\CvIncludes.h>
+#include <NovelCVLib\Hcv\Types.h>
+#include <NovelCVLib\Hcv\error.h>
 #include <vector>
-#include <Lib\Hcv\Channel.h>
-#include <Lib\Hcv\Image.h>
+#include <NovelCVLib\Hcv\Channel.h>
+#include <NovelCVLib\Hcv\Image.h>
 
-#include <Lib\Hcv\ConflictScanner2.h>
-#include <Lib\Hcv\BadRootScanner.h>
+#include <NovelCVLib\Hcv\ConflictScanner2.h>
+#include <NovelCVLib\Hcv\BadRootScanner.h>
 
-#include <Lib\Hcv\SlideMgr.h>
+#include <NovelCVLib\Hcv\SlideMgr.h>
 
-//#include <Lib\Hcv\ScanTryMgr_9.h>
-#include <Lib\Hcv\ImgScanMgr.h>
+//#include <NovelCVLib\Hcv\ScanTryMgr_9.h>
+#include <NovelCVLib\Hcv\ImgScanMgr.h>
 
-#include <Lib\Hcv\ImgDataElm_CovMat.h>
+#include <NovelCVLib\Hcv\ImgDataElm_CovMat.h>
+
+#include <NovelCVLib\Ncpp\Common\MultiAllocProvider.h>
 
 
 namespace Hcv
@@ -340,7 +342,7 @@ namespace Hcv
 			};
 */
 
-		class RgnInfo
+		class RgnInfo : public PixelRgn<SimplePixelRgn>
 		{
 		protected:
 			RgnInfo * pActRgn;
@@ -992,8 +994,8 @@ namespace Hcv
 
 		//FixedVector<LinkAction> m_linkActionVect;
 
-		PtrPrvider< LinkAction > m_linkAction_PtrPrvider;
-		//PtrPrvider< ImgScanMgr_Ns::EdgeInfoAcc > m_eiAcc_PtrPrvider;
+		// MultiAllocProvider< LinkAction > m_linkAction_Provider;
+		MultiAllocProviderRef< LinkAction > m_linkAction_Provider;
 
 		FixedVector< LinkAction_2 > m_linkAction_2_Arr;
 

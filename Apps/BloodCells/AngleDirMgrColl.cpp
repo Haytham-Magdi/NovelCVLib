@@ -23,6 +23,8 @@
 #include <NovelCVLib\Apps\BloodCells\AngleDirMgrColl.h>
 #include <NovelCVLib\Apps\BloodCells\PixelInfo_1.h>
 
+#include <NovelCVLib\Apps\BloodCells\RegionSegmentor51.h>
+
 #include <NovelCVLib\Ncv\F32PixelLink3C_Util.h>
 
 #include <NovelCVLib\Ncv\SimplePixelRgn.h>

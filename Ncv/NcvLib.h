@@ -88,6 +88,7 @@
 #include <NovelCVLib\Apps\BloodCells\PixelInfo_1.h>
 #include <NovelCVLib\Apps\BloodCells\RgnOfMerge.h>
 
+#include <NovelCVLib\Apps\BloodCells\RegionSegmentor51.h>
 
 
 

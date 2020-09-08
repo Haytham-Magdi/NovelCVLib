@@ -1,13 +1,13 @@
-#include <Lib\Cpp\Common\commonLib.h>
-#include <Lib\Hcv\CvIncludes.h>
-#include <Lib\Hcv\Types.h>
-#include <Lib\Hcv\error.h>
+#include <NovelCVLib\Cpp\Common\commonLib.h>
+#include <NovelCVLib\Hcv\CvIncludes.h>
+#include <NovelCVLib\Hcv\Types.h>
+#include <NovelCVLib\Hcv\error.h>
 #include <vector>
-#include <Lib\Hcv\Channel.h>
-#include <Lib\Hcv\Image.h>
-#include <Lib\Hcv\funcs1.h>
+#include <NovelCVLib\Hcv\Channel.h>
+#include <NovelCVLib\Hcv\Image.h>
+#include <NovelCVLib\Hcv\funcs1.h>
 
-#include <Lib\Hcv\RegionSegmentor51.h>
+#include <NovelCVLib\Hcv\RegionSegmentor51.h>
 
 #define M_PI 3.14159265358979323846
 
@@ -337,12 +337,11 @@ namespace Hcv
 		//m_linkAction_2_Arr.SetCapacity( 
 			nSrcWidth * nSrcHeight * 4 );
 
-		m_linkAction_PtrPrvider.Init( 10000000 );
-
-		//m_eiAcc_PtrPrvider.Init( 500000 );
+		// m_linkAction_Provider.Init( 30000 );
+		m_linkAction_Provider = new MultiAllocProvider<LinkAction>(30000);
 
 		FixedVector< LinkAction > & rLinkActionVect = 
-			m_linkAction_PtrPrvider.GetAllocArr();
+			m_linkAction_Provider.GetAllocArr();
 
 
 		for( int i=0; i < rLinkActionVect.GetSize(); i++ )
@@ -1520,7 +1519,7 @@ namespace Hcv
 		RgnLink & rLinkR2 = pRgn2->links[ nLinkIndex + 4 ];
 
 
-		LinkAction * pLA = m_linkAction_PtrPrvider.ProvidePtr();
+		LinkAction * pLA = m_linkAction_Provider.ProvidePtr();
 
 		//pRgn1 = a_pRgn;
 		//pRgn2 = pRgn2;
@@ -1549,7 +1548,7 @@ namespace Hcv
 
 
 
-		LinkAction * pLA = m_linkAction_PtrPrvider.ProvidePtr();
+		LinkAction * pLA = m_linkAction_Provider.ProvidePtr();
 
 		//pRgn1 = a_pRgn;
 		//pRgn2 = a_pRgn2;
