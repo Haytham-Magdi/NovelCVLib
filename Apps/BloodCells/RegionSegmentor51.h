@@ -310,13 +310,8 @@ namespace Hcv
 
 			LinkAction()
 			{
-				bShowTrace = false;
-				bActionCanceled = false;
-				bIntersected = false;
 				nIndex = 0;
-				bIsActive = false;
 			}
-
 
 			//RgnInfo * pRgn1;
 			//RgnInfo * pRgn2;
@@ -324,20 +319,8 @@ namespace Hcv
 			RgnLink * pLink1;
 			//RgnLink * pLink2;
 
-			bool bIsActive;
-
-			bool bShowTrace;
-			bool bActionCanceled;
-			bool bIntersected;
-
-			int nScaledDist;
-
 			int nIndex;
-
 		};
-
-
-
 
 
 	public:
@@ -345,11 +328,8 @@ namespace Hcv
 			int a_nDifThreshold = 15, F32ImageRef a_rootValImg = NULL);
 
 		~RegionSegmentor51();
-
-
 		
 		static inline bool HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn);
-
 
 		virtual void Segment();
 		virtual S16ImageRef GenSegmentedImage(bool a_bShowMeanColor = true);

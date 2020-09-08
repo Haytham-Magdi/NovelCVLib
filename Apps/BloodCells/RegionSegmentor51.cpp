@@ -324,11 +324,10 @@ namespace Hcv
 						continue;
 					}
 
+					GlobalStuff::m_nLA_Index = pLA->nIndex;
 
 					RgnInfo * pRgn1 = pLA->pRgn1;
 					RgnInfo * pRgn2 = pLA->pRgn2;
-
-					GlobalStuff::m_nLA_Index = pLA->nIndex;
 
 					{
 						// int nLastLA_MinIdx = 
@@ -358,17 +357,19 @@ namespace Hcv
 					}
 
 
-					RgnInfo * pRootRgn1 = pRgn1->GetDirectRoot();
+					RgnInfo * pRootRgn1 = pRgn1->GetActRootAfterNecessaryUpdating();
+					Ncpp_ASSERT( NULL != pRootRgn1);
 
-					if( NULL == pRootRgn1 )
-					{
-						// Bug
-						ThrowHcvException();
-					}
+					// if( NULL == pRootRgn1 )
+					// {
+					// 	// Bug
+					// 	ThrowHcvException();
+					// }
 
 					RgnInfo * pRootRgn2 = pRgn2->GetDirectRoot();
 
-					//const int nTestIdx = 181157;
+					// Ncpp_ASSERT(NULL != pRootRgn1 && NULL != pRootRgn2);
+
 					const int nTestIdx = 173209;
 
 					
@@ -386,28 +387,29 @@ namespace Hcv
 					//if( 0 == i || e >= 1 )
 					//if( 0 == i || e >= 1 )
 					{
-						if( NULL != pRootRgn1 && NULL != pRootRgn2 )
+						// if( NULL != pRootRgn1 && NULL != pRootRgn2 )
+						if(NULL != pRootRgn2 )
 						{
+							if(nTestIdx == pRgn2->nIndex)
+							{
+								i = i;
+							}
+
 							if( 0 == i )
 							{
-
 								if( pRootRgn1 == pRootRgn2 )
 									continue;
 
 								bMergeRoots = true;
 							}
-
 						}
 						else		//	NULL == pRootRgn2
 						{
-							//if( NULL != pRgn1->pTraceRootElm )
-								//continue;
+							// if( 1 == i )
+							// 	i = i;
 
-							if( 1 == i )
-								i = i;
-
-							UpdateActRgn( pRootRgn1 );
-							RgnInfo * pActRgn1 = pRootRgn1->GetActRgn();
+							// UpdateActRgn( pRootRgn1 );
+							RgnInfo * pActRgn1 = pRootRgn1->GetActRootAfterNecessaryUpdating();
 
 							bool bAddRgn = true;
 
@@ -430,12 +432,9 @@ namespace Hcv
 
 								pRgn2->pSrcRgn = pRgn1;
 
-								pActRgn1->IncPopulationBy( pRgn2 );
-
-								//Manage_EI_Activation( pRgn1, pRgn2 );
-
 								PrepareRgnLinkActions( pRgn2, 0 );
-							}
+							
+							}	//	end if addRgn.
 
 							continue;
 						}
@@ -535,10 +534,6 @@ namespace Hcv
 								pMasterRgn->conflictList.TakeListElements(
 									pSlaveRgn->conflictList );
 								pSlaveRgn->SetActRgn( pMasterRgn );
-
-								pMasterRgn->IncPopulationBy( pSlaveRgn );
-
-								//Manage_EI_Activation( pRgn1, pRgn2 );
 							}
 
 							if( pRootRgn2->bIsPassiveRoot )

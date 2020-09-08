@@ -28,6 +28,7 @@ namespace Ncv
 				return m_pRoot;
 			}
 
+			//	todo: faster implementation (not recursive).
 			T_PixelRgnEx * GetActRootAfterNecessaryUpdating()
 			{
 				if (m_pRoot->IsSelfRoot())
