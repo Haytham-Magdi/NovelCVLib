@@ -366,31 +366,15 @@ namespace Hcv
 			return *m_srcGrad->GetPixAt( a_pRgn->pos.x, a_pRgn->pos.y );
 		}
 
-		void ScanImageLines();
-		void PostScanPrepare();
-
 		void InitLinks(void);
-		void ProcessEdgeQues();
-		void TraceLinkActionRoots( LinkAction * a_pLA );
-			//RgnInfo ** a_ppRoot1, RgnInfo ** a_ppRoot2 );
-
-		void RegionSegmentor51::AddFwdTraceUnit(RgnInfo * a_pRgn, int a_nFwdIndex, int a_nBkdIndex);
-		void RegionSegmentor51::AddBkdTraceUnit(RgnInfo * a_pRgn, int a_nFwdIndex, int a_nBkdIndex);
 
 		int GetInverseLinkIndex(int a_index)
 		{
 			return MgrOfLinkTypes::GetCore()->GetInverseLinkIndex(a_index);
 		}
 
-		void PrepareTraceListPtrs();
 
-
-
-
-		void ProcessLinkActionTrace( LinkAction * a_pLA );
 		void InitRgnInfoVect(void);
-		void PrepareConflicts();
-		void PrepareRgnConflicts( RgnInfo * a_pRgn );
 
 		int GetMaxDif() { return m_nMaxDif; }
 		float m_difScale;
@@ -412,13 +396,6 @@ namespace Hcv
 		}
 
 		inline float CalcRgnDif(RgnInfo * a_pRgn1, RgnInfo * a_pRgn2);
-
-		// With Space
-		inline float CalcRgnDifWS(RgnInfo * a_pRgn1, RgnInfo * a_pRgn2);
-		inline bool IsConflictDist(float a_dist)
-		{			
-			return  ( a_dist >= (m_difThreshold * m_difScale) );
-		}
 
 		inline void CreateLink( RgnInfo * a_pRgn, 
 			int x, int y, RgnLinkDir a_dir);
@@ -448,21 +425,6 @@ namespace Hcv
 
 		inline void CreateConflict( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2);
 
-
-		F32ImageRef GenScanImage();
-
-		F32ImageRef GenRootRgnImage();
-
-		F32ImageRef GenMergeOrderImage();
-
-		F32ImageRef Gen_FalseMergeImage();
-
-		F32ImageRef Gen_FalseMergeImage_2();
-
-		void ProcessLineScanResult( RgnLinkDir a_dir );
-
-		void PrepareSrcGradImg();
-
 		RgnLink * GetLinkBetweenRgns( int a_nIdx_1, int a_nIdx_2 );
 
 
@@ -472,10 +434,7 @@ namespace Hcv
 		SlideMgrRef m_slideMgr;
 
 		F32ImageRef m_src;
-		F32ImageRef m_srcGrad;
 		F32ImageRef m_orgSrc;
-		F32ImageRef m_rootRgnImg;
-		F32ImageRef m_slideRootDifImg;
 
 		LinkAction * pLADbg; 
 
@@ -499,16 +458,10 @@ namespace Hcv
 
 		FixedVector<RgnConflict> m_rgnConflictVect;
 		int m_nofConflicts;
-		int m_nofPrimConfRgns;
 
 		//MultiListQue< LinkAction > m_difQues;
 		MultiListQueMgr< LinkAction_2 > m_linkActionMergeQues;
 		MultiListQueMgr< LinkAction > m_linkActionEdgeQues;
-
-
-		//MultiListQue< LinkAction > m_difQues2;
-		ListQue< RgnInfo > m_RgnOfConflictQue;
-		float m_difThreshold;
 
 		int m_nVisitID;
 

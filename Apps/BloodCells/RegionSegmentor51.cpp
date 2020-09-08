@@ -30,19 +30,14 @@ namespace Hcv
 
 
 	RegionSegmentor51::RegionSegmentor51(F32ImageRef a_src, S16ImageRef a_rootImg,
-		int a_nDifThreshold, F32ImageRef a_rootValImg) : 
+		F32ImageRef a_rootValImg) : 
 	m_rgnIndexCalc(a_src->GetWidth(), a_src->GetHeight()), m_nAprSize( GlobalStuff::AprSize1D )
 	//m_rgnIndexCalc(a_src->GetWidth(), a_src->GetHeight()), m_nAprSize( 0 )
 	{	
-		m_difThreshold = a_nDifThreshold;
 		m_nofConflicts = 0;
-		m_nofPrimConfRgns = 0;
 		m_nVisitID = 0;
 
 		m_orgSrc = a_src;
-
-		
-
 
 
 		{
@@ -56,11 +51,6 @@ namespace Hcv
 			m_src = m_orgSrc;
 		}
 
-		{
-			PrepareSrcGradImg();
-		}
-
-
 
 		InitMaxDif();
 
@@ -69,30 +59,10 @@ namespace Hcv
 		//m_difQues.Init( GetMaxDif() + 2 );
 
 		m_linkActionMergeQues.InitSize( GetMaxDif() * 2 + 2 );
-		m_linkActionEdgeQues.InitSize( GetMaxDif() * 2 + 2 );
 
-		m_edgeInfo_Ques.InitSize( m_linkActionMergeQues.GetNofQues() );
-
-		m_medTraceQues.Init( m_linkActionMergeQues.GetNofQues() );
-
-
-		m_edgeFwdRgnVect.SetCapacity(3000);
-
-		m_edgeBkdRgnVect.SetCapacity(3000);
-		
 		InitRgnInfoVect();
 
-		//m_pDbgRgn = & m_rgnInfoVect[ 282873 ];
-		//m_pDbgRgn = & m_rgnInfoVect[ 110507 ];
-		//m_pDbgRgn = & m_rgnInfoVect[ 109981 ];
-		//m_pDbgRgn = & m_rgnInfoVect[ 101785 ];		
-		//m_pDbgRgn = & m_rgnInfoVect[ 286705 ];
 		m_pDbgRgn = & m_rgnInfoVect[ 535326 ];
-
-		//m_pDbgRgn = GetPointRgn( 301, 348 );
-		
-
-		
 
 		{	
 			IndexCalc2D idx2D( m_src->GetSize().width,
@@ -109,7 +79,6 @@ namespace Hcv
 		
 		m_nofConflicts = 0;
 
-		ScanImageLines();
 	}
 
 	void RegionSegmentor51::InitRgnInfoVect(void)
