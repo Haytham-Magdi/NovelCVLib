@@ -29,19 +29,6 @@ namespace Hcv
 
 	using namespace Hcpl::Math;
 
-/*
-	class IRegionSegmentor50 : FRM_Object
-	{	
-	public:
-		virtual S16ImageRef GenSegmentedImage(bool a_bShowMeanColor = true) = 0;
-		virtual void Segment() = 0;
-		virtual S16ImageRef GetLastOutputImg() = 0;
-		virtual void ShowEdgeOfConflict() = 0;
-	};
-
-	typedef Hcpl::ObjRef< IRegionSegmentor50 > IRegionSegmentor50Ref;
-*/
-
 
 	class RegionSegmentor51 // : public IRegionSegmentor20
 	{
@@ -405,36 +392,11 @@ namespace Hcv
 		static inline bool HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn);
 
 
-		S16ImageRef GenDifImg(bool a_bRC, bool a_bRB,
-			bool a_bCB, bool a_bLB);
-
-		S16ImageRef GenConflictImg(bool a_bRC, bool a_bRB,
-			bool a_bCB, bool a_bLB);
-
-		HistoGramRef GenDifHisto(bool a_bRC, bool a_bRB,
-			bool a_bCB, bool a_bLB);
-
-
-			
-
-
-		//virtual ImgSegDataMgrRef Gen_SegData();
-		virtual void Gen_SegData();
-
 		virtual void Segment();
 		virtual S16ImageRef GenSegmentedImage(bool a_bShowMeanColor = true);
 		
 		virtual F32ImageRef GenSegmentedImage2(bool a_bShowMeanColor = true);
 
-		virtual S16ImageRef GetLastOutputImg()
-		{
-			return m_outImg;
-		}
-
-		virtual void ShowEdgeOfConflict();
-		virtual void ShowValleyPath(int a_x, int a_y);
-		virtual void ShowSrcPath(int a_x, int a_y);
-		
 
 	protected:
 
@@ -519,8 +481,6 @@ namespace Hcv
 
 		//inline LinkAction * CloneLinkAction(LinkAction * a_pLA );
 
-		inline void Push_LA_To_MergeQues( int a_nIndex, LinkAction_2 * pLA );
-
 		inline RgnConflict * GetConflictIfExists( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn);
 
 		inline void RemoveDuplicateConflicts( RgnInfo * a_pRgn );
@@ -528,19 +488,6 @@ namespace Hcv
 		inline void PrepareRgnLinkActions( RgnInfo * a_pRgn, float a_distBef );
 
 		inline void CreateConflict( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2, RgnInfo * pOrgEdge = NULL, ImgScanMgr_Ns::EdgeInfo * a_pEI = NULL );
-
-		bool PointInImage( int x, int y )
-		{
-			if( 
-				x < 0 ||
-				x > m_rgnIndexCalc.GetSizeX() - 1 ||
-				y < 0 ||
-				y > m_rgnIndexCalc.GetSizeY() - 1 
-				)
-				return false;
-			else
-				return true;
-		}
 
 
 		F32ImageRef GenScanImage();
@@ -611,8 +558,6 @@ namespace Hcv
 		float m_difThreshold;
 
 		int m_nVisitID;
-
-		S16ImageRef m_outImg;
 
 		RgnInfo * m_pAnyRoot;
 

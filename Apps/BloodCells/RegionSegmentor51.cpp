@@ -399,118 +399,6 @@ namespace Hcv
 
 	}
 
-	S16ImageRef RegionSegmentor51::GenDifImg(bool a_bRC, bool a_bRB,
-		bool a_bCB, bool a_bLB)
-	{
-		S16ImageRef ret = S16Image::Create(m_src->GetSize(), 1);
-		ret->SetAll(0);
-
-
-		S16ChannelRef retCh0 = ret->GetAt(0);
-
-		bool dirFlags[] = {false, false, false, false};
-
-		if(a_bRC)
-		dirFlags[RC] = true;
-		if(a_bRB)
-		dirFlags[RB] = true;
-		if(a_bCB)
-		dirFlags[CB] = true;
-		if(a_bLB)
-		dirFlags[LB] = true;
-
-
-		//F32Point testPnt( 417, 534 );
-		F32Point testPnt( 419, 532 );
-
-
-		int nTestCnt = 0;
-
-		for(int i=0; i < m_rgnInfoVect.GetSize(); i++)
-		{
-			RgnInfo * pRgn = &m_rgnInfoVect[i];
-
-			RgnLink * links = pRgn->links;
-
-			for(int j=0; j<4; j++)
-			{
-				if( links[j].bExists && dirFlags[j] )
-				{
-					if( pRgn->GetActRgn() != links[j].pRgn2->GetActRgn() )
-					{
-						//if( F32Point::Sub( testPnt, pRgn->pos ).CalcMag() < 2 ) 
-						if( F32Point::Sub( testPnt, pRgn->pos ).CalcMag() < 3 ) 
-						{
-							RgnInfo * pActRgn1 = pRgn->GetActRgn();
-							RgnInfo * pActRgn2 = links[j].pRgn2->GetActRgn();
-
-							if( pActRgn1->nPixCnt < 20 ||
-								pActRgn2->nPixCnt < 20 )
-							{
-								i = i;
-							}
-
-							nTestCnt++;
-
-							i = i;
-						}
-
-						retCh0->SetAt( pRgn->pos.x, pRgn->pos.y, 255);
-					}
-				}
-			}
-		}
-
-		return ret;
-	}
-
-
-
-	
-	HistoGramRef RegionSegmentor51::GenDifHisto(bool a_bRC, bool a_bRB,
-		bool a_bCB, bool a_bLB)
-	{
-		HistoGramRef hist = new HistoGram( GetMaxDif() + 1 );
-		/*		FixedVector<Int32> & rHistVect = *hist->GetVectPtr();
-
-		bool dirFlags[] = {false, false, false, false};
-
-		if(a_bRC)
-		dirFlags[RC] = true;
-		if(a_bRB)
-		dirFlags[RB] = true;
-		if(a_bCB)
-		dirFlags[CB] = true;
-		if(a_bLB)
-		dirFlags[LB] = true;
-
-
-		ListQue< RgnLink > tmpQue;
-
-		for(int i=0; i<m_difQues.GetNofQues(); i++)
-		{
-		RgnLink * pLink = m_difQues.PopPtr(i);
-
-		while(NULL != pLink)
-		{
-		if( ! dirFlags[ pLink->dir ] )
-		continue;
-
-		rHistVect[ i ]++;
-
-		tmpQue.PushPtr(pLink);
-		pLink = m_difQues.PopPtr(i);
-		}
-
-		m_difQues.PushQue(i, &tmpQue);
-		}*/
-
-		return hist;
-	}
-
-	
-	
-	
 	
 	void RegionSegmentor51::Segment()
 	{
@@ -519,16 +407,6 @@ namespace Hcv
 		RgnInfo * pTestRgn = & m_rgnInfoVect[ m_nTestRgnIdx ];
 
 		const int nLastLA_Index = GlobalStuff::m_nLA_Index;
-
-		ListQue< LinkAction > tmpQue;
-
-		//MultiListQue< LinkAction > m_difQues;
-		
-		MultiListQue< LinkAction > interRootQues;
-		
-		interRootQues.Init( m_linkActionMergeQues.GetNofQues() );
-
-		//ListQue< LinkAction > interRootQue;
 
 
 		const int nLim_e = 1;
@@ -584,33 +462,11 @@ namespace Hcv
 					if( 169560 == pRgn2->nIndex )
 						i = i;
 
-
-					//pRgn1->bIsPassiveRoot = false;
-					//pRgn2->bIsPassiveRoot = false;
-
-
 					GlobalStuff::m_nLA_Index = pLA->nIndex;
 
 					//if( 3590427 == pLA->nIndex )
 					if( 284395 == pLA->nIndex )
 						pLA = pLA;
-
-
-					//int nDistCur = m_linkActionMergeQues.GetLastMinIndex();
-
-					//int nDistAct = (int)CalcRgnDif( pRgn1, pRgn2 );
-
-					//if( nDistAct > nDistCur )
-					//{
-					//	pLA->nScaledDist = nDistAct;
-					//	Push_LA_To_MergeQues( nDistAct, pLA );
-
-					//	continue;
-					//}
-
-
-
-
 
 
 					{
@@ -696,16 +552,6 @@ namespace Hcv
 									continue;
 
 								bMergeRoots = true;
-
-								//float distCur = m_linkActionMergeQues.GetLastMinIndex();
-
-
-								//-- interRootQues.PushPtr(
-								//-- 	m_linkActionMergeQues.GetLastMinIndex(), pLA );
-
-
-
-								//float dist = CalcRgnDif( pRootRgn1, pRootRgn2 );
 							}
 
 						}
@@ -866,69 +712,10 @@ namespace Hcv
 					}
 				}while( NULL != pLA );
 
-
-				//for(int k=0; k < interRootQues.GetNofQues(); k++)
-				//{
-				//	//LinkAction * pLA = interRootQues.PopPtr();
-				//	LinkAction * pLA = interRootQues.PopPtr(k);
-
-				//	while( NULL != pLA )
-				//	{
-				//		//m_difQues.PushPtr(0, pLA);
-				//		Push_LA_To_MergeQues(k, pLA);
-
-				//		//pLA = interRootQues.PopPtr();
-				//		pLA = interRootQues.PopPtr(k);
-				//	}
-				//}
-
-
 				
-			}
+			}	//	end for i.
 
-
-			m_pAnyRoot = NULL;
-
-			for(int i=0; i < m_rgnInfoVect.GetSize(); i++)
-			{
-				RgnInfo * pRgn = &m_rgnInfoVect[i];
-
-				if( NULL == pRgn->GetRootRgn() )
-				{
-					if( NULL == m_pAnyRoot )
-					{
-						m_pAnyRoot = pRgn;
-						pRgn->BeARoot();
-					}
-					else
-					{
-						pRgn->SetRootRgn( m_pAnyRoot );
-					}
-				}
-			}
-
-			for(int i=0; i < m_rgnInfoVect.GetSize(); i++)
-			{
-				RgnInfo * pRgn = & m_rgnInfoVect[i];
-				UpdateActRgn( pRgn );
-			}
-
-			if( 1 == e )
-			{
-				for(int i=0; i < m_rgnInfoVect.GetSize(); i++)
-				{
-					RgnInfo * pRgn2 = &m_rgnInfoVect[i];
-					
-					RgnInfo * pActRgn2 = pRgn2->GetActRgn();
-					
-					//if( 1 == pActRgn2->nPixCnt )
-					if( pActRgn2->nPixCnt < 20 )
-						i = i;
-				}
-			}
-
-
-		}
+		}	//	end for e.
 
 		//ShowImage( GenMergeOrderImage(), "MergeOrderImage");	
 
@@ -947,7 +734,6 @@ namespace Hcv
 		//ShowImage( GenRootRgnImage(), "RootRgnImage" );
 		
 
-		Gen_SegData();
 	}
 
 	float RegionSegmentor51::CalcRgnDif(RgnInfo * a_pRgn1, RgnInfo * a_pRgn2)
@@ -955,93 +741,10 @@ namespace Hcv
 		ThrowHcvException();
 
 		return -1;
-
-		//float dist = m_difScale * m_imgDataMgr->CalcDif(
-			//a_pRgn1->nIndex, a_pRgn2->nIndex);
-		
-		//UpdateActRgn(a_pRgn1);
-
-		//UpdateActRgn(a_pRgn2);
-
-		//RgnInfo * pRgnAct_1 = a_pRgn1->GetActRgn_2();
-		//RgnInfo * pRgnAct_2 = a_pRgn2->GetActRgn_2();
-
-
-		//ImgDataElm_CovMat elm_Mean_1;
-
-		//elm_Mean_1.Copy( pRgnAct_1->dataElm_Mean );
-		//elm_Mean_1.DividSelfBy( pRgnAct_1->nPixCnt );
-
-
-		//ImgDataElm_CovMat_2 elm_Mean_2;
-
-		//elm_Mean_2.Copy( pRgnAct_2->dataElm_Mean );
-		//elm_Mean_2.DividSelfBy( pRgnAct_2->nPixCnt );
-
-
-		//elm_Mean_1.IncBy( elm_Mean_2 );
-		//elm_Mean_1.DividSelfBy( 2 );
-		//	
-		//float magSqr = ( pRgnAct_1->magSqr / pRgnAct_1->nPixCnt +
-		//	pRgnAct_2->magSqr / pRgnAct_2->nPixCnt ) / 2;
-
-		//float dist = magSqr - elm_Mean_1.CalcMagSqr();
-		//
-		//if( dist < 0 )
-		//	dist = 0;
-
-		//dist = sqrt( dist );
-
-		//if( dist > 1000 )
-		//	dist = dist;
-
-		//dist *= m_difScale;
-
-		//dist += m_nAprSize;
-
-		////dist = m_difScale * ImgDataElm_CovMat_2::CalcDif(
-		////	*a_pRgn1->pDataElm, *a_pRgn2->pDataElm);
-		////	//*pRgnAct_1->pDataElm, *pRgnAct_2->pDataElm);
-
-
-		//return dist;
 	}
 
 
 
-/*
-	void RegionSegmentor51::PrepareConflicts()
-	{
-		//m_rgnConflictVect.SetSize( m_nofConflicts );
-		m_rgnConflictVect.SetSize( 
-			//m_nofPrimConfRgns * m_confCheckPtMgr.GetNofCheckPoints() * 2 );
-			10000000);
-		
-		m_nofConflicts = 0;
-
-		RgnInfo * pRgn = m_RgnOfConflictQue.PopPtr();
-
-		while( NULL != pRgn )
-		{
-			PrepareRgnConflicts( pRgn );
-
-			pRgn = m_RgnOfConflictQue.PopPtr();
-
-//			if( NULL == pRgn->GetActRgn() )
-//				pRgn = pRgn;
-
-		}	//	while
-	}
-	*/
-
-	//RegionSegmentor51::LinkAction * RegionSegmentor51::CloneLinkAction(LinkAction * a_pLA )
-	//{
-	//	LinkAction * pLA = &m_linkActionVect[ m_nofLinkActions++ ];
-
-	//	*pLA = *a_pLA;
-
-	//	return pLA;
-	//}
 
 	RegionSegmentor51::LinkAction * RegionSegmentor51::ProvideLinkAction( 
 		//RegionSegmentor51::RgnInfo * a_pRgn, RegionSegmentor51::RgnInfo * a_pRgn2 )
@@ -1133,6 +836,7 @@ namespace Hcv
 
 
 
+
 	void RegionSegmentor51::PrepareLinkAction( 
 			RgnLink & a_rLink, float a_distBef, bool a_bSetProcessed )
 	{
@@ -1141,11 +845,7 @@ namespace Hcv
 		RgnInfo * pRgn1 = a_rLink.pRgn1;
 		RgnInfo * pRgn2 = a_rLink.pRgn2;
 
-
-
 		Hcpl_ASSERT( NULL != pRgn1->GetRootRgn() );
-
-
 
 		LinkAction * pLA = m_linkAction_Provider.ProvidePtr();
 
@@ -1159,17 +859,7 @@ namespace Hcv
 
 		{		
 			float distRoot = -1;
-			//float distNear;			
 			{
-				RgnInfo * pRgnTmp;
-				/*if( NULL != a_pRgn2->GetRootRgn() )
-					pRgnTmp = a_pRgn2->GetRootRgn();
-				else*/
-					pRgnTmp = pRgn2;
-
-				//distRoot = CalcRgnDif( pRgn1->GetRootRgn(), pRgnTmp );
-
-				//distNear = CalcRgnDif( a_pRgn, pRgnTmp );
 			}
 
 			//float distNear = CalcRgnDif( pRgn1, pRgn2 );
@@ -1257,9 +947,6 @@ namespace Hcv
 				
 
 		pLA->nScaledDist = nDistNew;
-
-		////if( nDistNew <= pRgn1->GetRootRgn()->RootMedColorDist )
-		//	Push_LA_To_MergeQues( nDistNew, pLA);		
 	}
 
 
@@ -1379,45 +1066,6 @@ namespace Hcv
 
 	}
 
-	S16ImageRef RegionSegmentor51::GenConflictImg(bool a_bRC, bool a_bRB,
-			bool a_bCB, bool a_bLB)
-	{
-		S16ImageRef ret = S16Image::Create(m_src->GetSize(), 1);
-		ret->SetAll(0);
-
-		S16ChannelRef retCh0 = ret->GetAt(0);
-
-		bool dirFlags[] = {false, false, false, false};
-
-		if(a_bRC)
-		dirFlags[RC] = true;
-		if(a_bRB)
-		dirFlags[RB] = true;
-		if(a_bCB)
-		dirFlags[CB] = true;
-		if(a_bLB)
-		dirFlags[LB] = true;
-
-		for(int i=0; i < m_rgnInfoVect.GetSize(); i++)
-		{
-			RgnInfo * pRgn = &m_rgnInfoVect[i];
-
-			RgnLink * links = pRgn->links;
-
-			for(int j=0; j<4; j++)
-			{
-				if( links[j].bExists && dirFlags[j] )
-				{
-					if( IsConflictDist( links[j].DistMag ) )
-					{
-						retCh0->SetAt( pRgn->pos.x, pRgn->pos.y, 255);
-					}
-				}
-			}
-		}
-
-		return ret;
-	}
 
 
 
@@ -2073,143 +1721,6 @@ namespace Hcv
 */
 
 //		m_srcGrad = GenMorphGradImg( m_src, 2 );
-	}
-
-	
-	void RegionSegmentor51::Gen_SegData()
-	{
-		//ImgSegDataMgrRef sdm1 = new ImgSegDataMgr(
-
-		CvSize srcSiz = m_src->GetSize();
-
-
-		//FixedVector< RgnInfo * > segRgn_Arr;
-		//segRgn_Arr.SetCapacity( m_rgnInfoVect.GetSize() );
-
-		FixedVector< int > pixInt_Arr;
-		pixInt_Arr.SetSize( m_rgnInfoVect.GetSize() );
-
-
-		int nSegCnt = 0;
-
-		for(int i=0; i < m_rgnInfoVect.GetSize(); i++)
-		{
-			RgnInfo * pRgn = &m_rgnInfoVect[i];
-			RgnInfo * pActRgn = pRgn->GetActRgn();
-
-			if( pActRgn == pRgn )
-			{
-				//segRgn_Arr.PushBack( pRgn );
-				pRgn->nSegIndex = nSegCnt++;
-			}
-		}
-
-		
-		for(int i=0; i < m_rgnInfoVect.GetSize(); i++)
-		{
-			RgnInfo * pRgn = &m_rgnInfoVect[i];
-			RgnInfo * pActRgn = pRgn->GetActRgn();
-
-			Hcpl_ASSERT( pActRgn->nSegIndex >= 0 );
-
-			pixInt_Arr[ i ] = pActRgn->nSegIndex;
-		}
-
-		
-		int nofSegments = nSegCnt;
-				
-		{
-			int nSrcSiz_1D = srcSiz.width * srcSiz.height;
-
-			char sMark[] = "Seg2_File";
-
-			int nMarkLen = strlen(sMark);
-
-			int nCnt = 0;
-
-			FixedVector<byte> fileData_Arr;
-
-			fileData_Arr.SetSize(
-				1 + nMarkLen + 12 + nSrcSiz_1D * sizeof(int) );
-
-			fileData_Arr[ nCnt ] = (byte)nMarkLen;
-			nCnt++;
-
-			memcpy( & fileData_Arr[ nCnt ], sMark, nMarkLen );
-			nCnt += nMarkLen;
-
-
-			*((int *)(& fileData_Arr[ nCnt ])) = srcSiz.width;
-			nCnt += sizeof(int);
-
-			*((int *)(& fileData_Arr[ nCnt ])) = srcSiz.height;
-			nCnt += sizeof(int);
-
-			*((int *)(& fileData_Arr[ nCnt ])) = nofSegments;
-			nCnt += sizeof(int);
-
-
-			{
-				int nSiz_1 = ( fileData_Arr.GetSize() ) - nCnt;
-				int nSiz_2 = ( pixInt_Arr.GetSize() * sizeof(int) );
-
-				Hcpl_ASSERT( nSiz_1 == nSiz_2 );
-			}
-
-			int * pixFile_Buf = ( int * ) & fileData_Arr[ nCnt ];
-
-			memcpy( pixFile_Buf, & pixInt_Arr[ 0 ], 
-				pixInt_Arr.GetSize() * sizeof(int) );
-
-
-
-			CString sFilePath = 
-				"E:\\HthmWork\\Lib\\BSDS_300_2\\cbisRes.seg2";
-
-			if( -1 != GlobalStuff::m_imgFilePath.Find(
-				"D:\\HthmWork_D\\Berkeley-Image-DataSet\\BSDS-300\\Final-Extracted\\BSDS300-images\\BSDS300\\images" ))
-			{
-				char sAprSize[100];
-				sprintf(sAprSize, "%d", (int)GlobalStuff::AprSize1D );
-
-
-				sFilePath = 
-					//"E:\\HthmWork\\Lib\\BSDS_300_2\\CBIS\\CBIS_" +
-					"E:\\HthmWork\\Lib\\BSDS_300_2\\CBIS\\AprSiz" +
-					CString( sAprSize )+
-					CString( "\\Segms\\" );
-
-				FilePathMgr fpm1( GlobalStuff::m_imgFilePath.GetBuffer() );
-
-				FixedVector< char > fileTitle_Arr;
-
-				fpm1.GetFileTitle( fileTitle_Arr );
-
-				sFilePath += 
-					CString( fileTitle_Arr.GetHeadPtr() ) + ".seg2";
-			}
-
-
-
-
-
-			if( false )
-			{
-				CFile file1;
-
-				if( ! file1.Open(sFilePath, CFile::modeCreate | CFile::modeWrite) )
-					ThrowHcvException();
-			
-				file1.Write( & fileData_Arr[ 0 ], fileData_Arr.GetSize() );
-
-				file1.Close();
-			}
-
-			
-
-		}
-
-
 	}
 
 

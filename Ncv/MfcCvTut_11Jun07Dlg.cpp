@@ -824,8 +824,6 @@ void CMfcCvTut_11Jun07Dlg::RgnSgmImg_Mouse_Callback(
 		if( nullptr == rs1 )
 			return;
 
-		//rs1->ShowValleyPath( a_x, a_y );
-		rs1->ShowSrcPath( a_x, a_y );
 		
 
 		return;
@@ -874,7 +872,6 @@ void CMfcCvTut_11Jun07Dlg::RgnSgmImg_Mouse_Callback(
 			if( nullptr == rs1 )
 				return;
 
-			rs1->ShowEdgeOfConflict();
 
 /*
 			Ncv::S16ImageRef img1 = rs1->GenSegmentedImage(false);
