@@ -222,7 +222,7 @@ namespace Hcv
 			RgnLink()
 			{
 
-				pCurLA = NULL;
+				pCurLA = nullptr;
 			}
 
 			//RgnInfo * pPeerRgn;
@@ -325,7 +325,7 @@ namespace Hcv
 
 	public:
 		RegionSegmentor51(F32ImageRef a_src, S16ImageRef a_rootImg,
-			int a_nDifThreshold = 15, F32ImageRef a_rootValImg = NULL);
+			int a_nDifThreshold = 15, F32ImageRef a_rootValImg = nullptr);
 
 		~RegionSegmentor51();
 		

@@ -146,7 +146,7 @@ namespace Hcv
 
 			ImageRotationMgr_ExParamsRef rotParams = 
 				new ImageRotationMgr_ExParams(
-				//img1, NULL, 0, nAprSiz_Far, nAprSiz_Loc, imgFactoryMgr );
+				//img1, nullptr, 0, nAprSiz_Far, nAprSiz_Loc, imgFactoryMgr );
 				img1, ids1, 0, nAprSiz_Far, nAprSiz_Loc, imgFactoryMgr );
 
 			
@@ -313,21 +313,29 @@ namespace Hcv
 			for(int i=0; i < 2; i++)
 			//for(int i=0; i < 1; i++)
 			{
-				LinkAction_2 * pLA = NULL;
+				LinkAction_2 * pLA = nullptr;
 
 				do
 				{
 					pLA = m_linkActionMergeQues.PopPtrMin();
 
-					if( NULL == pLA )
+					if( nullptr == pLA )
 					{
 						continue;
 					}
 
 					GlobalStuff::m_nLA_Index = pLA->nIndex;
 
-					RgnInfo * pRgn1 = pLA->pRgn1;
+					RgnInfo * pActRootRgn1;
+					{
+						RgnInfo * pRgn1 = pLA->pRgn1;
+
+						pActRootRgn1 = pRgn1->GetActRootAfterNecessaryUpdating();
+						Ncpp_ASSERT(nullptr != pActRootRgn1);
+					}
+
 					RgnInfo * pRgn2 = pLA->pRgn2;
+					Ncpp_ASSERT(nullptr != pRgn2);
 
 					{
 						// int nLastLA_MinIdx = 
@@ -342,8 +350,8 @@ namespace Hcv
 						// 	//nLastLA_MinIdx * 0.1 )
 						// 	//nLastLA_MinIdx * 3 )
 						// {
-						// 	UpdateActRgn( pRootRgn1 );
-						// 	RgnInfo * pRgnAct1 = pRootRgn1->GetActRgn();
+						// 	UpdateActRgn( pActRootRgn1 );
+						// 	RgnInfo * pRgnAct1 = pActRootRgn1->GetActRgn();
 
 						// 	UpdateActRgn( pRootRgn2 );
 						// 	RgnInfo * pRgnAct2 = pRootRgn2->GetActRgn();
@@ -357,18 +365,10 @@ namespace Hcv
 					}
 
 
-					RgnInfo * pRootRgn1 = pRgn1->GetActRootAfterNecessaryUpdating();
-					Ncpp_ASSERT( NULL != pRootRgn1);
-
-					// if( NULL == pRootRgn1 )
-					// {
-					// 	// Bug
-					// 	ThrowHcvException();
-					// }
 
 					RgnInfo * pRootRgn2 = pRgn2->GetDirectRoot();
 
-					// Ncpp_ASSERT(NULL != pRootRgn1 && NULL != pRootRgn2);
+					// Ncpp_ASSERT(nullptr != pActRootRgn1 && nullptr != pRootRgn2);
 
 					const int nTestIdx = 173209;
 
@@ -382,34 +382,39 @@ namespace Hcv
 
 					bool bMergeRoots = false;
 
+					RgnInfo * pActRootRgn2;
+
 					//if( 1 != i )
 					//if( 0 == i )
 					//if( 0 == i || e >= 1 )
 					//if( 0 == i || e >= 1 )
 					{
-						// if( NULL != pRootRgn1 && NULL != pRootRgn2 )
-						if(NULL != pRootRgn2 )
+						// if( nullptr != pActRootRgn1 && nullptr != pRootRgn2 )
+						if(nullptr != pRootRgn2 )
 						{
 							if(nTestIdx == pRgn2->nIndex)
 							{
 								i = i;
 							}
 
-							if( 0 == i )
+							pActRootRgn2 = pRootRgn2->GetActRootAfterNecessaryUpdating();
+
+
+							// if( 0 == i )
 							{
-								if( pRootRgn1 == pRootRgn2 )
+								if( pActRootRgn1 == pActRootRgn2 )
 									continue;
 
 								bMergeRoots = true;
 							}
 						}
-						else		//	NULL == pRootRgn2
+						else		//	nullptr == pRootRgn2
 						{
 							// if( 1 == i )
 							// 	i = i;
 
-							// UpdateActRgn( pRootRgn1 );
-							RgnInfo * pActRgn1 = pRootRgn1->GetActRootAfterNecessaryUpdating();
+							// UpdateActRgn( pActRootRgn1 );
+							RgnInfo * pActRgn1 = pActRootRgn1->GetActRootAfterNecessaryUpdating();
 
 							bool bAddRgn = true;
 
@@ -419,15 +424,15 @@ namespace Hcv
 								//*pRgn2->pixColors = *pRgn1->pixColors;
 
 								//if( m_maxDif_Buf[ pRgn2->nIndex ] <=
-									//m_maxDif_Buf[ pRootRgn1->nIndex ] )
+									//m_maxDif_Buf[ pActRootRgn1->nIndex ] )
 								if( m_scanPix_Buf[ pRgn2->nIndex ].maxSlopeVal <= 35 )
 								{
 									pRgn2->BeARoot();
-									pRgn2->SetActRgn( pRootRgn1->GetActRgn() );
+									pRgn2->SetActRgn( pActRootRgn1->GetActRgn() );
 								}
 								else
 								{
-									pRgn2->SetRootRgn( pRootRgn1 );
+									pRgn2->SetRootRgn( pActRootRgn1 );
 								}
 
 								pRgn2->pSrcRgn = pRgn1;
@@ -448,7 +453,7 @@ namespace Hcv
 						UpdateActRgn( pRgn1 );
 						RgnInfo * pActRgn1 = pRgn1->GetActRgn();
 
-						if(NULL == pRgn2->GetActRootAfterNecessaryUpdating())
+						if(nullptr == pRgn2->GetActRootAfterNecessaryUpdating())
 						{
 							// Bug
 							ThrowHcvException();
@@ -506,7 +511,7 @@ namespace Hcv
 							
 							if( pRootRgn2->bIsPassiveRoot )
 							{
-								//*pRootRgn2->pixColors = *pRootRgn1->pixColors;
+								//*pRootRgn2->pixColors = *pActRootRgn1->pixColors;
 								//pRootRgn2->bIsPassiveRoot = false;
 
 								//PrepareRgnLinkActions( pRootRgn2, 
@@ -538,7 +543,7 @@ namespace Hcv
 
 							if( pRootRgn2->bIsPassiveRoot )
 							{
-								pRootRgn2->SetRootRgn( pRootRgn1 );
+								pRootRgn2->SetRootRgn( pActRootRgn1 );
 
 								pRootRgn2->bIsPassiveRoot = false;
 
@@ -548,7 +553,7 @@ namespace Hcv
 
 						}
 					}
-				}while( NULL != pLA );
+				}while( nullptr != pLA );
 
 				
 			}	//	end for i.
@@ -651,7 +656,7 @@ namespace Hcv
 
 		if( false == rLink.bExists )
 		{
-			return NULL;
+			return nullptr;
 		}
 
 		RgnInfo * pRgn2 = rLink.pRgn2;
@@ -683,7 +688,7 @@ namespace Hcv
 		RgnInfo * pRgn1 = a_rLink.pRgn1;
 		RgnInfo * pRgn2 = a_rLink.pRgn2;
 
-		Hcpl_ASSERT( NULL != pRgn1->GetActRootAfterNecessaryUpdating() );
+		Hcpl_ASSERT( nullptr != pRgn1->GetActRootAfterNecessaryUpdating() );
 
 		LinkAction * pLA = m_linkAction_Provider.ProvidePtr();
 
@@ -753,11 +758,11 @@ namespace Hcv
 
 		//if( pRgn1->bFstFromBadSrc || pRgn2->bFstFromBadSrc )
 		//if( pRgn1->bInTraceDam_Pos || pRgn2->bInTraceDam_Pos )
-		//if( NULL == pRgn1->pShortestEI &&
+		//if( nullptr == pRgn1->pShortestEI &&
 		//if( 0 == pRgn1->nTraceRank &&
 		//	
 		//	//pRgn1->pShortestEI  != pRgn2->pShortestEI )
-		//	//NULL != pRgn2->pShortestEI )
+		//	//nullptr != pRgn2->pShortestEI )
 		//	0 != pRgn2->nTraceRank )
 
 		if( pRgn1->nTraceRank < pRgn2->nTraceRank )
@@ -775,7 +780,7 @@ namespace Hcv
 			//nDistNew = ( GetMaxDif() - 1 ) * m_difScale;
 
 
-		if( NULL != a_rLink.pCurLA && a_rLink.pCurLA->bIsActive )
+		if( nullptr != a_rLink.pCurLA && a_rLink.pCurLA->bIsActive )
 		{
 			if( nDistNew >= a_rLink.pCurLA->nScaledDist )
 				return;
@@ -801,7 +806,7 @@ namespace Hcv
 
 		RegionSegmentor51::RgnConflict * pConflict = minConfList.Last();
 
-		while( NULL != pConflict )
+		while( nullptr != pConflict )
 		{
 			RgnInfo * pPeerRgn = pConflict->pPeerRgn;
 
@@ -824,7 +829,7 @@ namespace Hcv
 		}
 
 		//return false;
-		return NULL;
+		return nullptr;
 	}
 
 	void RegionSegmentor51::RemoveDuplicateConflicts( RgnInfo * a_pRgn )
@@ -834,7 +839,7 @@ namespace Hcv
 
 		RgnConflict * pConflict = confList.Last();
 
-		while( NULL != pConflict )
+		while( nullptr != pConflict )
 		{
 			RgnInfo * pPeerRgn = pConflict->pPeerRgn;
 
