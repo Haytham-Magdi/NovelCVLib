@@ -86,6 +86,9 @@
 //#include <NovelCVLib\Apps\BloodCells\RotationMgrColl.h>
 #include <NovelCVLib\Apps\BloodCells\BloodCellsProcess1.h>
 #include <NovelCVLib\Apps\BloodCells\PixelInfo_1.h>
+#include <NovelCVLib\Apps\BloodCells\RgnOfMerge.h>
+
+
 
 
 
