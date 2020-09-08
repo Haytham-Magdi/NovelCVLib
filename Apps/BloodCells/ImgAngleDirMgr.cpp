@@ -515,14 +515,14 @@ namespace Ncv
 
 				for (int i = 0; i < cnfAcc_1D.GetSize(); i++)
 				{
-					S32Point pnt = cnfAcc.CalcPointFromIndex_1D(i);
+					// S32Point pnt = cnfAcc.CalcPointFromIndex_1D(i);
 
-					S32Point testPnt(500, 444);
-					if (0 == cx.m_nIndex &&
-						S32Point::AreEqual(pnt, testPnt))
-					{
-						i = i;
-					}
+					// S32Point testPnt(500, 444);
+					// if (0 == cx.m_nIndex &&
+					// 	S32Point::AreEqual(pnt, testPnt))
+					// {
+					// 	i = i;
+					// }
 
 					ConflictInfo2 & rConf = cnfAcc_1D[i];
 					rConf.Index = i;
@@ -2255,30 +2255,30 @@ namespace Ncv
 			}	//	end i for.
 
 			//	for debug,
-			{
-				//dbgCenter_Idx = 144467;
-				dbgCenter_Idx = 288212;
-				ConflictInfo2 & rSrc = confAcc_1D[dbgCenter_Idx];
-				Ncpp_ASSERT(!IsUndefined(rSrc));
+			//{
+			//	//dbgCenter_Idx = 144467;
+			//	dbgCenter_Idx = 288212;
+			//	ConflictInfo2 & rSrc = confAcc_1D[dbgCenter_Idx];
+			//	Ncpp_ASSERT(!IsUndefined(rSrc));
 
-				F32ColorVal & rDest = dispAcc_1D[dbgCenter_Idx];
-				F32ColorVal & rDest_Side_1 = dispAcc_1D[rSrc.Offset_Side_1];
-				F32ColorVal & rDest_Side_2 = dispAcc_1D[rSrc.Offset_Side_2];
+			//	F32ColorVal & rDest = dispAcc_1D[dbgCenter_Idx];
+			//	F32ColorVal & rDest_Side_1 = dispAcc_1D[rSrc.Offset_Side_1];
+			//	F32ColorVal & rDest_Side_2 = dispAcc_1D[rSrc.Offset_Side_2];
 
-				rDest.val0 = 155;
-				//rDest.val1 = 100;
-				rDest.val1 = 255;
-				//rDest.val2 = 255;
-				rDest.val2 = 0;
+			//	rDest.val0 = 155;
+			//	//rDest.val1 = 100;
+			//	rDest.val1 = 255;
+			//	//rDest.val2 = 255;
+			//	rDest.val2 = 0;
 
-				//rDest_Side_1.val0 = 0;
-				//rDest_Side_1.val1 = 255;
-				//rDest_Side_1.val2 = 255;
+			//	//rDest_Side_1.val0 = 0;
+			//	//rDest_Side_1.val1 = 255;
+			//	//rDest_Side_1.val2 = 255;
 
-				//rDest_Side_2.val0 = 0;
-				//rDest_Side_2.val1 = 255;
-				//rDest_Side_2.val2 = 255;
-			}
+			//	//rDest_Side_2.val0 = 0;
+			//	//rDest_Side_2.val1 = 255;
+			//	//rDest_Side_2.val2 = 255;
+			//}
 
 
 			ShowImage(confDsp_Img, cx.MakeStrWithId("confDsp_Img").c_str());

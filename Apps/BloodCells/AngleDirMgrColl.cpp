@@ -346,7 +346,7 @@ namespace Ncv
 
 			//DisplayImgForEdges();
 
-			//DisplayConflictImg();
+			DisplayConflictImg();
 
 			////ShowImage(standev_InrWide_Img->GetSrcImg(), "standev_InrWide_Img->GetSrcImg()");
 
@@ -1737,7 +1737,7 @@ namespace Ncv
 			const ActualArrayAccessor_2D<ConflictInfo2_Ex> & confAcc = m_context_H->m_conflictInfoImg->GetActualAccessor();
 			F32ImageRef confDsp_Img = F32Image::Create(toCvSize(confAcc.GetSize()), 3);
 
-			confDsp_Img->SetAll(0);
+			//confDsp_Img->SetAll(0);
 
 			//ActualArrayAccessor_1D<ConflictInfo2_Ex> confAcc_1D = confAcc.GenAcc_1D();
 			
@@ -1745,6 +1745,11 @@ namespace Ncv
 			ActualArrayAccessor_1D<F32ColorVal> destAcc_1D = destAcc.GenAcc_1D();
 			
 			//ActualArrayAccessor_1D<F32ColorVal> destAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
+
+			for (int i = 0; i < destAcc_1D.GetSize(); i++)
+				destAcc_1D[i] = F32ColorVal(0.0f, 0.0f, 0.0f);
+
+
 
 			ActualArrayAccessor_1D<ConflictInfo2_Ex> srcAcc_1D = confAcc.GenAcc_1D();
 
