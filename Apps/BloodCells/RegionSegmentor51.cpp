@@ -187,19 +187,6 @@ namespace Hcv
 		}
 
 
-		m_standDiv_Buf = m_imgScanMgr->GetMaxGrad_Loc_Img(
-			)->GetPixAt(0, 0);
-
-
-		//ImgDataMgr_CovMat * pDataMgr_Exact = dynamic_cast<ImgDataMgr_CovMat *>
-		//	((IImgDataMgr *)m_imgDataMgr); 
-
-		//m_dataElm_Buf = & (pDataMgr_Exact->GetDataArr())[0];
-
-		//m_dataElm_Mean_Buf = & (pDataMgr_Exact->GetDataArr_Mean())[0];
-
-		//m_avgSqrMag_Buf = & (pDataMgr_Exact->GetAvgSqrMag_Arr())[0];
-
 
 
 
@@ -211,76 +198,7 @@ namespace Hcv
 
 				pRgnInfo->nIndex = m_rgnIndexCalc.Calc(x, y);
 
-				pRgnInfo->pPrev = pRgnInfo;
-
-				
-				//pRgnInfo->pDataElm = & m_dataElm_Buf[ pRgnInfo->nIndex ];
-
-				//pRgnInfo->dataElm_Mean.Copy( 
-				//	m_dataElm_Mean_Buf[ pRgnInfo->nIndex ] );
-
-				//pRgnInfo->magSqr = m_avgSqrMag_Buf[ pRgnInfo->nIndex ];
-
-
-
-				pRgnInfo->pixColors = 
-					(F32ColorVal *)m_src->GetPixAt(x, y);
-
-				pRgnInfo->showColor = *pRgnInfo->pixColors;
-
-
-				//pRgnInfo->bIsInConflict = false;
-
-				pRgnInfo->accXYDistFromRoot = 0;
-				pRgnInfo->maxAccXYDistFromRoot = -1;
-
-				pRgnInfo->minDistFromRoot = 0;
-
-				pRgnInfo->bFstFromBadSrc = false;
-
-				pRgnInfo->bBadFillDone = false;
-
-				pRgnInfo->bBad_UnfillDone = false;
-
-				pRgnInfo->bInIntersection = false;
-
-				pRgnInfo->bFromBadSrc = false;
-
-				pRgnInfo->m_pDeepSrcBadRgn = NULL;
-
-				pRgnInfo->bFromBadSrc_Org = false;
-
-				pRgnInfo->bFrom_MaybeBadSrc = false;				
-
-				pRgnInfo->bMaybe_FstFromBadSrc = false;				
-
-				pRgnInfo->bInNativeTrace = false;				
-
-				pRgnInfo->bFromSureBadSrc = false;
-
-				pRgnInfo->m_pMinDist_EI = NULL;
-
-				pRgnInfo->pTraceRootElm = NULL;
-
-				pRgnInfo->pTraceFwdRoot = NULL;
-				pRgnInfo->pTraceBkdRoot = NULL;
-
-				pRgnInfo->nTraceID = -1;
-
-				pRgnInfo->nMaxDistMet = 0;
-				pRgnInfo->distMagFromRoot = 500 * m_difScale;
-
-				//pRgnInfo->meanColors.val0 = 0;
-				//pRgnInfo->meanColors.val1 = 0;
-				//pRgnInfo->meanColors.val2 = 0;
-
-				pRgnInfo->meanColors.val0 = pRgnInfo->pixColors->val0;
-				pRgnInfo->meanColors.val1 = pRgnInfo->pixColors->val1;
-				pRgnInfo->meanColors.val2 = pRgnInfo->pixColors->val2;
-				
-
-				//pRgnInfo->nPixCnt = 0;
-				pRgnInfo->nPixCnt = 1;
+				pRgnInfo->pixColors = (F32ColorVal *)m_src->GetPixAt(x, y);
 
 				pRgnInfo->pos.x = x;
 				pRgnInfo->pos.y = y;
@@ -288,16 +206,15 @@ namespace Hcv
 				pRgnInfo->nLastVisitID = 0;
 
 				RgnLink * links = pRgnInfo->links;
-				for(int i=0; i<8; i++)
+				for(int i=0; i < 8; i++)
 				{
 					links[i].bProcessed = true;
 					links[i].bExists = false;					
 					links[i].dir = (RgnLinkDir)i;
 				}
 
-				// pRgnInfo->bHasConflicts = false;
-			}
-		}
+			}	//	end for x.
+		}	//	end for y.
 
 	}
 
@@ -420,8 +337,6 @@ namespace Hcv
 		//const int nLim_e = 20;
 
 
-		EdgeInfoAccessor eiAcc( this );
-
 
 		for(int e=0; e < nLim_e; e++)
 		{
@@ -475,7 +390,7 @@ namespace Hcv
 
 
 
-					RgnInfo * pRootRgn1 = pRgn1->GetRootRgn();
+					RgnInfo * pRootRgn1 = pRgn1->GetRootAfterNecessaryUpdating();
 
 					if( NULL == pRootRgn1 )
 					{
@@ -483,7 +398,7 @@ namespace Hcv
 						ThrowHcvException();
 					}
 
-					RgnInfo * pRootRgn2 = pRgn2->GetRootRgn();
+					RgnInfo * pRootRgn2 = pRgn2->GetRootAfterNecessaryUpdating();
 
 					//const int nTestIdx = 181157;
 					const int nTestIdx = 173209;
@@ -566,7 +481,7 @@ namespace Hcv
 						UpdateActRgn( pRgn1 );
 						RgnInfo * pActRgn1 = pRgn1->GetActRgn();
 
-						if( NULL == pRgn2->GetRootRgn() )
+						if( NULL == pRgn2->GetRootAfterNecessaryUpdating() )
 						{
 							// Bug
 							ThrowHcvException();
@@ -805,7 +720,7 @@ namespace Hcv
 		RgnInfo * pRgn1 = a_rLink.pRgn1;
 		RgnInfo * pRgn2 = a_rLink.pRgn2;
 
-		Hcpl_ASSERT( NULL != pRgn1->GetRootRgn() );
+		Hcpl_ASSERT( NULL != pRgn1->GetRootAfterNecessaryUpdating() );
 
 		LinkAction * pLA = m_linkAction_Provider.ProvidePtr();
 
@@ -893,7 +808,7 @@ namespace Hcv
 
 		Hcpl_ASSERT( nDistNew >= 0 );
 
-		//if( nDistNew > pRgn1->GetRootRgn()->RootMedColorDist )
+		//if( nDistNew > pRgn1->GetRootAfterNecessaryUpdating()->RootMedColorDist )
 			//nDistNew = ( GetMaxDif() - 1 ) * m_difScale;
 
 
@@ -1178,237 +1093,6 @@ namespace Hcv
 
 
 
-	void RegionSegmentor51::PostScanPrepare()
-	{
-		FixedVector< ImgScanMgr_Ns::EdgeInfo > & rEdgeInfoArr = 
-			m_imgScanMgr->GetEdgeInfoArr();
-
-
-		EdgeInfoAccessor eiAcc( this );
-
-		CvSize srcSize = m_src->GetSize();
-
-
-		for( int k=0; k < rEdgeInfoArr.GetSize(); k++ )
-		{
-			ImgScanMgr_Ns::EdgeInfo & rEI = rEdgeInfoArr[ k ];
-
-			if( rEI.IsCanceled )
-				continue;
-
-			eiAcc.SetEdgeInfo( & rEI );
-
-			//pRgn_R1->pRgn_DeepR = pRgn_R1;
-			//pRgn_R2->pRgn_DeepR = pRgn_R2;
-		}
-
-	}
-
-
-	void RegionSegmentor51::ScanImageLines()
-	{
-		CvSize siz1 = m_src->GetSize();
-
-		//m_conflictScanner = new ConflictScanner2( m_src );
-
-		//const int nHalfAprSize = m_conflictScanner->GetAprSize() / 2;
-
-		//m_conflictScanner = NULL;
-
-
-
-		//GlobalStuff::SetLinePathImg( scanImage );
-
-
-/////////////////////////
-
-
-
-		//m_maxDif_Buf = & (m_imgScanMgr->GetMaxDif_Arr())[0];
-
-		//m_scanPix_Buf = & (m_imgScanMgr->GetPixInfoArr())[0];
-
-		//{
-		//	FixedVector< EdgeScan::ScanDirMgrExtRef > & rScanMgrExt_Arr =
-		//		m_imgScanMgr->GetScanDirExtArr();
-
-		//	for( int i = 0; i < 4; i++ )
-		//	{
-		//		m_dir_difBuf_Arr[ i ] = m_dir_difBuf_Arr[ i + 4 ] =
-		//			&(rScanMgrExt_Arr[ i * 2 ]->m_difGlobArr)[ 0 ];
-		//	}
-		//}
-
-
-		PostScanPrepare();
-
-
-		static int dxArr[] = {1, 1, 0, -1};
-		static int dyArr[] = {0, 1, 1, 1};
-
-		int nCurTraceProcID = 0;
-
-		FixedVector< ImgScanMgr_Ns::EdgeInfo > & rEdgeInfoArr = 
-			m_imgScanMgr->GetEdgeInfoArr();
-
-		EdgeInfoAccessor eiAcc( this );
-
-		CvSize srcSize = m_src->GetSize();
-		
-		m_standDev_Buf = m_imgScanMgr->GetMaxGrad_Loc_Img(
-			)->GetPixAt( 0, 0 );
-
-		float * standDiv_Buf = m_standDev_Buf;
-
-		for( int k=0; k < rEdgeInfoArr.GetSize(); k++ )
-		{
-			ImgScanMgr_Ns::EdgeInfo & rEI = rEdgeInfoArr[ k ];
-
-			if( rEI.IsCanceled )
-				continue;
-
-			eiAcc.SetEdgeInfo( & rEI );
-
-
-
-			RgnInfo * pRgnEdge = eiAcc.GetEdge_Rgn();
-
-			RgnInfo * pRootRgn1 = eiAcc.GetR1_Rgn();
-			RgnInfo * pRootRgn2 = eiAcc.GetR2_Rgn();
-
-
-			{
-				int nQueIdx = (int) ( (
-					standDiv_Buf[ pRgnEdge->nIndex ] * m_difScale ) / 2 );
-
-				MaxFinder< float > & rMaxFnd = 
-					ImgDataElm_CovMat::MaxFnd_Dif;
-
-				m_edgeInfo_Ques.PushPtr( nQueIdx, & rEI );
-
-				int b = 0;
-
-				b = 0;
-			}
-		}
-
-
-
-
-
-
-		for( int k=0; k < rEdgeInfoArr.GetSize(); k++ )
-		{
-			ImgScanMgr_Ns::EdgeInfo & rEI = rEdgeInfoArr[ k ];
-
-			//rEI.InrR1_IOL = rEI.Med1_IOL;
-			//rEI.InrR2_IOL = rEI.Med2_IOL;
-
-			if( rEI.IsCanceled )
-				continue;
-
-			eiAcc.SetEdgeInfo( & rEI );
-
-			RgnInfo * pRootRgn1 = eiAcc.GetR1_Rgn();
-			RgnInfo * pRootRgn2 = eiAcc.GetR2_Rgn();
-		}
-
-
-		for( int k=0; k < rEdgeInfoArr.GetSize(); k++ )
-		{
-			ImgScanMgr_Ns::EdgeInfo & rEI = rEdgeInfoArr[ k ];
-
-			if( rEI.IsCanceled )
-				continue;
-
-			eiAcc.SetEdgeInfo( & rEI );
-
-
-			RgnInfo * pRgnEdge = eiAcc.GetEdge_Rgn();
-
-			RgnInfo * pRootRgn1 = eiAcc.GetR1_Rgn();
-			RgnInfo * pRootRgn2 = eiAcc.GetR2_Rgn();
-
-
-			pRootRgn1->BeARoot();		
-			//PrepareRgnLinkActions( pRootRgn1, 0 );
-			
-			pRootRgn2->BeARoot();		
-			//PrepareRgnLinkActions( pRootRgn2, 0 );
-
-			CreateConflict( pRootRgn1, pRootRgn2);
-		}
-
-		F32Point testPnt( 135, 180 );
-
-		{
-			int nSrcSiz1D = m_rgnInfoVect.GetSize();
-
-			for( int i=0; i < nSrcSiz1D; i++ )
-			{
-				RgnInfo * pRgn = & m_rgnInfoVect[ i ];
-
-				if( ! pRgn->IsRoot() )
-				{
-					pRgn->BeARoot();
-					//PrepareRgnLinkActions( pRgn, 0 );	
-				}
-				//else
-				//{
-				//	pRgn = pRgn;
-				//}
-			}
-
-		}
-
-
-		{
-			FixedVector< ImgScanMgr_Ns::EdgeInfo > & rEdgeInfoArr = 
-				m_imgScanMgr->GetEdgeInfoArr();
-
-			FixedVector< ImgScanMgr_Ns::PixLinking > & rPixLinkingArr =
-				m_imgScanMgr->GetPixLinkingArr();
-
-			int nLA_Cnt = 0;
-
-			for( int i=0; i < rPixLinkingArr.GetSize(); i++ )
-			{
-				ImgScanMgr_Ns::PixLinking & rPL = rPixLinkingArr[ i ];
-
-				for( int j=0; j < 4; j++ )
-				{
-					ImgScanMgr_Ns::PixLink & rLink = rPL.Links[ j ];
-
-					Hcpl_ASSERT( rLink.Rate >= 0 );
-
-					if( rLink.nIOA_Peer < 0 )
-						continue;
-										
-					LinkAction_2 * pLA = & m_linkAction_2_Arr[ nLA_Cnt ];
-
-					pLA->nIndex = nLA_Cnt;
-
-					pLA->pRgn1 = & m_rgnInfoVect[ rPL.nIOA ];
-					pLA->pRgn2 = & m_rgnInfoVect[ rLink.nIOA_Peer ];
-					
-					m_linkActionMergeQues.PushPtr(rLink.Rate * m_difScale, pLA);
-
-					// this->Push_LA_To_MergeQues( 
-					// 	rLink.Rate * m_difScale, pLA );
-
-					nLA_Cnt++;
-				}
-			}
-
-		}
-
-
-		RgnInfo * pRgn_R1_Test = & m_rgnInfoVect[ 251299 ];
-
-		F32ImageRef scanImage = this->GenScanImage();
-	}
-
-
 
 	RegionSegmentor51::RgnLink * RegionSegmentor51::GetLinkBetweenRgns( int a_nIdx_1, int a_nIdx_2 )
 	{
@@ -1447,232 +1131,6 @@ namespace Hcv
 		return pLink;
 	}
 
-
-
-	F32ImageRef RegionSegmentor51::GenScanImage()
-	{
-		F32ImageRef ret = this->m_src->Clone();
-
-		ret->SetAll( 0 );
-
-		U8ColorVal colorEdge1( 0, 210, 0 );
-
-		U8ColorVal colorEdgeArr[ 4 ];
-
-		{
-			colorEdgeArr[0].AssignVal( 0, 180, 0 );
-			colorEdgeArr[1].AssignVal( 255, 0, 0 );
-			colorEdgeArr[2].AssignVal( 0, 0, 255 );
-			colorEdgeArr[3].AssignVal( 0, 180, 255 );			
-		}
-
-		U8ColorVal colorRootClear( 255, 255, 255 );
-		U8ColorVal colorRootInTrace( 255, 0, 200 );
-
-		FixedVector< ImgScanMgr_Ns::EdgeInfo > & rEdgeInfoArr = 
-			m_imgScanMgr->GetEdgeInfoArr();
-
-		EdgeInfoAccessor eiAcc( this );
-
-		for( int k=0; k < rEdgeInfoArr.GetSize(); k++ )
-		{
-			ImgScanMgr_Ns::EdgeInfo & rEI = rEdgeInfoArr[ k ];
-
-
-			if( rEI.IsCanceled )
-				continue;
-
-			eiAcc.SetEdgeInfo( & rEdgeInfoArr[ k ] );
-
-
-			{
-				F32ColorVal * pix = (F32ColorVal *) ret->GetPixAt( 
-					eiAcc.GetEdge_Rgn()->pos.x, eiAcc.GetEdge_Rgn()->pos.y );
-
-				//U8ColorVal color1 = colorEdgeArr[ (int)rEI.Dir ];
-				U8ColorVal color1 = colorEdge1;
-
-				pix->val0 = color1.val0;
-				pix->val1 = color1.val1;
-				pix->val2 = color1.val2;
-			}
-
-
-			{
-				RgnInfo * pRgn = eiAcc.GetR1_Rgn();
-
-				F32ColorVal * pix = (F32ColorVal *) ret->GetPixAt( pRgn->pos.x, pRgn->pos.y );
-				
-				U8ColorVal color1;
-
-/*				if( rEI.Dir != pRgn->localGradDir && pRgn->localGradVal > 0.5 )
-				{
-					pRgn->bIsPassiveRoot = true;
-					color1 = colorRootInTrace;
-				}
-				else*/
-					color1 = colorRootClear;
-
-				pix->val0 = color1.val0;
-				pix->val1 = color1.val1;
-				pix->val2 = color1.val2;
-			}
-
-
-			{
-				RgnInfo * pRgn = eiAcc.GetR2_Rgn();
-
-				F32ColorVal * pix = (F32ColorVal *) ret->GetPixAt( pRgn->pos.x, pRgn->pos.y );
-				
-				U8ColorVal color1;
-
-/*				if( rEI.Dir != pRgn->localGradDir && pRgn->localGradVal > 0.5 )
-				{
-					pRgn->bIsPassiveRoot = true;
-					color1 = colorRootInTrace;
-				}
-				else*/
-					color1 = colorRootClear;
-					
-				pix->val0 = color1.val0;
-				pix->val1 = color1.val1;
-				pix->val2 = color1.val2;
-			}
-		}
-
-		return ret;
-	}
-
-
-
-	F32ImageRef RegionSegmentor51::GenRootRgnImage()
-	{
-		F32ImageRef ret = F32Image::Create( m_src->GetSize(), 3 );
-
-		F32Point testPnt( 135, 180 );
-
-
-		for( int i=0; i < m_rgnInfoVect.GetSize(); i++ )
-		{
-			RgnInfo * pRgn = &m_rgnInfoVect[ i ];
-
-			F32ColorVal * pix = (F32ColorVal *)ret->GetPixAt( pRgn->pos.x, pRgn->pos.y );
-
-			if( pRgn->IsRoot() )
-			{
-				//if( 284516 == pRgn->nIndex )
-
-				pix->AssignVal( 255, 255, 255 );
-
-				if( 122171 == pRgn->nIndex )
-					i = i;
-
-				if( F32Point::Sub( testPnt, pRgn->pos ).CalcMag() < 5 ) 
-					i = i;
-			}
-			else
-			{
-				pix->AssignVal( 0, 0, 0 );
-			}
-		}
-
-		return ret;
-	}
-
-
-	F32ImageRef RegionSegmentor51::GenMergeOrderImage()
-	{
-		F32ImageRef ret = this->m_src->Clone();
-
-		//const float dspLim = ( 256 * 3 );
-		const float dspLim = ( 256 );
-
-		const float divFact = RgnInfo::s_MergeOrder / ( dspLim - 1 );
-
-		for( int i=0; i < m_rgnInfoVect.GetSize(); i++ )
-		{
-			RgnInfo * pRgn = &m_rgnInfoVect[ i ];
-
-			F32ColorVal * pix = (F32ColorVal *) ret->GetPixAt( pRgn->pos.x, pRgn->pos.y );
-
-
-			const int nDspVal = (int) (pRgn->nMergeOrder / divFact);
-
-			pix->val0 = nDspVal;
-			pix->val1 = nDspVal;
-			pix->val2 = nDspVal;
-
-
-/*
-
-			float val = nDspVal;
-
-			if( nDspVal / 256 == 2 )			
-			{
-				pix->val1 = nDspVal % 256;
-				pix->val2 = 255;
-				pix->val0 = 255;
-			}
-			else
-				pix->val1 = 0;
-
-
-			if( nDspVal / 256 == 1 )			
-			{
-				pix->val2 = nDspVal % 256;
-				pix->val0 = 255;
-			}
-			else
-				pix->val2 = 0;
-
-
-			if( nDspVal / 256 == 0 )			
-				pix->val0 = nDspVal % 256;
-*/
-		}
-
-
-		return ret;
-	}
-
-
-	void RegionSegmentor51::PrepareSrcGradImg()
-	{
-
-		//m_srcGrad = GenMorphGradImg( m_src, 3 );
-		//m_srcGrad = GenCvSmoothedImg( m_srcGrad, 3 );
-
-//		m_srcGrad = GenMorphGradImg( m_src, 1 );
-//		m_srcGrad = GenCvSmoothedImg( m_srcGrad, 5 );
-
-		//m_srcGrad = GenMorphGradImg( m_src, 7 );
-		//m_srcGrad = GenCvSmoothedImg( m_srcGrad, 11 );
-
-		m_srcGrad = CircDiff::GenResult( m_src, 7 );
-		//m_srcGrad = GenCvSmoothedImg( m_srcGrad, 5 );
-		
-
-		//m_srcGrad = GenMorphGradImg( m_src, 14 );
-		//m_srcGrad = GenCvSmoothedImg( m_srcGrad, 21 );
-		//m_srcGrad = GenCvSmoothedImg( m_srcGrad, 5 );
-
-		//m_srcGrad = GenCvErodeCircleImg(m_srcGrad, 1);
-
-		//SobelBuilder sb1( m_src, 5 );
-
-		//m_srcGrad = sb1.
-
-
-/*
-		m_srcGrad = GenMorphGradImg( m_src, 3 );
-		m_srcGrad = GenCvDilateCircleImg(m_srcGrad, 2);
-		m_srcGrad = GenCvErodeCircleImg(m_srcGrad, 2);
-		m_srcGrad = GenCvSmoothedImg( m_srcGrad, 3 );
-		m_srcGrad = GenCvErodeCircleImg(m_srcGrad, 2);
-*/
-
-//		m_srcGrad = GenMorphGradImg( m_src, 2 );
-	}
 
 
 

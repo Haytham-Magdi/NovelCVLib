@@ -206,15 +206,6 @@ namespace Hcv
 		{
 			RgnInfo * pPeerRgn;
 
-			// RgnInfo * pOrgEdge;
-			// RgnInfo * pOrgR1;
-			// RgnInfo * pOrgR2;
-
-			// RgnInfo * pOrgDeep1;
-			// RgnInfo * pOrgDeep2;
-
-			// ImgScanMgr_Ns::EdgeInfo * pEI;
-
 			struct _RgnConflict * pNext;	//	for being APtrList Entry
 			struct _RgnConflict * pPrev;	//	for being APtrList Entry
 		};
@@ -230,8 +221,6 @@ namespace Hcv
 
 			RgnLink()
 			{
-				bInTrace = false;
-				//pInvLink = NULL;
 
 				pCurLA = NULL;
 			}
@@ -249,26 +238,11 @@ namespace Hcv
 			RgnLinkDir dir;
 			bool bProcessed;
 			bool bExists;
-			// bool bInTrace;
-
-			// float DistMag;
-			// F32ColorVal UnitDist;
 
 			LinkAction * pCurLA;
-
-			// RgnLink * pPrev;	//	for being ListQue Entry
 		};
 
-		class RgnInfoListElm;
 
-/*
-			class RgnInfoListElm
-			{
-			public:
-				RgnInfo * pRgn;
-				RgnInfoListElm * pNext;
-			};
-*/
 
 		class RgnInfo : public PixelRgn<RgnInfo>
 		{
@@ -285,24 +259,9 @@ namespace Hcv
 			{
 			}
 
-			RgnInfo * GetRootRgn()
-			{
-				return pRootRgn;
-			}
-
-			// void SetRootRgn(RgnInfo * a_pRootRgn)
-			// {
-			// 	nMergeOrder = s_MergeOrder++;
-
-			// 	this->pRootRgn = a_pRootRgn;
-			// }
-
 
 
 			int nIndex;
-
-			int nSegIndex;
-
 
 			F32ColorVal * pixColors;
 
@@ -527,12 +486,6 @@ namespace Hcv
 		FixedVector< FillInfo > m_fillInfoVect;
 
 		FixedVector<RgnInfo> m_rgnInfoVect;
-		FixedVector<RgnInfo *> m_medTraceRgnPtrVect;
-
-		FixedVector< RgnInfoListElm > m_traceRootAllocVect;
-
-		FixedVector<TraceUnit> m_edgeFwdRgnVect;
-		FixedVector<TraceUnit> m_edgeBkdRgnVect;
 
 
 		//FixedVector<LinkAction> m_linkActionVect;
@@ -559,59 +512,9 @@ namespace Hcv
 
 		int m_nVisitID;
 
-		RgnInfo * m_pAnyRoot;
-
 		RgnInfo * m_pDbgRgn;
 
-		MultiListQue< LinkAction > m_medTraceQues;
-
-
-		MultiListQueMgr< ImgScanMgr_Ns::EdgeInfo > m_edgeInfo_Ques;
-
-		
-		//F32ImageRef m_scanImg;
-
-		ImgScanMgrRef m_imgScanMgr; 
-
-		float * m_dir_difBuf_Arr[8];
-
-		float * m_maxDif_Buf;
-
-		float * m_standDev_Buf;
-
-		EdgeScan::PixInfo * m_scanPix_Buf;
-
-
-		float * m_standDiv_Buf;
-
-		//ImgDataElm_CovMat * m_dataElm_Buf;
-
-		//ImgDataElm_CovMat * m_dataElm_Mean_Buf;
-
-		//float * m_avgSqrMag_Buf;
-
-
-		//FixedVector< RgnInfo * > m_rgnInTraceArr;
-		//FixedVector< RgnInfo * > m_rgnOfBadSrcArr;
-
-		//FixedVector< RgnInfo * > m_rgnOf_FstBadSrcArr;
-
-		//int m_nCurGrpID;
-
-		//FixedVector< RgnInfo * > m_rgnOf_FstBadSrcArr_2;
-
-		//FixedVector< RgnInfo * > m_rgnOf_OpenEnd_Arr;
-
-		//FixedDeque< RgnInfo * > m_fillDeq;
-
-		//FixedDeque< RgnInfo * > m_unfill_Deq;
-
-		//FixedVector< ImgScanMgr_Ns::EdgeInfo * > m_fstFromBad_EI_Arr;
-
-		//FixedVector< ImgScanMgr_Ns::EdgeInfo * > m_shortest_FromBad_EI_Arr;
-
 		int m_nTestRgnIdx;
-
 		
 		const int m_nAprSize;
 
