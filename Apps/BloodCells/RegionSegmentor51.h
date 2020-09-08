@@ -487,7 +487,7 @@ namespace Hcv
 
 		inline void PrepareRgnLinkActions( RgnInfo * a_pRgn, float a_distBef );
 
-		inline void CreateConflict( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2, RgnInfo * pOrgEdge = NULL, ImgScanMgr_Ns::EdgeInfo * a_pEI = NULL );
+		inline void CreateConflict( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2);
 
 
 		F32ImageRef GenScanImage();

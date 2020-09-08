@@ -440,34 +440,11 @@ namespace Hcv
 						continue;
 					}
 
-					//RgnInfo * pRgn1 = pLA->pLink1->pRgn1;
-					//RgnInfo * pRgn2 = pLA->pLink1->pRgn2;
 
 					RgnInfo * pRgn1 = pLA->pRgn1;
 					RgnInfo * pRgn2 = pLA->pRgn2;
 
-					if( 122171 == pRgn1->nIndex )
-						pRgn1 = pRgn1;
-
-					if( 122171 == pRgn2->nIndex )
-						pRgn2 = pRgn2;
-
-
-					if( 2110125 == pLA->nIndex )
-						i = i;
-
-					if( 169560 == pRgn1->nIndex )
-						i = i;
-
-					if( 169560 == pRgn2->nIndex )
-						i = i;
-
 					GlobalStuff::m_nLA_Index = pLA->nIndex;
-
-					//if( 3590427 == pLA->nIndex )
-					if( 284395 == pLA->nIndex )
-						pLA = pLA;
-
 
 					{
 						int nLastLA_MinIdx = 
@@ -482,22 +459,6 @@ namespace Hcv
 							//nLastLA_MinIdx * 0.1 )
 							//nLastLA_MinIdx * 3 )
 						{
-							// ImgScanMgr_Ns::EdgeInfo * pEI = 
-							// 	m_edgeInfo_Ques.PopPtrMin();
-
-							// if( NULL == pEI )
-							// 	break;
-
-							// ImgScanMgr_Ns::EdgeInfo & rEI = *pEI;
-
-							// if( rEI.IsCanceled )
-							// 	continue;
-
-							// eiAcc.SetEdgeInfo( & rEI );
-
-							// RgnInfo * pRootRgn1 = eiAcc.GetR1_Rgn();
-							// RgnInfo * pRootRgn2 = eiAcc.GetR2_Rgn();
-
 							UpdateActRgn( pRootRgn1 );
 							RgnInfo * pRgnAct1 = pRootRgn1->GetActRgn();
 
@@ -507,8 +468,7 @@ namespace Hcv
 							if( pRgnAct1 == pRgnAct2 )
 								continue;
 
-							//CreateConflict( pRootRgn1, pRootRgn2, eiAcc.GetEdge_Rgn(), & rEI  );
-							CreateConflict( pRgnAct1, pRgnAct2, eiAcc.GetEdge_Rgn(), & rEI  );
+							CreateConflict( pRgnAct1, pRgnAct2);
 						}
 
 					}
@@ -1069,7 +1029,7 @@ namespace Hcv
 
 
 
-	void RegionSegmentor51::CreateConflict( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2, RgnInfo * a_pOrgEdge, ImgScanMgr_Ns::EdgeInfo * a_pEI )
+	void RegionSegmentor51::CreateConflict( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2)
 	{
 		if( NULL == a_pOrgEdge )
 			a_pOrgEdge = a_pOrgEdge;
@@ -1079,12 +1039,6 @@ namespace Hcv
 
 		int a = 0;
 		
-		if( a_pRgn1->pRgn_DeepR != a_pRgn1 )
-			a = 0;
-
-		if( a_pRgn2->pRgn_DeepR != a_pRgn2 )
-			a = 0;
-
 		{
 			RgnConflict * pRc = &m_rgnConflictVect[ m_nofConflicts++ ];
 			pRc->pNext = pRc;
@@ -1094,9 +1048,6 @@ namespace Hcv
 			pRc->pOrgEdge = a_pOrgEdge;
 			pRc->pOrgR1 = a_pRgn1;
 			pRc->pOrgR2 = a_pRgn2;
-
-			pRc->pOrgDeep1 = a_pRgn1->pRgn_DeepR;
-			pRc->pOrgDeep2 = a_pRgn2->pRgn_DeepR;
 
 			pRc->pPeerRgn = a_pRgn2->pRgn_DeepR;
 			a_pRgn1->pRgn_DeepR->conflictList.PushLast( pRc );
@@ -1385,7 +1336,7 @@ namespace Hcv
 			pRootRgn2->BeARoot();		
 			//PrepareRgnLinkActions( pRootRgn2, 0 );
 
-			CreateConflict( pRootRgn1, pRootRgn2, eiAcc.GetEdge_Rgn(), & rEI  );
+			CreateConflict( pRootRgn1, pRootRgn2);
 		}
 
 		F32Point testPnt( 135, 180 );
