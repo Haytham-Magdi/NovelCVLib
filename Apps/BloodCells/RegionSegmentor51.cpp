@@ -251,28 +251,13 @@ namespace Hcv
 							pMaxSizRgn = pActRgn1;
 						}
 
-						const bool bHaveConflict = bHaveConflict = HaveConflict( pMinSizRgn, pMaxSizRgn );
-
-
+						const bool bHaveConflict = HaveConflict( pMinSizRgn, pMaxSizRgn );
 						if( bHaveConflict )
-						{
 							continue;
-						}
-						else
-						{
-	//		NoConflict:
-						
-								
-							if( pActRgn1 == pActRgn2 )	
-								continue;							
-							
-							if( pRootRgn2->bIsPassiveRoot )
-							{
-								//*pRootRgn2->pixColors = *pActRgn1->pixColors;
-								//pRootRgn2->bIsPassiveRoot = false;
 
-								//PrepareRgnLinkActions( pRootRgn2);
-							}
+
+						// NoConflict:
+						{
 
 							if( 0 != pMinSizRgn->conflictList.GetSize() )
 								RemoveDuplicateConflicts( pMaxSizRgn );
