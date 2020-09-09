@@ -244,7 +244,7 @@ namespace Hcv
 
 
 
-		class RgnInfo : public PixelRgn<RgnInfo>
+		class RgnInfo : public PixelRgn2<RgnInfo>
 		{
 		protected:
 			RgnInfo * pActRgn;
@@ -258,6 +258,7 @@ namespace Hcv
 			RgnInfo()
 			{
 			}
+
 
 
 

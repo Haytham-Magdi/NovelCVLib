@@ -14,28 +14,27 @@ namespace Ncv
 	using namespace Ncpp;
 
 	template<class T_PixelRgnEx>
-    class PixelRgn
+    class PixelRgn2
     {
         public:
 
-			PixelRgn() 
-			{
-				m_pRoot = (T_PixelRgnEx *)this;
-			}
+			SetRootToSelf() { m_pRoot = (T_PixelRgnEx *)this; }
 
-			T_PixelRgnEx * GetDirectRoot()
-			{
-				return m_pRoot;
-			}
+			SetRootToNull() { m_pRoot = nullptr; }
 
-			SetDirectRoot(T_PixelRgnEx * a_pRoot)
-			{
-				m_pRoot = a_pRoot;
-			}
+			T_PixelRgnEx * GetDirectRoot() { return m_pRoot; }
+
+			SetDirectRoot(T_PixelRgnEx * a_pRoot) { m_pRoot = a_pRoot; }
+
+			bool HasRoot() { return nullptr != m_pRoot;	}
+
+			bool IsSelfRoot() const { return this == m_pRoot; }
 
 			//	todo: faster implementation (not recursive).
 			T_PixelRgnEx * GetActRootAfterNecessaryUpdating()
 			{
+				Ncpp_ASSERT(HasRoot());
+
 				if (m_pRoot->IsSelfRoot())
 				{
 					return m_pRoot;
@@ -47,13 +46,25 @@ namespace Ncv
 				}
 			}
 
-			static bool DoBothRgnsHaveTheSameRoot(T_PixelRgnEx & a_rgn1, T_PixelRgnEx & a_rgn2)
+			static bool DoBothRgnsHaveTheSameActRoot(T_PixelRgnEx & a_rgn1, T_PixelRgnEx & a_rgn2)
 			{
 				T_PixelRgnEx * pRoot1 = a_rgn1.GetActRootAfterNecessaryUpdating();
 				T_PixelRgnEx * pRoot2 = a_rgn2.GetActRootAfterNecessaryUpdating();
 
 				return pRoot1 == pRoot2;
 			}
+
+			static void MergeThoseActRgns(T_PixelRgnEx & a_actRgn1, T_PixelRgnEx & a_actRgn2)
+			{
+				Ncpp_ASSERT(a_actRgn1 != a_actRgn2);
+
+				T_PixelRgnEx * pMinRgn = MinOrEqual(a_actRgn1, a_actRgn2);
+				T_PixelRgnEx * pMaxRgn = Max(a_actRgn1, a_actRgn2);
+
+				// T_PixelRgnEx::MergeRgnDataIntoAnother(*pMinRoot, *pMaxRoot);
+				pMaxRoot->m_pRoot = pMinRoot;
+			}
+
 
 			static void MergeRgns(T_PixelRgnEx & a_rgn1, T_PixelRgnEx & a_rgn2)
 			{
@@ -69,7 +80,6 @@ namespace Ncv
 				pMaxRoot->m_pRoot = pMinRoot;
 			}
 
-			bool IsSelfRoot() const { return this == m_pRoot; }
 
 
 

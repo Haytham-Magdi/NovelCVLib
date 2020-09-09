@@ -326,12 +326,12 @@ namespace Hcv
 
 					GlobalStuff::m_nLA_Index = pLA->nIndex;
 
-					RgnInfo * pActRootRgn1;
+					RgnInfo * pActRgn1;
 					{
 						RgnInfo * pRgn1 = pLA->pRgn1;
 
-						pActRootRgn1 = pRgn1->GetActRootAfterNecessaryUpdating();
-						Ncpp_ASSERT(nullptr != pActRootRgn1);
+						pActRgn1 = pRgn1->GetActRootAfterNecessaryUpdating();
+						Ncpp_ASSERT(nullptr != pActRgn1);
 					}
 
 					RgnInfo * pRgn2 = pLA->pRgn2;
@@ -350,8 +350,8 @@ namespace Hcv
 						// 	//nLastLA_MinIdx * 0.1 )
 						// 	//nLastLA_MinIdx * 3 )
 						// {
-						// 	UpdateActRgn( pActRootRgn1 );
-						// 	RgnInfo * pRgnAct1 = pActRootRgn1->GetActRgn();
+						// 	UpdateActRgn( pActRgn1 );
+						// 	RgnInfo * pRgnAct1 = pActRgn1->GetActRgn();
 
 						// 	UpdateActRgn( pRootRgn2 );
 						// 	RgnInfo * pRgnAct2 = pRootRgn2->GetActRgn();
@@ -368,7 +368,7 @@ namespace Hcv
 
 					RgnInfo * pRootRgn2 = pRgn2->GetDirectRoot();
 
-					// Ncpp_ASSERT(nullptr != pActRootRgn1 && nullptr != pRootRgn2);
+					// Ncpp_ASSERT(nullptr != pActRgn1 && nullptr != pRootRgn2);
 
 					const int nTestIdx = 173209;
 
@@ -389,7 +389,7 @@ namespace Hcv
 					//if( 0 == i || e >= 1 )
 					//if( 0 == i || e >= 1 )
 					{
-						// if( nullptr != pActRootRgn1 && nullptr != pRootRgn2 )
+						// if( nullptr != pActRgn1 && nullptr != pRootRgn2 )
 						if(nullptr != pRootRgn2 )
 						{
 							if(nTestIdx == pRgn2->nIndex)
@@ -402,7 +402,7 @@ namespace Hcv
 
 							// if( 0 == i )
 							{
-								if( pActRootRgn1 == pActRootRgn2 )
+								if( pActRgn1 == pActRootRgn2 )
 									continue;
 
 								bMergeRoots = true;
@@ -413,32 +413,14 @@ namespace Hcv
 							// if( 1 == i )
 							// 	i = i;
 
-							// UpdateActRgn( pActRootRgn1 );
-							RgnInfo * pActRgn1 = pActRootRgn1->GetActRootAfterNecessaryUpdating();
 
 							bool bAddRgn = true;
 
-
 							if( bAddRgn )
 							{	
-								//*pRgn2->pixColors = *pRgn1->pixColors;
-
-								//if( m_maxDif_Buf[ pRgn2->nIndex ] <=
-									//m_maxDif_Buf[ pActRootRgn1->nIndex ] )
-								if( m_scanPix_Buf[ pRgn2->nIndex ].maxSlopeVal <= 35 )
-								{
-									pRgn2->BeARoot();
-									pRgn2->SetActRgn( pActRootRgn1->GetActRgn() );
-								}
-								else
-								{
-									pRgn2->SetRootRgn( pActRootRgn1 );
-								}
-
-								pRgn2->pSrcRgn = pRgn1;
-
-								PrepareRgnLinkActions( pRgn2, 0 );
-							
+								pRgn2->SetDirectRoot( pActRgn1);
+								PrepareRgnLinkActions( pRgn2, 0);
+								
 							}	//	end if addRgn.
 
 							continue;
@@ -511,7 +493,7 @@ namespace Hcv
 							
 							if( pRootRgn2->bIsPassiveRoot )
 							{
-								//*pRootRgn2->pixColors = *pActRootRgn1->pixColors;
+								//*pRootRgn2->pixColors = *pActRgn1->pixColors;
 								//pRootRgn2->bIsPassiveRoot = false;
 
 								//PrepareRgnLinkActions( pRootRgn2, 
@@ -543,7 +525,7 @@ namespace Hcv
 
 							if( pRootRgn2->bIsPassiveRoot )
 							{
-								pRootRgn2->SetRootRgn( pActRootRgn1 );
+								pRootRgn2->SetRootRgn( pActRgn1 );
 
 								pRootRgn2->bIsPassiveRoot = false;
 

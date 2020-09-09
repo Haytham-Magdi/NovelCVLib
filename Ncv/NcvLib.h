@@ -33,6 +33,8 @@
 #include <NovelCVLib\Ncv\CoreSharedPixelLinkDiffMag_Initializer.h>
 
 #include <NovelCVLib\Ncv\PixelRgn.h>
+#include <NovelCVLib\Ncv\PixelRgn2.h>
+
 #include <NovelCVLib\Ncv\SimplePixelRgn.h>
 #include <NovelCVLib\Ncv\PixelRgnUtil.h>
 

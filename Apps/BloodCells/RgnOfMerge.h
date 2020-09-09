@@ -26,7 +26,7 @@
 //#include <NovelCVLib\Apps\BloodCells\RotationMgrColl.h>
 
 // #include <NovelCVLib\Ncv\SimplePixelRgn.h>
-#include <NovelCVLib\Ncv\PixelRgn.h>
+#include <NovelCVLib\Ncv\PixelRgn2.h>
 
 
 namespace Ncv

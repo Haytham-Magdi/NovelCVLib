@@ -31,5 +31,32 @@ namespace Ncpp
 
 		int Round( float a_num );
 
+
+		template<class T>
+		void Min(const T & a_arg1, const T & a_arg2)
+		{
+			return (a_arg1 < a_arg2) ? a_arg1 : a_arg2;
+		}
+
+		template<class T>
+		void MinOrEqual(const T & a_arg1, const T & a_arg2)
+		{
+			return (a_arg1 <= a_arg2) ? a_arg1 : a_arg2;
+		}
+
+		template<class T>
+		void Max(const T & a_arg1, const T & a_arg2)
+		{
+			return (a_arg1 > a_arg2) ? a_arg1 : a_arg2;
+		}
+
+		template<class T>
+		void MaxOrEqual(const T & a_arg1, const T & a_arg2)
+		{
+			return (a_arg1 >= a_arg2) ? a_arg1 : a_arg2;
+		}
+
+
+
 	}
 }
