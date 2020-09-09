@@ -193,7 +193,7 @@ namespace Hcv
 
 		inline void RemoveDuplicateConflicts( RgnInfo * a_pRgn );
 
-		inline void PrepareRgnLinkActions( RgnInfo * a_pRgn, float a_distBef );
+		inline void PrepareRgnLinkActions( RgnInfo * a_pRgn );
 
 		inline void CreateConflict_Direct( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2);
 
