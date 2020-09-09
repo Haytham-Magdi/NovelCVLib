@@ -35,146 +35,6 @@ namespace Hcv
 
 
 
-		class MgrOfLinkTypes
-		{ 
-
-		public:
-			class CoreStuff
-			{
-			public:
-
-				CoreStuff() : m_mapIndexCalc(8, 8), m_dxyIndexCalc(3, 3)
-				{
-					InitLinkTypeMgrs();
-					InitMaps();
-				}
-
-				float GetDist(int a_i, int a_j)
-				{
-					return m_distMap[ 
-						//m_mapIndexCalc.Calc(a_i, a_j) ];
-						m_mapIndexCalc.Calc(a_j, a_i) ];
-				}
-
-				int GetNbr(int a_i, int a_j)
-				{
-					return m_nbrMap[ 
-						//m_mapIndexCalc.Calc(a_i, a_j) ];
-						m_mapIndexCalc.Calc(a_j, a_i) ];
-				}
-
-				int GetInverseLinkIndex(int a_index)
-				{
-					return (&m_linkTypeMgrVect[a_index])->GetInverseLinkTypeMgr()->GetIndex();
-				}
-
-				int GetLinkIndex(int a_dx, int a_dy)
-				{
-					int index = m_dxyIndexMap[ m_dxyIndexCalc.Calc( a_dx + 1, a_dy + 1) ];
-
-					return index;
-				}
-				
-
-
-			protected:
-				void InitLinkTypeMgrs();				
-				void InitMaps();
-
-			protected:
-				FixedVector<LinkTypeMgr> m_linkTypeMgrVect;
-				float m_distMap[64];
-				int m_nbrMap[64];
-				IndexCalc2D m_mapIndexCalc;
-
-				int m_dxyIndexMap[9];
-				IndexCalc2D m_dxyIndexCalc;
-
-			};
-
-
-		public:
-			static CoreStuff * GetCore()
-			{
-				static CoreStuff core;
-
-				return &core;
-			}
-
-
-		protected:
-			//static CoreStuff m_core;
-
-
-		};
-
-
-		class LinkTypeMgr
-		{
-			friend class MgrOfLinkTypes;
-
-		public:
-
-			F32Point GetDirXY()
-			{
-				return m_dirXY;
-			}
-
-			F32Point GetUnitDirXY()
-			{
-				return m_unitDirXY;
-			}
-
-			int GetIndex()
-			{
-				return (int)m_dir;
-			}
-
-			RgnLinkDir GetLinkDir()
-			{
-				return m_dir;
-			}
-
-			LinkTypeMgr * GetInverseLinkTypeMgr()
-			{
-				return m_pInverseLinkTypeMgr;
-			}
-
-		protected:
-			void Init(LinkTypeMgr * a_pLTM0, int a_i, F32Point & a_dirXY)
-			{
-				m_dirXY = a_dirXY;
-				m_unitDirXY = a_dirXY.GetUnitVect();
-				m_dir = (RgnLinkDir)a_i;
-
-				RgnLinkDir inverseDir;
-
-				if( a_i < 4 )
-				{
-					inverseDir = (RgnLinkDir)( a_i + 4 );
-				}
-				else
-				{
-					inverseDir = (RgnLinkDir)( a_i - 4 );
-				}
-
-				m_pInverseLinkTypeMgr = &a_pLTM0[ (int)inverseDir ]; 
-			}
-		
-		
-		protected:
-			F32Point m_dirXY;
-			F32Point m_unitDirXY;
-			RgnLinkDir m_dir;
-			//RgnLinkDir m_inverseDir;
-			LinkTypeMgr * m_pInverseLinkTypeMgr;
-			//float * m_dists
-		};
-
-
-
-
-
 
 //////////////////////////////////////////////////////////////
 
@@ -201,33 +61,6 @@ namespace Hcv
 		class LinkAction;
 
 
-		class RgnLink
-		{
-		public:
-
-			RgnLink()
-			{
-
-				pCurLA = nullptr;
-			}
-
-			//RgnInfo * pPeerRgn;
-
-			RgnInfo * pRgn1;
-			RgnInfo * pRgn2;
-
-			RgnLink * GetInvLinkPtr()
-			{
-				return & pRgn2->links[ ( (int)dir + 4 ) % 8 ];
-			}
-
-			RgnLinkDir dir;
-			bool bProcessed;
-			bool bExists;
-
-			LinkAction * pCurLA;
-		};
-
 
 
 		class RgnInfo : public PixelRgn2<RgnInfo>
@@ -250,11 +83,9 @@ namespace Hcv
 
 			int nIndex;
 
-			F32ColorVal * pixColors;
 
 
-
-			// F32Point pos;
+			S32Point pos;
 
 			//bool bIsInConflict;
 
@@ -291,27 +122,10 @@ namespace Hcv
 			RgnInfo * pRgn2;
 		};
 
-		class LinkAction : public MultiListQueMember< LinkAction >
-		{
-		public:
-
-			LinkAction()
-			{
-				nIndex = 0;
-			}
-
-			//RgnInfo * pRgn1;
-			//RgnInfo * pRgn2;
-
-			RgnLink * pLink1;
-			//RgnLink * pLink2;
-
-			int nIndex;
-		};
-
 
 	public:
-		RegionSegmentor51(F32ImageRef a_src);
+
+		RegionSegmentor51(const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & a_ploAcc);
 
 		~RegionSegmentor51();
 		
@@ -322,15 +136,9 @@ namespace Hcv
 		
 		virtual F32ImageRef GenSegmentedImage2(bool a_bShowMeanColor = true);
 
+		inline void CreateConflict( const int a_rgnIndex1, const int a_rgnIndex1);
 
 	protected:
-
-		//void Manage_EI_Activation( RgnInfo * a_pRgn_1, RgnInfo * a_pRgn_2 );
-
-		float GetRgnGradVal( RgnInfo * a_pRgn )
-		{
-			return *m_srcGrad->GetPixAt( a_pRgn->pos.x, a_pRgn->pos.y );
-		}
 
 		void InitLinks(void);
 
@@ -387,7 +195,7 @@ namespace Hcv
 
 		inline void PrepareRgnLinkActions( RgnInfo * a_pRgn, float a_distBef );
 
-		inline void CreateConflict( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2);
+		inline void CreateConflict_Direct( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2);
 
 		RgnLink * GetLinkBetweenRgns( int a_nIdx_1, int a_nIdx_2 );
 
@@ -397,13 +205,11 @@ namespace Hcv
 
 		SlideMgrRef m_slideMgr;
 
-		F32ImageRef m_src;
-		F32ImageRef m_orgSrc;
+		ActualArrayAccessor_2D<F32PixelLinkOwner3C> m_ploAcc;
 
 		LinkAction * pLADbg; 
 
 		int m_nMaxDif;
-		IndexCalc2D m_rgnIndexCalc;
 
 		FixedVector<RgnInfo> m_rgnInfoVect;
 
@@ -413,12 +219,12 @@ namespace Hcv
 		// MultiAllocProvider< LinkAction > m_linkAction_Provider;
 		MultiAllocProviderRef< LinkAction > m_linkAction_Provider;
 
+		MultiAllocProviderRef< RgnConflict > m_rgnConflict_Provider;
+
+
 		FixedVector< LinkAction_2 > m_linkAction_2_Arr;
 
 		//int m_nofLinkActions;
-
-		FixedVector<RgnConflict> m_rgnConflictVect;
-		int m_nofConflicts;
 
 		//MultiListQue< LinkAction > m_difQues;
 		MultiListQueMgr< LinkAction_2 > m_linkActionMergeQues;

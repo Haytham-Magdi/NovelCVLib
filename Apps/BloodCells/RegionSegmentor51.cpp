@@ -29,112 +29,50 @@ namespace Hcv
 
 
 
-	RegionSegmentor51::RegionSegmentor51(F32ImageRef a_src) : 
-	m_rgnIndexCalc(a_src->GetWidth(), a_src->GetHeight())
+	RegionSegmentor51::RegionSegmentor51(ActualArrayAccessor_2D<F32PixelLinkOwner3C> & a_ploAcc)
 	{	
-		m_nofConflicts = 0;
 		m_nVisitID = 0;
 
-		m_orgSrc = a_src;
+        a_ploAcc.CopyTo(&m_ploAcc);
 
-
-		{
-			F32ColorVal colorFact;
-
-			colorFact.val0 = 0.51 * 0.5;
-			colorFact.val1 = 1.44 * 0.5;
-			colorFact.val2 = 1.048 * 0.5;
-
-			//m_orgSrc = GenMultByColorImg( m_orgSrc, colorFact);
-			m_src = m_orgSrc;
-		}
-
+		m_rgnConflict_Provider = new MultiAllocProvider<RgnConflict>(a_ploAcc.CalcSize_1D());
 
 		InitMaxDif();
-
-		//m_difQues.Init( GetMaxDif() + 1 );
-		//m_difQues.Init( GetMaxDif() * 1000 + 1 );
-		//m_difQues.Init( GetMaxDif() + 2 );
 
 		m_linkActionMergeQues.InitSize( GetMaxDif() * 2 + 2 );
 
 		InitRgnInfoVect();
 
-		m_pDbgRgn = & m_rgnInfoVect[ 535326 ];
+		// m_pDbgRgn = & m_rgnInfoVect[ 535326 ];
 
-		{	
-			IndexCalc2D idx2D( m_src->GetSize().width,
-				m_src->GetSize().height );
-
-			m_nTestRgnIdx = idx2D.Calc( 17, 353 );
-		}
+		m_nTestRgnIdx = a_ploAcc.CalcIndex_1D(17, 353);
 
 
-		InitLinks();		
 
-		m_rgnConflictVect.SetCapacity( 
-			1000000);
-		
-		m_nofConflicts = 0;
 
 	}
+
+
 
 	void RegionSegmentor51::InitRgnInfoVect(void)
 	{
 		RgnInfo::s_MergeOrder = 0;
 
-		CvSize srcSiz = m_src->GetSize();
 
-		m_rgnInfoVect.SetSize(srcSiz.width * srcSiz.height);
+		Size_2D srcSiz = m_ploAcc->GetSize();
 
+		m_rgnInfoVect.SetSize(m_ploAcc.CalcSize_1D());
+
+		ActualArrayAccessor_2D<RgnInfo> rgnInfoAcc;
+
+
+		for(int y=0; y < rgnInfoAcc.GetSizeY(); y++)
 		{
-			F32ImageRef img1 = m_src;
-				
-			IImgDataMgr_2_FactorySetRef imgFactoryMgr = 
-				////new ImgDataMgr_2_FactorySet_CovMat();
-				new ImgDataMgr_2_FactorySet_LocHist();
-				////new ImgDataMgr_2_FactorySet_GridPal();
-				//new ImgDataMgr_2_FactorySet_Simple();
-			
-
-			//IImgCoreSrcRef ids1 = new ImgDataSrc_LocHist(img1);
-			////IImgCoreSrcRef ids1 = new ImgDataSrc_GridPal(img1);
-			IImgCoreSrcRef ids1 = new ImgDataSrc_LocHist(img1);
-			
-
-			RgnSegmDiameter rsDiam;
-			rsDiam.SetDiamFull( GlobalStuff::AprSize1D );
-
-			int nAprSiz_Far = rsDiam.GetDiamFull();
-			//int nAprSiz_Far = rsDiam.GetDiamFull() + 4;
-		
-			//int nAprSiz_Loc = rsDiam.GetDiamInr_1();
-			int nAprSiz_Loc = rsDiam.GetDiamFull();
-
-			ImageRotationMgr_ExParamsRef rotParams = 
-				new ImageRotationMgr_ExParams(
-				//img1, nullptr, 0, nAprSiz_Far, nAprSiz_Loc, imgFactoryMgr );
-				img1, ids1, 0, nAprSiz_Far, nAprSiz_Loc, imgFactoryMgr );
-
-			
-		
-			m_imgScanMgr = new ImgScanMgr( rotParams, 4,
-				cvPoint( 40, 40 ) );
-		}
-
-
-
-
-
-		for(int y=0; y < srcSiz.height; y++)
-		{
-			for(int x=0; x < srcSiz.width; x++)
+			for(int x=0; x < rgnInfoAcc.GetSizeX(); x++)
 			{	
-				RgnInfo * pRgnInfo = GetPointRgn(x, y);
+				RgnInfo * pRgnInfo = &rgnInfoAcc.GetAt(x, y);
 
-				pRgnInfo->nIndex = m_rgnIndexCalc.Calc(x, y);
-
-				pRgnInfo->pixColors = (F32ColorVal *)m_src->GetPixAt(x, y);
+				pRgnInfo->nIndex = rgnInfoAcc.CalcIndex_1D(x, y);
 
 				pRgnInfo->pos.x = x;
 				pRgnInfo->pos.y = y;
@@ -154,103 +92,6 @@ namespace Hcv
 
 	}
 
-	inline void RegionSegmentor51::CreateLink( RgnInfo * a_pRgn, 
-		int x, int y, RgnLinkDir a_dir)
-	{	
-		static int dx[] = {1, 1, 0, -1};
-		static int dy[] = {0, 1, 1, 1};
-
-		const int nLinkIndex = (int)a_dir;
-
-		RgnInfo * pRgn2 = GetPointRgn( x + dx[ nLinkIndex ], 
-			y + dy[ nLinkIndex ]);
-
-		RgnLink & rLink = a_pRgn->links[ nLinkIndex ];
-		RgnLink & rLinkR2 = pRgn2->links[ nLinkIndex + 4 ];
-
-		rLink.bProcessed = rLinkR2.bProcessed = false;
-		rLink.bExists = rLinkR2.bExists = true;
-		
-		rLink.pRgn1 = a_pRgn;
-		rLink.pRgn2 = pRgn2;
-
-		rLinkR2.pRgn1 = pRgn2;
-		rLinkR2.pRgn2 = a_pRgn;
-	} 
-
-
-
-
-	void RegionSegmentor51::InitLinks(void)
-	{
-		const int nSrcWidth = m_src->GetWidth();
-		const int nSrcHeight = m_src->GetHeight();
-
-		m_linkAction_2_Arr.SetSize( 
-		//m_linkAction_2_Arr.SetCapacity( 
-			nSrcWidth * nSrcHeight * 4 );
-
-		// m_linkAction_Provider.Init( 30000 );
-		m_linkAction_Provider = new MultiAllocProvider<LinkAction>(30000);
-
-		FixedVector< LinkAction > & rLinkActionVect = 
-			m_linkAction_Provider.GetAllocArr();
-
-
-		for( int i=0; i < rLinkActionVect.GetSize(); i++ )
-			rLinkActionVect[ i ].nIndex = i;
-
-
-		for(int y=0; y<nSrcHeight-1; y++)
-		{
-			for(int x=1; x<nSrcWidth-1; x++)
-			{	
-				//	RC, RB, CB, LB
-
-				RgnInfo * pRgn = GetPointRgn(x, y);
-
-				
-				CreateLink(pRgn, x, y, RC);
-				CreateLink(pRgn, x, y, RB);
-				CreateLink(pRgn, x, y, CB);
-				CreateLink(pRgn, x, y, LB);
-			}
-		}
-
-		for(int y=0, x=0; y<nSrcHeight-1; y++)
-		{
-			//	RC, RB, CB
-
-			RgnInfo * pRgn = GetPointRgn(x, y);
-
-			
-			CreateLink(pRgn, x, y, RC);
-			CreateLink(pRgn, x, y, RB);
-			CreateLink(pRgn, x, y, CB);
-		}
-
-		for(int y=nSrcHeight-1, x=0; x<nSrcWidth-1; x++)
-		{	
-			// RC
-
-			RgnInfo * pRgn = GetPointRgn(x, y);
-
-			
-			CreateLink(pRgn, x, y, RC);
-		}
-
-		for(int y=0, x=nSrcWidth-1; y<nSrcHeight-1; y++)
-		{
-			//	CB, LB
-
-			RgnInfo * pRgn = GetPointRgn(x, y);
-
-			
-			CreateLink(pRgn, x, y, CB);
-			CreateLink(pRgn, x, y, LB);
-		}
-
-	}
 
 	
 	void RegionSegmentor51::Segment()
@@ -326,7 +167,7 @@ namespace Hcv
 						// 	if( pRgnAct1 == pRgnAct2 )
 						// 		continue;
 
-						// 	CreateConflict( pRgnAct1, pRgnAct2);
+						// 	CreateConflict_Direct( pRgnAct1, pRgnAct2);
 						// }
 
 					}
@@ -859,26 +700,30 @@ namespace Hcv
 	}
 
 
+	void RegionSegmentor51::CreateConflict( const int a_rgnIndex1, const int a_rgnIndex2);
+	{
+		CreateConflict_Direct( &m_rgnInfoVect[a_rgnIndex1], &m_rgnInfoVect[a_rgnIndex2] );
+	}
 
-
-	void RegionSegmentor51::CreateConflict( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2)
+	void RegionSegmentor51::CreateConflict_Direct( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2)
 	{
 		{
-			RgnConflict * pRc = &m_rgnConflictVect[ m_nofConflicts++ ];
+			RgnConflict * pRc = m_rgnConflict_Provider->ProvideNewElementPtr();
+			
 			pRc->pNext = pRc;
 			pRc->pPrev = pRc;
 
-			pRc->pPeerRgn = a_pRgn2->pRgn_DeepR;
-			a_pRgn1->pRgn_DeepR->conflictList.PushLast( pRc );
+			pRc->pPeerRgn = a_pRgn2;
+			a_pRgn1->conflictList.PushLast( pRc );
 		}
 
 		{
-			RgnConflict * pRc2 = &m_rgnConflictVect[ m_nofConflicts++ ];
+			RgnConflict * pRc2 = m_rgnConflict_Provider->ProvideNewElementPtr();
 			pRc2->pNext = pRc2;
 			pRc2->pPrev = pRc2;
 
-			pRc2->pPeerRgn = a_pRgn1->pRgn_DeepR;
-			a_pRgn2->pRgn_DeepR->conflictList.PushLast( pRc2 );
+			pRc2->pPeerRgn = a_pRgn1;
+			a_pRgn2->conflictList.PushLast( pRc2 );
 		}
 	}
 
