@@ -54,14 +54,13 @@ namespace Ncv
 				return pRoot1 == pRoot2;
 			}
 
-			static void MergeThoseActRgns(T_PixelRgnEx & a_actRgn1, T_PixelRgnEx & a_actRgn2)
+			static void MergeRgns_Direct(T_PixelRgnEx * a_pActRgn1, T_PixelRgnEx * a_pActRgn2)
 			{
 				Ncpp_ASSERT(a_actRgn1 != a_actRgn2);
 
-				T_PixelRgnEx * pMinRgn = MinOrEqual(a_actRgn1, a_actRgn2);
-				T_PixelRgnEx * pMaxRgn = Max(a_actRgn1, a_actRgn2);
-
-				// T_PixelRgnEx::MergeRgnDataIntoAnother(*pMinRoot, *pMaxRoot);
+				T_PixelRgnEx * pMinRgn, * pMaxRgn;
+				AssignForCondition(a_pActRgn1 < a_pActRgn2, a_pActRgn1, a_pActRgn2, pMinRgn, pMaxRgn);
+	
 				pMaxRoot->m_pRoot = pMinRoot;
 			}
 

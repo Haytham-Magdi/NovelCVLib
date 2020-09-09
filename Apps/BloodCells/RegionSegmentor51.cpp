@@ -137,154 +137,70 @@ namespace Hcv
 					RgnInfo * pRgn2 = pLA->pRgn2;
 					Ncpp_ASSERT(nullptr != pRgn2);
 
-					{
-						// int nLastLA_MinIdx = 
-						// 	m_linkActionMergeQues.GetLastMinIndex();
-
-						// while(
-						// 	//true)
-						// 	false)
-						// 	//m_edgeInfo_Ques.Get_CurMinIndex() < 
-						// 	//nLastLA_MinIdx )
-						// 	//nLastLA_MinIdx * 0.7 )
-						// 	//nLastLA_MinIdx * 0.1 )
-						// 	//nLastLA_MinIdx * 3 )
-						// {
-						// 	UpdateActRgn( pActRgn1 );
-						// 	RgnInfo * pRgnAct1 = pActRgn1->GetActRgn();
-
-						// 	UpdateActRgn( pRootRgn2 );
-						// 	RgnInfo * pRgnAct2 = pRootRgn2->GetActRgn();
-
-						// 	if( pRgnAct1 == pRgnAct2 )
-						// 		continue;
-
-						// 	CreateConflict_Direct( pRgnAct1, pRgnAct2);
-						// }
-
-					}
-
-
-
 					RgnInfo * pRootRgn2 = pRgn2->GetDirectRoot();
 
-					// Ncpp_ASSERT(nullptr != pActRgn1 && nullptr != pRootRgn2);
-
-					const int nTestIdx = 173209;
-
+					// const int nTestIdx = 173209;
 					
-					if( nTestIdx == pRgn1->nIndex ||
-						 nTestIdx == pRgn2->nIndex )
+					// if( nTestIdx == pRgn1->nIndex ||
+					// 	 nTestIdx == pRgn2->nIndex )
+					// {
+					// 	i = i;
+					// }
+
+
+					if(nullptr == pRootRgn2)
 					{
-						i = i;
+						pRgn2->SetDirectRoot( pActRgn1);
+						PrepareRgnLinkActions(pRgn2);
+
+						continue;
 					}
 
 
-					bool bMergeRoots = false;
+					// if(nTestIdx == pRgn2->nIndex)
+					// 		i = i;
 
-					RgnInfo * pActRgn2 = nullptr;
+					RgnInfo * pActRgn2 = pRootRgn2->GetActRootAfterNecessaryUpdating();
+					Ncpp_ASSERT(nullptr != pActRgn2);
 
-					//if( 1 != i )
-					//if( 0 == i )
-					//if( 0 == i || e >= 1 )
-					//if( 0 == i || e >= 1 )
+					if( pActRgn1 == pActRgn2 )
+						continue;
+
+					//	Merging Roots
 					{
-						// if( nullptr != pActRgn1 && nullptr != pRootRgn2 )
-						if(nullptr == pRootRgn2 )
-						{
-							pRgn2->SetDirectRoot( pActRgn1);
-							PrepareRgnLinkActions(pRgn2);
-
-							continue;
-						}
-						else
-						{
-							if(nTestIdx == pRgn2->nIndex)
-							{
-								i = i;
-							}
-
-							pActRgn2 = pRootRgn2->GetActRootAfterNecessaryUpdating();
-
-
-							// if( 0 == i )
-							{
-								if( pActRgn1 == pActRgn2 )
-									continue;
-
-								bMergeRoots = true;
-							}
-						}
-
-					}
-
-					Ncpp_ASSERT(nullptr == pActRgn2);
-					Ncpp_ASSERT(pActRgn1 != pActRgn2);
-
-					//else	//	i > 0
-//--					if( 1 == i )
-					//if( bMergeRoots )
-					{
+						// Ncpp_ASSERT(pActRgn1 != pActRgn2);
 						
-
 						m_nVisitID++;
 
 						RgnInfo * pMinSizRgn, * pMaxSizRgn;
 
-						if( pActRgn1->conflictList.GetSize() <
-							pActRgn2->conflictList.GetSize() )
-						{
-							pMinSizRgn = pActRgn1;
-							pMaxSizRgn = pActRgn2;
-						}
-						else
-						{
-							pMinSizRgn = pActRgn2;
-							pMaxSizRgn = pActRgn1;
-						}
+						AssignForCondition( 
+							pActRgn1->conflictList.GetSize() < pActRgn2->conflictList.GetSize(), 
+							pActRgn1, pActRgn2, pMinSizRgn, pMaxSizRgn);
 
 						const bool bHaveConflict = HaveConflict( pMinSizRgn, pMaxSizRgn );
 						if( bHaveConflict )
 							continue;
 
 
-						// NoConflict:
+						// No Conflict
 						{
+							// if( 0 != pMinSizRgn->conflictList.GetSize() )
+							// 	RemoveDuplicateConflicts( pMaxSizRgn );
 
-							if( 0 != pMinSizRgn->conflictList.GetSize() )
-								RemoveDuplicateConflicts( pMaxSizRgn );
+							RgnInfo * pMasterRgn, * pSlaveRgn;
+							AssignForCondition(pActRgn1 < pActRgn2, pActRgn1, pActRgn2, pMasterRgn, pSlaveRgn);
 
-							{
-								RgnInfo * pMasterRgn, * pSlaveRgn;
+							pMasterRgn->conflictList.TakeListElements(
+								pSlaveRgn->conflictList );
 
-								if( pRootRgn2->bIsPassiveRoot ||
-									pActRgn1 < pActRgn2 )	
-								{
-									pMasterRgn = pActRgn1;
-									pSlaveRgn = pActRgn2;
-								}
-								else
-								{
-									pMasterRgn = pActRgn2;
-									pSlaveRgn = pActRgn1;
-								}
+							pSlaveRgn->SetDirectRoot( pMasterRgn );
 
-								pMasterRgn->conflictList.TakeListElements(
-									pSlaveRgn->conflictList );
-								pSlaveRgn->SetActRgn( pMasterRgn );
-							}
+							RemoveDuplicateConflicts( pMasterRgn );
 
-							if( pRootRgn2->bIsPassiveRoot )
-							{
-								pRootRgn2->SetRootRgn( pActRgn1 );
+						}	//	end block: No Conflict
+					}	//	end block: Merging Roots
 
-								pRootRgn2->bIsPassiveRoot = false;
-
-								PrepareRgnLinkActions( pRgn2 );
-							}
-
-						}
-					}
 				}while( nullptr != pLA );
 
 				

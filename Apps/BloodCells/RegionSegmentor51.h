@@ -76,6 +76,7 @@ namespace Hcv
 
 			RgnInfo()
 			{
+				SetRootToNull();
 			}
 
 			int nIndex;
@@ -84,8 +85,6 @@ namespace Hcv
 			APtrList< RgnConflict > conflictList;
 
 			// int nMergeOrder;
-
-			// bool bIsPassiveRoot;
 
 			static int s_MergeOrder;
 
@@ -149,11 +148,6 @@ namespace Hcv
 
 		inline void PrepareLinkAction( RgnLink & a_rLink, float a_distBef, 
 			bool a_bSetProcessed = true);
-
-		//inline LinkAction * ProvideLinkAction(RgnInfo * a_pRgn, RgnLinkDir a_dir, bool a_bSetProcessed = true);
-		inline LinkAction * ProvideLinkAction( RgnInfo * a_pRgn, RgnLinkDir a_dir );
-
-		inline LinkAction * ProvideLinkAction( RgnInfo * a_pRgn, RgnInfo * a_pRgn2 );
 
 		inline RgnConflict * GetConflictIfExists( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn);
 
