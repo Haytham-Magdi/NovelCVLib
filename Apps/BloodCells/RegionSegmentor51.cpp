@@ -107,12 +107,12 @@ namespace Hcv
 
 
 
-		for(int e=0; e < nLim_e; e++)
-		{
-			e = e;
-			for(int i=0; i < 2; i++)
-			//for(int i=0; i < 1; i++)
-			{
+		// for(int e=0; e < nLim_e; e++)
+		// {
+		// 	e = e;
+		// 	for(int i=0; i < 2; i++)
+		// 	//for(int i=0; i < 1; i++)
+		// 	{
 				LinkAction_2 * pLA = nullptr;
 
 				do
@@ -195,7 +195,6 @@ namespace Hcv
 								pSlaveRgn->conflictList );
 
 							pSlaveRgn->SetDirectRoot( pMasterRgn );
-
 							RemoveDuplicateConflicts( pMasterRgn );
 
 						}	//	end block: No Conflict
@@ -204,25 +203,10 @@ namespace Hcv
 				}while( nullptr != pLA );
 
 				
-			}	//	end for i.
+		// 	}	//	end for i.
 
-		}	//	end for e.
+		// }	//	end for e.
 
-		//ShowImage( GenMergeOrderImage(), "MergeOrderImage");	
-
-		{
-			F32ImageRef sgmImg2 = GenSegmentedImage2();
-			ShowImage( sgmImg2, "GenSegmentedImage_2");	
-			SaveImage( sgmImg2, "sgmImg2.jpg" );
-		}
-
-		ShowImage( 
-			//GenColorDsp( 
-			( 
-			GenU8FromF32Image( GenMergeOrderImage() )), 			
-			"MergeOrderImage");	
-
-		//ShowImage( GenRootRgnImage(), "RootRgnImage" );
 		
 
 	}
