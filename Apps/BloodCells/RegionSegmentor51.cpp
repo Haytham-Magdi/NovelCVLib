@@ -211,14 +211,6 @@ namespace Hcv
 
 	}
 
-	float RegionSegmentor51::CalcRgnDif(RgnInfo * a_pRgn1, RgnInfo * a_pRgn2)
-	{
-		ThrowHcvException();
-
-		return -1;
-	}
-
-
 
 	bool RegionSegmentor51::RgnInfo::HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn)
 	{
@@ -257,6 +249,7 @@ namespace Hcv
 
 		return nullptr;
 	}
+
 
 	void RegionSegmentor51::RemoveDuplicateConflicts( RgnInfo * a_pRgn )
 	{
@@ -357,105 +350,6 @@ namespace Hcv
 		}
 	}
 
-
-//////////////////////////////////////////////////////////////
-
-
-	void RegionSegmentor51::MgrOfLinkTypes::CoreStuff::InitLinkTypeMgrs()
-	{
-		static int dx[] = {1, 1, 0, -1,   -1, -1, 0, 1};
-		static int dy[] = {0, 1, 1, 1,   0, -1, -1, -1};
-
-		m_linkTypeMgrVect.SetSize(8);
-
-		m_dxyIndexMap[ m_dxyIndexCalc.Calc( 0 + 1, 0 + 1) ] = -1;
-
-		for(int i=0; i < m_linkTypeMgrVect.GetSize(); i++)
-		{
-			F32Point point(dx[i], dy[i]);
-						
-			m_linkTypeMgrVect[i].Init( &m_linkTypeMgrVect[0], i, point );
-
-
-			m_dxyIndexMap[ m_dxyIndexCalc.Calc( dx[i] + 1, dy[i] + 1) ] = i;
-		}
-
-	}
-
-	void RegionSegmentor51::MgrOfLinkTypes::CoreStuff::InitMaps()
-	{
-		m_linkTypeMgrVect.SetSize(8);
-
-		{
-			for(int i=0; i < m_linkTypeMgrVect.GetSize(); i++)
-			{
-				F32Point uDirXY_i = m_linkTypeMgrVect[i].GetUnitDirXY();
-
-				for(int j=0; j < m_linkTypeMgrVect.GetSize(); j++)
-				{
-					F32Point uDirXY_j = m_linkTypeMgrVect[j].GetUnitDirXY();
-
-					float dist = F32Point::Sub(uDirXY_i, uDirXY_j).CalcMag(); 
-					//m_distMap[ m_mapIndexCalc.Calc(i, j) ] = dist;
-					m_distMap[ m_mapIndexCalc.Calc(j, i) ] = dist;
-				}
-			}
-		}
-
-		{
-			for(int i=0; i < m_linkTypeMgrVect.GetSize(); i++)
-			{				
-				for(int j=0; j < m_linkTypeMgrVect.GetSize(); j++)
-				{					
-					//m_nbrMap[ m_mapIndexCalc.Calc(i, j) ] = j;
-					m_nbrMap[ m_mapIndexCalc.Calc(j, i) ] = j;
-				}
-			}
-		}
-
-		{
-			for(int i=0; i < m_linkTypeMgrVect.GetSize(); i++)
-			{		
-				for(int k=0; k < m_linkTypeMgrVect.GetSize(); k++)
-				{		
-					int minIndex = k;
-					//float distMinIndex = m_distMap[ m_mapIndexCalc.Calc(i, minIndex) ]; 
-					float distMinIndex = m_distMap[ m_mapIndexCalc.Calc(
-						//minIndex, 
-						m_nbrMap[ m_mapIndexCalc.Calc(minIndex, i) ],
-						i) ]; 
-
-					for(int j=k+1; j < m_linkTypeMgrVect.GetSize(); j++)
-					{					
-						//float distJ = m_distMap[ m_mapIndexCalc.Calc(i, j) ]; 
-						float distJ = m_distMap[ m_mapIndexCalc.Calc(							
-							//j, 
-							m_nbrMap[ m_mapIndexCalc.Calc(j, i) ],
-							i) ]; 
-
-						if( distJ < distMinIndex )
-						{
-							distMinIndex = distJ;
-							minIndex = j;
-						}
-					}
-
-					// Swap
-					//int tmp = m_nbrMap[ m_mapIndexCalc.Calc(i, k) ];
-					int tmp = m_nbrMap[ m_mapIndexCalc.Calc(k, i) ];
-
-					//m_nbrMap[ m_mapIndexCalc.Calc(i, k) ] = 
-					m_nbrMap[ m_mapIndexCalc.Calc(k, i) ] = 
-						//m_nbrMap[ m_mapIndexCalc.Calc(i, minIndex) ];
-						m_nbrMap[ m_mapIndexCalc.Calc(minIndex, i) ];
-
-					//m_nbrMap[ m_mapIndexCalc.Calc(i, minIndex) ] = tmp;
-					m_nbrMap[ m_mapIndexCalc.Calc(minIndex, i) ] = tmp;
-				}
-			}
-		}
-
-	}
 
 
 

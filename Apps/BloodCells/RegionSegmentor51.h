@@ -141,8 +141,6 @@ namespace Hcv
 				//(float) ( 3 * Sqr(255)) ) * 1.4); 				
 		}
 
-		inline float CalcRgnDif(RgnInfo * a_pRgn1, RgnInfo * a_pRgn2);
-
 		inline void CreateLink( RgnInfo * a_pRgn, 
 			int x, int y, RgnLinkDir a_dir);
 
