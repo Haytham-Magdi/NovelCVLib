@@ -130,12 +130,12 @@ namespace Ncv
 					InitPixelLinksForOwnerOnImgFrame<T_PixelLinkOwner, T_Elm, T_PixelLink, T_CoreSharedPixelLink, T_CoreSharedPixelLinkInitializer>(x, y, ploAcc, imgSize);
 				}
 
-				for (int y = 0, x = 0; y < ploAcc.GetSize_Y(); y++)
+				for (int x = 0, y = 0; y < ploAcc.GetSize_Y(); y++)
 				{
 					InitPixelLinksForOwnerOnImgFrame<T_PixelLinkOwner, T_Elm, T_PixelLink, T_CoreSharedPixelLink, T_CoreSharedPixelLinkInitializer>(x, y, ploAcc, imgSize);
 				}
 
-				for (int y = 0, x = ploAcc.GetSize_X() - 1; y < ploAcc.GetSize_Y(); y++)
+				for (int x = ploAcc.GetSize_X() - 1, y = 0; y < ploAcc.GetSize_Y(); y++)
 				{
 					InitPixelLinksForOwnerOnImgFrame<T_PixelLinkOwner, T_Elm, T_PixelLink, T_CoreSharedPixelLink, T_CoreSharedPixelLinkInitializer>(x, y, ploAcc, imgSize);
 				}

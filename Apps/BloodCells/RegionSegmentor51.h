@@ -1,25 +1,19 @@
 #pragma once
 
-#include <NovelCVLib\Cpp\Common\commonLib.h>
-#include <NovelCVLib\Cpp\Math\mathLib.h>
-#include <NovelCVLib\Hcv\CvIncludes.h>
-#include <NovelCVLib\Hcv\Types.h>
-#include <NovelCVLib\Hcv\error.h>
-#include <vector>
-#include <NovelCVLib\Hcv\Channel.h>
-#include <NovelCVLib\Hcv\Image.h>
+#include <NovelCVLib/Common/commonLib.h>
+// #include <NovelCVLib\Cpp\Math\mathLib.h>
+// #include <NovelCVLib\Hcv\CvIncludes.h>
+// #include <NovelCVLib\Hcv\Types.h>
+// #include <NovelCVLib\Hcv\error.h>
+// #include <vector>
 
-#include <NovelCVLib\Hcv\ConflictScanner2.h>
-#include <NovelCVLib\Hcv\BadRootScanner.h>
+// #include <NovelCVLib\Hcv\Channel.h>
+// #include <NovelCVLib\Hcv\Image.h>
 
-#include <NovelCVLib\Hcv\SlideMgr.h>
-
-//#include <NovelCVLib\Hcv\ScanTryMgr_9.h>
-#include <NovelCVLib\Hcv\ImgScanMgr.h>
-
-#include <NovelCVLib\Hcv\ImgDataElm_CovMat.h>
 
 #include <NovelCVLib\Ncpp\Common\MultiAllocProvider.h>
+
+#include <NovelCVLib\Ncv\F32PixelLink3C_Defs.h>
 
 
 namespace Hcv
@@ -325,8 +319,7 @@ namespace Hcv
 
 
 	public:
-		RegionSegmentor51(F32ImageRef a_src, S16ImageRef a_rootImg,
-			int a_nDifThreshold = 15, F32ImageRef a_rootValImg = nullptr);
+		RegionSegmentor51(F32ImageRef a_src);
 
 		~RegionSegmentor51();
 		
@@ -372,8 +365,6 @@ namespace Hcv
 				//(float) ( 3 * Sqr(500)) )); 				
 				(float) ( 3 * Sqr(700)) )); 				
 				//(float) ( 3 * Sqr(255)) ) * 1.4); 				
-
-			m_nMaxDif += m_nAprSize;
 		}
 
 		inline float CalcRgnDif(RgnInfo * a_pRgn1, RgnInfo * a_pRgn2);
@@ -422,9 +413,6 @@ namespace Hcv
 		int m_nMaxDif;
 		IndexCalc2D m_rgnIndexCalc;
 
-		
-		FixedVector< FillInfo > m_fillInfoVect;
-
 		FixedVector<RgnInfo> m_rgnInfoVect;
 
 
@@ -449,9 +437,6 @@ namespace Hcv
 		RgnInfo * m_pDbgRgn;
 
 		int m_nTestRgnIdx;
-		
-		const int m_nAprSize;
-
 		
 		
 	};

@@ -1,13 +1,13 @@
-#include <NovelCVLib\Cpp\Common\commonLib.h>
-#include <NovelCVLib\Hcv\CvIncludes.h>
-#include <NovelCVLib\Hcv\Types.h>
-#include <NovelCVLib\Hcv\error.h>
-#include <vector>
-#include <NovelCVLib\Hcv\Channel.h>
-#include <NovelCVLib\Hcv\Image.h>
-#include <NovelCVLib\Hcv\funcs1.h>
+#include <NovelCVLib/Common/commonLib.h>
+// #include <NovelCVLib\Hcv\CvIncludes.h>
+// #include <NovelCVLib\Hcv\Types.h>
+// #include <NovelCVLib\Hcv\error.h>
+// #include <vector>
+#include <NovelCVLib/OpenCV/Channel.h>
+#include <NovelCVLib/OpenCV/Image.h>
+#include <NovelCVLib/OpenCV/funcs1.h>
 
-#include <NovelCVLib\Hcv\RegionSegmentor51.h>
+#include <NovelCVLib/Apps/BloodCells/RegionSegmentor51.h>
 
 #define M_PI 3.14159265358979323846
 
@@ -29,10 +29,8 @@ namespace Hcv
 
 
 
-	RegionSegmentor51::RegionSegmentor51(F32ImageRef a_src, S16ImageRef a_rootImg,
-		F32ImageRef a_rootValImg) : 
-	m_rgnIndexCalc(a_src->GetWidth(), a_src->GetHeight()), m_nAprSize( GlobalStuff::AprSize1D )
-	//m_rgnIndexCalc(a_src->GetWidth(), a_src->GetHeight()), m_nAprSize( 0 )
+	RegionSegmentor51::RegionSegmentor51(F32ImageRef a_src) : 
+	m_rgnIndexCalc(a_src->GetWidth(), a_src->GetHeight())
 	{	
 		m_nofConflicts = 0;
 		m_nVisitID = 0;
@@ -88,37 +86,6 @@ namespace Hcv
 		CvSize srcSiz = m_src->GetSize();
 
 		m_rgnInfoVect.SetSize(srcSiz.width * srcSiz.height);
-
-		m_medTraceRgnPtrVect.SetCapacity( m_rgnInfoVect.GetSize() );
-
-		//m_traceRootAllocVect.SetCapacity( m_rgnInfoVect.GetSize() );
-		m_traceRootAllocVect.SetCapacity( 10000000 );
-
-
-/*		F32ChannelRef srcCh0 = m_src->GetAt(0);
-		F32ChannelRef srcCh1 = m_src->GetAt(1);
-		F32ChannelRef srcCh2 = m_src->GetAt(2);
-
-		F32ChannelRef rvCh0 = m_rootValImg->GetAt(0);
-		F32ChannelRef rvCh1 = m_rootValImg->GetAt(1);
-		F32ChannelRef rvCh2 = m_rootValImg->GetAt(2);*/
-
-		//S16ChannelRef rootCh0 = m_rootImg->GetAt(0);
-
-
-		RgnSegmDiameter rsDiam;
-
-		rsDiam.SetDiamFull( m_nAprSize );
-
-		{
-			//int nDiamCore = ( m_nAprSize - 2 ) / 3;
-			int nDiamCore = rsDiam.GetDiamCore();
-			
-
-			//int nDiamInr_1 = nDiamCore * 2 + 1;
-			int nDiamInr_1 = rsDiam.GetDiamInr_1();
-		}
-
 
 		{
 			F32ImageRef img1 = m_src;
