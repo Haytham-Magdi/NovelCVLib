@@ -214,8 +214,6 @@ namespace Hcv
 		FixedVector<RgnInfo> m_rgnInfoVect;
 
 
-		//FixedVector<LinkAction> m_linkActionVect;
-
 		// MultiAllocProvider< LinkAction > m_linkAction_Provider;
 		MultiAllocProviderRef< LinkAction > m_linkAction_Provider;
 
@@ -224,17 +222,13 @@ namespace Hcv
 
 		FixedVector< LinkAction_2 > m_linkAction_2_Arr;
 
-		//int m_nofLinkActions;
-
-		//MultiListQue< LinkAction > m_difQues;
 		MultiListQueMgr< LinkAction_2 > m_linkActionMergeQues;
-		MultiListQueMgr< LinkAction > m_linkActionEdgeQues;
 
 		int m_nVisitID;
 
-		RgnInfo * m_pDbgRgn;
+		// RgnInfo * m_pDbgRgn;
 
-		int m_nTestRgnIdx;
+		// int m_nTestRgnIdx;
 		
 		
 	};
