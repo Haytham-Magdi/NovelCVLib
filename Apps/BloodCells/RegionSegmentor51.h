@@ -78,29 +78,12 @@ namespace Hcv
 			{
 			}
 
-
-
-
 			int nIndex;
-
-
-
 			S32Point pos;
 
-			//bool bIsInConflict;
-
-
-			RgnLink links[8];
 			APtrList< RgnConflict > conflictList;
 
-			// bool bHasConflicts;
-
-
-			RgnInfo * pSrcRgn;
-
-			int nTraceID;
-
-			int nMergeOrder;
+			// int nMergeOrder;
 
 			// bool bIsPassiveRoot;
 
@@ -108,7 +91,7 @@ namespace Hcv
 
 			int nLastVisitID;
 
-			RgnInfo * pPrev;	//	for being ListQue Entry
+			// RgnInfo * pPrev;	//	for being ListQue Entry
 		};
 
 
@@ -140,14 +123,6 @@ namespace Hcv
 
 	protected:
 
-		void InitLinks(void);
-
-		int GetInverseLinkIndex(int a_index)
-		{
-			return MgrOfLinkTypes::GetCore()->GetInverseLinkIndex(a_index);
-		}
-
-
 		void InitRgnInfoVect(void);
 
 		int GetMaxDif() { return m_nMaxDif; }
@@ -172,13 +147,6 @@ namespace Hcv
 		inline void CreateLink( RgnInfo * a_pRgn, 
 			int x, int y, RgnLinkDir a_dir);
 
-		RgnInfo * GetPointRgn(int x, int y)
-		{ 
-			return &m_rgnInfoVect[m_rgnIndexCalc.Calc(x, y)]; 
-		}
-
-		inline void UpdateActRgn(RgnInfo * a_pRgn);
-
 		inline void PrepareLinkAction( RgnLink & a_rLink, float a_distBef, 
 			bool a_bSetProcessed = true);
 
@@ -186,8 +154,6 @@ namespace Hcv
 		inline LinkAction * ProvideLinkAction( RgnInfo * a_pRgn, RgnLinkDir a_dir );
 
 		inline LinkAction * ProvideLinkAction( RgnInfo * a_pRgn, RgnInfo * a_pRgn2 );
-
-		//inline LinkAction * CloneLinkAction(LinkAction * a_pLA );
 
 		inline RgnConflict * GetConflictIfExists( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn);
 
@@ -197,17 +163,13 @@ namespace Hcv
 
 		inline void CreateConflict_Direct( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2);
 
-		RgnLink * GetLinkBetweenRgns( int a_nIdx_1, int a_nIdx_2 );
-
 
 
 	protected:
 
-		SlideMgrRef m_slideMgr;
-
 		ActualArrayAccessor_2D<F32PixelLinkOwner3C> m_ploAcc;
 
-		LinkAction * pLADbg; 
+		// LinkAction * pLADbg; 
 
 		int m_nMaxDif;
 

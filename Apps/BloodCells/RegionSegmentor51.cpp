@@ -79,14 +79,6 @@ namespace Hcv
 
 				pRgnInfo->nLastVisitID = 0;
 
-				RgnLink * links = pRgnInfo->links;
-				for(int i=0; i < 8; i++)
-				{
-					links[i].bProcessed = true;
-					links[i].bExists = false;					
-					links[i].dir = (RgnLinkDir)i;
-				}
-
 			}	//	end for x.
 		}	//	end for y.
 
@@ -363,7 +355,6 @@ namespace Hcv
 			pConflict = pNext;
 		}
 
-		//return false;
 		return nullptr;
 	}
 
@@ -376,19 +367,13 @@ namespace Hcv
 
 		while( nullptr != pConflict )
 		{
+ 			pConflict->pPeerRgn = pPeerRgn->GetActRootAfterNecessaryUpdating();
 			RgnInfo * pPeerRgn = pConflict->pPeerRgn;
-
-			UpdateActRgn( pPeerRgn );
-			pPeerRgn = pPeerRgn->GetActRgn();
- 			pConflict->pPeerRgn = pPeerRgn;
-
 
 			RgnConflict * pNext = confList.Next();
 			
 			if( pPeerRgn->nLastVisitID == m_nVisitID )
-			{
 				confList.RemovePtr( pConflict );
-			}
 
 			pPeerRgn->nLastVisitID = m_nVisitID;
 
@@ -578,44 +563,6 @@ namespace Hcv
 
 
 
-
-
-	RegionSegmentor51::RgnLink * RegionSegmentor51::GetLinkBetweenRgns( int a_nIdx_1, int a_nIdx_2 )
-	{
-		if( 0 == a_nIdx_1 && 1 == a_nIdx_2 )
-			a_nIdx_1 = a_nIdx_1;
-
-		RgnInfo * pRgn1 = & m_rgnInfoVect[ a_nIdx_1 ];
-		RgnInfo * pRgn2 = & m_rgnInfoVect[ a_nIdx_2 ];
-
-		int nDx = pRgn2->pos.x - pRgn1->pos.x;
-		Hcpl_ASSERT( abs( nDx <= 1 ) );
-
-		int nDy = pRgn2->pos.y - pRgn1->pos.y;
-		Hcpl_ASSERT( abs( nDy <= 1 ) );
-
-		Hcpl_ASSERT( ! ( nDx == 0 && nDy == 0 ) );
-
-		nDx++;
-		nDy++;
-
-
-		static int link_Idx_Arr[] = {
-
-			5, 6, 7,
-			4, 0, 0,
-			3, 2, 1
-		};
-
-		int nIdx_XY = nDx + nDy * 3;
-
-		int nLinkIdx = link_Idx_Arr[ nIdx_XY ];
-
-
-		RgnLink * pLink = & pRgn1->links[ nLinkIdx ];
-
-		return pLink;
-	}
 
 
 
