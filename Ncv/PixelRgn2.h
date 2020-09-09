@@ -18,13 +18,13 @@ namespace Ncv
     {
         public:
 
-			SetRootToSelf() { m_pRoot = (T_PixelRgnEx *)this; }
+			void SetRootToSelf() { m_pRoot = (T_PixelRgnEx *)this; }
 
-			SetRootToNull() { m_pRoot = nullptr; }
+			void SetRootToNull() { m_pRoot = nullptr; }
 
 			T_PixelRgnEx * GetDirectRoot() { return m_pRoot; }
 
-			SetDirectRoot(T_PixelRgnEx * a_pRoot) { m_pRoot = a_pRoot; }
+			void SetDirectRoot(T_PixelRgnEx * a_pRoot) { m_pRoot = a_pRoot; }
 
 			bool HasRoot() { return nullptr != m_pRoot;	}
 

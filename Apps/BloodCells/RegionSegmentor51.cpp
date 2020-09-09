@@ -1,7 +1,7 @@
 #include <NovelCVLib/Common/commonLib.h>
-// #include <NovelCVLib\Hcv\CvIncludes.h>
-// #include <NovelCVLib\Hcv\Types.h>
-// #include <NovelCVLib\Hcv\error.h>
+// #include <NovelCVLib\Ncv\CvIncludes.h>
+// #include <NovelCVLib\Ncv\Types.h>
+// #include <NovelCVLib\Ncv\error.h>
 // #include <vector>
 #include <NovelCVLib/OpenCV/Channel.h>
 #include <NovelCVLib/OpenCV/Image.h>
@@ -11,10 +11,10 @@
 
 #define M_PI 3.14159265358979323846
 
-namespace Hcv
+namespace Ncv
 {
-	using namespace Hcpl;
-	using namespace Hcpl::Math;
+	using namespace Ncpp;
+	using namespace Ncpp::Math;
 
 	//static MgrOfLinkTypes::CoreStuff m_core;
 	//RegionSegmentor51::MgrOfLinkTypes::CoreStuff m_core;
@@ -61,11 +61,12 @@ namespace Hcv
 		RgnInfo::s_MergeOrder = 0;
 
 
-		Size_2D srcSiz = m_ploAcc->GetSize();
+		Size_2D srcSiz = m_ploAcc.GetSize();
 
 		m_rgnInfoVect.SetSize(m_ploAcc.CalcSize_1D());
 
 		ActualArrayAccessor_2D<RgnInfo> rgnInfoAcc;
+		rgnInfoAcc.Init(m_rgnInfoVect.GetHeadPtr(), m_ploAcc.GetSize());
 
 		for(int y=0; y < rgnInfoAcc.GetSizeY(); y++)
 		{
@@ -213,7 +214,7 @@ namespace Hcv
 	}
 
 
-	bool RegionSegmentor51::RgnInfo::HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn)
+	bool RegionSegmentor51::HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn)
 	{
 		RegionSegmentor51::RgnConflict * pConflict = GetConflictIfExists( a_pMinSizRgn, a_pMaxSizRgn);
 		return nullptr != pConflict;
@@ -261,7 +262,7 @@ namespace Hcv
 
 		while( nullptr != pConflict )
 		{
- 			pConflict->pPeerRgn = pPeerRgn->GetActRootAfterNecessaryUpdating();
+			pConflict->pPeerRgn = pConflict->pPeerRgn->GetActRootAfterNecessaryUpdating();
 			RgnInfo * pPeerRgn = pConflict->pPeerRgn;
 
 			RgnConflict * pNext = confList.Next();
@@ -302,7 +303,7 @@ namespace Hcv
 			pLA->pRgn2 = pRgn_Peer;
 
 			const float linkDiff = rLink.GetCoreSharedLinkPtr()->DiffMag;
-			const nQueIdx = (int)(linkDiff * m_difScale);
+			const int nQueIdx = (int)(linkDiff * m_difScale);
 
 			m_linkActionMergeQues.PushPtr(nQueIdx , pLA);
 
@@ -312,7 +313,7 @@ namespace Hcv
 	}
 
 
-	void RegionSegmentor51::CreateConflict( const int a_rgnIndex1, const int a_rgnIndex2);
+	void RegionSegmentor51::CreateConflict( const int a_rgnIndex1, const int a_rgnIndex2)
 	{
 		CreateConflict_Direct( &m_rgnInfoVect[a_rgnIndex1], &m_rgnInfoVect[a_rgnIndex2] );
 	}

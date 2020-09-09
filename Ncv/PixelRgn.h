@@ -28,7 +28,7 @@ namespace Ncv
 				return m_pRoot;
 			}
 
-			SetDirectRoot(T_PixelRgnEx * a_pRoot)
+			void SetDirectRoot(T_PixelRgnEx * a_pRoot)
 			{
 				m_pRoot = a_pRoot;
 			}

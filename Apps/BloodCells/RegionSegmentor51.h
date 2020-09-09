@@ -2,26 +2,27 @@
 
 #include <NovelCVLib/Common/commonLib.h>
 // #include <NovelCVLib\Cpp\Math\mathLib.h>
-// #include <NovelCVLib\Hcv\CvIncludes.h>
-// #include <NovelCVLib\Hcv\Types.h>
-// #include <NovelCVLib\Hcv\error.h>
+// #include <NovelCVLib\Ncv\CvIncludes.h>
+// #include <NovelCVLib\Ncv\Types.h>
+// #include <NovelCVLib\Ncv\error.h>
 // #include <vector>
 
-// #include <NovelCVLib\Hcv\Channel.h>
-// #include <NovelCVLib\Hcv\Image.h>
+// #include <NovelCVLib\Ncv\Channel.h>
+// #include <NovelCVLib\Ncv\Image.h>
 
 
-#include <NovelCVLib\Ncpp\Common\MultiAllocProvider.h>
+#include <NovelCVLib/Ncpp/Common/MultiAllocProvider.h>
 
-#include <NovelCVLib\Ncv\F32PixelLink3C_Defs.h>
+#include <NovelCVLib/Ncv/F32PixelLink3C_Defs.h>
+#include <NovelCVLib/Ncpp/Common/ActualArrayAccessor_2D.h>
+#include <NovelCVLib/Ncpp/Common/S32Point.h>
+#include <NovelCVLib/Ncpp/Common/APtrList.h>
 
 
-namespace Hcv
+namespace Ncv
 {
-	class ImgSegDataMgr;
 
-
-	using namespace Hcpl::Math;
+	using namespace Ncpp::Math;
 
 
 	class RegionSegmentor51 // : public IRegionSegmentor20
@@ -41,7 +42,6 @@ namespace Hcv
 	protected:
 
 		class RgnInfo;
-		class RgnLink;
 
 
 	public:
@@ -52,8 +52,8 @@ namespace Hcv
 		{
 			RgnInfo * pPeerRgn;
 
-			struct _RgnConflict * pNext;	//	for being APtrList Entry
-			struct _RgnConflict * pPrev;	//	for being APtrList Entry
+			RgnConflict * pNext;	//	for being APtrList Entry
+			RgnConflict * pPrev;	//	for being APtrList Entry
 		};
 
 
@@ -111,14 +111,11 @@ namespace Hcv
 
 		~RegionSegmentor51();
 		
-		static inline bool HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn);
+		inline bool HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn);
 
 		virtual void Segment();
-		virtual S16ImageRef GenSegmentedImage(bool a_bShowMeanColor = true);
-		
-		virtual F32ImageRef GenSegmentedImage2(bool a_bShowMeanColor = true);
 
-		inline void CreateConflict( const int a_rgnIndex1, const int a_rgnIndex1);
+		inline void CreateConflict( const int a_rgnIndex1, const int a_rgnIndex2);
 
 	protected:
 
@@ -140,12 +137,6 @@ namespace Hcv
 				(float) ( 3 * Sqr(700)) )); 				
 				//(float) ( 3 * Sqr(255)) ) * 1.4); 				
 		}
-
-		inline void CreateLink( RgnInfo * a_pRgn, 
-			int x, int y, RgnLinkDir a_dir);
-
-		inline void PrepareLinkAction( RgnLink & a_rLink, float a_distBef, 
-			bool a_bSetProcessed = true);
 
 		inline RgnConflict * GetConflictIfExists( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn);
 
@@ -183,5 +174,5 @@ namespace Hcv
 	};
 
 
-	typedef Hcpl::ObjRef< RegionSegmentor51 > RegionSegmentor51Ref;
+	typedef Ncpp::ObjRef< RegionSegmentor51 > RegionSegmentor51Ref;
 }
