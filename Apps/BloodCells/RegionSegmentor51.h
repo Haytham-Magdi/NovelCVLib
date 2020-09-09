@@ -28,20 +28,12 @@ namespace Hcv
 	{
 //////////////////////////////////////////////////////////////
 
-		typedef enum
-		{
-			RC = 0, 
-			RB, CB, LB,
-			LC,		
-			LT, CT, RT
-		}RgnLinkDir;
 
 
 	public:
 
 
 
-		class LinkTypeMgr;
 
 		class MgrOfLinkTypes
 		{ 
