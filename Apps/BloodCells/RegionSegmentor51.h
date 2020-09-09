@@ -160,6 +160,7 @@ namespace Hcv
 	protected:
 
 		ActualArrayAccessor_2D<F32PixelLinkOwner3C> m_ploAcc;
+		ActualArrayAccessor_1D<F32PixelLinkOwner3C> m_ploAcc_1D;
 
 		// LinkAction * pLADbg; 
 
@@ -167,14 +168,8 @@ namespace Hcv
 
 		FixedVector<RgnInfo> m_rgnInfoVect;
 
-
-		// MultiAllocProvider< LinkAction > m_linkAction_Provider;
-		MultiAllocProviderRef< LinkAction > m_linkAction_Provider;
-
+		MultiAllocProviderRef< LinkAction_2 > m_linkAction_Provider;
 		MultiAllocProviderRef< RgnConflict > m_rgnConflict_Provider;
-
-
-		FixedVector< LinkAction_2 > m_linkAction_2_Arr;
 
 		MultiListQueMgr< LinkAction_2 > m_linkActionMergeQues;
 

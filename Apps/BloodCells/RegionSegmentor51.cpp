@@ -34,8 +34,10 @@ namespace Hcv
 		m_nVisitID = 0;
 
         a_ploAcc.CopyTo(&m_ploAcc);
+		m_ploAcc_1D = m_ploAcc.GenAcc_1D();
 
-		m_rgnConflict_Provider = new MultiAllocProvider<RgnConflict>(a_ploAcc.CalcSize_1D());
+		m_rgnConflict_Provider = new MultiAllocProvider<RgnConflict>(a_ploAcc.CalcSize_1D() / 4);
+		m_linkAction_Provider = new MultiAllocProvider<LinkAction_2>(a_ploAcc.CalcSize_1D() * 8);
 
 		InitMaxDif();
 
@@ -64,7 +66,6 @@ namespace Hcv
 		m_rgnInfoVect.SetSize(m_ploAcc.CalcSize_1D());
 
 		ActualArrayAccessor_2D<RgnInfo> rgnInfoAcc;
-
 
 		for(int y=0; y < rgnInfoAcc.GetSizeY(); y++)
 		{
@@ -277,48 +278,36 @@ namespace Hcv
 
 	void RegionSegmentor51::PrepareRgnLinkActions( RgnInfo * a_pRgn )
 	{
-		ThrowHcvException();
-
-		if( 122171 == a_pRgn->nIndex )
-			a_pRgn = a_pRgn;
+		// if( 122171 == a_pRgn->nIndex )
+		// 	a_pRgn = a_pRgn;
 
 
+		F32PixelLinkOwner3C & rPlo = m_ploAcc_1D[a_pRgn->nIndex];
 
-		RgnLink * links = a_pRgn->links;
-
-		for(int i=0; i<4; i++)
+		for (int j = 0; j < NOF_ALL_PIXEL_LINK_TYPES; j++)
 		{
-			RgnLink & rLink = links[i];
-
-//			if( rLink.bProcessed )
-			if( false == rLink.bExists )
+			F32PixelLink3C & rLink = rPlo.GetLinkAt((PixelLinkIndex)j);
+			if (!rLink.Exists())
 				continue;
 
-			//RgnInfo * pRgn2 = rLink.pRgn2;
-			//RgnLink & rLink2 = pRgn2->links[ i + 4 ];
+			LinkAction_2 * pLA = m_linkAction_Provider->ProvideNewElementPtr();
 
-			//if( pRgn2->bInTrace )
-				//continue;
+			RgnInfo * pRgn_Peer;
+			{
+				const int ownerIndex_Peer = rLink.GetPeerOwnerPtr() - m_ploAcc_1D.GetData();
+				pRgn_Peer = &m_rgnInfoVect[ownerIndex_Peer];
+			}
 
-			PrepareLinkAction( rLink, a_distBef );
-		}
+			pLA->pRgn1 = a_pRgn;
+			pLA->pRgn2 = pRgn_Peer;
 
-		for(int i=4; i<8; i++)
-		{
-			RgnLink & rLink = links[i];
+			const float linkDiff = rLink.GetCoreSharedLinkPtr()->DiffMag;
+			const nQueIdx = (int)(linkDiff * m_difScale);
 
-//			if( rLink.bProcessed )
-			if( false == rLink.bExists )
-				continue;
+			m_linkActionMergeQues.PushPtr(nQueIdx , pLA);
 
-			//RgnInfo * pRgn2 = rLink.pRgn2;
-			//RgnLink & rLink2 = pRgn2->links[ i - 4 ];
+		}	//	end for j.
 
-			//if( pRgn2->bInTrace )
-				//continue;
-
-			PrepareLinkAction( rLink, a_distBef );
-		}
 
 	}
 
