@@ -58,7 +58,7 @@
 //#include <NovelCVLib\Apps\BloodCells\RotationMgrColl.cpp>
 #include <NovelCVLib\Apps\BloodCells\BloodCellsProcess1.cpp>
 #include <NovelCVLib\Apps\BloodCells\PixelInfo_1.cpp>
-#include <NovelCVLib\Apps\BloodCells\RegionSegmentor51.cpp>
+#include <NovelCVLib\Apps\BloodCells\RegionSegmentor52.cpp>
 
 #include <NovelCVLib\Ncv\PixelLinkTypes.cpp>
 #include <NovelCVLib\Ncv\F32PixelLink3C_Util.cpp>

@@ -7,7 +7,7 @@
 #include <NovelCVLib/OpenCV/Image.h>
 #include <NovelCVLib/OpenCV/funcs1.h>
 
-#include <NovelCVLib/Apps/BloodCells/RegionSegmentor51.h>
+#include <NovelCVLib/Apps/BloodCells/RegionSegmentor52.h>
 
 #define M_PI 3.14159265358979323846
 
@@ -17,19 +17,19 @@ namespace Ncv
 	using namespace Ncpp::Math;
 
 	//static MgrOfLinkTypes::CoreStuff m_core;
-	//RegionSegmentor51::MgrOfLinkTypes::CoreStuff m_core;
+	//RegionSegmentor52::MgrOfLinkTypes::CoreStuff m_core;
 
-	int RegionSegmentor51::RgnInfo::s_MergeOrder = 0;
+	int RegionSegmentor52::RgnInfo::s_MergeOrder = 0;
 
 
-	RegionSegmentor51::~RegionSegmentor51()
+	RegionSegmentor52::~RegionSegmentor52()
 	{
 
 	}
 
 
 
-	RegionSegmentor51::RegionSegmentor51(const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & a_ploAcc)
+	RegionSegmentor52::RegionSegmentor52(const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & a_ploAcc)
 	{	
 		m_nVisitID = 0;
 
@@ -56,7 +56,7 @@ namespace Ncv
 
 
 
-	void RegionSegmentor51::InitRgnInfoVect(void)
+	void RegionSegmentor52::InitRgnInfoVect(void)
 	{
 		RgnInfo::s_MergeOrder = 0;
 
@@ -88,7 +88,7 @@ namespace Ncv
 
 
 	
-	void RegionSegmentor51::Segment()
+	void RegionSegmentor52::Segment()
 	{
 		//m_pDbgRgn = & m_rgnInfoVect[ 110507 ];
 
@@ -214,18 +214,18 @@ namespace Ncv
 	}
 
 
-	bool RegionSegmentor51::HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn)
+	bool RegionSegmentor52::HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn)
 	{
-		RegionSegmentor51::RgnConflict * pConflict = GetConflictIfExists( a_pMinSizRgn, a_pMaxSizRgn);
+		RegionSegmentor52::RgnConflict * pConflict = GetConflictIfExists( a_pMinSizRgn, a_pMaxSizRgn);
 		return nullptr != pConflict;
 	}
 
 
-	RegionSegmentor51::RgnConflict * RegionSegmentor51::GetConflictIfExists( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn)
+	RegionSegmentor52::RgnConflict * RegionSegmentor52::GetConflictIfExists( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn)
 	{
 		APtrList< RgnConflict > & minConfList = a_pMinSizRgn->conflictList;
 
-		RegionSegmentor51::RgnConflict * pConflict = minConfList.Last();
+		RegionSegmentor52::RgnConflict * pConflict = minConfList.Last();
 
 		while( nullptr != pConflict )
 		{
@@ -253,7 +253,7 @@ namespace Ncv
 	}
 
 
-	void RegionSegmentor51::RemoveDuplicateConflicts( RgnInfo * a_pRgn )
+	void RegionSegmentor52::RemoveDuplicateConflicts( RgnInfo * a_pRgn )
 	{
 		APtrList< RgnConflict > & confList = 
 			a_pRgn->conflictList;
@@ -277,7 +277,7 @@ namespace Ncv
 	}
 
 
-	void RegionSegmentor51::PrepareRgnLinkActions( RgnInfo * a_pRgn )
+	void RegionSegmentor52::PrepareRgnLinkActions( RgnInfo * a_pRgn )
 	{
 		// if( 122171 == a_pRgn->nIndex )
 		// 	a_pRgn = a_pRgn;
@@ -313,12 +313,12 @@ namespace Ncv
 	}
 
 
-	void RegionSegmentor51::CreateConflict( const int a_rgnIndex1, const int a_rgnIndex2)
+	void RegionSegmentor52::CreateConflict( const int a_rgnIndex1, const int a_rgnIndex2)
 	{
 		CreateConflict_Direct( &m_rgnInfoVect[a_rgnIndex1], &m_rgnInfoVect[a_rgnIndex2] );
 	}
 
-	void RegionSegmentor51::CreateConflict_Direct( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2)
+	void RegionSegmentor52::CreateConflict_Direct( RgnInfo * a_pRgn1, RgnInfo * a_pRgn2)
 	{
 		{
 			RgnConflict * pRc = m_rgnConflict_Provider->ProvideNewElementPtr();

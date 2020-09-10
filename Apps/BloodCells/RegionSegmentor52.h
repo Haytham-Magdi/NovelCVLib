@@ -25,7 +25,7 @@ namespace Ncv
 	using namespace Ncpp::Math;
 
 
-	class RegionSegmentor51 // : public IRegionSegmentor20
+	class RegionSegmentor52 // : public IRegionSegmentor20
 	{
 //////////////////////////////////////////////////////////////
 
@@ -107,9 +107,9 @@ namespace Ncv
 
 	public:
 
-		RegionSegmentor51(const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & a_ploAcc);
+		RegionSegmentor52(const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & a_ploAcc);
 
-		~RegionSegmentor51();
+		~RegionSegmentor52();
 		
 		inline bool HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn);
 
@@ -174,5 +174,5 @@ namespace Ncv
 	};
 
 
-	typedef Ncpp::ObjRef< RegionSegmentor51 > RegionSegmentor51Ref;
+	typedef Ncpp::ObjRef< RegionSegmentor52 > RegionSegmentor51Ref;
 }

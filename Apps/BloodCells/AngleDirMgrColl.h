@@ -81,6 +81,7 @@ namespace Ncv
 			void TryEdgeTracking1();
 			void TryEdgeTracking2();
 			void TryEdgeTracking3();
+			void TryConflictSegmentor52();
 			void DisplayNormAvgStandiv_Dir_Img();
 			void DisplayStandiv2_Dir_Img();
 			void DisplayBidiffInfo_Dir_Img();
