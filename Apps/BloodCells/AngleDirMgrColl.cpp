@@ -265,21 +265,33 @@ namespace Ncv
 				m_angleDirMgrArr[i + m_rotColl->GetNofRots()] = angleDirMgr_V;
 			}
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_1b_1();
-			}
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_1b_2();
-			}
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_2_1();
-			}
+			// for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			// 	m_angleDirMgrArr[i]->Proceed_1b_1();
+			// }
 
-			for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
-				m_angleDirMgrArr[i]->Proceed_2_2();
-			}
+			// for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			// 	m_angleDirMgrArr[i]->Proceed_1b_2();
+			// }
+
+			// for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			// 	m_angleDirMgrArr[i]->Proceed_2_1();
+			// }
+
+			// for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
+			// 	m_angleDirMgrArr[i]->Proceed_2_2();
+			// }
+
+
+
+
+
+
+
+
+
+
 
 			 //for (int i = 0; i < m_angleDirMgrArr.GetSize(); i++) {
 			 //	m_angleDirMgrArr[i]->Proceed_2b_1();
@@ -1130,7 +1142,11 @@ namespace Ncv
 
 
 			RegionSegmentor52Ref segmentor = new RegionSegmentor52(ploAcc);
+			
+			
 			segmentor->Segment();
+
+			return;
 
 			FixedVector<RegionSegmentor52::RgnInfo> rgnInfoVect = segmentor->GetRgnInfoVect();
 			Ncpp_ASSERT(rgnInfoVect.GetSize() == ploAcc.CalcSize_1D());

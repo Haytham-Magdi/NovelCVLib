@@ -63,7 +63,7 @@ namespace Ncv
 
 		Size_2D srcSiz = m_ploAcc.GetSize();
 
-		m_rgnInfoVect.SetSize(m_ploAcc.CalcSize_1D());
+		m_rgnInfoVect.InitSize(m_ploAcc.CalcSize_1D());
 
 		ActualArrayAccessor_2D<RgnInfo> rgnInfoAcc;
 		rgnInfoAcc.Init(m_rgnInfoVect.GetHeadPtr(), m_ploAcc.GetSize());
