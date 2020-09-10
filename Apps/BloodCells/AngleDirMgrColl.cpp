@@ -1143,15 +1143,139 @@ namespace Ncv
 
 			// RegionSegmentor52Ref segmentor = new RegionSegmentor52(ploAcc);
 			RegionSegmentor52 * segmentor = new RegionSegmentor52(ploAcc);
+
+			//{
+			//	const int rgnIdx1 = ploAcc.CalcIndex_1D(330, 250);
+			//	const int rgnIdx2 = ploAcc.CalcIndex_1D(200, 50);
+			//	segmentor->CreateConflict(rgnIdx1, rgnIdx2);
+			//}
+
+			//{
+			//	const int rgnIdx3 = ploAcc.CalcIndex_1D(340, 260);
+			//	const int rgnIdx4 = ploAcc.CalcIndex_1D(210, 60);
+			//	segmentor->CreateConflict(rgnIdx3, rgnIdx4);
+			//}
+
+			FixedVector<S32Point> pntsVect(10000);
+
+			//pntsVect.PushBack(S32Point(117, 238));
+			//pntsVect.PushBack(S32Point(60, 238));
+
+			//pntsVect.PushBack(S32Point(92, 55));
+			//pntsVect.PushBack(S32Point(60, 238));
+
+			//pntsVect.PushBack(S32Point(92, 55));
+			//pntsVect.PushBack(S32Point(160, 65));
+
+			//pntsVect.PushBack(S32Point(92, 55));
+			//pntsVect.PushBack(S32Point(160, 65));
+
+			//pntsVect.PushBack(S32Point(338, 342));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(328, 312));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(296, 304));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(450, 107));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(176, 381));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(137, 383));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(137, 383));
+			//pntsVect.PushBack(S32Point(121, 358));
+
+			//pntsVect.PushBack(S32Point(268, 100));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(292, 185));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(292, 185));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(181, 311));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(251, 190));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(257, 173));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(251, 190));
+			//pntsVect.PushBack(S32Point(257, 173));
+
+			//pntsVect.PushBack(S32Point(126, 236));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(257, 173));
+			//pntsVect.PushBack(S32Point(268, 173));
+
+
+			//pntsVect.PushBack(S32Point(297, 233));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(192, 278));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(176, 197));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+			//pntsVect.PushBack(S32Point(312, 447));
+			//pntsVect.PushBack(S32Point(348, 331));
+
+
+
+			pntsVect.PushBack(S32Point(79, 67));
+			pntsVect.PushBack(S32Point(82, 95));
+
+
+			{
+				int rgnIdx1, rgnIdx2;
+				for (int i = 0; i < pntsVect.GetSize(); i++)
+				{
+					S32Point & rPnt = pntsVect[i];
+					
+					if (0 == i % 2)
+						rgnIdx1 = ploAcc.CalcIndex_1D(rPnt.x, rPnt.y);
+					else
+					{
+						rgnIdx2 = ploAcc.CalcIndex_1D(rPnt.x, rPnt.y);
+						segmentor->CreateConflict(rgnIdx1, rgnIdx2);
+					}
+				}
+			}
+
+
+
+
+			//{
+			//	const int rgnIdx1 = ploAcc.CalcIndex_1D(117, 238);
+			//	const int rgnIdx2 = ploAcc.CalcIndex_1D(60, 238);
+			//	segmentor->CreateConflict(rgnIdx1, rgnIdx2);
+			//}
+
+			//{
+			//	const int rgnIdx1 = ploAcc.CalcIndex_1D(92, 55);
+			//	const int rgnIdx2 = ploAcc.CalcIndex_1D(60, 238);
+			//	segmentor->CreateConflict(rgnIdx1, rgnIdx2);
+			//}
+
+			//{
+			//	const int rgnIdx1 = ploAcc.CalcIndex_1D(92, 55);
+			//	const int rgnIdx2 = ploAcc.CalcIndex_1D(160, 65);
+			//	segmentor->CreateConflict(rgnIdx1, rgnIdx2);
+			//}
+
+
 			
-			const int rgnIdx1 = ploAcc.CalcIndex_1D(330, 250);
-			const int rgnIdx2 = ploAcc.CalcIndex_1D(200, 50);
-
-			const int rgnIdx3 = ploAcc.CalcIndex_1D(340, 260);
-			const int rgnIdx4 = ploAcc.CalcIndex_1D(210, 60);
-
-			segmentor->CreateConflict(rgnIdx1, rgnIdx2);
-			segmentor->CreateConflict(rgnIdx3, rgnIdx4);
 
 			segmentor->Segment();
 
