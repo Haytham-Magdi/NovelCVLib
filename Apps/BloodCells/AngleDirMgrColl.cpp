@@ -1118,8 +1118,6 @@ namespace Ncv
 		{
 			AngleDirMgrColl_Context & cx = *m_context_H;
 
-			ArrayHolder_2D_Ref<SimplePixelRgn> pixelRgnHolder = ArrayHolderUtil::CreateEmptyFrom<SimplePixelRgn>(cx.m_org_Img->AsHolderRef());
-
 
 			ArrayHolder_2D_Ref<F32PixelLinkOwner3C> pixelLinkOwnerHolder =
 				PixelLinkUtil::GenPixelLinkOwnerHolder<F32PixelLinkOwner3C, F32ColorVal, F32PixelLink3C, F32SimpleCoreSharedPixelLink,
@@ -1134,6 +1132,12 @@ namespace Ncv
 			RegionSegmentor52Ref segmentor = new RegionSegmentor52(ploAcc);
 			segmentor->Segment();
 
+			FixedVector<RegionSegmentor52::RgnInfo> rgnInfoVect = segmentor->GetRgnInfoVect();
+			Ncpp_ASSERT(rgnInfoVect.GetSize() == ploAcc.CalcSize_1D());
+
+			ActualArrayAccessor_2D<RegionSegmentor52::RgnInfo> rgnInfoAcc(rgnInfoVect.GetHeadPtr(), ploAcc.GetSize());
+
+
 			// EdgeTrackingMgr1 edm1;
 			// edm1.Proceed(pixelLinkOwnerHolder->GetActualAccessor(), pixelRgnHolder->GetActualAccessor());
 
@@ -1141,12 +1145,13 @@ namespace Ncv
 			//------------------
 
 
-			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(pixelRgnHolder->GetActualSize()), 3);
-			//ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
-			ActualArrayAccessor_2D<F32ColorVal> coloredDispAcc((F32ColorVal *)dspImg_Colored->GetDataPtr(), pixelRgnHolder->GetActualSize());
+			F32ImageRef dspImg_Colored = F32Image::Create(toCvSize(rgnInfoAcc.GetSize()), 3);
 
-			PixelRgnUtil::PrepareRandomColorRepForRgns<SimplePixelRgn>(
-				pixelRgnHolder->GetActualAccessor(), coloredDispAcc);
+			//ActualArrayAccessor_1D<F32ColorVal> coloredDispAcc_1D((F32ColorVal *)dspImg_Colored->GetDataPtr(), dspImg_Colored->GetSize1D());
+			ActualArrayAccessor_2D<F32ColorVal> coloredDispAcc((F32ColorVal *)dspImg_Colored->GetDataPtr(), rgnInfoAcc.GetSize());
+
+			PixelRgnUtil::PrepareRandomColorRepForRgns<RegionSegmentor52::RgnInfo>(
+				rgnInfoAcc, coloredDispAcc);
 
 			ShowImage(dspImg_Colored, "TryEdgeTracking1");
 

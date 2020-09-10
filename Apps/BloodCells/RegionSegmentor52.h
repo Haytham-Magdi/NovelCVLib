@@ -111,6 +111,9 @@ namespace Ncv
 
 		inline void CreateConflict( const int a_rgnIndex1, const int a_rgnIndex2);
 
+		FixedVector<RgnInfo> & GetRgnInfoVect() { return m_rgnInfoVect; }
+
+
 	private:
 
 		void InitRgnInfoVect(void);
