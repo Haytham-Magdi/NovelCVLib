@@ -238,9 +238,7 @@ namespace Ncv
 			RgnConflict * pNext = minConfList.Next();
 			
 			if( pPeerRgn->nLastVisitID == m_nVisitID )
-			{
 				minConfList.RemovePtr( pConflict );
-			}
 
 			pPeerRgn->nLastVisitID = m_nVisitID;
 
@@ -253,6 +251,12 @@ namespace Ncv
 
 	void RegionSegmentor52::RemoveDuplicateConflicts( RgnInfo * a_pRgn )
 	{
+		static int cnt1 = 0;
+		cnt1++;
+
+		if (2 == cnt1)
+			cnt1 = cnt1;
+
 		APtrList< RgnConflict > & confList = 
 			a_pRgn->conflictList;
 
@@ -272,6 +276,8 @@ namespace Ncv
 
 			pConflict = pNext;
 		}
+
+		Ncpp_ASSERT(confList.GetSize() > 0);
 	}
 
 
