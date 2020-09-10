@@ -338,6 +338,13 @@ namespace Ncv
 			pRc2->pPeerRgn = a_pRgn1;
 			a_pRgn2->conflictList.PushLast( pRc2 );
 		}
+
+		a_pRgn1->SetRootToSelf();
+		a_pRgn2->SetRootToSelf();
+
+		PrepareRgnLinkActions(a_pRgn1);
+		PrepareRgnLinkActions(a_pRgn2);
+
 	}
 
 

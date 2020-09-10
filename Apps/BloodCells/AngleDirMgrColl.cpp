@@ -1143,10 +1143,14 @@ namespace Ncv
 
 			RegionSegmentor52Ref segmentor = new RegionSegmentor52(ploAcc);
 			
-			
+			const int rgnIdx1 = ploAcc.CalcIndex_1D(330, 250);
+			const int rgnIdx2 = ploAcc.CalcIndex_1D(200, 50);
+
+			segmentor->CreateConflict(rgnIdx1, rgnIdx2);
+
 			segmentor->Segment();
 
-			return;
+			// return;
 
 			FixedVector<RegionSegmentor52::RgnInfo> rgnInfoVect = segmentor->GetRgnInfoVect();
 			Ncpp_ASSERT(rgnInfoVect.GetSize() == ploAcc.CalcSize_1D());
