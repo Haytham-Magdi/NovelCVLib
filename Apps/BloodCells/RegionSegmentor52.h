@@ -39,7 +39,7 @@ namespace Ncv
 
 //////////////////////////////////////////////////////////////
 
-	protected:
+	private:
 
 		class RgnInfo;
 
@@ -65,12 +65,6 @@ namespace Ncv
 
 		class RgnInfo : public PixelRgn2<RgnInfo>
 		{
-		protected:
-			RgnInfo * pActRgn;
-
-			// // bool bIsRoot;
-			RgnInfo * pRootRgn;
-
 		public:
 
 
@@ -117,7 +111,7 @@ namespace Ncv
 
 		inline void CreateConflict( const int a_rgnIndex1, const int a_rgnIndex2);
 
-	protected:
+	private:
 
 		void InitRgnInfoVect(void);
 
@@ -148,7 +142,7 @@ namespace Ncv
 
 
 
-	protected:
+	private:
 
 		ActualArrayAccessor_2D<F32PixelLinkOwner3C> m_ploAcc;
 		ActualArrayAccessor_1D<F32PixelLinkOwner3C> m_ploAcc_1D;
