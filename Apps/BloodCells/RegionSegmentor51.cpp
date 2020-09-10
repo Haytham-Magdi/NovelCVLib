@@ -29,7 +29,7 @@ namespace Ncv
 
 
 
-	RegionSegmentor51::RegionSegmentor51(ActualArrayAccessor_2D<F32PixelLinkOwner3C> & a_ploAcc)
+	RegionSegmentor51::RegionSegmentor51(const ActualArrayAccessor_2D<F32PixelLinkOwner3C> & a_ploAcc)
 	{	
 		m_nVisitID = 0;
 
@@ -39,7 +39,7 @@ namespace Ncv
 		m_rgnConflict_Provider = new MultiAllocProvider<RgnConflict>(a_ploAcc.CalcSize_1D() / 4);
 		m_linkAction_Provider = new MultiAllocProvider<LinkAction_2>(a_ploAcc.CalcSize_1D() * 8);
 
-		InitMaxDif();
+		InitScaleAndMaxDif();
 
 		m_linkActionMergeQues.InitSize( GetMaxDif() * 2 + 2 );
 
@@ -68,9 +68,9 @@ namespace Ncv
 		ActualArrayAccessor_2D<RgnInfo> rgnInfoAcc;
 		rgnInfoAcc.Init(m_rgnInfoVect.GetHeadPtr(), m_ploAcc.GetSize());
 
-		for(int y=0; y < rgnInfoAcc.GetSizeY(); y++)
+		for(int y=0; y < rgnInfoAcc.GetSize_Y(); y++)
 		{
-			for(int x=0; x < rgnInfoAcc.GetSizeX(); x++)
+			for(int x=0; x < rgnInfoAcc.GetSize_X(); x++)
 			{	
 				RgnInfo * pRgnInfo = &rgnInfoAcc.GetAt(x, y);
 

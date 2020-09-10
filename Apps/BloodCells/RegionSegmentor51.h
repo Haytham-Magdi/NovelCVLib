@@ -124,7 +124,7 @@ namespace Ncv
 		int GetMaxDif() { return m_nMaxDif; }
 		float m_difScale;
 
-		void InitMaxDif() 
+		void InitScaleAndMaxDif() 
 		{ 
 			m_difScale = 100;
 			//m_difScale = 1;
