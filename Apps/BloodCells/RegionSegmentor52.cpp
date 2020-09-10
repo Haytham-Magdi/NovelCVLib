@@ -170,7 +170,7 @@ namespace Ncv
 					{
 						// Ncpp_ASSERT(pActRgn1 != pActRgn2);
 						
-						m_nVisitID++;
+						// m_nVisitID++;
 
 						RgnInfo * pMinSizRgn, * pMaxSizRgn;
 
@@ -221,6 +221,8 @@ namespace Ncv
 
 	RegionSegmentor52::RgnConflict * RegionSegmentor52::GetConflictIfExists( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn)
 	{
+		m_nVisitID++;
+
 		APtrList< RgnConflict > & minConfList = a_pMinSizRgn->conflictList;
 
 		RegionSegmentor52::RgnConflict * pConflict = minConfList.Last();
@@ -251,11 +253,13 @@ namespace Ncv
 
 	void RegionSegmentor52::RemoveDuplicateConflicts( RgnInfo * a_pRgn )
 	{
-		static int cnt1 = 0;
-		cnt1++;
+		m_nVisitID++;
 
-		if (2 == cnt1)
-			cnt1 = cnt1;
+		//static int cnt1 = 0;
+		//cnt1++;
+
+		//if (2 == cnt1)
+		//	cnt1 = cnt1;
 
 		APtrList< RgnConflict > & confList = 
 			a_pRgn->conflictList;
@@ -277,7 +281,7 @@ namespace Ncv
 			pConflict = pNext;
 		}
 
-		Ncpp_ASSERT(confList.GetSize() > 0);
+		//Ncpp_ASSERT(confList.GetSize() > 0);
 	}
 
 
