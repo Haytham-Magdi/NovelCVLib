@@ -122,9 +122,7 @@ namespace Ncv
 					pLA = m_linkActionMergeQues.PopPtrMin();
 
 					if( nullptr == pLA )
-					{
 						continue;
-					}
 
 					GlobalStuff::m_nLA_Index = pLA->nIndex;
 
@@ -339,11 +337,19 @@ namespace Ncv
 			a_pRgn2->conflictList.PushLast( pRc2 );
 		}
 
-		a_pRgn1->SetRootToSelf();
-		a_pRgn2->SetRootToSelf();
-
-		PrepareRgnLinkActions(a_pRgn1);
-		PrepareRgnLinkActions(a_pRgn2);
+		if(!a_pRgn1->isInDirectConflict)
+		{
+			a_pRgn1->SetRootToSelf();
+			PrepareRgnLinkActions(a_pRgn1);
+			a_pRgn1->isInDirectConflict = true;
+		}		
+		
+		if(!a_pRgn2->isInDirectConflict)
+		{
+			a_pRgn2->SetRootToSelf();
+			PrepareRgnLinkActions(a_pRgn2);
+			a_pRgn2->isInDirectConflict = true;
+		}		
 
 	}
 

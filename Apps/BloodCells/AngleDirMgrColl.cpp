@@ -1141,12 +1141,17 @@ namespace Ncv
 			//const F32PixelLinkOwner3C * linkOwnerHeadPtr = ploAcc_1D.GetData();
 
 
-			RegionSegmentor52Ref segmentor = new RegionSegmentor52(ploAcc);
+			// RegionSegmentor52Ref segmentor = new RegionSegmentor52(ploAcc);
+			RegionSegmentor52 * segmentor = new RegionSegmentor52(ploAcc);
 			
 			const int rgnIdx1 = ploAcc.CalcIndex_1D(330, 250);
 			const int rgnIdx2 = ploAcc.CalcIndex_1D(200, 50);
 
+			const int rgnIdx3 = ploAcc.CalcIndex_1D(340, 260);
+			const int rgnIdx4 = ploAcc.CalcIndex_1D(210, 60);
+
 			segmentor->CreateConflict(rgnIdx1, rgnIdx2);
+			segmentor->CreateConflict(rgnIdx3, rgnIdx4);
 
 			segmentor->Segment();
 

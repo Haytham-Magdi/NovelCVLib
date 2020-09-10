@@ -71,10 +71,13 @@ namespace Ncv
 			RgnInfo()
 			{
 				SetRootToNull();
+				isInDirectConflict = false;
 			}
 
 			int nIndex;
 			S32Point pos;
+
+			bool isInDirectConflict;
 
 			APtrList< RgnConflict > conflictList;
 
