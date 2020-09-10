@@ -25,7 +25,7 @@ namespace Ncv
 	using namespace Ncpp::Math;
 
 
-	class RegionSegmentor52 // : public IRegionSegmentor20
+	class RegionSegmentor52 : public Ncpp::Object
 	{
 //////////////////////////////////////////////////////////////
 
@@ -113,7 +113,7 @@ namespace Ncv
 		
 		inline bool HaveConflict( RgnInfo * a_pMinSizRgn, RgnInfo * a_pMaxSizRgn);
 
-		virtual void Segment();
+		void Segment();
 
 		inline void CreateConflict( const int a_rgnIndex1, const int a_rgnIndex2);
 
@@ -174,5 +174,5 @@ namespace Ncv
 	};
 
 
-	typedef Ncpp::ObjRef< RegionSegmentor52 > RegionSegmentor51Ref;
+	typedef Ncpp::ObjRef< RegionSegmentor52 > RegionSegmentor52Ref;
 }

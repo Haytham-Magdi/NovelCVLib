@@ -342,6 +342,8 @@ namespace Ncv
 		
 			//TryEdgeTracking3();
 
+			TryConflictSegmentor52();
+
 			DisplayNormAvgStandiv_Dir_Img();
 			
 			DisplayStandiv2_Dir_Img();
@@ -1129,8 +1131,11 @@ namespace Ncv
 			//const F32PixelLinkOwner3C * linkOwnerHeadPtr = ploAcc_1D.GetData();
 
 
-			EdgeTrackingMgr1 edm1;
-			edm1.Proceed(pixelLinkOwnerHolder->GetActualAccessor(), pixelRgnHolder->GetActualAccessor());
+			RegionSegmentor52Ref segmentor = new RegionSegmentor52(ploAcc);
+			segmentor->Segment();
+
+			// EdgeTrackingMgr1 edm1;
+			// edm1.Proceed(pixelLinkOwnerHolder->GetActualAccessor(), pixelRgnHolder->GetActualAccessor());
 
 
 			//------------------
