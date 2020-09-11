@@ -1236,6 +1236,16 @@ namespace Ncv
 			pntsVect.PushBack(S32Point(79, 67));
 			pntsVect.PushBack(S32Point(82, 95));
 
+			//pntsVect.PushBack(S32Point(74, 66));
+			//pntsVect.PushBack(S32Point(44, 70));
+
+			//pntsVect.PushBack(S32Point(62, 72));
+			//pntsVect.PushBack(S32Point(39, 79));
+
+			//pntsVect.PushBack(S32Point(77, 62));
+			pntsVect.PushBack(S32Point(77, 65));
+			pntsVect.PushBack(S32Point(97, 63));
+
 
 			{
 				int rgnIdx1, rgnIdx2;
@@ -1256,26 +1266,6 @@ namespace Ncv
 
 
 
-			//{
-			//	const int rgnIdx1 = ploAcc.CalcIndex_1D(117, 238);
-			//	const int rgnIdx2 = ploAcc.CalcIndex_1D(60, 238);
-			//	segmentor->CreateConflict(rgnIdx1, rgnIdx2);
-			//}
-
-			//{
-			//	const int rgnIdx1 = ploAcc.CalcIndex_1D(92, 55);
-			//	const int rgnIdx2 = ploAcc.CalcIndex_1D(60, 238);
-			//	segmentor->CreateConflict(rgnIdx1, rgnIdx2);
-			//}
-
-			//{
-			//	const int rgnIdx1 = ploAcc.CalcIndex_1D(92, 55);
-			//	const int rgnIdx2 = ploAcc.CalcIndex_1D(160, 65);
-			//	segmentor->CreateConflict(rgnIdx1, rgnIdx2);
-			//}
-
-
-			
 
 			segmentor->Segment();
 
